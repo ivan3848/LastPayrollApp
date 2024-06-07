@@ -1,20 +1,67 @@
 "use client";
 import type { Page } from "@/types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
-import { Checkbox } from "primereact/checkbox";
 import { InputText } from "primereact/inputtext";
-import { useContext, useState } from "react";
+import { Password } from "primereact/password";
+import { useContext, useRef } from "react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
+import { login } from "../services/AuthService";
+import { ILogin } from "../types/ILogin";
+import { Toast } from "primereact/toast";
+
+const loginFormSchema = z.object({
+    username: z
+        .string({ required_error: "El email es requerido" })
+        .min(2, { message: "El email debe tener al menos 2 caracteres" })
+        .max(50, {
+            message: "El email debe tener un máximo de 100 caracteres",
+        }),
+    password: z
+        .string({ required_error: "La contraseña es requerida" })
+        .min(6, { message: "La contraseña debe tener al menos 6 caracteres" })
+        .max(50, {
+            message: "La contraseña debe tener un máximo de 50 caracteres",
+        }),
+});
 
 const Login: Page = () => {
-    const [rememberMe, setRememberMe] = useState(false);
+    const toast = useRef<Toast | null>(null);
+
+    const show = (message: string) => {
+        toast.current?.show({
+            severity: "error",
+            summary: "Error al iniciar sesión",
+            detail: message,
+            life: 3000,
+        });
+    };
+
+    const {
+        handleSubmit,
+        register,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm<ILogin>({ resolver: zodResolver(loginFormSchema) });
+
+    const onSubmit = async (data: ILogin) => {
+        const response = await login(data.username, data.password);
+        response === "success" ? router.push("/") : show(response);
+        reset();
+        return;
+    };
+
     const router = useRouter();
     const { layoutConfig } = useContext(LayoutContext);
     const dark = layoutConfig.colorScheme !== "light";
 
     return (
         <>
+            <Toast ref={toast} />
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 1600 800"
@@ -46,59 +93,55 @@ const Login: Page = () => {
             <div className="px-5 min-h-screen flex justify-content-center align-items-center">
                 <div className="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1">
                     <div className="mb-4">
-                        <div className="text-900 text-xl font-bold mb-2">
-                            Log in
+                        <div className="text-900 text-2xl font-bold mb-2 ">
+                            Iniciar Sesión
                         </div>
                         <span className="text-600 font-medium">
-                            Please enter your details
+                            Por favor, ingrese sus credenciales.
                         </span>
                     </div>
-                    <div className="flex flex-column">
-                        <span className="p-input-icon-left w-full mb-4">
-                            <i className="pi pi-envelope"></i>
-                            <InputText
-                                id="email"
-                                type="text"
-                                className="w-full md:w-25rem"
-                                placeholder="Email"
-                            />
-                        </span>
-                        <span className="p-input-icon-left w-full mb-4">
-                            <i className="pi pi-lock"></i>
-                            <InputText
-                                id="password"
-                                type="password"
-                                className="w-full md:w-25rem"
-                                placeholder="Password"
-                            />
-                        </span>
-                        <div className="mb-4 flex flex-wrap gap-3">
-                            <div>
-                                <Checkbox
-                                    name="checkbox"
-                                    checked={rememberMe}
-                                    onChange={(e) =>
-                                        setRememberMe(e.checked ?? false)
-                                    }
-                                    className="mr-2"
-                                ></Checkbox>
-                                <label
-                                    htmlFor="checkbox"
-                                    className="text-900 font-medium mr-8"
-                                >
-                                    Remember Me
-                                </label>
-                            </div>
-                            <a className="text-600 cursor-pointer hover:text-primary cursor-pointer ml-auto transition-colors transition-duration-300">
-                                Reset password
-                            </a>
+                    <form onSubmit={handleSubmit(onSubmit)}>
+                        <div className="flex flex-column">
+                            <span className="w-full mb-4">
+                                <InputText
+                                    {...register("username")}
+                                    id="username"
+                                    type="text"
+                                    className="w-full md:w-25rem"
+                                    placeholder="email"
+                                />
+
+                                {errors.username && (
+                                    <p className="error-message flex justify-start text-red pt-1">
+                                        {errors.username.message?.toString()}
+                                    </p>
+                                )}
+                            </span>
+                            <span className="w-full mb-4">
+                                <Password
+                                    id="password"
+                                    inputClassName="w-full md:w-25rem"
+                                    toggleMask
+                                    feedback={false}
+                                    placeholder="contraseña"
+                                    onChange={(e) => {
+                                        setValue("password", e.target.value);
+                                    }}
+                                />
+
+                                {errors.password && (
+                                    <p className="error-message flex justify-start text-red pt-1">
+                                        {errors.password.message?.toString()}
+                                    </p>
+                                )}
+                            </span>
+                            <Button
+                                label="Iniciar Sesión"
+                                className="w-full"
+                                type="submit"
+                            ></Button>
                         </div>
-                        <Button
-                            label="Log In"
-                            className="w-full"
-                            onClick={() => router.push("/")}
-                        ></Button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </>

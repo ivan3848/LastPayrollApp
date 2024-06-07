@@ -4,6 +4,22 @@ import AppSubMenu from "./AppSubMenu";
 const AppMenu = () => {
     const model: MenuModel[] = [
         {
+            label: "Mantenimientos",
+            icon: "pi pi-fw pi-cog",
+            items: [
+                {
+                    label: "Ubicaciones",
+                    icon: "pi pi-fw pi-map-marker",
+                    to: "/pages/maintenance/location",
+                },
+                {
+                    label: "Asignaciones",
+                    icon: "pi pi-fw pi-users",
+                    to: "/pages/maintenance/asignation",
+                },
+            ],
+        },
+        {
             label: "Dashboards",
             icon: "pi pi-home",
             items: [
