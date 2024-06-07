@@ -1,7 +1,7 @@
 "use client";
 
 import { TabPanel, TabView } from "primereact/tabview";
-import CountryTable from "../country/components/countryTable";
+import Country from "../country/components/Country";
 
 const LocationTabs = () => {
     return (
@@ -9,7 +9,7 @@ const LocationTabs = () => {
             <div className="col-12">
                 <TabView>
                     <TabPanel header="País" leftIcon="pi pi-map mr-2">
-                        <CountryTable />
+                        <Country />
                     </TabPanel>
                     <TabPanel header="Región" rightIcon="pi pi-user ml-2">
                         <p className="m-0">

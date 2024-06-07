@@ -1,4 +1,3 @@
-import CountryTable from "@/components/country/components/countryTable";
 import LocationTabs from "@/components/location/locationTabs";
 
 const Location = () => {
