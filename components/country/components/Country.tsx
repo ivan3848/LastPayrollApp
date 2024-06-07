@@ -1,45 +1,27 @@
 "use client";
 
+import DeleteEntity from "@/components/Shared/components/DeleteEntity";
 import useCrudModals from "@/components/Shared/Hooks/useCrudModals";
-import { ProductService } from "@/demo/service/ProductService";
+import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
 import type { Demo } from "@/types";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
-import { Dialog } from "primereact/dialog";
-import {
-    InputNumber,
-    InputNumberValueChangeEvent,
-} from "primereact/inputnumber";
-import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
-import { RadioButton, RadioButtonChangeEvent } from "primereact/radiobutton";
+import { DataTable, DataTablePageEvent } from "primereact/datatable";
 import { Toast } from "primereact/toast";
-import { Toolbar } from "primereact/toolbar";
-import { classNames } from "primereact/utils";
-import React, { useEffect, useRef, useState } from "react";
-import { ICountry } from "../Types/ICountry";
-import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
+import { useState } from "react";
 import useCountryQuery from "../Hooks/useCountryQuery";
+import { ICountry } from "../Types/ICountry";
+import AddCountry from "./AddCountry";
+import EditCountry from "./EditCountry";
 
 const Country = () => {
-    let emptyProduct: Demo.Product = {
-        id: "",
-        name: "",
-        image: "",
-        description: "",
-        category: "",
-        price: 0,
-        quantity: 0,
-        rating: 0,
-        inventoryStatus: "INSTOCK",
-    };
-
     const {
-        entityDialog,
-        setEntityDialog,
         deleteEntityDialog,
         setDeleteEntityDialog,
+        addEntityDialog,
+        setAddEntityDialog,
+        editEntityDialog,
+        setEditEntityDialog,
         entity,
         setEntity,
         submitted,
@@ -47,139 +29,29 @@ const Country = () => {
         toast,
         dt,
     } = useCrudModals<ICountry>();
-    const { setPage, setPageSize, setGlobalFilter, params } = useParamFilter();
+    const { setPage, setPageSize, params } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
     const { data } = useCountryQuery(params, listOfDependencies);
 
-    const openNew = () => {
-        setProduct(emptyProduct);
+    const handleAdd = () => {
         setSubmitted(false);
-        setProductDialog(true);
+        setAddEntityDialog(true);
     };
 
-    const hideDialog = () => {
+    const handleEdit = (entity: ICountry) => {
+        setEntity(entity);
         setSubmitted(false);
-        setProductDialog(false);
+        setEditEntityDialog(true);
     };
 
-    const hideDeleteProductDialog = () => {
-        setDeleteProductDialog(false);
+    const handleDelete = (entity: ICountry) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setDeleteEntityDialog(true);
     };
 
-    const saveProduct = () => {
-        setSubmitted(true);
-
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
-            if (product.id) {
-                const index = findIndexById(product.id);
-
-                _products[index] = _product;
-                toast.current?.show({
-                    severity: "success",
-                    summary: "Successful",
-                    detail: "Product Updated",
-                    life: 3000,
-                });
-            } else {
-                _product.image = "product-placeholder.svg";
-                _products.push(_product);
-                toast.current?.show({
-                    severity: "success",
-                    summary: "Successful",
-                    detail: "Product Created",
-                    life: 3000,
-                });
-            }
-
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
-        }
-    };
-
-    const editProduct = (product: Demo.Product) => {
-        setProduct({ ...product });
-        setProductDialog(true);
-    };
-
-    const confirmDeleteProduct = (product: Demo.Product) => {
-        setProduct(product);
-        setDeleteProductDialog(true);
-    };
-
-    const deleteProduct = () => {
-        let _products = products.filter((val) => val.id !== product.id);
-        setProducts(_products);
-        setDeleteProductDialog(false);
-        setProduct(emptyProduct);
-        toast.current?.show({
-            severity: "success",
-            summary: "Successful",
-            detail: "Product Deleted",
-            life: 3000,
-        });
-    };
-
-    const findIndexById = (id: string) => {
-        let index = -1;
-        for (let i = 0; i < products.length; i++) {
-            if (products[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
-
-    const onCategoryChange = (e: RadioButtonChangeEvent) => {
-        let _product = { ...product };
-        _product["category"] = e.value;
-        setProduct(_product);
-    };
-
-    const onInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-        name: string
-    ) => {
-        const val = (e.target && e.target.value) || "";
-        let _product = { ...product };
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
-
-    const onInputNumberChange = (
-        e: InputNumberValueChangeEvent,
-        name: string
-    ) => {
-        const val = e.value || 0;
-        let _product = { ...product };
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
-
-    const leftToolbarTemplate = () => {
-        return (
-            <React.Fragment>
-                <div className="my-2">
-                    <Button
-                        label="Agregar"
-                        icon="pi pi-plus"
-                        severity="success"
-                        className="mr-2"
-                        onClick={openNew}
-                    />
-                </div>
-            </React.Fragment>
-        );
-    };
-
-    const nameBodyTemplate = (rowData: Demo.Product) => {
+    const nameBodyTemplate = (rowData: ICountry) => {
         return (
             <>
                 <span className="p-column-title">Name</span>
@@ -188,21 +60,21 @@ const Country = () => {
         );
     };
 
-    const actionBodyTemplate = (rowData: Demo.Product) => {
+    const actionBodyTemplate = (rowData: ICountry) => {
         return (
             <>
                 <Button
                     icon="pi pi-pencil"
                     className="mr-2"
                     rounded
-                    severity="success"
-                    onClick={() => editProduct(rowData)}
+                    severity="warning"
+                    onClick={() => handleEdit(rowData)}
                 />
                 <Button
                     icon="pi pi-trash"
                     rounded
-                    severity="warning"
-                    onClick={() => confirmDeleteProduct(rowData)}
+                    severity="danger"
+                    onClick={() => handleDelete(rowData)}
                 />
             </>
         );
@@ -210,212 +82,88 @@ const Country = () => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h5 className="m-0">País</h5>
-            <span className="block mt-2 md:mt-0 p-input-icon-left">
-                <i className="pi pi-search" />
-                <InputText
-                    type="search"
-                    onInput={(e) =>
-                        setTimeout(() => {
-                            setGlobalFilter(
-                                (e.target as HTMLInputElement).value
-                            );
-                        }, 500)
-                    }
-                    placeholder="Buscar..."
-                />
-            </span>
+            <h3 className="m-0">País</h3>
+            <Button
+                label="Agregar"
+                icon="pi pi-plus"
+                severity="success"
+                className="mr-2"
+                onClick={handleAdd}
+            />
         </div>
     );
 
-    const productDialogFooter = (
-        <>
-            <Button
-                label="Cancel"
-                icon="pi pi-times"
-                text
-                onClick={hideDialog}
-            />
-            <Button
-                label="Save"
-                icon="pi pi-check"
-                text
-                onClick={saveProduct}
-            />
-        </>
-    );
+    const onPage = (event: DataTablePageEvent) => {
+        console.log(event);
+        setPage(event.page! + 1);
+        setPageSize(event.rows);
+    };
 
+    const calculateFirstRow = (
+        pageNumber: number,
+        pageSize: number
+    ): number => {
+        return (pageNumber - 1) * pageSize;
+    };
 
     return (
         <div className="grid crud-demo">
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
-                    <Toolbar
-                        className="mb-4"
-                        left={leftToolbarTemplate}
-                    ></Toolbar>
-
                     <DataTable
+                        id="Country-Table"
+                        dataKey="idCountry"
                         ref={dt}
                         value={data.items}
-                        dataKey="id"
+                        lazy
+                        filterDisplay="menu"
                         paginator
-                        rows={10}
-                        rowsPerPageOptions={[5, 10, 25]}
+                        totalRecords={data.totalCount}
                         className="datatable-responsive"
-                        paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products"
-                        emptyMessage="No hay registros disponibles"
+                        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                        emptyMessage="No hay registros."
                         header={header}
-                        responsiveLayout="scroll"
+                        onPage={onPage}
+                        rowsPerPageOptions={[5, 10, 25, 50]}
+                        rows={data.pageSize!}
+                        first={calculateFirstRow(data.page!, data.pageSize!)}
+                        currentPageReportTemplate="Mostrando del {first} a {last} de {totalRecords}"
                     >
                         <Column
                             field="name"
-                            header="Name"
-                            sortable
+                            header="País"
                             body={nameBodyTemplate}
                             headerStyle={{ minWidth: "15rem" }}
                         ></Column>
                         <Column
-                            body={actionBodyTemplate}
                             header="Acciones"
+                            body={actionBodyTemplate}
                             headerStyle={{ minWidth: "10rem" }}
                         ></Column>
                     </DataTable>
 
-                    <Dialog
-                        visible={productDialog}
-                        style={{ width: "450px" }}
-                        header="Product Details"
-                        modal
-                        className="p-fluid"
-                        footer={productDialogFooter}
-                        onHide={hideDialog}
-                    >
-                        {product.image && (
-                            <img
-                                src={`/demo/images/product/${product.image}`}
-                                alt={product.image}
-                                width="150"
-                                className="mt-0 mx-auto mb-5 block shadow-2"
-                            />
-                        )}
-                        <div className="field">
-                            <label htmlFor="name">Name</label>
-                            <InputText
-                                id="name"
-                                value={product.name}
-                                onChange={(e) => onInputChange(e, "name")}
-                                required
-                                autoFocus
-                                className={classNames({
-                                    "p-invalid": submitted && !product.name,
-                                })}
-                            />
-                            {submitted && !product.name && (
-                                <small className="p-invalid">
-                                    Name is required.
-                                </small>
-                            )}
-                        </div>
-                        <div className="field">
-                            <label htmlFor="description">Description</label>
-                            <InputTextarea
-                                id="description"
-                                value={product.description}
-                                onChange={(e) =>
-                                    onInputChange(e, "description")
-                                }
-                                required
-                                rows={3}
-                                cols={20}
-                            />
-                        </div>
-
-                        <div className="field">
-                            <label className="mb-3">Category</label>
-                            <div className="formgrid grid">
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category1"
-                                        name="category"
-                                        value="Accessories"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Accessories"
-                                        }
-                                    />
-                                    <label htmlFor="category1">
-                                        Accessories
-                                    </label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category2"
-                                        name="category"
-                                        value="Clothing"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Clothing"
-                                        }
-                                    />
-                                    <label htmlFor="category2">Clothing</label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category3"
-                                        name="category"
-                                        value="Electronics"
-                                        onChange={onCategoryChange}
-                                        checked={
-                                            product.category === "Electronics"
-                                        }
-                                    />
-                                    <label htmlFor="category3">
-                                        Electronics
-                                    </label>
-                                </div>
-                                <div className="field-radiobutton col-6">
-                                    <RadioButton
-                                        inputId="category4"
-                                        name="category"
-                                        value="Fitness"
-                                        onChange={onCategoryChange}
-                                        checked={product.category === "Fitness"}
-                                    />
-                                    <label htmlFor="category4">Fitness</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="formgrid grid">
-                            <div className="field col">
-                                <label htmlFor="price">Price</label>
-                                <InputNumber
-                                    id="price"
-                                    value={product.price as number}
-                                    onValueChange={(e) =>
-                                        onInputNumberChange(e, "price")
-                                    }
-                                    mode="currency"
-                                    currency="USD"
-                                    locale="en-US"
-                                />
-                            </div>
-                            <div className="field col">
-                                <label htmlFor="quantity">Quantity</label>
-                                <InputNumber
-                                    id="quantity"
-                                    value={product.quantity}
-                                    onValueChange={(e) =>
-                                        onInputNumberChange(e, "quantity")
-                                    }
-                                />
-                            </div>
-                        </div>
-                    </Dialog>
-
+                    <AddCountry
+                        addEntityDialog={addEntityDialog}
+                        setAddEntityDialog={setAddEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                    <EditCountry
+                        entity={entity!}
+                        editEntityDialog={editEntityDialog}
+                        setEditEntityDialog={setEditEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                    <DeleteEntity
+                        id={entity?.idCountry ?? 0}
+                        endpoint="employee/country"
+                        deleteEntityDialog={deleteEntityDialog}
+                        setDeleteEntityDialog={setDeleteEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
                 </div>
             </div>
         </div>

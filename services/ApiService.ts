@@ -12,7 +12,7 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:5038/",
     headers: {
         "Content-Type": "application/json",
-        IdCompany: user?.idCompany ?? "2" ,
+        IdCompany: user?.idCompany ?? "2",
         IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
     }
 });
@@ -41,7 +41,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, body);
             return response.data;
         } catch (error: any) {
-            return error.response.data;
+            throw error;
         }
     }
 
@@ -52,7 +52,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, {});
             return response.data;
         } catch (error: any) {
-            return error.response.data;
+            throw error;
         }
     }
 
@@ -63,7 +63,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.put<R>(finalEndpoint, body);
             return response.data;
         } catch (error: any) {
-            return error.response.data;
+            throw error;
         }
     }
 
@@ -73,7 +73,7 @@ class ApiService<Q, R> {
             await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
             return "Registro eliminado";
         } catch (error: any) {
-            return error.response.data;
+            throw error;
         }
     }
 }

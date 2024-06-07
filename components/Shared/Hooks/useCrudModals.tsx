@@ -3,7 +3,8 @@ import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 
 function useCrudModals<T>() {
-    const [entityDialog, setEntityDialog] = useState(false);
+    const [addEntityDialog, setAddEntityDialog] = useState(false);
+    const [editEntityDialog, setEditEntityDialog] = useState(false);
     const [deleteEntityDialog, setDeleteEntityDialog] = useState(false);
     const [entity, setEntity] = useState<T | null>(null);
     const [submitted, setSubmitted] = useState(false);
@@ -11,10 +12,12 @@ function useCrudModals<T>() {
     const dt = useRef<DataTable<any>>(null);
 
     return {
-        entityDialog,
-        setEntityDialog,
         deleteEntityDialog,
         setDeleteEntityDialog,
+        addEntityDialog,
+        setAddEntityDialog,
+        editEntityDialog,
+        setEditEntityDialog,
         entity,
         setEntity,
         submitted,

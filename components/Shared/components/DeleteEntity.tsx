@@ -8,45 +8,63 @@ interface Props {
     id: number;
     endpoint: string;
     deleteEntityDialog: boolean;
-    setModalOpen: (value: boolean) => void;
-    setHasChanged: (value: boolean) => void;
+    setDeleteEntityDialog: (value: boolean) => void;
+    setSubmitted: (value: boolean) => void;
+    toast: React.MutableRefObject<any>;
 }
 
 const DeleteEntity = ({
     id,
     deleteEntityDialog,
-    setModalOpen,
-    setHasChanged,
+    setDeleteEntityDialog,
+    setSubmitted,
     endpoint,
+    toast,
 }: Props) => {
     const apiService = new ApiService(endpoint);
 
     const deleteRegister = useMutation({
         mutationFn: (id: number) => apiService.delete(id),
         onError: (error: any) => {
-            toast.warning(error.response.data);
+            setDeleteEntityDialog(false);
+
+            toast.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: error.response.data,
+                life: 3000,
+            });
         },
         onSuccess: () => {
-            setModalOpen(false);
-            setHasChanged(true);
-            toast.success("Registro eliminado correctamente");
+            setDeleteEntityDialog(false);
+            setSubmitted(true);
+
+            toast.current?.show({
+                severity: "success",
+                summary: "Eliminado!",
+                detail: "Registro eliminado correctamente",
+                life: 3000,
+            });
         },
     });
-
-    const handleDelete = async () => {
+    const handleDelete = () => {
         deleteRegister.mutate(id);
+    };
+
+    const hideDeleteEntityDialog = () => {
+        setDeleteEntityDialog(false);
     };
 
     const deleteProductDialogFooter = (
         <>
             <Button
-                label="No"
+                label="Cancelar"
                 icon="pi pi-times"
                 text
-                onClick={hideDeleteProductDialog}
+                onClick={hideDeleteEntityDialog}
             />
             <Button
-                label="Yes"
+                label="Confirmar"
                 icon="pi pi-check"
                 text
                 onClick={handleDelete}
@@ -57,21 +75,17 @@ const DeleteEntity = ({
         <Dialog
             visible={deleteEntityDialog}
             style={{ width: "450px" }}
-            header="Confirm"
+            header="Eliminar Registro"
             modal
             footer={deleteProductDialogFooter}
-            onHide={hideDeleteProductDialog}
+            onHide={hideDeleteEntityDialog}
         >
             <div className="flex align-items-center justify-content-center">
                 <i
                     className="pi pi-exclamation-triangle mr-3"
                     style={{ fontSize: "2rem" }}
                 />
-                {id && (
-                    <span>
-                        ¿Está seguro de que desea eliminar este registro?
-                    </span>
-                )}
+                {id && <span>¿Está seguro de eliminar el registro?</span>}
             </div>
         </Dialog>
     );
