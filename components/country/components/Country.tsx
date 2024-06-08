@@ -2,18 +2,11 @@
 
 import DeleteEntity from "@/components/Shared/components/DeleteEntity";
 import useCrudModals from "@/components/Shared/Hooks/useCrudModals";
-import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
-import type { Demo } from "@/types";
-import { Button } from "primereact/button";
-import { Column } from "primereact/column";
-import { DataTable, DataTablePageEvent } from "primereact/datatable";
 import { Toast } from "primereact/toast";
-import { useState } from "react";
-import useCountryQuery from "../Hooks/useCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import AddCountry from "./AddCountry";
-import EditCountry from "./EditCountry";
 import CountryTable from "./CountryTable";
+import EditCountry from "./EditCountry";
 
 const Country = () => {
     const {
@@ -29,10 +22,6 @@ const Country = () => {
         setSubmitted,
         toast,
     } = useCrudModals<ICountry>();
-    const { setPage, setPageSize, setGlobalFilter, params } = useParamFilter();
-
-    const listOfDependencies: boolean[] = [submitted];
-    const { data } = useCountryQuery(params, listOfDependencies);
 
     const handleAdd = () => {
         setSubmitted(false);
@@ -58,10 +47,7 @@ const Country = () => {
                     <Toast ref={toast} />
 
                     <CountryTable
-                        data={data}
-                        setPage={setPage}
-                        setPageSize={setPageSize}
-                        setGlobalFilter={setGlobalFilter}
+                        submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}

@@ -3,18 +3,15 @@ export default interface IParamsApi {
         page?: number;
         pageSize?: number;
         globalFilter?: string;
-        sortBy?: {
-            sorts?: [
-                {
-                    sortBy: string,
-                    sortDirection: string
-                }
-            ]
-        },
         filters?:
         {
             column: string,
             value: string | number
+        }[]
+        sorts?:
+        {
+            sortBy: string,
+            isAsc: boolean
         }[]
 
     }

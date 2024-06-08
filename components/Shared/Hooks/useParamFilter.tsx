@@ -42,6 +42,16 @@ const useParamFilter = () => {
         );
     };
 
+    const setSorts = (
+        sorts: { sortBy: string; isAsc: boolean }[]
+    ) => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.sorts = sorts;
+            })
+        );
+    };
+
     const clearFilter = () =>
         setParams({
             filter: { page: 1, pageSize: 5 },
@@ -52,6 +62,7 @@ const useParamFilter = () => {
         setPageSize,
         setGlobalFilter,
         setFilters,
+        setSorts,
         clearFilter,
         params,
     };

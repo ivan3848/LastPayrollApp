@@ -1,39 +1,41 @@
 import IResponse from "@/types/IResponse";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import { DataTable, DataTablePageEvent } from "primereact/datatable";
-import { InputText } from "primereact/inputtext";
+import {
+    DataTable,
+    DataTableFilterEvent,
+    DataTableFilterMeta,
+    DataTablePageEvent,
+    DataTableSortEvent,
+    SortOrder,
+} from "primereact/datatable";
 import { useState } from "react";
 import { ICountry } from "../Types/ICountry";
+import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
+import useCountryQuery from "../Hooks/useCountryQuery";
+import { FilterMatchMode } from "primereact/api";
 
 interface Props {
-    data: IResponse<ICountry>;
-    setPage: (value: number) => void;
-    setPageSize: (value: number) => void;
-    setGlobalFilter: (value: string) => void;
+    submitted: boolean;
     handleAdd: () => void;
     handleEdit: (entity: ICountry) => void;
     handleDelete: (entity: ICountry) => void;
 }
 
 const CountryTable = ({
-    data,
-    setPage,
-    setPageSize,
+    submitted,
     handleDelete,
     handleEdit,
     handleAdd,
 }: Props) => {
-    const [globalFilter, setGlobalFilter] = useState("");
+    const { setPage, setPageSize, setFilters, setSorts, params } =
+        useParamFilter();
 
-    const nameBodyTemplate = (rowData: ICountry) => {
-        return (
-            <>
-                <span className="p-column-title">Name</span>
-                {rowData.name}
-            </>
-        );
-    };
+    const listOfDependencies: boolean[] = [submitted];
+    const { data, isLoading, isFetching } = useCountryQuery(
+        params,
+        listOfDependencies
+    );
 
     const actionBodyTemplate = (rowData: ICountry) => {
         return (
@@ -60,6 +62,24 @@ const CountryTable = ({
         setPageSize(event.rows);
     };
 
+    const onSort = (event: DataTableSortEvent) => {
+        switch (event.sortOrder) {
+            case 1:
+                setSorts([{ sortBy: event.sortField, isAsc: true }]);
+                break;
+            case -1:
+                setSorts([{ sortBy: event.sortField, isAsc: false }]);
+                break;
+            default:
+                setSorts([]);
+                break;
+        }
+    };
+
+    // const onFilter = (event: DataTableFilterEvent) => {
+    //     console.log(event.filters);
+    // };
+
     const calculateFirstRow = (
         pageNumber: number,
         pageSize: number
@@ -67,26 +87,10 @@ const CountryTable = ({
         return (pageNumber - 1) * pageSize;
     };
 
-    const onGlobalFilterChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        setGlobalFilter(event.target.value);
-    };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Países</h3>
 
-            <div className="col-12 mb-2 lg:col-4 lg:mb-0">
-                <span className="p-input-icon-right">
-                    <InputText
-                        type="search"
-                        value={globalFilter || ""}
-                        placeholder="Buscar"
-                        onChange={(e) => onGlobalFilterChange(e)}
-                    />
-                    <i className="pi pi-search" />
-                </span>
-            </div>
             <Button
                 label="Agregar"
                 icon="pi pi-plus"
@@ -99,35 +103,37 @@ const CountryTable = ({
 
     return (
         <DataTable
-            globalFilterFields={["name"]}
             id="Country-Table"
             dataKey="idCountry"
             value={data?.items}
             lazy
-            filterDisplay="menu"
             paginator
-            globalFilter={globalFilter}
-            globalFilterMatchMode="contains"
+            loading={isLoading || isFetching}
+            onSort={onSort}
+            sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+            sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : 0}
+            sortMode="single"
+            // onFilter={onFilter}
+            // filters={lazyState.filters}
             totalRecords={data?.totalCount}
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
             emptyMessage="No hay registros."
             header={header}
             onPage={onPage}
-            rowsPerPageOptions={[5, 10, 25, 50]}
+            rowsPerPageOptions={[5, 10, 25]}
             rows={data?.pageSize!}
             first={calculateFirstRow(data?.page!, data?.pageSize!)}
-            currentPageReportTemplate="Mostrando del {first} a {last} de {totalRecords}"
+            currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
                 field="name"
-                filterField="name"
                 header="País"
-                body={nameBodyTemplate}
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterPlaceholder="Buscar por nombre"
+                filterField="name"
+                filterMatchMode={"contains" as FilterMatchMode}
             ></Column>
             <Column
                 header="Acciones"
