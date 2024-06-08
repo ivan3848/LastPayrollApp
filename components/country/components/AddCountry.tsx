@@ -11,6 +11,7 @@ import countryService from "../Services/countryService";
 import { ICountry } from "../Types/ICountry";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
 import useAddCountryQuery from "../Hooks/useAddCountryQuery";
+import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
 
 const addEntityFormSchema = z.object({
     name: z
@@ -45,7 +46,7 @@ const AddCountry = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addCountry = useAddCountryQuery({
+    const addEntity = useAddCountryQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
@@ -53,25 +54,13 @@ const AddCountry = ({
     });
 
     const onSubmit = (data: ICountry) => {
-        addCountry.mutate(data);
+        addEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
-
-    const addDialogFooter = (
-        <div className="flex justify-content-end">
-            <Button
-                label="Cancelar"
-                icon="pi pi-times"
-                text
-                onClick={hideDialog}
-            />
-            <Button label="Guardar" icon="pi pi-check" type="submit" />
-        </div>
-    );
 
     return (
         <Dialog
@@ -101,7 +90,7 @@ const AddCountry = ({
                         </small>
                     )}
                 </div>
-                {addDialogFooter}
+                <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );

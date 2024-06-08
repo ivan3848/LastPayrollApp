@@ -8,17 +8,8 @@ interface Props {
 
 const useParamFilter = () => {
     const [params, setParams] = useState<IParamsApi>({
-        filter: { page: 1, pageSize: 10 },
+        filter: { page: 1, pageSize: 5 },
     });
-
-    const refreshData = () => {
-        setParams((currentParams) =>
-            produce(currentParams, (draft) => {
-                draft.filter.page = 1;
-                draft.filter.pageSize = 10;
-            })
-        );
-    };
 
     const setPage = (page: number) =>
         setParams((currentParams) =>
@@ -62,7 +53,6 @@ const useParamFilter = () => {
         setGlobalFilter,
         setFilters,
         clearFilter,
-        refreshData,
         params,
     };
 };

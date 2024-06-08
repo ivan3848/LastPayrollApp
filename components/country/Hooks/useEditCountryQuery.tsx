@@ -4,18 +4,18 @@ import countryService from "../Services/countryService";
 
 interface Props {
     toast: React.MutableRefObject<any>;
-    setAddEntityDialog: (value: boolean) => void;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useAddCountryQuery = ({
+const useEditCountryQuery = ({
     toast,
-    setAddEntityDialog,
+    setEditEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: ICountry) => countryService.post(entity),
+        mutationFn: (entity: ICountry) => countryService.put(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -26,17 +26,17 @@ const useAddCountryQuery = ({
         },
         onSuccess: () => {
             reset();
-            setAddEntityDialog(false);
+            setEditEntityDialog(false);
             setSubmitted(true);
 
             toast.current?.show({
                 severity: "success",
-                summary: "Insertado!",
-                detail: "Registro agregado correctamente",
+                summary: "Editado!",
+                detail: "Registro editado correctamente",
                 life: 3000,
             });
         },
     });
 };
 
-export default useAddCountryQuery;
+export default useEditCountryQuery;

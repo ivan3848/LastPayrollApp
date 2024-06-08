@@ -13,6 +13,7 @@ import useCountryQuery from "../Hooks/useCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import AddCountry from "./AddCountry";
 import EditCountry from "./EditCountry";
+import CountryTable from "./CountryTable";
 
 const Country = () => {
     const {
@@ -27,9 +28,8 @@ const Country = () => {
         submitted,
         setSubmitted,
         toast,
-        dt,
     } = useCrudModals<ICountry>();
-    const { setPage, setPageSize, params } = useParamFilter();
+    const { setPage, setPageSize, setGlobalFilter, params } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
     const { data } = useCountryQuery(params, listOfDependencies);
@@ -51,97 +51,21 @@ const Country = () => {
         setDeleteEntityDialog(true);
     };
 
-    const nameBodyTemplate = (rowData: ICountry) => {
-        return (
-            <>
-                <span className="p-column-title">Name</span>
-                {rowData.name}
-            </>
-        );
-    };
-
-    const actionBodyTemplate = (rowData: ICountry) => {
-        return (
-            <>
-                <Button
-                    icon="pi pi-pencil"
-                    className="mr-2"
-                    rounded
-                    severity="warning"
-                    onClick={() => handleEdit(rowData)}
-                />
-                <Button
-                    icon="pi pi-trash"
-                    rounded
-                    severity="danger"
-                    onClick={() => handleDelete(rowData)}
-                />
-            </>
-        );
-    };
-
-    const header = (
-        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">País</h3>
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="success"
-                className="mr-2"
-                onClick={handleAdd}
-            />
-        </div>
-    );
-
-    const onPage = (event: DataTablePageEvent) => {
-        console.log(event);
-        setPage(event.page! + 1);
-        setPageSize(event.rows);
-    };
-
-    const calculateFirstRow = (
-        pageNumber: number,
-        pageSize: number
-    ): number => {
-        return (pageNumber - 1) * pageSize;
-    };
-
     return (
-        <div className="grid crud-demo">
-            <div className="col-12">
+        <div className="grid">
+            <div className="w-full">
                 <div className="card">
                     <Toast ref={toast} />
-                    <DataTable
-                        id="Country-Table"
-                        dataKey="idCountry"
-                        ref={dt}
-                        value={data.items}
-                        lazy
-                        filterDisplay="menu"
-                        paginator
-                        totalRecords={data.totalCount}
-                        className="datatable-responsive"
-                        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                        emptyMessage="No hay registros."
-                        header={header}
-                        onPage={onPage}
-                        rowsPerPageOptions={[5, 10, 25, 50]}
-                        rows={data.pageSize!}
-                        first={calculateFirstRow(data.page!, data.pageSize!)}
-                        currentPageReportTemplate="Mostrando del {first} a {last} de {totalRecords}"
-                    >
-                        <Column
-                            field="name"
-                            header="País"
-                            body={nameBodyTemplate}
-                            headerStyle={{ minWidth: "15rem" }}
-                        ></Column>
-                        <Column
-                            header="Acciones"
-                            body={actionBodyTemplate}
-                            headerStyle={{ minWidth: "10rem" }}
-                        ></Column>
-                    </DataTable>
+
+                    <CountryTable
+                        data={data}
+                        setPage={setPage}
+                        setPageSize={setPageSize}
+                        setGlobalFilter={setGlobalFilter}
+                        handleAdd={handleAdd}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                    />
 
                     <AddCountry
                         addEntityDialog={addEntityDialog}

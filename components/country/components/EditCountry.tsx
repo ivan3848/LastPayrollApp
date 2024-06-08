@@ -10,6 +10,8 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import { Button } from "primereact/button";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
+import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
+import useEditCountryQuery from "../Hooks/useEditCountryQuery";
 
 interface Props {
     entity: ICountry;
@@ -26,7 +28,6 @@ const EditCountry = ({
     setSubmitted,
     toast,
 }: Props) => {
-  
     const { editEntityFormSchema } = countryFormSchemas();
 
     const {
@@ -38,28 +39,11 @@ const EditCountry = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const editEntity = useMutation({
-        mutationFn: (entity: ICountry) => countryService.put(entity),
-        onError: (error: any) => {
-            toast.current?.show({
-                severity: "warn",
-                summary: "Error",
-                detail: error.response.data,
-                life: 3000,
-            });
-        },
-        onSuccess: () => {
-            reset();
-            setEditEntityDialog(false);
-            setSubmitted(true);
-
-            toast.current?.show({
-                severity: "success",
-                summary: "Editado!",
-                detail: "Registro editado correctamente",
-                life: 3000,
-            });
-        },
+    const editEntity = useEditCountryQuery({
+        toast,
+        setEditEntityDialog,
+        setSubmitted,
+        reset,
     });
 
     const onSubmit = (data: ICountry) => {
@@ -71,18 +55,6 @@ const EditCountry = ({
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
-
-    const editDialogFooter = (
-        <div className="flex justify-content-end">
-            <Button
-                label="Cancelar"
-                icon="pi pi-times"
-                text
-                onClick={hideDialog}
-            />
-            <Button label="Guardar" icon="pi pi-check" type="submit" />
-        </div>
-    );
 
     return (
         <Dialog
@@ -113,7 +85,7 @@ const EditCountry = ({
                         </small>
                     )}
                 </div>
-                {editDialogFooter}
+                <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );
