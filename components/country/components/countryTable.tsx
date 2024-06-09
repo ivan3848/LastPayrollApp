@@ -1,19 +1,15 @@
-import IResponse from "@/types/IResponse";
+import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
+import { FilterMatchMode } from "primereact/api";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTableFilterEvent,
-    DataTableFilterMeta,
     DataTablePageEvent,
     DataTableSortEvent,
-    SortOrder,
 } from "primereact/datatable";
-import { useState } from "react";
-import { ICountry } from "../Types/ICountry";
-import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
 import useCountryQuery from "../Hooks/useCountryQuery";
-import { FilterMatchMode } from "primereact/api";
+import { ICountry } from "../Types/ICountry";
 
 interface Props {
     submitted: boolean;
@@ -28,7 +24,7 @@ const CountryTable = ({
     handleEdit,
     handleAdd,
 }: Props) => {
-    const { setPage, setPageSize, setFilters, setSorts, params } =
+    const { setPage, setPageSize, setFilters, setSorts, clearSorts, params } =
         useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
@@ -71,20 +67,13 @@ const CountryTable = ({
                 setSorts([{ sortBy: event.sortField, isAsc: false }]);
                 break;
             default:
-                setSorts([]);
+                clearSorts();
                 break;
         }
     };
 
-    // const onFilter = (event: DataTableFilterEvent) => {
-    //     console.log(event.filters);
-    // };
-
-    const calculateFirstRow = (
-        pageNumber: number,
-        pageSize: number
-    ): number => {
-        return (pageNumber - 1) * pageSize;
+    const onFilter = (event: DataTableFilterEvent) => {
+        console.log(event.filters);
     };
 
     const header = (
@@ -110,10 +99,11 @@ const CountryTable = ({
             paginator
             loading={isLoading || isFetching}
             onSort={onSort}
+            removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-            sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : 0}
+            sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
             sortMode="single"
-            // onFilter={onFilter}
+            onFilter={onFilter}
             // filters={lazyState.filters}
             totalRecords={data?.totalCount}
             className="datatable-responsive"
@@ -123,7 +113,7 @@ const CountryTable = ({
             onPage={onPage}
             rowsPerPageOptions={[5, 10, 25]}
             rows={data?.pageSize!}
-            first={calculateFirstRow(data?.page!, data?.pageSize!)}
+            first={data.firstRow!}
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column

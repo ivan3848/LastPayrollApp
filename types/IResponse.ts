@@ -6,4 +6,5 @@ export default interface IResponse<T> {
     pageSize?: number;
     totalCount?: number;
     totalPages?: number;
+    firstRow?: number;
 }

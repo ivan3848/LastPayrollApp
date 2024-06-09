@@ -42,9 +42,7 @@ const useParamFilter = () => {
         );
     };
 
-    const setSorts = (
-        sorts: { sortBy: string; isAsc: boolean }[]
-    ) => {
+    const setSorts = (sorts: { sortBy: string; isAsc: boolean }[]) => {
         setParams((currentParams) =>
             produce(currentParams, (draft) => {
                 draft.filter!.sorts = sorts;
@@ -52,7 +50,23 @@ const useParamFilter = () => {
         );
     };
 
-    const clearFilter = () =>
+    const clearFilters = () => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.filters = [];
+            })
+        );
+    };
+
+    const clearSorts = () => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.sorts = [];
+            })
+        );
+    };
+
+    const clear = () =>
         setParams({
             filter: { page: 1, pageSize: 5 },
         });
@@ -63,7 +77,9 @@ const useParamFilter = () => {
         setGlobalFilter,
         setFilters,
         setSorts,
-        clearFilter,
+        clear,
+        clearFilters,
+        clearSorts,
         params,
     };
 };
@@ -113,12 +129,21 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
             filter: { page: 1, pageSize: 5 },
         });
 
+    const setSorts = (sorts: { sortBy: string; isAsc: boolean }[]) => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.sorts = sorts;
+            })
+        );
+    };
+
     return {
         setPage,
         setPageSize,
         setGlobalFilter,
         setFilters,
         clearFilter,
+        setSorts,
         params,
     };
 };
