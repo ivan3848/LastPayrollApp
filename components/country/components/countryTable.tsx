@@ -1,10 +1,8 @@
 import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
-import { FilterMatchMode } from "primereact/api";
 import { Button } from "primereact/button";
-import { Column } from "primereact/column";
+import { Column, ColumnFilterApplyClickEvent } from "primereact/column";
 import {
     DataTable,
-    DataTableFilterEvent,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
@@ -24,8 +22,15 @@ const CountryTable = ({
     handleEdit,
     handleAdd,
 }: Props) => {
-    const { setPage, setPageSize, setFilters, setSorts, clearSorts, params } =
-        useParamFilter();
+    const {
+        setPage,
+        setPageSize,
+        setFilters,
+        setSorts,
+        clearSorts,
+        clearFilters,
+        params,
+    } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading, isFetching } = useCountryQuery(
@@ -72,8 +77,13 @@ const CountryTable = ({
         }
     };
 
-    const onFilter = (event: DataTableFilterEvent) => {
-        console.log(event.filters);
+    const onFilter = (event: any) => {
+        setFilters([
+            {
+                column: event.field,
+                value: event.constraints.constraints?.[0].value,
+            },
+        ]);
     };
 
     const header = (
@@ -103,12 +113,10 @@ const CountryTable = ({
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
             sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
             sortMode="single"
-            onFilter={onFilter}
-            // filters={lazyState.filters}
             totalRecords={data?.totalCount}
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-            emptyMessage="No hay registros."
+            emptyMessage="No hay registros para mostrar."
             header={header}
             onPage={onPage}
             rowsPerPageOptions={[5, 10, 25]}
@@ -123,7 +131,10 @@ const CountryTable = ({
                 sortable
                 filter
                 filterField="name"
-                filterMatchMode={"contains" as FilterMatchMode}
+                filterPlaceholder="Buscar por país"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
             ></Column>
             <Column
                 header="Acciones"
