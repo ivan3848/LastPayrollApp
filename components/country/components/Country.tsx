@@ -1,12 +1,15 @@
 "use client";
 
 import DeleteEntity from "@/components/Shared/components/DeleteEntity";
+import TableSkeletonTemplate from "@/components/Shared/components/TableSkeletonTemplate";
 import useCrudModals from "@/components/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
+import { lazy, Suspense } from "react";
 import { ICountry } from "../Types/ICountry";
 import AddCountry from "./AddCountry";
-import CountryTable from "./CountryTable";
 import EditCountry from "./EditCountry";
+
+const CountryTable = lazy(() => import("./CountryTable"));
 
 const Country = () => {
     const {
@@ -40,40 +43,55 @@ const Country = () => {
         setDeleteEntityDialog(true);
     };
 
+    const entityProperties = ["País", "Acciones"];
+
     return (
         <div className="grid">
             <div className="w-full">
                 <div className="card">
                     <Toast ref={toast} />
 
-                    <CountryTable
-                        submitted={submitted}
-                        handleAdd={handleAdd}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                    />
+                    <Suspense
+                        fallback={
+                            <TableSkeletonTemplate items={entityProperties} />
+                        }
+                    >
+                        <CountryTable
+                            submitted={submitted}
+                            handleAdd={handleAdd}
+                            handleDelete={handleDelete}
+                            handleEdit={handleEdit}
+                        />
+                    </Suspense>
 
-                    <AddCountry
-                        addEntityDialog={addEntityDialog}
-                        setAddEntityDialog={setAddEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
-                    />
-                    <EditCountry
-                        entity={entity!}
-                        editEntityDialog={editEntityDialog}
-                        setEditEntityDialog={setEditEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
-                    />
-                    <DeleteEntity
-                        id={entity?.idCountry ?? 0}
-                        endpoint="employee/country"
-                        deleteEntityDialog={deleteEntityDialog}
-                        setDeleteEntityDialog={setDeleteEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
-                    />
+                    {addEntityDialog && (
+                        <AddCountry
+                            addEntityDialog={addEntityDialog}
+                            setAddEntityDialog={setAddEntityDialog}
+                            setSubmitted={setSubmitted}
+                            toast={toast}
+                        />
+                    )}
+
+                    {editEntityDialog && (
+                        <EditCountry
+                            entity={entity!}
+                            editEntityDialog={editEntityDialog}
+                            setEditEntityDialog={setEditEntityDialog}
+                            setSubmitted={setSubmitted}
+                            toast={toast}
+                        />
+                    )}
+                    {deleteEntityDialog && (
+                        <DeleteEntity
+                            id={entity?.idCountry ?? 0}
+                            endpoint="employee/country"
+                            deleteEntityDialog={deleteEntityDialog}
+                            setDeleteEntityDialog={setDeleteEntityDialog}
+                            setSubmitted={setSubmitted}
+                            toast={toast}
+                        />
+                    )}
                 </div>
             </div>
         </div>

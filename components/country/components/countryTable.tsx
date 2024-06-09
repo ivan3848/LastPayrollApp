@@ -1,3 +1,4 @@
+import ActionTableTemplate from "@/components/Shared/components/ActionTableTemplate";
 import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
@@ -8,7 +9,7 @@ import {
 } from "primereact/datatable";
 import useCountryQuery from "../Hooks/useCountryQuery";
 import { ICountry } from "../Types/ICountry";
-import ActionTableTemplate from "@/components/Shared/components/ActionTableTemplate";
+import { useState } from "react";
 
 interface Props {
     submitted: boolean;

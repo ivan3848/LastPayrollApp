@@ -70,7 +70,7 @@ const EditCountry = ({
                         {...register("name")}
                         id="name"
                         autoFocus
-                        defaultValue={entity.name}
+                        defaultValue={entity?.name}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}

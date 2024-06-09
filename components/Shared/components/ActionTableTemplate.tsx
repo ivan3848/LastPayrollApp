@@ -12,7 +12,7 @@ function ActionTableTemplate<T>({
     handleEdit,
     handleDelete,
 }: Props<T>) {
-    console.log(entity);
+
     return (
         <>
             <Button
