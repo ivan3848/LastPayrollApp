@@ -1,6 +1,6 @@
 import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
-import { Column, ColumnFilterApplyClickEvent } from "primereact/column";
+import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
@@ -8,6 +8,7 @@ import {
 } from "primereact/datatable";
 import useCountryQuery from "../Hooks/useCountryQuery";
 import { ICountry } from "../Types/ICountry";
+import ActionTableTemplate from "@/components/Shared/components/ActionTableTemplate";
 
 interface Props {
     submitted: boolean;
@@ -33,30 +34,7 @@ const CountryTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading, isFetching } = useCountryQuery(
-        params,
-        listOfDependencies
-    );
-
-    const actionBodyTemplate = (rowData: ICountry) => {
-        return (
-            <>
-                <Button
-                    icon="pi pi-pencil"
-                    className="mr-2"
-                    rounded
-                    severity="info"
-                    onClick={() => handleEdit(rowData)}
-                />
-                <Button
-                    icon="pi pi-trash"
-                    rounded
-                    severity="secondary"
-                    onClick={() => handleDelete(rowData)}
-                />
-            </>
-        );
-    };
+    const { data, isLoading } = useCountryQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -107,7 +85,7 @@ const CountryTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading || isFetching}
+            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -138,7 +116,13 @@ const CountryTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={actionBodyTemplate}
+                body={(rowData) => (
+                    <ActionTableTemplate<ICountry>
+                        entity={rowData}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                    />
+                )}
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

@@ -1,26 +1,13 @@
+import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import countryService from "../Services/countryService";
+import useAddCountryQuery from "../Hooks/useAddCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
-import useAddCountryQuery from "../Hooks/useAddCountryQuery";
-import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
-
-const addEntityFormSchema = z.object({
-    name: z
-        .string()
-        .min(2, { message: "El país debe tener al menos 2 caracteres" })
-        .max(100, {
-            message: "El país debe tener menos de 100 caracteres",
-        }),
-});
 
 interface Props {
     addEntityDialog: boolean;

@@ -1,17 +1,13 @@
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { ICountry } from "../Types/ICountry";
+import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
-import countryService from "../Services/countryService";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import { Button } from "primereact/button";
-import countryFormSchemas from "../Validations/CountryFormSchemas";
-import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
+import React from "react";
+import { useForm } from "react-hook-form";
 import useEditCountryQuery from "../Hooks/useEditCountryQuery";
+import { ICountry } from "../Types/ICountry";
+import countryFormSchemas from "../Validations/CountryFormSchemas";
 
 interface Props {
     entity: ICountry;
@@ -74,7 +70,7 @@ const EditCountry = ({
                         {...register("name")}
                         id="name"
                         autoFocus
-                        defaultValue={entity?.name}
+                        defaultValue={entity.name}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
