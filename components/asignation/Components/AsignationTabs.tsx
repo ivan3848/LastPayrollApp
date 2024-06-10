@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 
-const LocationTabs = () => {
+const AsignationTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
@@ -21,4 +21,4 @@ const LocationTabs = () => {
     );
 };
 
-export default LocationTabs;
+export default AsignationTabs;
