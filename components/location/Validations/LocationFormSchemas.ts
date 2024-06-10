@@ -11,7 +11,11 @@ const locationFormSchemas = () => {
                 message: "La ubicación debe tener menos de 100 caracteres",
             }),
         Address: z.string().optional(),
-        Code: z.string().optional(),
+        Code: z.string()
+            .min(1, { message: "El código debe tener al menos 1 carácter" })
+            .max(4, {
+                message: "El código no debe tener mas de 4 caracteres",
+            }),
     });
 
     const addEntityFormSchema = z.object({
@@ -23,7 +27,11 @@ const locationFormSchemas = () => {
                 message: "La ubicación debe tener menos de 100 caracteres",
             }),
         Address: z.string().optional(),
-        Code: z.string().optional(),
+        Code: z.string()
+            .min(1, { message: "El código debe tener al menos 1 carácter" })
+            .max(4, {
+                message: "El código no debe tener mas de 4 caracteres",
+            }),
     });
 
     return { editEntityFormSchema, addEntityFormSchema };

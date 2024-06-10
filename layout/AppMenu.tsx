@@ -10,12 +10,12 @@ const AppMenu = () => {
                 {
                     label: "Ubicaciones",
                     icon: "pi pi-fw pi-map-marker",
-                    to: "/pages/maintenance/location",
+                    to: "/maintenance/location",
                 },
                 {
                     label: "Asignaciones",
                     icon: "pi pi-fw pi-users",
-                    to: "/pages/maintenance/asignation",
+                    to: "/maintenance/asignation",
                 },
             ],
         },

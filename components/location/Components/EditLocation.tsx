@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import useEditLocationQuery from "../Hooks/useEditLocationQuery";
 import { ILocation } from "../Types/ILocation";
 import locationFormSchemas from "../Validations/LocationFormSchemas";
+import GenericDropDown from "@/components/Shared/Components/GenericDropDown";
 
 interface Props {
     entity: ILocation;
@@ -60,10 +61,6 @@ const EditLocation = ({
         setEditEntityDialog(false);
     };
 
-    const setDropdownValues = () => {
-        setValue("idZone", entity.idZone);
-    };
-
     return (
         <Dialog
             visible={editEntityDialog}
@@ -72,7 +69,6 @@ const EditLocation = ({
             modal
             className="p-fluid"
             onHide={hideDialog}
-            onShow={setDropdownValues}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
@@ -135,25 +131,14 @@ const EditLocation = ({
                     <label htmlFor="idZone" className="w-full">
                         Zona
                     </label>
-                    <Dropdown
-                        value={data.items.find(
-                            (item) =>
-                                item.idZone ===
-                                (watch("idZone") ?? entity.idZone)
-                        )}
-                        onChange={(e: DropdownChangeEvent) =>
-                            setValue("idZone", e.value.idZone)
-                        }
-                        options={data.items}
-                        optionLabel="name"
-                        placeholder="Seleccione una opción..."
-                        filter
-                        className={classNames(
-                            {
-                                "p-invalid": errors.idZone,
-                            },
-                            "w-full"
-                        )}
+                    <GenericDropDown
+                        id="idZone"
+                        isValid={!!errors.idZone}
+                        text="name"
+                        data={data.items}
+                        setValue={setValue}
+                        watch={watch}
+                        idValueEdit={entity.idZone}
                     />
                     {errors.idZone && (
                         <small className="p-invalid text-danger">

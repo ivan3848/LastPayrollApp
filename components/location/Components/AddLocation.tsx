@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import useAddLocationQuery from "../Hooks/useAddLocationQuery";
 import { ILocation } from "../Types/ILocation";
 import locationFormSchemas from "../Validations/LocationFormSchemas";
+import GenericDropDown from "@/components/Shared/Components/GenericDropDown";
 
 interface Props {
     addEntityDialog: boolean;
@@ -49,6 +50,7 @@ const AddLocation = ({
     });
 
     const onSubmit = (data: ILocation) => {
+        console.log(data);
         addEntity.mutate(data);
         return;
     };
@@ -60,9 +62,9 @@ const AddLocation = ({
     return (
         <Dialog
             visible={addEntityDialog}
-            style={{ width: "450px" }}
             header="Agregar Ubicación"
             modal
+            style={{ width: "450px" }}
             className="p-fluid"
             onHide={hideDialog}
         >
@@ -123,23 +125,13 @@ const AddLocation = ({
                     <label htmlFor="idZone" className="w-full">
                         Zona
                     </label>
-                    <Dropdown
-                        value={data.items.find(
-                            (item) => item.idZone === watch("idZone")
-                        )}
-                        onChange={(e: DropdownChangeEvent) =>
-                            setValue("idZone", e.value.idZone)
-                        }
-                        options={data.items}
-                        optionLabel="name"
-                        placeholder="Seleccione una opción..."
-                        filter
-                        className={classNames(
-                            {
-                                "p-invalid": errors.idZone,
-                            },
-                            "w-full"
-                        )}
+                    <GenericDropDown
+                        id="idZone"
+                        isValid={!!errors.idZone}
+                        text="name"
+                        data={data.items}
+                        setValue={setValue}
+                        watch={watch}
                     />
                     {errors.idZone && (
                         <small className="p-invalid text-danger">
