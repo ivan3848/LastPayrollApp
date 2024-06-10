@@ -156,7 +156,7 @@ const LocationTable = ({
                 filter
                 filterField="idZone"
                 filterPlaceholder="Buscar por zona"
-                filterElement={(event: any) => (
+                filterElement={() => (
                     <TableDropDownFilter
                         data={zoneDropDown.items}
                         text="name"
