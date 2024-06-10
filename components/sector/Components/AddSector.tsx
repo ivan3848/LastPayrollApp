@@ -1,4 +1,4 @@
-import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
+import useProvinceQuery from "@/components/province/Hooks/useProvinceQuery";
 import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
 import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,9 +8,9 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddRegionQuery from "../Hooks/useAddRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useAddSectorQuery from "../Hooks/useAddSectorQuery,";
+import { ISector } from "../Types/ISector";
+import sectorFormSchemas from "../Validations/SectorFormSchemas";
 
 interface Props {
     addEntityDialog: boolean;
@@ -19,13 +19,13 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddRegion = ({
+const AddSector = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = regionFormSchemas();
+    const { addEntityFormSchema } = sectorFormSchemas();
 
     const {
         handleSubmit,
@@ -34,21 +34,21 @@ const AddRegion = ({
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IRegion>({
+    } = useForm<ISector>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useProvinceQuery(params, []);
 
-    const addEntity = useAddRegionQuery({
+    const addEntity = useAddSectorQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
+    const onSubmit = (data: ISector) => {
         addEntity.mutate(data);
         return;
     };
@@ -61,7 +61,7 @@ const AddRegion = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar Región"
+            header="Agregar Sector"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -69,7 +69,7 @@ const AddRegion = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Sector
                     </label>
                     <InputText
                         {...register("name")}
@@ -86,15 +86,15 @@ const AddRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="idProvince" className="w-full">
+                        Provincia
                     </label>
                     <Dropdown
                         value={data.items.find(
-                            (item) => item.idCountry === watch("idCountry")
+                            (item) => item.idProvince === watch("idProvince")
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idProvince", e.value.idProvince)
                         }
                         options={data.items}
                         optionLabel="name"
@@ -102,14 +102,14 @@ const AddRegion = ({
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idProvince,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idProvince && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idProvince.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -119,4 +119,4 @@ const AddRegion = ({
     );
 };
 
-export default AddRegion;
+export default AddSector;

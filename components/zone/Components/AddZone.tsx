@@ -8,9 +8,10 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddRegionQuery from "../Hooks/useAddRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useAddZoneQuery from "../Hooks/useAddZoneQuery";
+import { IZone } from "../Types/IZone";
+import zoneFormSchemas from "../Validations/ZoneFormSchemas";
+import useSectorQuery from "@/components/sector/Hooks/useSectorQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -19,13 +20,13 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddRegion = ({
+const AddZone = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = regionFormSchemas();
+    const { addEntityFormSchema } = zoneFormSchemas();
 
     const {
         handleSubmit,
@@ -34,21 +35,21 @@ const AddRegion = ({
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IRegion>({
+    } = useForm<IZone>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useSectorQuery(params, []);
 
-    const addEntity = useAddRegionQuery({
+    const addEntity = useAddZoneQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
+    const onSubmit = (data: IZone) => {
         addEntity.mutate(data);
         return;
     };
@@ -61,7 +62,7 @@ const AddRegion = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar Región"
+            header="Agregar Zona"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -69,7 +70,7 @@ const AddRegion = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Zona
                     </label>
                     <InputText
                         {...register("name")}
@@ -86,30 +87,47 @@ const AddRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="zoneCode" className="w-full">
+                        Código de zona
+                    </label>
+                    <InputText
+                        {...register("zoneCode")}
+                        id="zoneCode"
+                        className={classNames({
+                            "p-invalid": errors.zoneCode,
+                        })}
+                    />
+                    {errors.zoneCode && (
+                        <small className="p-invalid text-danger">
+                            {errors.zoneCode.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
+                    <label htmlFor="idSector" className="w-full">
+                        Sector
                     </label>
                     <Dropdown
                         value={data.items.find(
-                            (item) => item.idCountry === watch("idCountry")
+                            (item) => item.idSector === watch("idSector")
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idSector", e.value.idSector)
                         }
                         options={data.items}
-                        optionLabel="name"
+                        optionLabel="zoneCode"
                         placeholder="Seleccione una opción..."
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idSector,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idSector && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idSector.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -119,4 +137,4 @@ const AddRegion = ({
     );
 };
 
-export default AddRegion;
+export default AddZone;

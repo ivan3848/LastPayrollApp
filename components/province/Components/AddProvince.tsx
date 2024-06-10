@@ -8,9 +8,10 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddRegionQuery from "../Hooks/useAddRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useAddProvinceQuery from "../Hooks/useAddProvinceQuery";
+import { IProvince } from "../Types/IProvince";
+import provinceFormSchemas from "../Validations/ProvinceFormSchemas";
+import useCityQuery from "@/components/city/Hooks/useCityQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -19,13 +20,13 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddRegion = ({
+const AddProvince = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = regionFormSchemas();
+    const { addEntityFormSchema } = provinceFormSchemas();
 
     const {
         handleSubmit,
@@ -34,21 +35,21 @@ const AddRegion = ({
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IRegion>({
+    } = useForm<IProvince>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useCityQuery(params, []);
 
-    const addEntity = useAddRegionQuery({
+    const addEntity = useAddProvinceQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
+    const onSubmit = (data: IProvince) => {
         addEntity.mutate(data);
         return;
     };
@@ -61,7 +62,7 @@ const AddRegion = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar Región"
+            header="Agregar Provincia"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -69,7 +70,7 @@ const AddRegion = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Provincia
                     </label>
                     <InputText
                         {...register("name")}
@@ -86,15 +87,15 @@ const AddRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="idCity" className="w-full">
+                        Ciudad
                     </label>
                     <Dropdown
                         value={data.items.find(
-                            (item) => item.idCountry === watch("idCountry")
+                            (item) => item.idCity === watch("idCity")
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idCity", e.value.idCity)
                         }
                         options={data.items}
                         optionLabel="name"
@@ -102,14 +103,14 @@ const AddRegion = ({
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idCity,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idCity && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idCity.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -119,4 +120,4 @@ const AddRegion = ({
     );
 };
 
-export default AddRegion;
+export default AddProvince;

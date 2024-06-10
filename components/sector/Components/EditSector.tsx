@@ -1,6 +1,6 @@
-import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
 import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
 import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
+import useProvinceQuery from "@/components/province/Hooks/useProvinceQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
@@ -8,73 +8,82 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddRegionQuery from "../Hooks/useAddRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useEditSectorQuery from "../Hooks/useEditSectorQuery";
+import { ISector } from "../Types/ISector";
+import sectorFormSchemas from "../Validations/SectorFormSchemas";
 
 interface Props {
-    addEntityDialog: boolean;
-    setAddEntityDialog: (value: boolean) => void;
+    entity: ISector;
+    editEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const AddRegion = ({
-    addEntityDialog,
-    setAddEntityDialog,
+const EditSector = ({
+    entity,
+    editEntityDialog,
+    setEditEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = regionFormSchemas();
+    const { editEntityFormSchema } = sectorFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
-        setValue,
         watch,
+        setValue,
         formState: { errors },
-    } = useForm<IRegion>({
-        resolver: zodResolver(addEntityFormSchema),
+    } = useForm<ISector>({
+        resolver: zodResolver(editEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useProvinceQuery(params, []);
 
-    const addEntity = useAddRegionQuery({
+    const editEntity = useEditSectorQuery({
         toast,
-        setAddEntityDialog,
+        setEditEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
-        addEntity.mutate(data);
+    const onSubmit = (data: ISector) => {
+        data.idSector = entity.idSector;
+        editEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
+    };
+
+    const setDropdownValues = () => {
+        setValue("idProvince", entity.idProvince);
     };
 
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar Región"
+            header="Editar Provincia"
             modal
             className="p-fluid"
             onHide={hideDialog}
+            onShow={setDropdownValues}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Sector
                     </label>
                     <InputText
                         {...register("name")}
                         id="name"
                         autoFocus
+                        defaultValue={entity?.name}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
@@ -86,15 +95,17 @@ const AddRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="idProvince" className="w-full">
+                        Provincia
                     </label>
                     <Dropdown
                         value={data.items.find(
-                            (item) => item.idCountry === watch("idCountry")
+                            (item) =>
+                                item.idProvince ===
+                                (watch("idProvince") ?? entity.idProvince)
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idProvince", e.value.idProvince)
                         }
                         options={data.items}
                         optionLabel="name"
@@ -102,14 +113,14 @@ const AddRegion = ({
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idProvince,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idProvince && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idProvince.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -119,4 +130,4 @@ const AddRegion = ({
     );
 };
 
-export default AddRegion;
+export default EditSector;

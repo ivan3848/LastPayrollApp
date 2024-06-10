@@ -1,6 +1,6 @@
 import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
 import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
-import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
+import useZoneQuery from "@/components/zone/Hooks/useZoneQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
@@ -8,26 +8,26 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditRegionQuery from "../Hooks/useEditRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useEditLocationQuery from "../Hooks/useEditLocationQuery";
+import { ILocation } from "../Types/ILocation";
+import locationFormSchemas from "../Validations/LocationFormSchemas";
 
 interface Props {
-    entity: IRegion;
+    entity: ILocation;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditRegion = ({
+const EditLocation = ({
     entity,
     editEntityDialog,
     setEditEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = regionFormSchemas();
+    const { editEntityFormSchema } = locationFormSchemas();
 
     const {
         handleSubmit,
@@ -36,22 +36,22 @@ const EditRegion = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IRegion>({
+    } = useForm<ILocation>({
         resolver: zodResolver(editEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useZoneQuery(params, []);
 
-    const editEntity = useEditRegionQuery({
+    const editEntity = useEditLocationQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
-        data.idRegion = entity.idRegion;
+    const onSubmit = (data: ILocation) => {
+        data.idLocation = entity.idLocation;
         editEntity.mutate(data);
         return;
     };
@@ -61,14 +61,14 @@ const EditRegion = ({
     };
 
     const setDropdownValues = () => {
-        setValue("idCountry", entity.idCountry);
+        setValue("idZone", entity.idZone);
     };
 
     return (
         <Dialog
             visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Región"
+            header="Editar Ubicación"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -77,7 +77,7 @@ const EditRegion = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Ubicación
                     </label>
                     <InputText
                         {...register("name")}
@@ -95,17 +95,54 @@ const EditRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="address" className="w-full">
+                        Dirección
+                    </label>
+                    <InputText
+                        {...register("address")}
+                        id="address"
+                        defaultValue={entity?.address}
+                        className={classNames({
+                            "p-invalid": errors.address,
+                        })}
+                    />
+                    {errors.address && (
+                        <small className="p-invalid text-danger">
+                            {errors.address.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
+                    <label htmlFor="code" className="w-full">
+                        Código
+                    </label>
+                    <InputText
+                        {...register("code")}
+                        id="code"
+                        autoFocus
+                        defaultValue={entity?.code}
+                        className={classNames({
+                            "p-invalid": errors.code,
+                        })}
+                    />
+                    {errors.code && (
+                        <small className="p-invalid text-danger">
+                            {errors.code.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
+                    <label htmlFor="idZone" className="w-full">
+                        Zona
                     </label>
                     <Dropdown
                         value={data.items.find(
                             (item) =>
-                                item.idCountry ===
-                                (watch("idCountry") ?? entity.idCountry)
+                                item.idZone ===
+                                (watch("idZone") ?? entity.idZone)
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idZone", e.value.idZone)
                         }
                         options={data.items}
                         optionLabel="name"
@@ -113,14 +150,14 @@ const EditRegion = ({
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idZone,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idZone && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idZone.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -130,4 +167,4 @@ const EditRegion = ({
     );
 };
 
-export default EditRegion;
+export default EditLocation;

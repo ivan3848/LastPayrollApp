@@ -1,6 +1,6 @@
-import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
 import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
 import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
+import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
@@ -8,73 +8,83 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddRegionQuery from "../Hooks/useAddRegionQuery";
-import { IRegion } from "../Types/IRegion";
-import regionFormSchemas from "../Validations/RegionFormSchemas";
+import useEditZoneQuery from "../Hooks/useEditZoneQuery";
+import { IZone } from "../Types/IZone";
+import zoneFormSchemas from "../Validations/ZoneFormSchemas";
+import useSectorQuery from "@/components/sector/Hooks/useSectorQuery";
 
 interface Props {
-    addEntityDialog: boolean;
-    setAddEntityDialog: (value: boolean) => void;
+    entity: IZone;
+    editEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const AddRegion = ({
-    addEntityDialog,
-    setAddEntityDialog,
+const EditZone = ({
+    entity,
+    editEntityDialog,
+    setEditEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = regionFormSchemas();
+    const { editEntityFormSchema } = zoneFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
-        setValue,
         watch,
+        setValue,
         formState: { errors },
-    } = useForm<IRegion>({
-        resolver: zodResolver(addEntityFormSchema),
+    } = useForm<IZone>({
+        resolver: zodResolver(editEntityFormSchema),
     });
 
     const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
+    const { data } = useSectorQuery(params, []);
 
-    const addEntity = useAddRegionQuery({
+    const editEntity = useEditZoneQuery({
         toast,
-        setAddEntityDialog,
+        setEditEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IRegion) => {
-        addEntity.mutate(data);
+    const onSubmit = (data: IZone) => {
+        data.idZone = entity.idZone;
+        editEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
+    };
+
+    const setDropdownValues = () => {
+        setValue("idSector", entity.idSector);
     };
 
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar Región"
+            header="Editar Zona"
             modal
             className="p-fluid"
             onHide={hideDialog}
+            onShow={setDropdownValues}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Región
+                        Zona
                     </label>
                     <InputText
                         {...register("name")}
                         id="name"
                         autoFocus
+                        defaultValue={entity?.name}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
@@ -86,15 +96,35 @@ const AddRegion = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idCountry" className="w-full">
-                        País
+                    <label htmlFor="zoneCode" className="w-full">
+                        Código de zona
+                    </label>
+                    <InputText
+                        {...register("zoneCode")}
+                        id="zoneCode"
+                        defaultValue={entity?.zoneCode}
+                        className={classNames({
+                            "p-invalid": errors.zoneCode,
+                        })}
+                    />
+                    {errors.zoneCode && (
+                        <small className="p-invalid text-danger">
+                            {errors.zoneCode.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
+                    <label htmlFor="idSector" className="w-full">
+                        Sector
                     </label>
                     <Dropdown
                         value={data.items.find(
-                            (item) => item.idCountry === watch("idCountry")
+                            (item) =>
+                                item.idSector ===
+                                (watch("idSector") ?? entity.idSector)
                         )}
                         onChange={(e: DropdownChangeEvent) =>
-                            setValue("idCountry", e.value.idCountry)
+                            setValue("idSector", e.value.idSector)
                         }
                         options={data.items}
                         optionLabel="name"
@@ -102,14 +132,14 @@ const AddRegion = ({
                         filter
                         className={classNames(
                             {
-                                "p-invalid": errors.idCountry,
+                                "p-invalid": errors.idSector,
                             },
                             "w-full"
                         )}
                     />
-                    {errors.idCountry && (
+                    {errors.idSector && (
                         <small className="p-invalid text-danger">
-                            {errors.idCountry.message?.toString()}
+                            {errors.idSector.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -119,4 +149,4 @@ const AddRegion = ({
     );
 };
 
-export default AddRegion;
+export default EditZone;
