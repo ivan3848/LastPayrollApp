@@ -8,7 +8,7 @@ interface Props {
 
 const useParamFilter = () => {
     const [params, setParams] = useState<IParamsApi>({
-        filter: { page: 1, pageSize: 5 },
+        filter: { page: 1, pageSize: 5, allData: false, filters: [] },
     });
 
     const setPage = (page: number) =>
@@ -53,7 +53,9 @@ const useParamFilter = () => {
     const clearFilters = () => {
         setParams((currentParams) =>
             produce(currentParams, (draft) => {
-                draft.filter!.filters = [];
+                if (draft.filter) {
+                    draft.filter.filters = [];
+                }
             })
         );
     };
@@ -68,7 +70,7 @@ const useParamFilter = () => {
 
     const clear = () =>
         setParams({
-            filter: { page: 1, pageSize: 5 },
+            filter: { page: 1, pageSize: 5, allData: false, filters: [] },
         });
 
     return {
@@ -148,5 +150,16 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
     };
 };
 
+const useParamAllData = () => {
+    const [params, setParams] = useState<IParamsApi>({
+        filter: { page: 1, pageSize: 5, allData: true },
+    });
+
+    return {
+        params,
+    };
+};
+
 export default useParamFilter;
 export { useParamFilterByTableName };
+export { useParamAllData };

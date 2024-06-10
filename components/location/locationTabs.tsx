@@ -1,7 +1,12 @@
 "use client";
 
 import { TabPanel, TabView } from "primereact/tabview";
-import Country from "../country/components/Country";
+import dynamic from "next/dynamic";
+import { Suspense } from "react";
+import TabSkeletonTemplate from "../Shared/Components/TabSkeletonTemplate";
+
+const Country = dynamic(() => import("../country/Components/Country"));
+const Region = dynamic(() => import("../region/Components/Region"));
 
 const LocationTabs = () => {
     return (
@@ -9,37 +14,14 @@ const LocationTabs = () => {
             <div className="col-12">
                 <TabView>
                     <TabPanel header="País" leftIcon="pi pi-map mr-2">
-                        <Country />
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <Country />
+                        </Suspense>
                     </TabPanel>
                     <TabPanel header="Región" rightIcon="pi pi-user ml-2">
-                        <p className="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit
-                            voluptatem accusantium doloremque laudantium, totam
-                            rem aperiam, eaque ipsa quae ab illo inventore
-                            veritatis et quasi architecto beatae vitae dicta
-                            sunt explicabo. Nemo enim ipsam voluptatem quia
-                            voluptas sit aspernatur aut odit aut fugit, sed quia
-                            consequuntur magni dolores eos qui ratione
-                            voluptatem sequi nesciunt. Consectetur, adipisci
-                            velit, sed quia non numquam eius modi.
-                        </p>
-                    </TabPanel>
-                    <TabPanel
-                        header="Header III"
-                        leftIcon="pi pi-search mr-2"
-                        rightIcon="pi pi-cog ml-2"
-                    >
-                        <p className="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos
-                            ducimus qui blanditiis praesentium voluptatum
-                            deleniti atque corrupti quos dolores et quas
-                            molestias excepturi sint occaecati cupiditate non
-                            provident, similique sunt in culpa qui officia
-                            deserunt mollitia animi, id est laborum et dolorum
-                            fuga. Et harum quidem rerum facilis est et expedita
-                            distinctio. Nam libero tempore, cum soluta nobis est
-                            eligendi optio cumque nihil impedit quo minus.
-                        </p>
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <Region />
+                        </Suspense>
                     </TabPanel>
                 </TabView>
             </div>

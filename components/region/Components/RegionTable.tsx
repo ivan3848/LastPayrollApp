@@ -1,5 +1,9 @@
+import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
 import ActionTableTemplate from "@/components/Shared/Components/ActionTableTemplate";
-import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
+import TableDropDownFilter from "@/components/Shared/Components/TableDropDownFilter";
+import useParamFilter, {
+    useParamAllData,
+} from "@/components/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -7,17 +11,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useCountryQuery from "../Hooks/useCountryQuery";
-import { ICountry } from "../Types/ICountry";
+import useRegionQuery from "../Hooks/useRegionQuery";
+import { IRegion } from "../Types/IRegion";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: ICountry) => void;
-    handleDelete: (entity: ICountry) => void;
+    handleEdit: (entity: IRegion) => void;
+    handleDelete: (entity: IRegion) => void;
 }
 
-const CountryTable = ({
+const RegionTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -34,7 +38,10 @@ const CountryTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCountryQuery(params, listOfDependencies);
+    const { data, isLoading } = useRegionQuery(params, listOfDependencies);
+
+    const { params: filter } = useParamAllData();
+    const { data: countryDropDown } = useCountryQuery(filter, []);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -66,7 +73,7 @@ const CountryTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Países</h3>
+            <h3 className="m-0">Regiones</h3>
 
             <Button
                 label="Agregar"
@@ -80,8 +87,8 @@ const CountryTable = ({
 
     return (
         <DataTable
-            id="Country-Table"
-            dataKey="idCountry"
+            id="Region-Table"
+            dataKey="idRegion"
             value={data?.items}
             lazy
             paginator
@@ -104,20 +111,44 @@ const CountryTable = ({
         >
             <Column
                 field="name"
-                header="País"
+                header="Región"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por país"
+                filterPlaceholder="Buscar por región"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
+
+            <Column
+                field="country"
+                header="País"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="idCountry"
+                filterPlaceholder="Buscar por país"
+                filterElement={(event: any) => (
+                    <TableDropDownFilter
+                        data={countryDropDown.items}
+                        text="name"
+                        column="idCountry"
+                        setFilters={setFilters}
+                        clearFilters={clearFilters}
+                    />
+                )}
+                showFilterMenuOptions={false}
+                showApplyButton={false}
+                showClearButton={false}
+                onFilterClear={clearFilters}
+            ></Column>
+
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<ICountry>
+                    <ActionTableTemplate<IRegion>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -129,4 +160,4 @@ const CountryTable = ({
     );
 };
 
-export default CountryTable;
+export default RegionTable;

@@ -2,6 +2,7 @@ export default interface IParamsApi {
     filter: {
         page?: number;
         pageSize?: number;
+        allData?: boolean;
         globalFilter?: string;
         filters?:
         {

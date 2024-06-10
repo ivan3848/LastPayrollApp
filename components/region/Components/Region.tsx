@@ -6,13 +6,13 @@ import useCrudModals from "@/components/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { ICountry } from "../Types/ICountry";
-import AddCountry from "./AddCountry";
-import EditCountry from "./EditCountry";
+import { IRegion } from "../Types/IRegion";
+import AddRegion from "./AddRegion";
+import EditRegion from "./EditRegion";
 
-const CountryTable = dynamic(() => import("./CountryTable"));
+const RegionTable = dynamic(() => import("./RegionTable"));
 
-const Country = () => {
+const Region = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,26 +25,26 @@ const Country = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<ICountry>();
+    } = useCrudModals<IRegion>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: ICountry) => {
+    const handleEdit = (entity: IRegion) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: ICountry) => {
+    const handleDelete = (entity: IRegion) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["País", "Acciones"];
+    const entityProperties = ["Región", "País", "Acciones"];
 
     return (
         <div className="grid">
@@ -57,7 +57,7 @@ const Country = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <CountryTable
+                        <RegionTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -66,7 +66,7 @@ const Country = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddCountry
+                        <AddRegion
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -75,7 +75,7 @@ const Country = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditCountry
+                        <EditRegion
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -85,8 +85,8 @@ const Country = () => {
                     )}
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idCountry ?? 0}
-                            endpoint="employee/country"
+                            id={entity?.idRegion ?? 0}
+                            endpoint="employee/region"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
@@ -99,4 +99,4 @@ const Country = () => {
     );
 };
 
-export default Country;
+export default Region;

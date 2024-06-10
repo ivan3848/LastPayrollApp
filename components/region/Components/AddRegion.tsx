@@ -1,13 +1,16 @@
+import useCountryQuery from "@/components/country/Hooks/useCountryQuery";
 import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
+import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddCountryQuery from "../Hooks/useAddCountryQuery";
-import { ICountry } from "../Types/ICountry";
-import countryFormSchemas from "../Validations/CountryFormSchemas";
+import useAddRegionQuery from "../Hooks/useAddRegionQuery";
+import { IRegion } from "../Types/IRegion";
+import regionFormSchemas from "../Validations/RegionFormSchemas";
 
 interface Props {
     addEntityDialog: boolean;
@@ -16,31 +19,36 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddCountry = ({
+const AddRegion = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = countryFormSchemas();
+    const { addEntityFormSchema } = regionFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
+        setValue,
+        watch,
         formState: { errors },
-    } = useForm<ICountry>({
+    } = useForm<IRegion>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddCountryQuery({
+    const { params } = useParamAllData();
+    const { data } = useCountryQuery(params, []);
+
+    const addEntity = useAddRegionQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: ICountry) => {
+    const onSubmit = (data: IRegion) => {
         addEntity.mutate(data);
         return;
     };
@@ -61,7 +69,7 @@ const AddCountry = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        País
+                        Región
                     </label>
                     <InputText
                         {...register("name")}
@@ -77,10 +85,38 @@ const AddCountry = ({
                         </small>
                     )}
                 </div>
+                <div className="field">
+                    <label htmlFor="idCountry" className="w-full">
+                        País
+                    </label>
+                    <Dropdown
+                        value={data.items.find(
+                            (item) => item.idCountry === watch("idCountry")
+                        )}
+                        onChange={(e: DropdownChangeEvent) =>
+                            setValue("idCountry", e.value.idCountry)
+                        }
+                        options={data.items}
+                        optionLabel="name"
+                        placeholder="Seleccione un país"
+                        filter
+                        className={classNames(
+                            {
+                                "p-invalid": errors.idCountry,
+                            },
+                            "w-full"
+                        )}
+                    />
+                    {errors.idCountry && (
+                        <small className="p-invalid text-danger">
+                            {errors.idCountry.message?.toString()}
+                        </small>
+                    )}
+                </div>
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );
 };
 
-export default AddCountry;
+export default AddRegion;

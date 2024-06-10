@@ -224,7 +224,6 @@ const InputDemo: Page = () => {
                         placeholder="Search"
                         id="dd"
                         dropdown
-                        multiple
                         value={selectedAutoValue}
                         onChange={(e) => setSelectedAutoValue(e.value)}
                         suggestions={autoFilteredValue}

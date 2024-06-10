@@ -1,4 +1,4 @@
-import DialogFooterButtons from "@/components/Shared/components/DialogFooterButtons";
+import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
