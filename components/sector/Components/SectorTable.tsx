@@ -123,7 +123,7 @@ const SectorTable = ({
             ></Column>
 
             <Column
-                field="province"
+                field="provinceName"
                 header="Provincia"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable

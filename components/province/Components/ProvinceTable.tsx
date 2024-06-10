@@ -111,19 +111,19 @@ const ProvinceTable = ({
         >
             <Column
                 field="name"
-                header="Ciudad"
+                header="Provincia"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por ciudad"
+                filterPlaceholder="Buscar por provincia"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
 
             <Column
-                field="ciudad"
+                field="cityName"
                 header="Ciudad"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable

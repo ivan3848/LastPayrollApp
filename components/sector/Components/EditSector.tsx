@@ -68,7 +68,7 @@ const EditSector = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Provincia"
+            header="Editar Sector"
             modal
             className="p-fluid"
             onHide={hideDialog}

@@ -115,7 +115,7 @@ const AddZone = ({
                             setValue("idSector", e.value.idSector)
                         }
                         options={data.items}
-                        optionLabel="zoneCode"
+                        optionLabel="name"
                         placeholder="Seleccione una opción..."
                         filter
                         className={classNames(
