@@ -154,7 +154,7 @@ const useParamAllData = () => {
     const [params, setParams] = useState<IParamsApi>({
         filter: { page: 1, pageSize: 5, allData: true },
     });
-
+    
     return {
         params,
     };

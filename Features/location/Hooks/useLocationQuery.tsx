@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const useLocationQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<ILocation>, Error>({
         queryKey: [CACHE_KEY_LOCATION, params, dependencies],
-        queryFn: () => locationService.get(params),
+        queryFn: () => locationService.getForTable(params),
         initialData: { items: [] },
     });
 };

@@ -1,6 +1,6 @@
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
-import React from "react";
+import React, { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
 import { isValid } from "zod";
 
@@ -23,6 +23,11 @@ function GenericDropDown<T>({
     setValue,
     watch,
 }: Props<T>) {
+    useEffect(() => {
+        if (idValueEdit) {
+            setValue(id, idValueEdit);
+        }
+    }, [id, idValueEdit, setValue]);
 
     return (
         <>

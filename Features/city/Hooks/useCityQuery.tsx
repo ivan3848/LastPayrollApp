@@ -8,7 +8,7 @@ import { ICity } from "../Types/ICity";
 const useCityQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<ICity>, Error>({
         queryKey: [CACHE_KEY_CITIES, params, dependencies],
-        queryFn: () => cityService.get(params),
+        queryFn: () => cityService.getForTable(params),
         initialData: { items: [] },
     });
 };

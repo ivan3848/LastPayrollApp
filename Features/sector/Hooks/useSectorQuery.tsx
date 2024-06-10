@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const useSectorQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<ISector>, Error>({
         queryKey: [CACHE_KEY_SECTOR, params, dependencies],
-        queryFn: () => sectorService.get(params),
+        queryFn: () => sectorService.getForTable(params),
         initialData: { items: [] },
     });
 };

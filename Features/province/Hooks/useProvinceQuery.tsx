@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const useProvinceQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<IProvince>, Error>({
         queryKey: [CACHE_KEY_PROVINCE, params, dependencies],
-        queryFn: () => provinceService.get(params),
+        queryFn: () => provinceService.getForTable(params),
         initialData: { items: [] },
     });
 };

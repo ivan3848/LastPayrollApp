@@ -1,4 +1,4 @@
-import AsignationTabs from "@/Components/asignation/Components/AsignationTabs";
+import AsignationTabs from "@/Features/asignation/Components/AsignationTabs";
 
 const Asignation = () => {
     return (

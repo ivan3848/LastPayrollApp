@@ -3,24 +3,13 @@ import { z } from "zod";
 const benefitPositionFormSchemas = () => {
     const editEntityFormSchema = z.object({
         idbenefitPosition: z.number().optional(),
-        name: z
-            .string()
-            .min(2, { message: "La ciudad debe tener al menos 2 caracteres" })
-            .max(100, {
-                message: "La ciudad debe tener menos de 100 caracteres",
-            }),
-        idRegion: z.number({ required_error: "La región es requerida" }),
-
+        idPosition: z.number({ required_error: "La posición es requerida" }),
+        idConcept: z.number({ required_error: "El concepto es requerido" }),
     });
 
     const addEntityFormSchema = z.object({
-        name: z
-            .string()
-            .min(2, { message: "La ciudad debe tener al menos 2 caracteres" })
-            .max(100, {
-                message: "La ciudad debe tener menos de 100 caracteres",
-            }),
-        idRegion: z.number({ required_error: "La región es requerida" }),
+        idPosition: z.number({ required_error: "La posición es requerida" }),
+        idConcept: z.number({ required_error: "El concepto es requerido" }),
     });
 
     return { editEntityFormSchema, addEntityFormSchema };
