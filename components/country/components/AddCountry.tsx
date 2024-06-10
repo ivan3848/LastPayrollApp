@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import useAddCountryQuery from "../Hooks/useAddCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
-import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
+import DialogFooterButtons from "@/Components/Shared/Components/DialogFooterButtons";
 
 interface Props {
     addEntityDialog: boolean;

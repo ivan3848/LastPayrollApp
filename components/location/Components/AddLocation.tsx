@@ -1,6 +1,6 @@
-import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
-import useZoneQuery from "@/components/zone/Hooks/useZoneQuery";
+import DialogFooterButtons from "@/Components/Shared/Components/DialogFooterButtons";
+import { useParamAllData } from "@/Components/Shared/Hooks/useParamFilter";
+import useZoneQuery from "@/Components/zone/Hooks/useZoneQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import useAddLocationQuery from "../Hooks/useAddLocationQuery";
 import { ILocation } from "../Types/ILocation";
 import locationFormSchemas from "../Validations/LocationFormSchemas";
-import GenericDropDown from "@/components/Shared/Components/GenericDropDown";
+import GenericDropDown from "@/Components/Shared/Components/GenericDropDown";
 
 interface Props {
     addEntityDialog: boolean;

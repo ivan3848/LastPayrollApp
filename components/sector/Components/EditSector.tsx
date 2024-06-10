@@ -1,6 +1,6 @@
-import DialogFooterButtons from "@/components/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/components/Shared/Hooks/useParamFilter";
-import useProvinceQuery from "@/components/province/Hooks/useProvinceQuery";
+import DialogFooterButtons from "@/Components/Shared/Components/DialogFooterButtons";
+import { useParamAllData } from "@/Components/Shared/Hooks/useParamFilter";
+import useProvinceQuery from "@/Components/province/Hooks/useProvinceQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";

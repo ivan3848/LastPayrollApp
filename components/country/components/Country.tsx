@@ -1,8 +1,8 @@
 "use client";
 
-import DeleteEntity from "@/components/Shared/Components/DeleteEntity";
-import TableSkeletonTemplate from "@/components/Shared/Components/TableSkeletonTemplate";
-import useCrudModals from "@/components/Shared/Hooks/useCrudModals";
+import DeleteEntity from "@/Components/Shared/Components/DeleteEntity";
+import TableSkeletonTemplate from "@/Components/Shared/Components/TableSkeletonTemplate";
+import useCrudModals from "@/Components/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";

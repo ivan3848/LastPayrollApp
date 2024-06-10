@@ -1,5 +1,5 @@
-import ActionTableTemplate from "@/components/Shared/Components/ActionTableTemplate";
-import useParamFilter from "@/components/Shared/Hooks/useParamFilter";
+import ActionTableTemplate from "@/Components/Shared/Components/ActionTableTemplate";
+import useParamFilter from "@/Components/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -7,8 +7,8 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useCountryQuery from "../Hooks/useCountryQuery";
 import { ICountry } from "../Types/ICountry";
+import useCountryQuery from "../Hooks/useCountryQuery";
 
 interface Props {
     submitted: boolean;

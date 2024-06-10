@@ -1,9 +1,9 @@
-import ActionTableTemplate from "@/components/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/components/Shared/Components/TableDropDownFilter";
+import ActionTableTemplate from "@/Components/Shared/Components/ActionTableTemplate";
+import TableDropDownFilter from "@/Components/Shared/Components/TableDropDownFilter";
 import useParamFilter, {
     useParamAllData,
-} from "@/components/Shared/Hooks/useParamFilter";
-import useZoneQuery from "@/components/zone/Hooks/useZoneQuery";
+} from "@/Components/Shared/Hooks/useParamFilter";
+import useZoneQuery from "@/Components/zone/Hooks/useZoneQuery";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
