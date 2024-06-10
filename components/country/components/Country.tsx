@@ -10,7 +10,7 @@ import { ICountry } from "../Types/ICountry";
 import AddCountry from "./AddCountry";
 import EditCountry from "./EditCountry";
 
-const CountryTable = dynamic(() => import("./CountryTable"));
+const CountryTable = dynamic(() => import("./countryTable"));
 
 const Country = () => {
     const {
