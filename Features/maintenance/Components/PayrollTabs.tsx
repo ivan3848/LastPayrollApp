@@ -5,14 +5,13 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 
-const BenefitPosition = dynamic(
-    () => import("../../benefitPosition/Components/BenefitPosition")
+const Concept = dynamic(() => import("../../concept/Components/Concept"));
+const AccountingAccount = dynamic(
+    () => import("../../accountingAccount/Components/AccountingAccount")
 );
-const ToolWorkDefinition = dynamic(
-    () => import("../../toolWorkDefinition/Components/ToolWorkDefinition")
-);
-const ToolWorkPosition = dynamic(
-    () => import("../../toolWorkPosition/Components/ToolWorkPosition")
+
+const CostCenter = dynamic(
+    () => import("../../costCenter/Components/CostCenter")
 );
 
 const PayrollTabs = () => {
@@ -21,11 +20,27 @@ const PayrollTabs = () => {
             <div className="col-12">
                 <TabView>
                     <TabPanel
-                        header="Beneficio de posición"
-                        leftIcon="pi pi-gift mr-2"
+                        header="Conceptos de nómina"
+                        leftIcon="pi pi-wallet mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            <BenefitPosition />
+                            <Concept />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Cuentas contables"
+                        leftIcon="pi pi-book mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <AccountingAccount />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Centros de costos"
+                        leftIcon="pi pi-database mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <CostCenter />
                         </Suspense>
                     </TabPanel>
                 </TabView>
