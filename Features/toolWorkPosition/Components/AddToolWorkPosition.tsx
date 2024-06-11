@@ -1,70 +1,66 @@
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
+import useToolWorkDefinitionQuery from "@/Features/toolWorkDefinition/Hooks/useToolWorkDefinitionQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditBenefitPositionQuery from "../Hooks/useEditBenefitPositionQuery";
-import { IBenefitPosition } from "../Types/IBenefitPosition";
-import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import useAddToolWorkPositionQuery from "../Hooks/useAddToolWorkPositionQuery";
+import { IToolWorkPosition } from "../Types/IToolWorkPosition";
+import toolWorkPositionFormSchemas from "../Validations/ToolWorkPositionFormSchemas";
 
 interface Props {
-    entity: IBenefitPosition;
-    editEntityDialog: boolean;
-    setEditEntityDialog: (value: boolean) => void;
+    addEntityDialog: boolean;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditBenefitPosition = ({
-    entity,
-    editEntityDialog,
-    setEditEntityDialog,
+const AddToolWorkPosition = ({
+    addEntityDialog,
+    setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = benefitPositionFormSchemas();
+    const { addEntityFormSchema } = toolWorkPositionFormSchemas();
 
     const {
         handleSubmit,
-        register,
         reset,
-        watch,
         setValue,
+        watch,
         formState: { errors },
-    } = useForm<IBenefitPosition>({
-        resolver: zodResolver(editEntityFormSchema),
+    } = useForm<IToolWorkPosition>({
+        resolver: zodResolver(addEntityFormSchema),
     });
 
     const { params } = useParamAllData();
     const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
+    const { data: dataToolWorkDefinition } = useToolWorkDefinitionQuery(params, []);
 
-    const editEntity = useEditBenefitPositionQuery({
+    const addEntity = useAddToolWorkPositionQuery({
         toast,
-        setEditEntityDialog,
+        setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IBenefitPosition) => {
-        data.idBenefitPosition = entity.idBenefitPosition;
-        editEntity.mutate(data);
+    const onSubmit = (data: IToolWorkPosition) => {
+        addEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
-        setEditEntityDialog(false);
+        setAddEntityDialog(false);
     };
 
     return (
         <Dialog
-            visible={editEntityDialog}
+            visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Beneficio De Posición"
+            header="Agregar Herramienta De Posición"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -81,7 +77,6 @@ const EditBenefitPosition = ({
                         data={dataPosition.items}
                         setValue={setValue}
                         watch={watch}
-                        idValueEdit={entity.idPosition}
                     />
                     {errors.idPosition && (
                         <small className="p-invalid text-danger">
@@ -90,21 +85,20 @@ const EditBenefitPosition = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="idConcept" className="w-full">
-                        Concepto del beneficio
+                    <label htmlFor="idToolWorkDefinition" className="w-full">
+                        Herramienta de posición
                     </label>
                     <GenericDropDown
-                        id="idConcept"
-                        isValid={!!errors.idConcept}
+                        id="idToolWorkDefinition"
+                        isValid={!!errors.idToolWorkDefinition}
                         text="name"
-                        data={dataConcept}
+                        data={dataToolWorkDefinition.items}
                         setValue={setValue}
                         watch={watch}
-                        idValueEdit={entity.idConcept}
                     />
-                    {errors.idConcept && (
+                    {errors.idToolWorkDefinition && (
                         <small className="p-invalid text-danger">
-                            {errors.idConcept.message?.toString()}
+                            {errors.idToolWorkDefinition.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -114,4 +108,4 @@ const EditBenefitPosition = ({
     );
 };
 
-export default EditBenefitPosition;
+export default AddToolWorkPosition;

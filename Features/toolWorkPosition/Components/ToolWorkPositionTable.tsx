@@ -12,17 +12,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useBenefitPositionQuery from "../Hooks/useBenefitPositionQuery";
-import { IBenefitPosition } from "../Types/IBenefitPosition";
+import useToolWorkPositionQuery from "../Hooks/useToolWorkPositionQuery";
+import { IToolWorkPosition } from "../Types/IToolWorkPosition";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IBenefitPosition) => void;
-    handleDelete: (entity: IBenefitPosition) => void;
+    handleEdit: (entity: IToolWorkPosition) => void;
+    handleDelete: (entity: IToolWorkPosition) => void;
 }
 
-const BenefitPositionTable = ({
+const ToolWorkPositionTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -39,14 +39,17 @@ const BenefitPositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useBenefitPositionQuery(
+    const { data, isLoading } = useToolWorkPositionQuery(
         params,
         listOfDependencies
     );
 
     const { params: filter } = useParamAllData();
     const { data: dataPosition } = usePositionQuery(filter, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
+    const { data: dataToolWorkDefinition } = useToolWorkPositionQuery(
+        filter,
+        []
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -69,7 +72,7 @@ const BenefitPositionTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Beneficios De Posiciones</h3>
+            <h3 className="m-0">Herramientas De Posiciones</h3>
 
             <Button
                 label="Agregar"
@@ -83,8 +86,8 @@ const BenefitPositionTable = ({
 
     return (
         <DataTable
-            id="BenefitPosition-Table"
-            dataKey="idBenefitPosition"
+            id="ToolWorkPosition-Table"
+            dataKey="idToolWorkPosition"
             value={data?.items}
             lazy
             paginator
@@ -128,18 +131,18 @@ const BenefitPositionTable = ({
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="concept"
-                header="Concepto"
+                field="toolWork"
+                header="Herramienta"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idConcept"
-                filterPlaceholder="Buscar por concepto"
+                filterField="idToolWorkDefinition"
+                filterPlaceholder="Buscar por herramienta"
                 filterElement={(event: any) => (
                     <TableDropDownFilter
-                        data={dataConcept}
+                        data={dataToolWorkDefinition.items}
                         text="name"
-                        column="idConcept"
+                        column="idToolWorkDefinition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
@@ -153,7 +156,7 @@ const BenefitPositionTable = ({
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IBenefitPosition>
+                    <ActionTableTemplate<IToolWorkPosition>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -165,4 +168,4 @@ const BenefitPositionTable = ({
     );
 };
 
-export default BenefitPositionTable;
+export default ToolWorkPositionTable;

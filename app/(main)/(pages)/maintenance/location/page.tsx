@@ -1,5 +1,4 @@
-import LocationTabs from "@/Features/location/Components/LocationTabs";
-
+import LocationTabs from "@/Features/maintenance/Components/LocationTabs";
 
 const Location = () => {
     return (

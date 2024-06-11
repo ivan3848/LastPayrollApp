@@ -40,6 +40,7 @@ function GenericDropDown<T>({
                 optionLabel={text}
                 placeholder="Seleccione una opción..."
                 filter
+                emptyMessage="No hay registros"
                 className={classNames(
                     {
                         "p-invalid": isValid,
