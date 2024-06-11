@@ -96,7 +96,7 @@ const EditBenefitPosition = ({
                 </div>
                 <div className="field">
                     <label htmlFor="idConcept" className="w-full">
-                        Posición
+                        Concepto del beneficio
                     </label>
                     <GenericDropDown
                         id="idConcept"

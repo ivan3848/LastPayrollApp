@@ -15,7 +15,8 @@ const useAddBenefitPositionQuery = ({
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IBenefitPosition) => benefitPositionService.post(entity),
+        mutationFn: (entity: IBenefitPosition) =>
+            benefitPositionService.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",

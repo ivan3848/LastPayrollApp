@@ -16,7 +16,7 @@ const AsignationTabs = () => {
                 <TabView>
                     <TabPanel
                         header="Beneficio de posición"
-                        leftIcon="pi pi-globe mr-2"
+                        leftIcon="pi pi-star mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <BenefitPosition />

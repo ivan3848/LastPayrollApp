@@ -9,7 +9,7 @@ import { CACHE_KEY_COUNTRY } from "@/constants/cacheKeys";
 const useCountryQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<ICountry>, Error>({
         queryKey: [CACHE_KEY_COUNTRY, params, dependencies],
-        queryFn: () => countryService.get(params),
+        queryFn: () => countryService.getForTable(params),
         initialData: { items: [] },
     });
 };
