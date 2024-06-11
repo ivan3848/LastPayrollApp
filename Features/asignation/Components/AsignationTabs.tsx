@@ -8,6 +8,9 @@ import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 const BenefitPosition = dynamic(
     () => import("../../benefitPosition/Components/BenefitPosition")
 );
+const ToolWorkDefinition = dynamic(
+    () => import("../../toolWorkDefinition/Components/ToolWorkDefinition")
+);
 
 const AsignationTabs = () => {
     return (
@@ -20,6 +23,14 @@ const AsignationTabs = () => {
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <BenefitPosition />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Herramientas de trabajo"
+                        leftIcon="pi pi-wrench mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <ToolWorkDefinition />
                         </Suspense>
                     </TabPanel>
                 </TabView>
