@@ -1,6 +1,4 @@
-import {
-    useConceptByStatusCodeQuery,
-} from "@/Features/concept/Hooks/useConceptQuery";
+import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
@@ -11,7 +9,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAddBenefitPositionQuery from "../Hooks/useAddBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
-import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
+import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
 
 interface Props {
     addEntityDialog: boolean;
