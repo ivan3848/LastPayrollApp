@@ -9,7 +9,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAddBenefitPositionQuery from "../Hooks/useAddBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
-import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
+import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
 
 interface Props {
     addEntityDialog: boolean;
