@@ -7,12 +7,12 @@ import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
-import AddContractStatus from "./AddContractStatus";
-import EditContractStatus from "./EditContractStatus";
+import AddMaritalStatus from "./AddMaritalStatus";
+import EditMaritalStatus from "./EditMaritalStatus";
 
-const ContractStatusTable = dynamic(() => import("./ContractStatusTable"));
+const MaritalStatusTable = dynamic(() => import("./MaritalStatusTable"));
 
-const ContractStatus = () => {
+const MaritalStatus = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -44,7 +44,7 @@ const ContractStatus = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Medida de contratación", "Acciones"];
+    const entityProperties = ["Estado civil", "Acciones"];
 
     return (
         <div className="grid">
@@ -57,7 +57,7 @@ const ContractStatus = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <ContractStatusTable
+                        <MaritalStatusTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -66,7 +66,7 @@ const ContractStatus = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddContractStatus
+                        <AddMaritalStatus
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -75,7 +75,7 @@ const ContractStatus = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditContractStatus
+                        <EditMaritalStatus
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -99,4 +99,4 @@ const ContractStatus = () => {
     );
 };
 
-export default ContractStatus;
+export default MaritalStatus;

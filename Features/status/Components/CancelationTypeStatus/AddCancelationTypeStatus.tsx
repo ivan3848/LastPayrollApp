@@ -1,30 +1,28 @@
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditStatusQuery from "../../Hooks/useEditStatusQuery";
+import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
 import { IStatus } from "../../Types/IStatus";
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import statusFormSchemas from "../../Validations/StatusFormSchemas";
 
 interface Props {
-    entity: IStatus;
-    editEntityDialog: boolean;
-    setEditEntityDialog: (value: boolean) => void;
+    addEntityDialog: boolean;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditContractStatus = ({
-    entity,
-    editEntityDialog,
-    setEditEntityDialog,
+const AddCancelationTypeStatus = ({
+    addEntityDialog,
+    setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = statusFormSchemas();
+    const { addEntityFormSchema } = statusFormSchemas();
 
     const {
         handleSubmit,
@@ -32,32 +30,31 @@ const EditContractStatus = ({
         reset,
         formState: { errors },
     } = useForm<IStatus>({
-        resolver: zodResolver(editEntityFormSchema),
+        resolver: zodResolver(addEntityFormSchema),
     });
 
-    const editEntity = useEditStatusQuery({
+    const addEntity = useAddStatusQuery({
         toast,
-        setEditEntityDialog,
+        setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
     const onSubmit = (data: IStatus) => {
-        data.idStatus = entity.idStatus;
-        data.tableName = entity.tableName;
-        editEntity.mutate(data);
+        data.tableName = "CancelationTypeStatus";
+        addEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
-        setEditEntityDialog(false);
+        setAddEntityDialog(false);
     };
 
     return (
         <Dialog
-            visible={editEntityDialog}
+            visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Medida De Contratación"
+            header="Agregar Tipo De Desvinculación"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -65,13 +62,12 @@ const EditContractStatus = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="description" className="w-full">
-                        Medida de contratación
+                        Tipo De Desvinculación
                     </label>
                     <InputText
                         {...register("description")}
                         id="description"
                         autoFocus
-                        defaultValue={entity?.description}
                         className={classNames({
                             "p-invalid": errors.description,
                         })}
@@ -88,4 +84,4 @@ const EditContractStatus = ({
     );
 };
 
-export default EditContractStatus;
+export default AddCancelationTypeStatus;
