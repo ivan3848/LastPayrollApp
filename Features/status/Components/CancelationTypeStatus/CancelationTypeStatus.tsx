@@ -7,12 +7,12 @@ import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
-import AddContractStatus from "./AddContractStatus";
-import EditContractStatus from "./EditContractStatus";
+import AddCancelationTypeStatus from "./AddCancelationTypeStatus";
+import EditCancelationTypeStatus from "./EditCancelationTypeStatus";
 
-const ContractStatusTable = dynamic(() => import("./ContractStatusTable"));
+const CancelationTypeStatusTable = dynamic(() => import("./CancelationTypeStatusTable"));
 
-const ContractStatus = () => {
+const Status = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -44,7 +44,7 @@ const ContractStatus = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Medida de contratación", "Acciones"];
+    const entityProperties = ["Tipo De Desvinculación", "Acciones"];
 
     return (
         <div className="grid">
@@ -57,7 +57,7 @@ const ContractStatus = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <ContractStatusTable
+                        <CancelationTypeStatusTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -66,7 +66,7 @@ const ContractStatus = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddContractStatus
+                        <AddCancelationTypeStatus
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -75,7 +75,7 @@ const ContractStatus = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditContractStatus
+                        <EditCancelationTypeStatus
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -99,4 +99,4 @@ const ContractStatus = () => {
     );
 };
 
-export default ContractStatus;
+export default Status;

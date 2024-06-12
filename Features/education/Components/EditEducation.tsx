@@ -5,46 +5,45 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditStatusQuery from "../../Hooks/useEditStatusQuery";
-import { IStatus } from "../../Types/IStatus";
-import statusFormSchemas from "../../Validations/StatusFormSchemas";
+import useEditEducationQuery from "../Hooks/useEditEducationQuery";
+import { IEducation } from "../Types/IEducation";
+import educationFormSchemas from "../Validations/EducationFormSchemas";
 
 interface Props {
-    entity: IStatus;
+    entity: IEducation;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditContractStatus = ({
+const EditEducation = ({
     entity,
     editEntityDialog,
     setEditEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = statusFormSchemas();
+    const { editEntityFormSchema } = educationFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
         formState: { errors },
-    } = useForm<IStatus>({
+    } = useForm<IEducation>({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const editEntity = useEditStatusQuery({
+    const editEntity = useEditEducationQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IStatus) => {
-        data.idStatus = entity.idStatus;
-        data.tableName = entity.tableName;
+    const onSubmit = (data: IEducation) => {
+        data.idEducation = entity.idEducation;
         editEntity.mutate(data);
         return;
     };
@@ -57,28 +56,28 @@ const EditContractStatus = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Medida De Contratación"
+            header="Editar Nivel Educativo"
             modal
             className="p-fluid"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
-                    <label htmlFor="description" className="w-full">
-                        Medida de contratación
+                    <label htmlFor="name" className="w-full">
+                        Nivel educativo
                     </label>
                     <InputText
-                        {...register("description")}
-                        id="description"
+                        {...register("name")}
+                        id="name"
                         autoFocus
-                        defaultValue={entity?.description}
+                        defaultValue={entity?.name}
                         className={classNames({
-                            "p-invalid": errors.description,
+                            "p-invalid": errors.name,
                         })}
                     />
-                    {errors.description && (
+                    {errors.name && (
                         <small className="p-invalid text-danger">
-                            {errors.description.message?.toString()}
+                            {errors.name.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -88,4 +87,4 @@ const EditContractStatus = ({
     );
 };
 
-export default EditContractStatus;
+export default EditEducation;

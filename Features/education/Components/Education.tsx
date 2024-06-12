@@ -6,13 +6,13 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IStatus } from "../../Types/IStatus";
-import AddContractStatus from "./AddContractStatus";
-import EditContractStatus from "./EditContractStatus";
+import { IEducation } from "../Types/IEducation";
+import AddEducation from "./AddEducation";
+import EditEducation from "./EditEducation";
 
-const ContractStatusTable = dynamic(() => import("./ContractStatusTable"));
+const EducationTable = dynamic(() => import("./EducationTable"));
 
-const ContractStatus = () => {
+const Education = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,26 +25,26 @@ const ContractStatus = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IStatus>();
+    } = useCrudModals<IEducation>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IStatus) => {
+    const handleEdit = (entity: IEducation) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IStatus) => {
+    const handleDelete = (entity: IEducation) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Medida de contratación", "Acciones"];
+    const entityProperties = ["País", "Acciones"];
 
     return (
         <div className="grid">
@@ -57,7 +57,7 @@ const ContractStatus = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <ContractStatusTable
+                        <EducationTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -66,7 +66,7 @@ const ContractStatus = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddContractStatus
+                        <AddEducation
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -75,7 +75,7 @@ const ContractStatus = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditContractStatus
+                        <EditEducation
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -85,8 +85,8 @@ const ContractStatus = () => {
                     )}
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idStatus ?? 0}
-                            endpoint="employee/status"
+                            id={entity?.idEducation ?? 0}
+                            endpoint="employee/education"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
@@ -99,4 +99,4 @@ const ContractStatus = () => {
     );
 };
 
-export default ContractStatus;
+export default Education;

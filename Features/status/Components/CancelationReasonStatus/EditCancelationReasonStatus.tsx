@@ -17,7 +17,7 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const EditContractStatus = ({
+const EditCancelationReasonStatus = ({
     entity,
     editEntityDialog,
     setEditEntityDialog,
@@ -57,7 +57,7 @@ const EditContractStatus = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Editar Medida De Contratación"
+            header="Editar Motivo De Desvinculación"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -65,7 +65,7 @@ const EditContractStatus = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="description" className="w-full">
-                        Medida de contratación
+                        Motivo de desvinculación
                     </label>
                     <InputText
                         {...register("description")}
@@ -88,4 +88,4 @@ const EditContractStatus = ({
     );
 };
 
-export default EditContractStatus;
+export default EditCancelationReasonStatus;
