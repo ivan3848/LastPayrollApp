@@ -1,12 +1,10 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
-import { outSession } from "@/lib";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const user = Cookies.get("auth") as IUser | undefined;
-
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:5038/",
@@ -48,7 +46,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, body);
             return response.data;
         } catch (error: any) {
-            throw error;
+            return error.response.data;
         }
     }
 
