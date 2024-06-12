@@ -20,19 +20,7 @@ interface RootLayoutProps {
 const queryClient = new QueryClient();
 
 export default function RootLayout({ children }: RootLayoutProps) {
-    const [hasSession, setHasSession] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        const isThereSession = async () => {
-            const session = await sessionCheck();
-            if (session) {
-                setHasSession(true);
-            }
-            setIsLoading(false);
-        }
-        isThereSession();
-    }, []);
+    const [hasSession, setHasSession] = useState(true);
 
     return (
         <html lang="en" suppressHydrationWarning>
@@ -46,9 +34,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        <Suspense fallback={isLoading}>
-                            {isLoading && <ProgressSpinner />}
-                        </Suspense>
                         {hasSession ? <LayoutProvider>{children}</LayoutProvider> : <Login changeSessionStatus={setHasSession} />}
                     </PrimeReactProvider>
                 </QueryClientProvider>
