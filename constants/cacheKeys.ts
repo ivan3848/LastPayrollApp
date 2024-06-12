@@ -17,6 +17,7 @@ export const CACHE_KEY_ACCOUNTINGACCOUNT = "accountingaccount";
 export const CACHE_KEY_ZONE = "zone";
 export const CACHE_KEY_BANK = "bank";
 export const CACHE_KEY_EDUCATION = "education";
+export const CACHE_KEY_STATUS = "status";
 export const CACHE_KEY_MARITAL_STATUS = "maritalstatus";
 export const CACHE_KEY_CONTRACT_STATUS = "contractstatus";
 export const CACHE_KEY_CANCELATION_STATUS = "cancelationstatus";
