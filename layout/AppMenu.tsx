@@ -17,6 +17,11 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-users",
                     to: "/maintenance/asignation",
                 },
+                {
+                    label: "Departamentos",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/departments",
+                },
             ],
         },
         {
