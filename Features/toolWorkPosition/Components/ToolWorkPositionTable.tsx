@@ -116,15 +116,15 @@ const ToolWorkPositionTable = ({
                 filter
                 filterField="idPosition"
                 filterPlaceholder="Buscar por posición"
-                filterElement={(event: any) => (
+                filterElement={
                     <TableDropDownFilter
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         text="name"
                         column="idPosition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
@@ -138,15 +138,15 @@ const ToolWorkPositionTable = ({
                 filter
                 filterField="idToolWorkDefinition"
                 filterPlaceholder="Buscar por herramienta"
-                filterElement={(event: any) => (
+                filterElement={ 
                     <TableDropDownFilter
-                        data={dataToolWorkDefinition.items}
+                    useQuery={useToolWorkPositionQuery}
                         text="name"
                         column="idToolWorkDefinition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                )}
+                 }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
