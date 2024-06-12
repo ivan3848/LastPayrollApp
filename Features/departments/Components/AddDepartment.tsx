@@ -1,6 +1,5 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
@@ -12,10 +11,6 @@ import { IDepartment } from "../Types/IDepartment";
 import useAddDepartmentQuery from "../Hooks/useAddDepartmentQuery";
 import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
 import useOrganizationalUnitQuery from "@/Features/organizationalUnit/Hooks/useOrganizationalUnitQuery";
-import IParamsApi from "@/types/IParamApi";
-import IResponse from "@/types/IResponse";
-import { DefinedUseQueryResult } from "@tanstack/react-query";
-import useDepartmentQuery from "../Hooks/useDepartmentQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -98,7 +93,7 @@ const AddDepartment = ({
                         text="description"
                         setValue={setValue}
                         watch={watch}
-                        useQuery={useDepartmentQuery}
+                        useQuery={useCostCenterQuery}
                     />
                     {errors.idCostCenter && (
                         <small className="p-invalid text-danger">
