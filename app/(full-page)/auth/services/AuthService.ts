@@ -21,7 +21,7 @@ function* createRolModule(rolModuleList: IRolModule[]) {
 }
 
 export async function login(username: string, password: string) {
-    const response = await apiService.post({ username, password }, "login");
+    const response = await apiService.loginPost({ username, password }, "login");
 
     if (typeof response === "string")
         return response;
@@ -38,7 +38,7 @@ export async function login(username: string, password: string) {
 
 export async function logout() {
     const sessionData = await getSession();
-    await apiService.post(sessionData!.userId as any, "logout");
+    await apiService.loginPost(sessionData?.userId as any, "logout");
     cookies().delete("session");
 }
 

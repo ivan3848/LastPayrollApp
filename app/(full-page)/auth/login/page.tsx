@@ -55,7 +55,7 @@ const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
         const response = await SignIn(data);
 
         if (response === "success") {
-            changeSessionStatus?.(true);
+            changeSessionStatus?.(false);
             router.push("/")
             reset();
             return;

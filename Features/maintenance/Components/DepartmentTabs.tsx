@@ -3,6 +3,7 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import OrganizationalUnit from "@/Features/organizationalUnit/Components/OrganizationalUnit";
 
 const Department = dynamic(
     () => import("@/Features/departments/Components/Department")
@@ -18,9 +19,12 @@ const DepartmentTabs = () => {
                             <Department />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel header="Departamento" leftIcon="pi pi-globe mr-2">
+                    <TabPanel
+                        header="Unidad Organizacional"
+                        leftIcon="pi pi-globe mr-2"
+                    >
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            <Department />
+                            <OrganizationalUnit />
                         </Suspense>
                     </TabPanel>
                 </TabView>
