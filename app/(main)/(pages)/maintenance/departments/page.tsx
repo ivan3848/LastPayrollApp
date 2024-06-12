@@ -1,4 +1,4 @@
-import Department from "@/Features/departments/Components/Deparment";
+import DepartmentTabs from "@/Features/maintenance/Components/DepartmentTabs";
 
 export default function page() {
     return (
@@ -6,7 +6,7 @@ export default function page() {
             <div className="card-header">
                 <h3 className="card-title">Departments</h3>
             </div>
-            <Department />
+            <DepartmentTabs />
         </div>
     );
 }

@@ -187,19 +187,19 @@ export default function ECommerce() {
                     data: [300, 50, 100],
                     backgroundColor: [
                         documentStyle.getPropertyValue("--primary-700") ||
-                            "#4547a9",
+                        "#4547a9",
                         documentStyle.getPropertyValue("--primary-400") ||
-                            "#8183f4",
+                        "#8183f4",
                         documentStyle.getPropertyValue("--primary-100") ||
-                            "#dadafc",
+                        "#dadafc",
                     ],
                     hoverBackgroundColor: [
                         documentStyle.getPropertyValue("--primary-600") ||
-                            "#5457cd",
+                        "#5457cd",
                         documentStyle.getPropertyValue("--primary-300") ||
-                            "#9ea0f6",
+                        "#9ea0f6",
                         documentStyle.getPropertyValue("--primary-200") ||
-                            "#bcbdf9",
+                        "#bcbdf9",
                     ],
                 },
             ],
