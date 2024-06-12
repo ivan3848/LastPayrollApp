@@ -17,7 +17,7 @@ interface Props {
     handleDelete: (entity: IStatus) => void;
 }
 
-const ContractStatusTable = ({
+const StatusTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -66,7 +66,7 @@ const ContractStatusTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Medida De Contratación</h3>
+            <h3 className="m-0">Tipo De Desvinculación</h3>
 
             <Button
                 label="Agregar"
@@ -80,7 +80,7 @@ const ContractStatusTable = ({
 
     return (
         <DataTable
-            id="ContractStatus-Table"
+            id="CancelationTypeStatus-Table"
             dataKey="idStatus"
             value={data?.items}
             lazy
@@ -104,7 +104,7 @@ const ContractStatusTable = ({
         >
             <Column
                 field="description"
-                header="Medida de contratación"
+                header="Tipo De Desvinculación"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
@@ -129,4 +129,4 @@ const ContractStatusTable = ({
     );
 };
 
-export default ContractStatusTable;
+export default StatusTable;

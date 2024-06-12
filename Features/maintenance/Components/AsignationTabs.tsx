@@ -19,7 +19,7 @@ const AsignationTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
-                <TabView>
+                <TabView scrollable>
                     <TabPanel
                         header="Beneficio de posición"
                         leftIcon="pi pi-gift mr-2"

@@ -7,17 +7,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IStatus } from "../../Types/IStatus";
-import useStatusQuery from "../../Hooks/useStatusQuery";
+import { IEducation } from "../Types/IEducation";
+import useEducationQuery from "../Hooks/useEducationQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IStatus) => void;
-    handleDelete: (entity: IStatus) => void;
+    handleEdit: (entity: IEducation) => void;
+    handleDelete: (entity: IEducation) => void;
 }
 
-const ContractStatusTable = ({
+const EducationTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -34,7 +34,7 @@ const ContractStatusTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useStatusQuery(params, listOfDependencies);
+    const { data, isLoading } = useEducationQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -66,7 +66,7 @@ const ContractStatusTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Medida De Contratación</h3>
+            <h3 className="m-0">Niveles Educativos</h3>
 
             <Button
                 label="Agregar"
@@ -80,8 +80,8 @@ const ContractStatusTable = ({
 
     return (
         <DataTable
-            id="ContractStatus-Table"
-            dataKey="idStatus"
+            id="Education-Table"
+            dataKey="idEducation"
             value={data?.items}
             lazy
             paginator
@@ -103,13 +103,13 @@ const ContractStatusTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="description"
-                header="Medida de contratación"
+                field="name"
+                header="Nivel Educativo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="description"
-                filterPlaceholder="Buscar por medida"
+                filterField="name"
+                filterPlaceholder="Buscar por nivel educativo"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
@@ -117,7 +117,7 @@ const ContractStatusTable = ({
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IStatus>
+                    <ActionTableTemplate<IEducation>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -129,4 +129,4 @@ const ContractStatusTable = ({
     );
 };
 
-export default ContractStatusTable;
+export default EducationTable;
