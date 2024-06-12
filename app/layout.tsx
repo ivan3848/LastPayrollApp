@@ -34,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {hasSession ? <LayoutProvider>{children}</LayoutProvider> : <Login changeSessionStatus={setHasSession} />}
+                        {!hasSession ? <LayoutProvider>{children}</LayoutProvider> : <Login changeSessionStatus={setHasSession} />}
                     </PrimeReactProvider>
                 </QueryClientProvider>
             </body>
