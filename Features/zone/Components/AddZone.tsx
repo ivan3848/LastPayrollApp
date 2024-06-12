@@ -40,9 +40,6 @@ const AddZone = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useSectorQuery(params, []);
-
     const addEntity = useAddZoneQuery({
         toast,
         setAddEntityDialog,
@@ -112,7 +109,7 @@ const AddZone = ({
                         id="idSector"
                         isValid={!!errors.idSector}
                         text="name"
-                        data={data.items}
+                        useQuery={useSectorQuery}
                         setValue={setValue}
                         watch={watch}
                     />

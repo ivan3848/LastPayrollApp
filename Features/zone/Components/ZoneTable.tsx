@@ -40,9 +40,6 @@ const ZoneTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useZoneQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: sectorDropDown } = useSectorQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -145,7 +142,7 @@ const ZoneTable = ({
                 filterPlaceholder="Buscar por sector"
                 filterElement={(event: any) => (
                     <TableDropDownFilter
-                        data={sectorDropDown.items}
+                        useQuery={useSectorQuery}
                         text="name"
                         column="idSector"
                         setFilters={setFilters}

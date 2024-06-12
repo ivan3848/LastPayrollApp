@@ -41,9 +41,6 @@ const EditProvince = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useCityQuery(params, []);
-
     const editEntity = useEditProvinceQuery({
         toast,
         setEditEntityDialog,
@@ -98,7 +95,7 @@ const EditProvince = ({
                         id="idCity"
                         isValid={!!errors.idCity}
                         text="name"
-                        data={data.items}
+                        useQuery={useCityQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idCity}

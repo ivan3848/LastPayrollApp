@@ -40,9 +40,6 @@ const ProvinceTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useProvinceQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: cityDropDown } = useCityQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -132,7 +129,7 @@ const ProvinceTable = ({
                 filterPlaceholder="Buscar por ciudad"
                 filterElement={(event: any) => (
                     <TableDropDownFilter
-                        data={cityDropDown.items}
+                        useQuery={useCityQuery}
                         text="name"
                         column="idCity"
                         setFilters={setFilters}

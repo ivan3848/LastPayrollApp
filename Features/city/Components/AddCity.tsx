@@ -1,9 +1,8 @@
 import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
@@ -11,7 +10,6 @@ import { useForm } from "react-hook-form";
 import useAddCityQuery from "../Hooks/useAddCityQuery";
 import { ICity } from "../Types/ICity";
 import cityFormSchemas from "../Validations/CityFormSchemas";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 
 interface Props {
     addEntityDialog: boolean;
@@ -38,9 +36,6 @@ const AddCity = ({
     } = useForm<ICity>({
         resolver: zodResolver(addEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data } = useRegionQuery(params, []);
 
     const addEntity = useAddCityQuery({
         toast,
@@ -94,7 +89,7 @@ const AddCity = ({
                         id="idRegion"
                         isValid={!!errors.idRegion}
                         text="name"
-                        data={data.items}
+                        useQuery={useRegionQuery}
                         setValue={setValue}
                         watch={watch}
                     />

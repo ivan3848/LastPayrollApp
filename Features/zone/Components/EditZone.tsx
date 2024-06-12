@@ -41,9 +41,6 @@ const EditZone = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useSectorQuery(params, []);
-
     const editEntity = useEditZoneQuery({
         toast,
         setEditEntityDialog,
@@ -116,7 +113,7 @@ const EditZone = ({
                         id="idSector"
                         isValid={!!errors.idSector}
                         text="name"
-                        data={data.items}
+                        useQuery={useSectorQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idSector}

@@ -11,7 +11,7 @@ const City = dynamic(() => import("../../city/Components/City"));
 const Province = dynamic(() => import("../../province/Components/Province"));
 const Sector = dynamic(() => import("../../sector/Components/Sector"));
 const Zone = dynamic(() => import("../../zone/Components/Zone"));
-const Location = dynamic(() => import("./Location"));
+const Location = dynamic(() => import("../../location/Components/Location"));
 
 const LocationTabs = () => {
     return (

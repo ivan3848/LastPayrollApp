@@ -40,9 +40,6 @@ const RegionTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useRegionQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: countryDropDown } = useCountryQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -132,7 +129,7 @@ const RegionTable = ({
                 filterPlaceholder="Buscar por país"
                 filterElement={(event: any) => (
                     <TableDropDownFilter
-                        data={countryDropDown.items}
+                        useQuery={useCountryQuery}
                         text="name"
                         column="idCountry"
                         setFilters={setFilters}

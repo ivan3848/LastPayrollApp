@@ -40,9 +40,6 @@ const SectorTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useSectorQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: provinceDropDown } = useProvinceQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -132,7 +129,7 @@ const SectorTable = ({
                 filterPlaceholder="Buscar por provincia"
                 filterElement={(event: any) => (
                     <TableDropDownFilter
-                        data={provinceDropDown.items}
+                        useQuery={useProvinceQuery}
                         text="name"
                         column="idProvince"
                         setFilters={setFilters}

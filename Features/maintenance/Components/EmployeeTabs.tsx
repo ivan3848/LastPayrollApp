@@ -4,22 +4,25 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import { LiaFileContractSolid } from "react-icons/lia";
 
-const BenefitPosition = dynamic(
-    () => import("../../benefitPosition/Components/BenefitPosition")
+const ContractStatus = dynamic(
+    () => import("../../status/Components/ContractStatus/ContractStatus")
 );
 
-const AsignationTabs = () => {
+const EmployeeTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
                 <TabView>
                     <TabPanel
-                        header="Beneficio de posición"
-                        leftIcon="pi pi-star mr-2"
+                        header="Medida de contratación"
+                        leftIcon={
+                            <LiaFileContractSolid className="mr-2" size={20} />
+                        }
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            <BenefitPosition />
+                            <ContractStatus />
                         </Suspense>
                     </TabPanel>
                 </TabView>
@@ -28,4 +31,4 @@ const AsignationTabs = () => {
     );
 };
 
-export default AsignationTabs;
+export default EmployeeTabs;

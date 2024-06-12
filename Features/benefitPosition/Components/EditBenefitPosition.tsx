@@ -1,20 +1,16 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
 import useEditBenefitPositionQuery from "../Hooks/useEditBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import IParamsApi from "@/types/IParamApi";
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 
 interface Props {
     entity: IBenefitPosition;
@@ -43,10 +39,6 @@ const EditBenefitPosition = ({
     } = useForm<IBenefitPosition>({
         resolver: zodResolver(editEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
 
     const editEntity = useEditBenefitPositionQuery({
         toast,
@@ -83,7 +75,7 @@ const EditBenefitPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idPosition}
@@ -98,14 +90,15 @@ const EditBenefitPosition = ({
                     <label htmlFor="idConcept" className="w-full">
                         Concepto del beneficio
                     </label>
-                    <GenericDropDown
+                    <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
                         text="name"
-                        data={dataConcept}
+                        useQuery={useConceptByStatusCodeQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idConcept}
+                        code="PROC"
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">

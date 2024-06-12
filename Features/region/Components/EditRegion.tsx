@@ -41,9 +41,6 @@ const EditRegion = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useCountryQuery(params, []);
-
     const editEntity = useEditRegionQuery({
         toast,
         setEditEntityDialog,
@@ -98,7 +95,7 @@ const EditRegion = ({
                         id="idCountry"
                         isValid={!!errors.idCountry}
                         text="name"
-                        data={data.items}
+                        useQuery={useCountryQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idCountry}

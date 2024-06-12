@@ -1,4 +1,5 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useParamFilter, {
@@ -13,9 +14,7 @@ import {
 } from "primereact/datatable";
 import useBenefitPositionQuery from "../Hooks/useBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
-import IParamsApi from "@/types/IParamApi";
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
 
 interface Props {
     submitted: boolean;
@@ -46,10 +45,6 @@ const BenefitPositionTable = ({
         listOfDependencies
     );
 
-    const { params: filter } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(filter, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -67,15 +62,6 @@ const BenefitPositionTable = ({
                 clearSorts();
                 break;
         }
-    };
-
-    const onFilter = (event: any) => {
-        setFilters([
-            {
-                column: event.field,
-                value: event.constraints.constraints?.[0].value,
-            },
-        ]);
     };
 
     const header = (
@@ -124,15 +110,15 @@ const BenefitPositionTable = ({
                 filter
                 filterField="idPosition"
                 filterPlaceholder="Buscar por posición"
-                filterElement={(event: any) => (
+                filterElement={
                     <TableDropDownFilter
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         text="name"
                         column="idPosition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
@@ -146,15 +132,16 @@ const BenefitPositionTable = ({
                 filter
                 filterField="idConcept"
                 filterPlaceholder="Buscar por concepto"
-                filterElement={(event: any) => (
-                    <TableDropDownFilter
-                        data={dataConcept}
+                filterElement={
+                    <TableDropDownConceptFilter
+                        useQuery={useConceptByStatusCodeQuery}
                         text="name"
                         column="idConcept"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
+                        code="PROC"
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}

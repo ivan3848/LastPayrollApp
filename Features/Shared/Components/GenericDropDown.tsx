@@ -1,27 +1,33 @@
+import IParamsApi from "@/types/IParamApi";
+import IResponse from "@/types/IResponse";
+import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { isValid } from "zod";
+import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
-    data: T[];
     isValid: boolean;
     text: string;
     id: string;
+    idValueEdit?: number;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
-    idValueEdit?: number;
+    useQuery: (
+        params: IParamsApi,
+        dependencies: boolean[]
+    ) => DefinedUseQueryResult<IResponse<T>, Error>;
 }
 
 function GenericDropDown<T>({
     isValid,
     text,
-    data,
     id,
     idValueEdit,
     setValue,
     watch,
+    useQuery,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -29,17 +35,21 @@ function GenericDropDown<T>({
         }
     }, [id, idValueEdit, setValue]);
 
+    const { params } = useParamAllData();
+    const { data } = useQuery(params, []);
+
     return (
         <>
             <Dropdown
-                value={data.find(
+                value={data.items.find(
                     (item: any) => item[id] === (watch(id) ?? idValueEdit)
                 )}
                 onChange={(e: DropdownChangeEvent) => setValue(id, e.value[id])}
-                options={data}
+                options={data.items}
                 optionLabel={text}
                 placeholder="Seleccione una opción..."
                 filter
+                emptyMessage="No hay registros"
                 className={classNames(
                     {
                         "p-invalid": isValid,

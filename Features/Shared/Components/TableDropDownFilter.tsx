@@ -1,9 +1,16 @@
+import IParamsApi from "@/types/IParamApi";
+import IResponse from "@/types/IResponse";
+import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { useState } from "react";
+import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
     column: string;
-    data: T[];
+    useQuery: (
+        params: IParamsApi,
+        dependencies: boolean[]
+    ) => DefinedUseQueryResult<IResponse<T>, Error>;
     text: string;
     setFilters: (
         filters: {
@@ -15,15 +22,18 @@ interface Props<T> {
 }
 function TableDropDownFilter<T>({
     column,
-    data,
+    useQuery,
     text,
     setFilters,
     clearFilters,
 }: Props<T>) {
     const [id, setId] = useState(null);
+    const {params} = useParamAllData();
+    const { data } = useQuery(params, []);
+
     return (
         <Dropdown
-            value={data.find((item: any) => item[column] === id) || null}
+            value={data.items.find((item: any) => item[column] === id) || null}
             onChange={(event: DropdownChangeEvent) => {
                 if (event.value) {
                     setId(event.value[column]);
@@ -35,7 +45,7 @@ function TableDropDownFilter<T>({
                 setId(null);
                 clearFilters();
             }}
-            options={data}
+            options={data.items}
             optionLabel={text}
             placeholder="Seleccione una opción..."
             filter

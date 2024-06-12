@@ -1,4 +1,4 @@
-import { CACHE_KEY_CITIES } from "@/constants/cacheKeys";
+import { CACHE_KEY_CONCEPT } from "@/constants/cacheKeys";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import conceptService, {
@@ -9,8 +9,9 @@ import { IConcept } from "../Types/IConcept";
 
 const useConceptQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<IConcept>, Error>({
-        queryKey: [CACHE_KEY_CITIES, params, dependencies],
+        queryKey: [CACHE_KEY_CONCEPT, params, dependencies],
         queryFn: () => conceptService.getForTable(params),
+        initialData: { items: [] },
     });
 };
 
@@ -19,7 +20,7 @@ const useConceptByStatusCodeQuery = (
     dependencies: boolean[]
 ) => {
     return useQuery<IConcept[], Error>({
-        queryKey: [CACHE_KEY_CITIES, statusCode, dependencies],
+        queryKey: [CACHE_KEY_CONCEPT, statusCode, dependencies],
         queryFn: () => conceptByStatusCodeService.get(statusCode),
         initialData: [],
     });

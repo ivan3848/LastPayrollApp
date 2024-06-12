@@ -1,9 +1,9 @@
-import useCountryQuery from "@/Features/country/Hooks/useCountryQuery";
+import useCityQuery from "@/Features/city/Hooks/useCityQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
@@ -11,8 +11,6 @@ import { useForm } from "react-hook-form";
 import useAddProvinceQuery from "../Hooks/useAddProvinceQuery";
 import { IProvince } from "../Types/IProvince";
 import provinceFormSchemas from "../Validations/ProvinceFormSchemas";
-import useCityQuery from "@/Features/city/Hooks/useCityQuery";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 
 interface Props {
     addEntityDialog: boolean;
@@ -39,9 +37,6 @@ const AddProvince = ({
     } = useForm<IProvince>({
         resolver: zodResolver(addEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data } = useCityQuery(params, []);
 
     const addEntity = useAddProvinceQuery({
         toast,
@@ -95,7 +90,7 @@ const AddProvince = ({
                         id="idCity"
                         isValid={!!errors.idCity}
                         text="name"
-                        data={data.items}
+                        useQuery={useCityQuery}
                         setValue={setValue}
                         watch={watch}
                     />

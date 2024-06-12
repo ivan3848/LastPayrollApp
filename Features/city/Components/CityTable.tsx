@@ -40,9 +40,6 @@ const CityTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useCityQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: regionDropDown } = useRegionQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -130,15 +127,15 @@ const CityTable = ({
                 filter
                 filterField="idRegion"
                 filterPlaceholder="Buscar por región"
-                filterElement={(event: any) => (
+                filterElement={
                     <TableDropDownFilter
-                        data={regionDropDown.items}
+                        useQuery={useRegionQuery}
                         text="name"
                         column="idRegion"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
