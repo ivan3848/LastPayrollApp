@@ -18,6 +18,11 @@ const AppMenu = () => {
                     to: "/maintenance/asignation",
                 },
                 {
+                    label: "Departamentos",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/departments",
+                },
+                {
                     label: "Nómina",
                     icon: "pi pi-fw pi-th-large",
                     to: "/maintenance/payroll",
