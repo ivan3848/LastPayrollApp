@@ -12,6 +12,10 @@ import { IDepartment } from "../Types/IDepartment";
 import useAddDepartmentQuery from "../Hooks/useAddDepartmentQuery";
 import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
 import useOrganizationalUnitQuery from "@/Features/organizationalUnit/Hooks/useOrganizationalUnitQuery";
+import IParamsApi from "@/types/IParamApi";
+import IResponse from "@/types/IResponse";
+import { DefinedUseQueryResult } from "@tanstack/react-query";
+import useDepartmentQuery from "../Hooks/useDepartmentQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -38,10 +42,6 @@ const AddDepartment = ({
     } = useForm<IDepartment>({
         resolver: zodResolver(addEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data } = useCostCenterQuery(params, []);
-    const a = useOrganizationalUnitQuery(params, []);
 
     const addEntity = useAddDepartmentQuery({
         toast,
@@ -96,9 +96,9 @@ const AddDepartment = ({
                         id="idCostCenter"
                         isValid={!!errors.idCostCenter}
                         text="description"
-                        data={data.items}
                         setValue={setValue}
                         watch={watch}
+                        useQuery={useDepartmentQuery}
                     />
                     {errors.idCostCenter && (
                         <small className="p-invalid text-danger">
@@ -114,7 +114,7 @@ const AddDepartment = ({
                         id="idOrganizationalUnit"
                         isValid={!!errors.idOrganizationalUnit}
                         text="name"
-                        data={a.data.items}
+                        useQuery={useOrganizationalUnitQuery}
                         setValue={setValue}
                         watch={watch}
                     />
