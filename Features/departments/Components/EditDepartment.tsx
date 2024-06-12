@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import { IDepartment } from "../Types/IDepartment";
 import departmentFormSchemas from "../Validation/DepartmentFormSchema";
 import useEditDepartmentQuery from "../Hooks/useEditDepartmentQuery";
+import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
 
 interface Props {
     entity: IDepartment;
@@ -98,7 +99,7 @@ const EditLocation = ({
                         id="idCostCenter"
                         isValid={!!errors.idCostCenter}
                         text="name"
-                        data={data.items}
+                        useQuery={useCostCenterQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idCostCenter}

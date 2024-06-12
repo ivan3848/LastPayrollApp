@@ -13,6 +13,7 @@ import {
 } from "primereact/datatable";
 import { IDepartment } from "../Types/IDepartment";
 import useDepartmentQuery from "../Hooks/useDepartmentQuery";
+import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
 
 interface Props {
     submitted: boolean;
@@ -144,7 +145,7 @@ const DepartmentTable = ({
                 filterPlaceholder="Buscar por centro de costo"
                 filterElement={() => (
                     <TableDropDownFilter
-                        data={zoneDropDown.items}
+                        useQuery={useCostCenterQuery}
                         text="description"
                         column="idCostCenter"
                         setFilters={setFilters}
