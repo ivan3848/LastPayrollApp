@@ -1,18 +1,17 @@
-import IParamsApi from "@/types/IParamApi";
-import IResponse from "@/types/IResponse";
+import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
+import { IStatus } from "@/Features/status/Types/IStatus";
 import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
 import { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
     isValid: boolean;
-    text: string;
     id: string;
     idValueEdit?: number;
     tableName: string;
+    isFocus?: boolean;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
     useQuery: (
@@ -23,13 +22,12 @@ interface Props<T> {
 
 function GenericConceptDropDown<T>({
     isValid,
-    text,
     id,
     idValueEdit,
     tableName,
+    isFocus = false,
     setValue,
     watch,
-    useQuery,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -37,19 +35,20 @@ function GenericConceptDropDown<T>({
         }
     }, [id, idValueEdit, setValue]);
 
-    const { data } = useQuery(tableName, []);
+    const { data } = useStatusByTableNameQuery(tableName, []);
 
     return (
         <>
             <Dropdown
                 value={data.find(
-                    (item: any) => item[id] === (watch(id) ?? idValueEdit)
+                    (item: IStatus) => item.idStatus === (watch(id) ?? idValueEdit)
                 )}
-                onChange={(e: DropdownChangeEvent) => setValue(id, e.value[id])}
+                onChange={(e: DropdownChangeEvent) => setValue(id, e.value.idStatus)}
                 options={data}
-                optionLabel={text}
+                optionLabel="description"
                 placeholder="Seleccione una opción..."
                 filter
+                autoFocus={isFocus}
                 emptyMessage="No hay registros"
                 className={classNames(
                     {
