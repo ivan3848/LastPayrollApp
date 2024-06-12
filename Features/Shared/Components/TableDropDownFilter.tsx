@@ -28,7 +28,7 @@ function TableDropDownFilter<T>({
     clearFilters,
 }: Props<T>) {
     const [id, setId] = useState(null);
-    const {params} = useParamAllData();
+    const { params } = useParamAllData();
     const { data } = useQuery(params, []);
 
     return (
@@ -49,6 +49,7 @@ function TableDropDownFilter<T>({
             optionLabel={text}
             placeholder="Seleccione una opción..."
             filter
+            emptyMessage="No hay registros"
             showClear
             className="w-full"
         />

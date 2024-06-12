@@ -5,10 +5,12 @@ import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 import { LiaFileContractSolid } from "react-icons/lia";
+import { CiBank } from "react-icons/ci";
 
 const ContractStatus = dynamic(
     () => import("../../status/Components/ContractStatus/ContractStatus")
 );
+const Bank = dynamic(() => import("../../bank/Components/Bank"));
 
 const EmployeeTabs = () => {
     return (
@@ -23,6 +25,14 @@ const EmployeeTabs = () => {
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <ContractStatus />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Bancos"
+                        leftIcon={<CiBank className="mr-2" size={20} />}
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <Bank />
                         </Suspense>
                     </TabPanel>
                 </TabView>

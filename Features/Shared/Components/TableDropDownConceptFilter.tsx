@@ -1,15 +1,9 @@
-import { DefinedUseQueryResult } from "@tanstack/react-query";
+import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
+import { IConcept } from "@/Features/concept/Types/IConcept";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { useState } from "react";
-import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
-    column: string;
-    useQuery: (
-        statusCode: string,
-        dependencies: boolean[]
-    ) => DefinedUseQueryResult<T[], Error>;
-    text: string;
     setFilters: (
         filters: {
             column: string;
@@ -17,28 +11,24 @@ interface Props<T> {
         }[]
     ) => void;
     clearFilters: () => void;
-    code: string;
+    tableName: string;
 }
 function TableDropDownConceptFilter<T>({
-    column,
-    useQuery,
-    text,
     setFilters,
     clearFilters,
-    code
+    tableName,
 }: Props<T>) {
     const [id, setId] = useState(null);
-    const {params} = useParamAllData();
-    const { data } = useQuery(code, []);
+    const { data } = useConceptByStatusCodeQuery(tableName, []);
 
     return (
         <Dropdown
-            value={data.find((item: any) => item[column] === id) || null}
+            value={data.find((item: IConcept) => item.idConcept === id) || null}
             onChange={(event: DropdownChangeEvent) => {
                 if (event.value) {
-                    setId(event.value[column]);
+                    setId(event.value.idConcept);
                     setFilters([
-                        { column: column, value: event.value[column] },
+                        { column: "idConcept", value: event.value.idConcept },
                     ]);
                     return;
                 }
@@ -46,7 +36,8 @@ function TableDropDownConceptFilter<T>({
                 clearFilters();
             }}
             options={data}
-            optionLabel={text}
+            optionLabel="name"
+            emptyMessage="No hay registros"
             placeholder="Seleccione una opción..."
             filter
             showClear

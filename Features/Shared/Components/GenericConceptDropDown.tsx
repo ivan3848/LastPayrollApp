@@ -1,35 +1,26 @@
-import IParamsApi from "@/types/IParamApi";
-import IResponse from "@/types/IResponse";
+import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
 import { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
     isValid: boolean;
-    text: string;
     id: string;
     idValueEdit?: number;
     code: string;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
-    useQuery: (
-        statusCode: string,
-        dependencies: boolean[]
-    ) => DefinedUseQueryResult<T[], Error>;
 }
 
 function GenericConceptDropDown<T>({
     isValid,
-    text,
     id,
     idValueEdit,
     code,
     setValue,
     watch,
-    useQuery,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -37,7 +28,7 @@ function GenericConceptDropDown<T>({
         }
     }, [id, idValueEdit, setValue]);
 
-    const { data } = useQuery(code, []);
+    const { data } = useConceptByStatusCodeQuery(code, []);
 
     return (
         <>
@@ -45,9 +36,9 @@ function GenericConceptDropDown<T>({
                 value={data.find(
                     (item: any) => item[id] === (watch(id) ?? idValueEdit)
                 )}
-                onChange={(e: DropdownChangeEvent) => setValue(id, e.value[id])}
+                onChange={(e: DropdownChangeEvent) => setValue(id, e.value.idConcept)}
                 options={data}
-                optionLabel={text}
+                optionLabel="name"
                 placeholder="Seleccione una opción..."
                 filter
                 emptyMessage="No hay registros"
