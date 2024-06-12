@@ -1,9 +1,5 @@
-import useSectorQuery from "@/Features/sector/Hooks/useSectorQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -11,17 +7,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useZoneQuery from "../Hooks/useZoneQuery";
-import { IZone } from "../Types/IZone";
+import { IStatus } from "../../Types/IStatus";
+import useStatusQuery from "../../Hooks/useStatusQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IZone) => void;
-    handleDelete: (entity: IZone) => void;
+    handleEdit: (entity: IStatus) => void;
+    handleDelete: (entity: IStatus) => void;
 }
 
-const ZoneTable = ({
+const StatusTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -38,7 +34,7 @@ const ZoneTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useZoneQuery(params, listOfDependencies);
+    const { data, isLoading } = useStatusQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -70,7 +66,7 @@ const ZoneTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Zonas</h3>
+            <h3 className="m-0">Medida De Contratación</h3>
 
             <Button
                 label="Agregar"
@@ -84,8 +80,8 @@ const ZoneTable = ({
 
     return (
         <DataTable
-            id="Zone-Table"
-            dataKey="idZone"
+            id="ContractStatus-Table"
+            dataKey="idStatus"
             value={data?.items}
             lazy
             paginator
@@ -107,58 +103,21 @@ const ZoneTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="name"
-                header="Zona"
+                field="description"
+                header="Medida de contratación"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="name"
-                filterPlaceholder="Buscar por zona"
+                filterField="description"
+                filterPlaceholder="Buscar por medida"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
-
-            <Column
-                field="zoneCode"
-                header="Código de zona"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="name"
-                filterPlaceholder="Buscar por código de zona"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-
-            <Column
-                field="sector"
-                header="Sector"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="idSector"
-                filterPlaceholder="Buscar por sector"
-                filterElement={(event: any) => (
-                    <TableDropDownFilter
-                        useQuery={useSectorQuery}
-                        text="name"
-                        column="idSector"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                )}
-                showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
-                onFilterClear={clearFilters}
-            ></Column>
-
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IZone>
+                    <ActionTableTemplate<IStatus>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -170,4 +129,4 @@ const ZoneTable = ({
     );
 };
 
-export default ZoneTable;
+export default StatusTable;

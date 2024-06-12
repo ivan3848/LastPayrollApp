@@ -14,6 +14,7 @@ import {
 } from "primereact/datatable";
 import useBenefitPositionQuery from "../Hooks/useBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
+import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
 
 interface Props {
     submitted: boolean;
@@ -43,10 +44,6 @@ const BenefitPositionTable = ({
         params,
         listOfDependencies
     );
-
-    const { params: filter } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(filter, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -113,15 +110,15 @@ const BenefitPositionTable = ({
                 filter
                 filterField="idPosition"
                 filterPlaceholder="Buscar por posición"
-                filterElement={(event: any) => (
+                filterElement={
                     <TableDropDownFilter
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         text="name"
                         column="idPosition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
@@ -135,15 +132,16 @@ const BenefitPositionTable = ({
                 filter
                 filterField="idConcept"
                 filterPlaceholder="Buscar por concepto"
-                filterElement={(event: any) => (
-                    <TableDropDownFilter
-                        data={dataConcept}
+                filterElement={
+                    <TableDropDownConceptFilter
+                        useQuery={useConceptByStatusCodeQuery}
                         text="name"
                         column="idConcept"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
+                        code="PROC"
                     />
-                )}
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}

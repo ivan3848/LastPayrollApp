@@ -11,6 +11,7 @@ const useStatusQuery = (params: IParamsApi, dependencies: boolean[]) => {
     return useQuery<IResponse<IStatus>, Error>({
         queryKey: [CACHE_KEY_CONCEPT, params, dependencies],
         queryFn: () => statusService.getForTable(params),
+        initialData: { items: [] },
     });
 };
 

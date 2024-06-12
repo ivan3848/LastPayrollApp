@@ -22,6 +22,11 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-th-large",
                     to: "/maintenance/payroll",
                 },
+                {
+                    label: "Empleados",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/employee",
+                },
             ],
         },
         {

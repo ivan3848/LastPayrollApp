@@ -11,6 +11,7 @@ import { useForm } from "react-hook-form";
 import useAddLocationQuery from "../Hooks/useAddLocationQuery";
 import { ILocation } from "../Types/ILocation";
 import locationFormSchemas from "../Validations/LocationFormSchemas";
+import useCountryQuery from "@/Features/country/Hooks/useCountryQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -37,9 +38,6 @@ const AddLocation = ({
     } = useForm<ILocation>({
         resolver: zodResolver(addEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data } = useZoneQuery(params, []);
 
     const addEntity = useAddLocationQuery({
         toast,
@@ -127,7 +125,7 @@ const AddLocation = ({
                         id="idZone"
                         isValid={!!errors.idZone}
                         text="name"
-                        data={data.items}
+                        useQuery={useZoneQuery}
                         setValue={setValue}
                         watch={watch}
                     />

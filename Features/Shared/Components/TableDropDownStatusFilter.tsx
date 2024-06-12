@@ -8,9 +8,9 @@ import { useParamAllData } from "../Hooks/useParamFilter";
 interface Props<T> {
     column: string;
     useQuery: (
-        params: IParamsApi,
+        tableName: string,
         dependencies: boolean[]
-    ) => DefinedUseQueryResult<IResponse<T>, Error>;
+    ) => DefinedUseQueryResult<T[], Error>;
     text: string;
     setFilters: (
         filters: {
@@ -19,21 +19,22 @@ interface Props<T> {
         }[]
     ) => void;
     clearFilters: () => void;
+    tableName: string;
 }
-function TableDropDownFilter<T>({
+function TableDropDownStatusFilter<T>({
     column,
     useQuery,
     text,
     setFilters,
     clearFilters,
+    tableName,
 }: Props<T>) {
     const [id, setId] = useState(null);
-    const {params} = useParamAllData();
-    const { data } = useQuery(params, []);
+    const { data } = useQuery(tableName, []);
 
     return (
         <Dropdown
-            value={data.items.find((item: any) => item[column] === id) || null}
+            value={data.find((item: any) => item[column] === id) || null}
             onChange={(event: DropdownChangeEvent) => {
                 if (event.value) {
                     setId(event.value[column]);
@@ -45,7 +46,7 @@ function TableDropDownFilter<T>({
                 setId(null);
                 clearFilters();
             }}
-            options={data.items}
+            options={data}
             optionLabel={text}
             placeholder="Seleccione una opción..."
             filter
@@ -55,4 +56,4 @@ function TableDropDownFilter<T>({
     );
 }
 
-export default TableDropDownFilter;
+export default TableDropDownStatusFilter;

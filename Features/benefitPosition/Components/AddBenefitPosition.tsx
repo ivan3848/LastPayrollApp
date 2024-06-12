@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import useAddBenefitPositionQuery from "../Hooks/useAddBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
+import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 
 interface Props {
     addEntityDialog: boolean;
@@ -35,10 +36,6 @@ const AddBenefitPosition = ({
     } = useForm<IBenefitPosition>({
         resolver: zodResolver(addEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
 
     const addEntity = useAddBenefitPositionQuery({
         toast,
@@ -74,7 +71,7 @@ const AddBenefitPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                     />
@@ -88,13 +85,14 @@ const AddBenefitPosition = ({
                     <label htmlFor="idConcept" className="w-full">
                         Concepto del beneficio
                     </label>
-                    <GenericDropDown
+                    <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
                         text="name"
-                        data={dataConcept}
+                        useQuery={useConceptByStatusCodeQuery}
                         setValue={setValue}
                         watch={watch}
+                        code="PROC"
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">

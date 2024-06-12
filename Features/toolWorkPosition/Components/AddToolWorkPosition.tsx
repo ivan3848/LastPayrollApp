@@ -36,10 +36,6 @@ const AddToolWorkPosition = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataToolWorkDefinition } = useToolWorkDefinitionQuery(params, []);
-
     const addEntity = useAddToolWorkPositionQuery({
         toast,
         setAddEntityDialog,
@@ -74,7 +70,7 @@ const AddToolWorkPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                     />
@@ -92,7 +88,7 @@ const AddToolWorkPosition = ({
                         id="idToolWorkDefinition"
                         isValid={!!errors.idToolWorkDefinition}
                         text="name"
-                        data={dataToolWorkDefinition.items}
+                        useQuery={useToolWorkDefinitionQuery}
                         setValue={setValue}
                         watch={watch}
                     />

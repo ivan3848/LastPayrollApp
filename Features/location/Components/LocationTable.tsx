@@ -40,9 +40,6 @@ const LocationTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useLocationQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: zoneDropDown } = useZoneQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -158,7 +155,7 @@ const LocationTable = ({
                 filterPlaceholder="Buscar por zona"
                 filterElement={() => (
                     <TableDropDownFilter
-                        data={zoneDropDown.items}
+                        useQuery={useZoneQuery}
                         text="name"
                         column="idZone"
                         setFilters={setFilters}

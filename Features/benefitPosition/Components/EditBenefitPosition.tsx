@@ -10,6 +10,7 @@ import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchema
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 
 interface Props {
     entity: IBenefitPosition;
@@ -38,10 +39,6 @@ const EditBenefitPosition = ({
     } = useForm<IBenefitPosition>({
         resolver: zodResolver(editEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataConcept } = useConceptByStatusCodeQuery("PROC", []);
 
     const editEntity = useEditBenefitPositionQuery({
         toast,
@@ -78,7 +75,7 @@ const EditBenefitPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                        data={dataPosition.items}
+                        useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idPosition}
@@ -93,14 +90,15 @@ const EditBenefitPosition = ({
                     <label htmlFor="idConcept" className="w-full">
                         Concepto del beneficio
                     </label>
-                    <GenericDropDown
+                    <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
                         text="name"
-                        data={dataConcept}
+                        useQuery={useConceptByStatusCodeQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idConcept}
+                        code="PROC"
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">

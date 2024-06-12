@@ -42,10 +42,6 @@ const ConceptTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useConceptQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: accountingAccountDropDown } = useAccountingAccountQuery(filter, []);
-    const { data: concepttypeDropDown } = useStatusByTableNameQuery("ConceptType",[]);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -148,29 +144,6 @@ const ConceptTable = ({
                 filterPlaceholder="Buscar por porcentaje de concepto"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-
-            <Column
-                field="regionName"
-                header="Región"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="idRegion"
-                filterPlaceholder="Buscar por región"
-                filterElement={(event: any) => (
-                    <TableDropDownFilter
-                        data={data!.items}
-                        text="name"
-                        column="idRegion"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                )}
-                showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
                 onFilterClear={clearFilters}
             ></Column>
 

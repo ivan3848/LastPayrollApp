@@ -12,19 +12,21 @@ interface Props<T> {
     text: string;
     id: string;
     idValueEdit?: number;
+    code: string;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
     useQuery: (
-        params: IParamsApi,
+        statusCode: string,
         dependencies: boolean[]
-    ) => DefinedUseQueryResult<IResponse<T>, Error>;
+    ) => DefinedUseQueryResult<T[], Error>;
 }
 
-function GenericDropDown<T>({
+function GenericConceptDropDown<T>({
     isValid,
     text,
     id,
     idValueEdit,
+    code,
     setValue,
     watch,
     useQuery,
@@ -35,17 +37,16 @@ function GenericDropDown<T>({
         }
     }, [id, idValueEdit, setValue]);
 
-    const { params } = useParamAllData();
-    const { data } = useQuery(params, []);
+    const { data } = useQuery(code, []);
 
     return (
         <>
             <Dropdown
-                value={data.items.find(
+                value={data.find(
                     (item: any) => item[id] === (watch(id) ?? idValueEdit)
                 )}
                 onChange={(e: DropdownChangeEvent) => setValue(id, e.value[id])}
-                options={data.items}
+                options={data}
                 optionLabel={text}
                 placeholder="Seleccione una opción..."
                 filter
@@ -61,4 +62,4 @@ function GenericDropDown<T>({
     );
 }
 
-export default GenericDropDown;
+export default GenericConceptDropDown;

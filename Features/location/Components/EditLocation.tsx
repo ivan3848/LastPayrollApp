@@ -40,9 +40,6 @@ const EditLocation = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useZoneQuery(params, []);
-
     const editEntity = useEditLocationQuery({
         toast,
         setEditEntityDialog,
@@ -134,7 +131,7 @@ const EditLocation = ({
                         id="idZone"
                         isValid={!!errors.idZone}
                         text="name"
-                        data={data.items}
+                        useQuery={useZoneQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idZone}
