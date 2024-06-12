@@ -90,12 +90,12 @@ const AppProfileSidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <a onClick={handleLogOut} className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
                                 <i className="pi pi-power-off text-xl text-primary"></i>
                             </span>
                             <div className="ml-3">
-                                <span onClick={handleLogOut} className="mb-2 font-semibold">
+                                <span className="mb-2 font-semibold">
                                     Sign Out
                                 </span>
                                 <p className="text-color-secondary m-0">
