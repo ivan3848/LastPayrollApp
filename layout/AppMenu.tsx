@@ -10,12 +10,27 @@ const AppMenu = () => {
                 {
                     label: "Ubicaciones",
                     icon: "pi pi-fw pi-map-marker",
-                    to: "/pages/maintenance/location",
+                    to: "/maintenance/location",
                 },
                 {
                     label: "Asignaciones",
                     icon: "pi pi-fw pi-users",
-                    to: "/pages/maintenance/asignation",
+                    to: "/maintenance/asignation",
+                },
+                {
+                    label: "Departamentos",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/departments",
+                },
+                {
+                    label: "Nómina",
+                    icon: "pi pi-fw pi-th-large",
+                    to: "/maintenance/payroll",
+                },
+                {
+                    label: "Empleados",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/employee",
                 },
             ],
         },

@@ -24,11 +24,18 @@ class ApiService<Q, R> {
         this.params = params;
     }
 
-    async get(params: IParamsApi, missEndpoint?: string): Promise<IResponse<R>> {
+    async getForTable(params: IParamsApi, missEndpoint?: string): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
         return await axiosInstance.get<IResponse<R>>(finalEndpoint, {
             params: params?.filter
+        }).then(res => res.data);
+    }
+    
+    async get(missEndpoint?: string): Promise<R> {
+        const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
+
+        return await axiosInstance.get<R>(finalEndpoint, {
         }).then(res => res.data);
     }
 
