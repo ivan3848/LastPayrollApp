@@ -41,9 +41,6 @@ const DepartmentTable = ({
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useDepartmentQuery(params, listOfDependencies);
 
-    const { params: filter } = useParamAllData();
-    const { data: zoneDropDown } = useZoneQuery(filter, []);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
