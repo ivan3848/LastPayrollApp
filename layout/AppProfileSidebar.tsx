@@ -38,12 +38,14 @@ const AppProfileSidebar = () => {
             className="layout-profile-sidebar w-full sm:w-25rem"
         >
             <div className="flex flex-column mx-auto md:mx-0">
-                <span className="mb-2 font-semibold">{adminInfo?.employeeName}</span>
+                <span className="mb-2 font-semibold">
+                    {adminInfo?.employeeName}
+                </span>
                 <span className="text-color-secondary font-medium mb-5">
                     {adminInfo?.rol}
                 </span>
 
-                <ul className="list-none m-0 p-0">
+                <ul className="list-none m-0 p-0" style={{ display: "none" }}>
                     <li>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
@@ -95,7 +97,10 @@ const AppProfileSidebar = () => {
                                 <i className="pi pi-power-off text-xl text-primary"></i>
                             </span>
                             <div className="ml-3">
-                                <span onClick={handleLogOut} className="mb-2 font-semibold">
+                                <span
+                                    onClick={handleLogOut}
+                                    className="mb-2 font-semibold"
+                                >
                                     Sign Out
                                 </span>
                                 <p className="text-color-secondary m-0">
@@ -108,12 +113,12 @@ const AppProfileSidebar = () => {
             </div>
 
             <div className="flex flex-column mt-5 mx-auto md:mx-0">
-                <span className="mb-2 font-semibold">Notifications</span>
+                {/* <span className="mb-2 font-semibold">Notifications</span>
                 <span className="text-color-secondary font-medium mb-5">
                     You have 3 notifications
-                </span>
+                </span> */}
 
-                <ul className="list-none m-0 p-0">
+                <ul className="list-none m-0 p-0" style={{ display: "none" }}>
                     <li>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
@@ -163,12 +168,12 @@ const AppProfileSidebar = () => {
             </div>
 
             <div className="flex flex-column mt-5 mx-auto md:mx-0">
-                <span className="mb-2 font-semibold">Messages</span>
+                {/* <span className="mb-2 font-semibold">Messages</span>
                 <span className="text-color-secondary font-medium mb-5">
                     You have new messages
-                </span>
+                </span> */}
 
-                <ul className="list-none m-0 p-0">
+                <ul className="list-none m-0 p-0" style={{ display: "none" }}>
                     <li>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
