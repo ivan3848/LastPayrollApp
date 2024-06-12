@@ -25,6 +25,7 @@ function GenericConceptDropDown<T>({
     setValue,
     watch,
 }: Props<T>) {
+    
     useEffect(() => {
         if (idValueEdit) {
             setValue(id, idValueEdit);
@@ -37,8 +38,7 @@ function GenericConceptDropDown<T>({
         <>
             <Dropdown
                 value={data.find(
-                    (item: IStatus) =>
-                        item.idStatus === (watch(id) ?? idValueEdit)
+                    (item: any) => item.idStatus === (watch(id) ?? idValueEdit)
                 )}
                 onChange={(e: DropdownChangeEvent) =>
                     setValue(id, e.value.idStatus)
