@@ -1,24 +1,21 @@
-import Cookies from "js-cookie";
 import { NextResponse, type NextRequest } from "next/server";
-import IUser from "./app/(full-page)/auth/types/IUser";
 import { haveAccess } from "./app/(full-page)/auth/services/AuthService";
+import { updateSession } from "./lib";
 
 const routeModuleDictionary: Readonly<{ [key: string]: string }> = {
-    // "/maintenance/locations": "Ubicación",
-    // "/maintenance/asignations": "Asignaciones",
+    // "/main/pages/maintenance/location": "Ubicación",
+    // "/main/pages/maintenance/asignation": "Asignaciones",
     "access": "access",
 };
 
-export function middleware(request: NextRequest) {
-    // const user = Cookies.get("auth") as IUser | undefined;
-    // console.log(user);
-    // if (!user) return NextResponse.redirect(new URL("/auth/login", request.url));
+export async function middleware(request: NextRequest) {
 
-    // var modules = routeModuleDictionary[request.nextUrl.pathname];
+    const modules = routeModuleDictionary[request.nextUrl.pathname];
 
-    // if (modules == undefined) return NextResponse.next();
-
-    // if (!(haveAccess(modules, user)).hasPermission)
-    //     return NextResponse.redirect(new URL("/auth/access", request.url));
+    if (modules == undefined) return NextResponse.next();
+  
+    if (!(await haveAccess(modules)).hasPermission)
+      return NextResponse.redirect(new URL("/auth/pages/notfound", request.url));
+  
+    return await updateSession(request);
 }
-

@@ -1,5 +1,4 @@
 "use client";
-import type { Page } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
@@ -9,9 +8,9 @@ import { useContext, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
-import { login } from "../services/AuthService";
 import { ILogin } from "../types/ILogin";
 import { Toast } from "primereact/toast";
+import SignIn from "./LoginServerActions";
 
 const loginFormSchema = z.object({
     username: z
@@ -28,12 +27,16 @@ const loginFormSchema = z.object({
         }),
 });
 
-const Login: Page = () => {
+interface Props {
+    changeSessionStatus?: (hasSession: boolean) => void;
+}
+
+const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
     const toast = useRef<Toast | null>(null);
 
     const show = (message: string) => {
         toast.current?.show({
-            severity: "error",
+            severity: "warn",
             summary: "Error al iniciar sesión",
             detail: message,
             life: 3000,
@@ -49,15 +52,20 @@ const Login: Page = () => {
     } = useForm<ILogin>({ resolver: zodResolver(loginFormSchema) });
 
     const onSubmit = async (data: ILogin) => {
-        const response = await login(data.username, data.password);
-        response === "success" ? router.push("/") : show(response);
-        reset();
-        return;
+        const response = await SignIn(data);
+
+        if (response === "success") {
+            changeSessionStatus?.(true);
+            router.push("/")
+            reset();
+            return;
+        }
+        show(response);
     };
 
     const router = useRouter();
     const { layoutConfig } = useContext(LayoutContext);
-    const dark = layoutConfig.colorScheme !== "light";
+    const dark = layoutConfig?.colorScheme !== "light";
 
     return (
         <>
