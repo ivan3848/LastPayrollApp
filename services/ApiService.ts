@@ -46,6 +46,17 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, body);
             return response.data;
         } catch (error: any) {
+            throw error;
+        }
+    }
+
+    async loginPost(body: Q, missEndpoint?: string): Promise<R | string> {
+        const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
+
+        try {
+            const response = await axiosInstance.post<R>(finalEndpoint, body);
+            return response.data;
+        } catch (error: any) {
             return error.response.data;
         }
     }
@@ -57,7 +68,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, {});
             return response.data;
         } catch (error: any) {
-            return error.response.data;
+            throw error;
         }
     }
 
