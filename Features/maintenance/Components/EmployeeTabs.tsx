@@ -5,17 +5,24 @@ import { TabPanel, TabView } from "primereact/tabview";
 import { Suspense } from "react";
 import { AiFillContainer, AiFillIdcard } from "react-icons/ai";
 import { CiBank } from "react-icons/ci";
-import { FaFileContract } from "react-icons/fa";
+import { FaFileContract, FaPeopleArrows } from "react-icons/fa";
 import { IoMdSchool } from "react-icons/io";
-import { RiCalendarScheduleFill } from "react-icons/ri";
+import { RiCalendarScheduleFill, RiFilePaper2Fill } from "react-icons/ri";
 import { SiBookstack } from "react-icons/si";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 import { PiIdentificationCardFill } from "react-icons/pi";
+import { FaMoneyCheckDollar } from "react-icons/fa6";
 
 const ContractStatus = dynamic(
     () => import("../../status/Components/ContractStatus/ContractStatus")
 );
 const Bank = dynamic(() => import("../../bank/Components/Bank"));
+const ContractType = dynamic(
+    () => import("../../contractType/Components/ContractType")
+);
+const Nationality = dynamic(
+    () => import("../../nationality/Components/Nationality")
+);
 const Education = dynamic(() => import("../../education/Components/Education"));
 const CancelationTypeStatus = dynamic(
     () =>
@@ -31,6 +38,14 @@ const CancelationReasonStatus = dynamic(
         import(
             "../../status/Components/CancelationReasonStatus/CancelationReasonStatus"
         )
+);
+const SalaryNewsStatus = dynamic(
+    () => import("../../status/Components/SalaryNewsStatus/SalaryNewsStatus")
+);
+
+const RelationshipStatus = dynamic(
+    () =>
+        import("../../status/Components/RelationshipStatus/RelationshipStatus")
 );
 
 const EmployeeTabs = () => {
@@ -103,7 +118,35 @@ const EmployeeTabs = () => {
                         }
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            <CancelationReasonStatus />
+                            <Nationality />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Novedades Salariales"
+                        leftIcon={
+                            <FaMoneyCheckDollar className="mr-2" size={18} />
+                        }
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <SalaryNewsStatus />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Parentescos"
+                        leftIcon={<FaPeopleArrows className="mr-2" size={18} />}
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <RelationshipStatus />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Tipos de contratos"
+                        leftIcon={
+                            <RiFilePaper2Fill className="mr-2" size={18} />
+                        }
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <ContractType />
                         </Suspense>
                     </TabPanel>
                     <TabPanel
