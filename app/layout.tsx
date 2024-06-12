@@ -24,14 +24,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const sessionChech = async () => {
+        const isThereSession = async () => {
             const session = await sessionCheck();
             if (session) {
                 setHasSession(true);
             }
             setIsLoading(false);
         }
-        sessionChech();
+        isThereSession();
     }, []);
 
     return (
