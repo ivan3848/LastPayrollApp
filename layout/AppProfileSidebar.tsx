@@ -1,16 +1,33 @@
 import { Badge } from "primereact/badge";
 import { Sidebar } from "primereact/sidebar";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LayoutContext } from "./context/layoutcontext";
+import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
+import { logout } from "@/app/(full-page)/auth/services/AuthService";
 
 const AppProfileSidebar = () => {
     const { layoutState, setLayoutState } = useContext(LayoutContext);
+    const [adminInfo, setAdminInfo] = useState({} as any);
 
     const onProfileSidebarHide = () => {
         setLayoutState((prevState) => ({
             ...prevState,
             profileSidebarVisible: false,
         }));
+    };
+
+    useEffect(() => {
+        const onProfileSidebarShow = async () => {
+            const sessionData = await sessionCheck();
+            setAdminInfo(sessionData);
+        };
+
+        onProfileSidebarShow();
+    }, []);
+
+    const handleLogOut = async () => {
+        await logout();
+        window.location.href = "/";
     };
 
     return (
@@ -21,9 +38,9 @@ const AppProfileSidebar = () => {
             className="layout-profile-sidebar w-full sm:w-25rem"
         >
             <div className="flex flex-column mx-auto md:mx-0">
-                <span className="mb-2 font-semibold">Welcome</span>
+                <span className="mb-2 font-semibold">{adminInfo?.employeeName}</span>
                 <span className="text-color-secondary font-medium mb-5">
-                    Isabella Andolini
+                    {adminInfo?.rol}
                 </span>
 
                 <ul className="list-none m-0 p-0">
@@ -78,7 +95,7 @@ const AppProfileSidebar = () => {
                                 <i className="pi pi-power-off text-xl text-primary"></i>
                             </span>
                             <div className="ml-3">
-                                <span className="mb-2 font-semibold">
+                                <span onClick={handleLogOut} className="mb-2 font-semibold">
                                     Sign Out
                                 </span>
                                 <p className="text-color-secondary m-0">

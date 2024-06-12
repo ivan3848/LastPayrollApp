@@ -57,7 +57,7 @@ class ApiService<Q, R> {
             const response = await axiosInstance.post<R>(finalEndpoint, {});
             return response.data;
         } catch (error: any) {
-            throw error;
+            return error.response.data;
         }
     }
 

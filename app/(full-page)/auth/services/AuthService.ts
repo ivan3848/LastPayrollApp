@@ -37,7 +37,8 @@ export async function login(username: string, password: string) {
 }
 
 export async function logout() {
-    await apiService.postEmpty("logout");
+    const sessionData = await getSession();
+    await apiService.post(sessionData!.userId as any, "logout");
     cookies().delete("session");
 }
 
