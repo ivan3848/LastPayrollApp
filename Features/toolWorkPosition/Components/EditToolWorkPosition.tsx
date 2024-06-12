@@ -1,6 +1,5 @@
 
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import React from "react";
@@ -9,7 +8,6 @@ import useEditToolWorkPositionQuery from "../Hooks/useEditToolWorkPositionQuery"
 import { IToolWorkPosition } from "../Types/IToolWorkPosition";
 import toolWorkPositionFormSchemas from "../Validations/ToolWorkPositionFormSchemas";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import useToolWorkDefinitionQuery from "@/Features/toolWorkDefinition/Hooks/useToolWorkDefinitionQuery";
 
@@ -40,10 +38,6 @@ const EditToolWorkPosition = ({
     } = useForm<IToolWorkPosition>({
         resolver: zodResolver(editEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(params, []);
-    const { data: dataToolWorkDefinition } = useToolWorkDefinitionQuery(params, []);
 
     const editEntity = useEditToolWorkPositionQuery({
         toast,
@@ -80,7 +74,7 @@ const EditToolWorkPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                        data={dataPosition.items}
+                       useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idPosition}
@@ -99,10 +93,10 @@ const EditToolWorkPosition = ({
                         id="idToolWorkDefinition"
                         isValid={!!errors.idToolWorkDefinition}
                         text="name"
-                        data={dataToolWorkDefinition.items}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idToolWorkDefinition}
+                        useQuery={useToolWorkDefinitionQuery}
                     />
                     {errors.idToolWorkDefinition && (
                         <small className="p-invalid text-danger">

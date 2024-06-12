@@ -1,8 +1,8 @@
-
 export interface ICostCenter {
-    idCostCenter?: number;
+    idCostCenter: number;
     description: string;
-    accountNumber: string;
+    accountNumber?: string;
     start?: Date;
     end?: Date;
+    action?: React.ReactNode;
 }

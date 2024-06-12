@@ -1,10 +1,9 @@
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useParamFilter, {
     useParamAllData,
 } from "@/Features/Shared/Hooks/useParamFilter";
+import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -12,17 +11,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useToolWorkPositionQuery from "../Hooks/useToolWorkPositionQuery";
-import { IToolWorkPosition } from "../Types/IToolWorkPosition";
+import { IDepartment } from "../Types/IDepartment";
+import useDepartmentQuery from "../Hooks/useDepartmentQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IToolWorkPosition) => void;
-    handleDelete: (entity: IToolWorkPosition) => void;
+    handleEdit: (entity: IDepartment) => void;
+    handleDelete: (entity: IDepartment) => void;
 }
 
-const ToolWorkPositionTable = ({
+const DepartmentTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -39,17 +38,10 @@ const ToolWorkPositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useToolWorkPositionQuery(
-        params,
-        listOfDependencies
-    );
+    const { data, isLoading } = useDepartmentQuery(params, listOfDependencies);
 
     const { params: filter } = useParamAllData();
-    const { data: dataPosition } = usePositionQuery(filter, []);
-    const { data: dataToolWorkDefinition } = useToolWorkPositionQuery(
-        filter,
-        []
-    );
+    const { data: zoneDropDown } = useZoneQuery(filter, []);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -70,9 +62,18 @@ const ToolWorkPositionTable = ({
         }
     };
 
+    const onFilter = (event: any) => {
+        setFilters([
+            {
+                column: event.field,
+                value: event.constraints.constraints?.[0].value,
+            },
+        ]);
+    };
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Herramientas De Posiciones</h3>
+            <h3 className="m-0">Departamento</h3>
 
             <Button
                 label="Agregar"
@@ -86,8 +87,8 @@ const ToolWorkPositionTable = ({
 
     return (
         <DataTable
-            id="ToolWorkPosition-Table"
-            dataKey="idToolWorkPosition"
+            id="Department-Table"
+            dataKey="idDepartment"
             value={data?.items}
             lazy
             paginator
@@ -109,44 +110,47 @@ const ToolWorkPositionTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="position"
-                header="Posición"
+                field="name"
+                header="Departamento"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idPosition"
-                filterPlaceholder="Buscar por posición"
-                filterElement={
-                    <TableDropDownFilter
-                        useQuery={usePositionQuery}
-                        text="name"
-                        column="idPosition"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                }
+                filterField="name"
+                filterPlaceholder="Buscar por departamento"
                 showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
+                onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="toolWork"
-                header="Herramienta"
+                field="organizationalUnit"
+                header="Unidad Organizacional"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idToolWorkDefinition"
-                filterPlaceholder="Buscar por herramienta"
-                filterElement={ 
+                filterField="name"
+                filterPlaceholder="Buscar por departamento"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="costCenter"
+                header="Centro De Costo"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="idCostCenter"
+                filterPlaceholder="Buscar por centro de costo"
+                filterElement={() => (
                     <TableDropDownFilter
-                    useQuery={useToolWorkPositionQuery}
-                        text="name"
-                        column="idToolWorkDefinition"
+                        data={zoneDropDown.items}
+                        text="description"
+                        column="idCostCenter"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                 }
+                )}
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
@@ -156,7 +160,7 @@ const ToolWorkPositionTable = ({
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IToolWorkPosition>
+                    <ActionTableTemplate<IDepartment>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -168,4 +172,4 @@ const ToolWorkPositionTable = ({
     );
 };
 
-export default ToolWorkPositionTable;
+export default DepartmentTable;
