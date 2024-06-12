@@ -6,7 +6,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useEditBenefitPositionQuery from "../Hooks/useEditBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
-import benefitPositionFormSchemas from "../Validations/BenefitPositionFormSchemas";
+import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";

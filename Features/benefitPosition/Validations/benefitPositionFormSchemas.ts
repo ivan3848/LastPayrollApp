@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const BenefitPositionFormSchemas = () => {
+const benefitPositionFormSchemas = () => {
     const editEntityFormSchema = z.object({
         idBenefitPosition: z.number().optional(),
         idPosition: z.number({ required_error: "El campo es requerido" }),
@@ -15,4 +15,4 @@ const BenefitPositionFormSchemas = () => {
     return { editEntityFormSchema, addEntityFormSchema };
 };
 
-export default BenefitPositionFormSchemas;
+export default benefitPositionFormSchemas;
