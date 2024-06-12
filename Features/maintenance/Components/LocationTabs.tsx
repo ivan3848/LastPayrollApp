@@ -17,7 +17,7 @@ const LocationTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
-                <TabView>
+                <TabView scrollable>
                     <TabPanel header="País" leftIcon="pi pi-globe mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Country />

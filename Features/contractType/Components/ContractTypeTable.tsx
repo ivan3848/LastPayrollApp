@@ -1,5 +1,4 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
@@ -8,18 +7,17 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IDepartment } from "../Types/IDepartment";
-import useDepartmentQuery from "../Hooks/useDepartmentQuery";
-import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
+import { IContractType } from "../Types/IContractType";
+import useContractTypeQuery from "../Hooks/useContractTypeQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IDepartment) => void;
-    handleDelete: (entity: IDepartment) => void;
+    handleEdit: (entity: IContractType) => void;
+    handleDelete: (entity: IContractType) => void;
 }
 
-const DepartmentTable = ({
+const ContractTypeTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -36,7 +34,7 @@ const DepartmentTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useDepartmentQuery(params, listOfDependencies);
+    const { data, isLoading } = useContractTypeQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,7 +66,7 @@ const DepartmentTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Departamento</h3>
+            <h3 className="m-0">Tipos de contratos</h3>
 
             <Button
                 label="Agregar"
@@ -82,8 +80,8 @@ const DepartmentTable = ({
 
     return (
         <DataTable
-            id="Department-Table"
-            dataKey="idDepartment"
+            id="ContractType-Table"
+            dataKey="idContractType"
             value={data?.items}
             lazy
             paginator
@@ -105,57 +103,21 @@ const DepartmentTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="name"
-                header="Departamento"
+                field="description"
+                header="Tipo de contrato"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="name"
-                filterPlaceholder="Buscar por departamento"
+                filterField="description"
+                filterPlaceholder="Buscar por tipo"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
-            <Column
-                field="organizationalUnit"
-                header="Unidad Organizacional"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="name"
-                filterPlaceholder="Buscar por departamento"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-
-            <Column
-                field="costCenter"
-                header="Centro De Costo"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="idCostCenter"
-                filterPlaceholder="Buscar por centro de costo"
-                filterElement={() => (
-                    <TableDropDownFilter
-                        useQuery={useCostCenterQuery}
-                        text="description"
-                        column="idCostCenter"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                )}
-                showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
-                onFilterClear={clearFilters}
-            ></Column>
-
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IDepartment>
+                    <ActionTableTemplate<IContractType>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -167,4 +129,4 @@ const DepartmentTable = ({
     );
 };
 
-export default DepartmentTable;
+export default ContractTypeTable;
