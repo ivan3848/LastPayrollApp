@@ -11,15 +11,15 @@ interface Props<T> {
         }[]
     ) => void;
     clearFilters: () => void;
-    tableName: string;
+    code: string;
 }
 function TableDropDownConceptFilter<T>({
     setFilters,
     clearFilters,
-    tableName,
+    code,
 }: Props<T>) {
     const [id, setId] = useState(null);
-    const { data } = useConceptByStatusCodeQuery(tableName, []);
+    const { data } = useConceptByStatusCodeQuery(code, []);
 
     return (
         <Dropdown

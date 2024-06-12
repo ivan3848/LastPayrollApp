@@ -157,9 +157,6 @@ const BankTable = ({
                 filterPlaceholder="Buscar por método de pago"
                 filterElement={
                     <TableDropDownStatusFilter
-                        useQuery={useStatusByTableNameQuery}
-                        text="description"
-                        column="idStatus"
                         tableName="BankPaymentMethod"
                         setFilters={setFilters}
                         clearFilters={clearFilters}

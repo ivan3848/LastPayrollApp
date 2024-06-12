@@ -134,9 +134,6 @@ const BenefitPositionTable = ({
                 filterPlaceholder="Buscar por concepto"
                 filterElement={
                     <TableDropDownConceptFilter
-                        useQuery={useConceptByStatusCodeQuery}
-                        text="name"
-                        column="idConcept"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                         code="PROC"

@@ -93,8 +93,6 @@ const EditBenefitPosition = ({
                     <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
-                        text="name"
-                        useQuery={useConceptByStatusCodeQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idConcept}

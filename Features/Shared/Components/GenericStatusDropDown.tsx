@@ -14,10 +14,6 @@ interface Props<T> {
     isFocus?: boolean;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
-    useQuery: (
-        code: string,
-        dependencies: boolean[]
-    ) => DefinedUseQueryResult<T[], Error>;
 }
 
 function GenericConceptDropDown<T>({
@@ -41,9 +37,12 @@ function GenericConceptDropDown<T>({
         <>
             <Dropdown
                 value={data.find(
-                    (item: IStatus) => item.idStatus === (watch(id) ?? idValueEdit)
+                    (item: IStatus) =>
+                        item.idStatus === (watch(id) ?? idValueEdit)
                 )}
-                onChange={(e: DropdownChangeEvent) => setValue(id, e.value.idStatus)}
+                onChange={(e: DropdownChangeEvent) =>
+                    setValue(id, e.value.idStatus)
+                }
                 options={data}
                 optionLabel="description"
                 placeholder="Seleccione una opción..."

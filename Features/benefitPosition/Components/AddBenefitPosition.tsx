@@ -88,8 +88,6 @@ const AddBenefitPosition = ({
                     <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
-                        text="name"
-                        useQuery={useConceptByStatusCodeQuery}
                         setValue={setValue}
                         watch={watch}
                         code="PROC"

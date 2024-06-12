@@ -71,10 +71,8 @@ const EditBank = ({
                         Método de pago
                     </label>
                     <GenericStatusDropDown
-                        id="idStatus"
+                        id="idStatusAccountType"
                         isValid={!!errors.idStatusAccountType}
-                        text="name"
-                        useQuery={useStatusByTableNameQuery}
                         setValue={setValue}
                         watch={watch}
                         tableName="BankPaymentMethod"
