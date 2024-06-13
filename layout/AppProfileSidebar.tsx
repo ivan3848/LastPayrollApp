@@ -2,8 +2,8 @@ import { Badge } from "primereact/badge";
 import { Sidebar } from "primereact/sidebar";
 import { useContext, useEffect, useState } from "react";
 import { LayoutContext } from "./context/layoutcontext";
-import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
 import { logout } from "@/app/(full-page)/auth/services/AuthService";
+import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
 
 const AppProfileSidebar = () => {
     const { layoutState, setLayoutState } = useContext(LayoutContext);
