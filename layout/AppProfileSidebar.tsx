@@ -28,6 +28,7 @@ const AppProfileSidebar = () => {
     const handleLogOut = async () => {
         await logout();
         window.location.href = "/";
+        localStorage.removeItem("hasSession");
     };
 
     return (
@@ -51,7 +52,7 @@ const AppProfileSidebar = () => {
                             </span>
                             <div className="ml-3">
                                 <span className="mb-2 font-semibold">
-                                    Profile
+                                    Perfil
                                 </span>
                                 <p className="text-color-secondary m-0">
                                     Lorem ipsum date visale
@@ -66,7 +67,7 @@ const AppProfileSidebar = () => {
                             </span>
                             <div className="ml-3">
                                 <span className="mb-2 font-semibold">
-                                    Billing
+                                    Facturacion
                                 </span>
                                 <p className="text-color-secondary m-0">
                                     Amet mimin mıollit
@@ -81,7 +82,7 @@ const AppProfileSidebar = () => {
                             </span>
                             <div className="ml-3">
                                 <span className="mb-2 font-semibold">
-                                    Settings
+                                    Configuración
                                 </span>
                                 <p className="text-color-secondary m-0">
                                     Exercitation veniam
@@ -96,10 +97,10 @@ const AppProfileSidebar = () => {
                             </span>
                             <div className="ml-3">
                                 <span className="mb-2 font-semibold">
-                                    Sign Out
+                                    Cerrar Session
                                 </span>
                                 <p className="text-color-secondary m-0">
-                                    Sed ut perspiciatis
+                                    cerrar Session
                                 </p>
                             </div>
                         </a>
