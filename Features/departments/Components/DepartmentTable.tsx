@@ -131,7 +131,7 @@ const DepartmentTable = ({
 
             <Column
                 field="costCenter"
-                header="Centro De Costo"
+                header="Centro de costo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter

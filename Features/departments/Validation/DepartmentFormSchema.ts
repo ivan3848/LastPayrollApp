@@ -5,16 +5,16 @@ const departmentFormSchemas = () => {
         name: z
             .string()
             .min(2, {
-                message: "El Departamento debe tener al menos 2 caracteres",
+                message: "El campo debe tener al menos 2 caracteres",
             })
             .max(100, {
-                message: "El Departamento debe tener menos de 100 caracteres",
+                message: "El campo debe tener menos de 100 caracteres",
             }),
         idCostCenter: z.number({
-            required_error: "Centro de Costos es requerido",
+            required_error: "El campo es requerido",
         }),
         idOrganizationalUnit: z.number({
-            required_error: "Unidad Organizacional es requerida",
+            required_error: "El campo es requerido",
         }),
     });
 
@@ -23,16 +23,16 @@ const departmentFormSchemas = () => {
         name: z
             .string()
             .min(2, {
-                message: "El Departamento debe tener al menos 2 caracteres",
+                message: "El campo debe tener al menos 2 caracteres",
             })
             .max(100, {
-                message: "El Departamento debe tener menos de 100 caracteres",
+                message: "El campo debe tener menos de 100 caracteres",
             }),
         idCostCenter: z.number({
-            required_error: "Centro de Costos es requerido",
+            required_error: "El campo es requerido",
         }),
         idOrganizationalUnit: z.number({
-            required_error: "Unidad Organizacional es requerida",
+            required_error: "El campo es requerido",
         }),
     });
 

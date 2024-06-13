@@ -46,7 +46,7 @@ const OrganizationalUnit = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Unidad Organizacional", "Acciones"];
+    const entityProperties = ["Unidad organizacional", "Acciones"];
 
     return (
         <div className="grid">

@@ -6,11 +6,11 @@ const organizationalUnitFormSchema = () => {
             .string()
             .min(2, {
                 message:
-                    "La unidad organizacional debe tener al menos 2 caracteres",
+                    "El campo debe tener al menos 2 caracteres",
             })
             .max(60, {
                 message:
-                    "La unidad organizacional debe tener menos de 60 caracteres",
+                    "El campo debe tener menos de 60 caracteres",
             }),
     });
 
@@ -20,11 +20,11 @@ const organizationalUnitFormSchema = () => {
             .string()
             .min(2, {
                 message:
-                    "La unidad organizacional debe tener al menos 2 caracteres",
+                    "El campo debe tener al menos 2 caracteres",
             })
             .max(60, {
                 message:
-                    "La unidad organizacional debe tener menos de 60 caracteres",
+                    "El campo debe tener menos de 60 caracteres",
             }),
     });
 

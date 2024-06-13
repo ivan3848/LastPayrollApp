@@ -24,10 +24,20 @@ const DepartmentTabs = () => {
                     </TabPanel>
                     <TabPanel
                         header="Departamento"
-                        leftIcon="pi pi-warehouse mr-2"
+                        leftIcon="pi pi-objects-column mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Department />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel header="Posición" leftIcon="pi pi-link mr-2">
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            {/* <Department /> */}
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel header="Vacantes" leftIcon="pi pi-qrcode mr-2">
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            {/* <Department /> */}
                         </Suspense>
                     </TabPanel>
                 </TabView>
