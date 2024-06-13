@@ -19,7 +19,15 @@ const AsignationTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
-                <TabView scrollable>
+                <TabView>
+                    {/* <TabPanel
+                        header="Horarios de trabajo"
+                        leftIcon="pi pi-calendar-clock mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <MaritalStatus />
+                        </Suspense>
+                    </TabPanel> */}
                     <TabPanel
                         header="Beneficio de posición"
                         leftIcon="pi pi-gift mr-2"
@@ -29,7 +37,7 @@ const AsignationTabs = () => {
                         </Suspense>
                     </TabPanel>
                     <TabPanel
-                        header="Herramientas de trabajo"
+                        header="Herramienta de trabajo"
                         leftIcon="pi pi-briefcase mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
@@ -37,7 +45,7 @@ const AsignationTabs = () => {
                         </Suspense>
                     </TabPanel>
                     <TabPanel
-                        header="Herramientas de posición"
+                        header="Herramienta de posición"
                         leftIcon="pi pi-wrench mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>

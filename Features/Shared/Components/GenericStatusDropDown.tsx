@@ -16,7 +16,7 @@ interface Props<T> {
     watch: (field: string) => any;
 }
 
-function GenericConceptDropDown<T>({
+function GenericStatusDropDown<T>({
     isValid,
     id,
     idValueEdit,
@@ -25,7 +25,7 @@ function GenericConceptDropDown<T>({
     setValue,
     watch,
 }: Props<T>) {
-    
+
     useEffect(() => {
         if (idValueEdit) {
             setValue(id, idValueEdit);
@@ -60,4 +60,4 @@ function GenericConceptDropDown<T>({
     );
 }
 
-export default GenericConceptDropDown;
+export default GenericStatusDropDown;
