@@ -8,13 +8,16 @@ import "primereact/resources/primereact.css";
 import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Login from "./(full-page)/auth/login/page";
+import { Suspense, useEffect, useState } from "react";
 
 interface RootLayoutProps {
     children: React.ReactNode;
 }
+
 const queryClient = new QueryClient();
 
-export default function RootLayout({ children }: RootLayoutProps) {
+const RootLayout = ({ children }: RootLayoutProps) => {
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
@@ -34,3 +37,5 @@ export default function RootLayout({ children }: RootLayoutProps) {
         </html>
     );
 }
+
+export default RootLayout;

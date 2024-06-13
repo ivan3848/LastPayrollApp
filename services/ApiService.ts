@@ -1,12 +1,10 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
-import { outSession } from "@/lib";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import axios from "axios";
 import Cookies from "js-cookie";
 
 const user = Cookies.get("auth") as IUser | undefined;
-
 
 const axiosInstance = axios.create({
     baseURL: "http://localhost:5038/",
@@ -26,11 +24,18 @@ class ApiService<Q, R> {
         this.params = params;
     }
 
-    async get(params: IParamsApi, missEndpoint?: string): Promise<IResponse<R>> {
+    async getForTable(params: IParamsApi, missEndpoint?: string): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
         return await axiosInstance.get<IResponse<R>>(finalEndpoint, {
             params: params?.filter
+        }).then(res => res.data);
+    }
+    
+    async get(missEndpoint?: string): Promise<R> {
+        const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
+
+        return await axiosInstance.get<R>(finalEndpoint, {
         }).then(res => res.data);
     }
 
@@ -42,6 +47,17 @@ class ApiService<Q, R> {
             return response.data;
         } catch (error: any) {
             throw error;
+        }
+    }
+
+    async loginPost(body: Q, missEndpoint?: string): Promise<R | string> {
+        const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
+
+        try {
+            const response = await axiosInstance.post<R>(finalEndpoint, body);
+            return response.data;
+        } catch (error: any) {
+            return error.response.data;
         }
     }
 

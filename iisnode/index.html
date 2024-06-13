@@ -53,6 +53,94 @@
     <script type="text/javascript">
 
         // this is replaced with actual data at runtime by code in interceptor.js
+        var logFiles = [{"file":"OL-CI-SPNO-10020-stderr-1718197770653.txt","computername":"OL-CI-SPNO","pid":10020,"type":"stderr","created":1718197770653},{"file":"OL-CI-SPNO-10020-stdout-1718197770649.txt","computername":"OL-CI-SPNO","pid":10020,"type":"stdout","created":1718197770649},{"file":"OL-CI-SPNO-10536-stderr-1718198578137.txt","computername":"OL-CI-SPNO","pid":10536,"type":"stderr","created":1718198578137},{"file":"OL-CI-SPNO-10536-stdout-1718198578131.txt","computername":"OL-CI-SPNO","pid":10536,"type":"stdout","created":1718198578131},{"file":"OL-CI-SPNO-12404-stderr-1718197564958.txt","computername":"OL-CI-SPNO","pid":12404,"type":"stderr","created":1718197564958},{"file":"OL-CI-SPNO-2588-stderr-1718197401745.txt","computername":"OL-CI-SPNO","pid":2588,"type":"stderr","created":1718197401745},{"file":"OL-CI-SPNO-6576-stderr-1718197495127.txt","computername":"OL-CI-SPNO","pid":6576,"type":"stderr","created":1718197495127},{"file":"OL-CI-SPNO-7204-stderr-1718197567070.txt","computername":"OL-CI-SPNO","pid":7204,"type":"stderr","created":1718197567070},{"file":"OL-CI-SPNO-7204-stdout-1718197567069.txt","computername":"OL-CI-SPNO","pid":7204,"type":"stdout","created":1718197567069},{"file":"OL-CI-SPNO-9064-stderr-1718197495943.txt","computername":"OL-CI-SPNO","pid":9064,"type":"stderr","created":1718197495943},{"file":"OL-CI-SPNO-9280-stderr-1718197402516.txt","computername":"OL-CI-SPNO","pid":9280,"type":"stderr","created":1718197402516}];
+        var lastUpdated = 1718198580658;
+        var date = new Date();
+
+        date.setTime(lastUpdated);
+        document.getElementById('lastUpdated').innerHTML = 'Index was last updated ' + date;
+
+        logFiles.sort(function (a, b) {
+            return b.created - a.created;
+        });
+
+        var logFilesTable = document.getElementById("logFilesTable");
+        for (var i = 0; i < logFiles.length; i++) {
+            var logFile = logFiles[i];
+            date.setTime(logFile.created);
+            var row = logFilesTable.insertRow(-1);
+            var computerNameCell = row.insertCell(0);
+            var pidCell = row.insertCell(1);
+            var typeCell = row.insertCell(2);
+            var dateCell = row.insertCell(3);
+            var logCell = row.insertCell(4);
+            computerNameCell.innerHTML = logFile.computername;
+            pidCell.innerHTML = logFile.pid.toString();
+            typeCell.innerHTML = logFile.type;
+            typeCell.setAttribute('class', logFile.type);
+            dateCell.innerHTML = date.toString();
+            logCell.innerHTML = '<a href="' + logFile.file + '">log</a>';
+        };
+
+    </script>
+</body>
+</html>
+
+<html>
+<head>
+    <title>iisnode logs</title>
+    <style type="text/css">
+        body
+        {
+            font-family: "Trebuchet MS" , Arial, Helvetica, sans-serif;
+        }
+        table
+        {
+            border-collapse: collapse;
+        }
+        td, th
+        {
+            border: 1px solid lightgray;
+            padding: 3px 7px 2px 7px;
+        }
+        th
+        {
+            text-align: left;
+            padding-top: 5px;
+            padding-bottom: 4px;
+            background-color: Gray;
+            color: #ffffff;
+        }
+        td.stderr
+        {
+            color: Red;
+        }
+    </style>
+</head>
+<body>
+    <table id="logFilesTable">
+        <tr>
+            <th>
+                Computer name
+            </th>
+            <th>
+                PID
+            </th>
+            <th>
+                Type
+            </th>
+            <th>
+                Created
+            </th>
+            <th>
+                Link
+            </th>
+        </tr>
+    </table>
+    <p id="lastUpdated"></p>
+    <script type="text/javascript">
+
+        // this is replaced with actual data at runtime by code in interceptor.js
         var logFiles = [{"file":"OL-CI-SPNO-12724-stderr-1718309707255.txt","computername":"OL-CI-SPNO","pid":12724,"type":"stderr","created":1718309707255},{"file":"OL-CI-SPNO-13092-stderr-1718309706215.txt","computername":"OL-CI-SPNO","pid":13092,"type":"stderr","created":1718309706215},{"file":"OL-CI-SPNO-9496-stderr-1718309707768.txt","computername":"OL-CI-SPNO","pid":9496,"type":"stderr","created":1718309707768},{"file":"OL-CI-SPNO-9772-stderr-1718309706731.txt","computername":"OL-CI-SPNO","pid":9772,"type":"stderr","created":1718309706731}];
         var lastUpdated = 1718309708246;
         var date = new Date();
