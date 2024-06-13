@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
@@ -30,6 +30,7 @@ const loginFormSchema = z.object({
 
 const Login: Page = () => {
     const toast = useRef<Toast | null>(null);
+    const [loading, setLoading] = useState(false); // Step 1: Loading state
 
     const show = (message: string) => {
         toast.current?.show({
@@ -49,6 +50,8 @@ const Login: Page = () => {
     } = useForm<ILogin>({ resolver: zodResolver(loginFormSchema) });
 
     const onSubmit = async (data: ILogin) => {
+        setLoading(true);
+
         const response = await SignIn(data);
 
         if (response === "success") {
@@ -57,6 +60,8 @@ const Login: Page = () => {
             reset();
             return;
         }
+        setLoading(false);
+
         show(response);
     };
 
@@ -144,6 +149,8 @@ const Login: Page = () => {
                                 label="Iniciar Sesión"
                                 className="w-full"
                                 type="submit"
+                                loading={loading}
+                                iconPos="right"
                             ></Button>
                         </div>
                     </form>
