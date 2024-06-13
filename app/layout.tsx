@@ -30,7 +30,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {localStorage.getItem('hasSession') ? <LayoutProvider>{children}</LayoutProvider> : <Login />}
+                        <LayoutProvider>{children}</LayoutProvider>
                     </PrimeReactProvider>
                 </QueryClientProvider>
             </body>
