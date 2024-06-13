@@ -49,8 +49,8 @@ const PersonalInformationTabs = () => {
                     </TabPanel>
                     <TabPanel
                         header="Parentescos"
-                        leftIcon="pi pi-address-book mr-2">
-
+                        leftIcon="pi pi-address-book mr-2"
+                    >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <RelationshipStatus />
                         </Suspense>

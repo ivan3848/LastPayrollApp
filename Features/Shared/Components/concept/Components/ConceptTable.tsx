@@ -15,7 +15,6 @@ import useConceptQuery from "../Hooks/useConceptQuery";
 import { IConcept } from "../Types/IConcept";
 import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
 import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
-import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
 
 interface Props {
     submitted: boolean;
@@ -112,6 +111,7 @@ const ConceptTable = ({
             <Column
                 field="conceptCode"
                 header="Código de concepto"
+                headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="conceptCode"
@@ -124,6 +124,7 @@ const ConceptTable = ({
             <Column
                 field="name"
                 header="Concepto"
+                headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
@@ -134,28 +135,9 @@ const ConceptTable = ({
             ></Column>
 
             <Column
-                field="conceptType"
-                header="Tipo de concepto"
-                sortable
-                filter
-                filterField="idConceptType"
-                filterPlaceholder="Buscar por tipo"
-                filterElement={
-                    <TableDropDownStatusFilter
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                        tableName="ConceptType"
-                    />
-                }
-                showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
-                onFilterClear={clearFilters}
-            ></Column>
-
-            <Column
                 field="percentValue"
                 header="Porcentaje de concepto"
+                headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="percentValue"

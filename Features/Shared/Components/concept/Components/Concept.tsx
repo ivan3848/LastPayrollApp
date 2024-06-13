@@ -79,7 +79,7 @@ const Concept = () => {
                         />
                     )}
 
-                    {editEntityDialog && (
+                    {/* {editEntityDialog && (
                         <EditConcept
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
@@ -87,7 +87,7 @@ const Concept = () => {
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )}
+                    )} */}
                     {deleteEntityDialog && (
                         <DeleteEntity
                             id={entity?.idConcept ?? 0}
