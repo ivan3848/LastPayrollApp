@@ -18,7 +18,7 @@ const PayrollTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
-                <TabView>
+                <TabView scrollable>
                     {/* <TabPanel
                         header="Conceptos de nómina"
                         leftIcon="pi pi-wallet mr-2"
