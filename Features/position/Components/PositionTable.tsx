@@ -1,6 +1,9 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useParamFilter, {
+    useParamAllData,
+} from "@/Features/Shared/Hooks/useParamFilter";
+import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -8,18 +11,19 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IDepartment } from "../Types/IDepartment";
-import useDepartmentQuery from "../Hooks/useDepartmentQuery";
-import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
+import usePositionQuery from "../Hooks/usePositionQuery";
+import { IPosition } from "../Types/IPosition";
+import useDepartmentQuery from "@/Features/departments/Hooks/useDepartmentQuery";
+import useOccupationQuery from "@/Features/occupation/Hooks/useOccupationQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IDepartment) => void;
-    handleDelete: (entity: IDepartment) => void;
+    handleEdit: (entity: IPosition) => void;
+    handleDelete: (entity: IPosition) => void;
 }
 
-const DepartmentTable = ({
+const PositionTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -36,7 +40,7 @@ const DepartmentTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useDepartmentQuery(params, listOfDependencies);
+    const { data, isLoading } = usePositionQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,7 +72,7 @@ const DepartmentTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Departamento</h3>
+            <h3 className="m-0">Posiciones</h3>
 
             <Button
                 label="Agregar"
@@ -82,8 +86,8 @@ const DepartmentTable = ({
 
     return (
         <DataTable
-            id="Department-Table"
-            dataKey="idDepartment"
+            id="Position-Table"
+            dataKey="idPosition"
             value={data?.items}
             lazy
             paginator
@@ -106,42 +110,30 @@ const DepartmentTable = ({
         >
             <Column
                 field="name"
-                header="Departamento"
+                header="Posición"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por departamento"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-            <Column
-                field="organizationalUnit"
-                header="Unidad Organizacional"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="name"
-                filterPlaceholder="Buscar por departamento"
+                filterPlaceholder="Buscar por posición"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
 
             <Column
-                field="costCenter"
-                header="Centro de costo"
+                field="department"
+                header="Departamento"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idCostCenter"
-                filterPlaceholder="Buscar por centro de costo"
+                filterField="idDepartamento"
+                filterPlaceholder="Buscar por zona"
                 filterElement={() => (
                     <TableDropDownFilter
-                        useQuery={useCostCenterQuery}
-                        text="description"
-                        column="idCostCenter"
+                        useQuery={useDepartmentQuery}
+                        text="name"
+                        column="idDepartment"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
@@ -153,9 +145,81 @@ const DepartmentTable = ({
             ></Column>
 
             <Column
+                field="positionManager"
+                header="Posición superior"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="idPositionManager"
+                filterPlaceholder="Buscar por posición superior"
+                filterElement={() => (
+                    <TableDropDownFilter
+                        useQuery={usePositionQuery}
+                        text="name"
+                        column="idPosition"
+                        setFilters={setFilters}
+                        clearFilters={clearFilters}
+                    />
+                )}
+                showFilterMenuOptions={false}
+                showApplyButton={false}
+                showClearButton={false}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="occupation"
+                header="Ocupación"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="idOccupation"
+                filterPlaceholder="Buscar por ocupación"
+                filterElement={() => (
+                    <TableDropDownFilter
+                        useQuery={useOccupationQuery}
+                        text="name"
+                        column="idOccupation"
+                        setFilters={setFilters}
+                        clearFilters={clearFilters}
+                    />
+                )}
+                showFilterMenuOptions={false}
+                showApplyButton={false}
+                showClearButton={false}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="minSalary"
+                header="Salario mínimo"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="minSalary"
+                filterPlaceholder="Buscar por salario mínimo"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="maxSalary"
+                header="Salario máximo"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="maxSalary"
+                filterPlaceholder="Buscar por salario máximo"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IDepartment>
+                    <ActionTableTemplate<IPosition>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -167,4 +231,4 @@ const DepartmentTable = ({
     );
 };
 
-export default DepartmentTable;
+export default PositionTable;

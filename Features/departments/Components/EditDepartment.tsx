@@ -12,6 +12,7 @@ import { IDepartment } from "../Types/IDepartment";
 import departmentFormSchemas from "../Validation/DepartmentFormSchema";
 import useEditDepartmentQuery from "../Hooks/useEditDepartmentQuery";
 import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
+import useOrganizationalUnitQuery from "@/Features/organizationalUnit/Hooks/useOrganizationalUnitQuery";
 
 interface Props {
     entity: IDepartment;
@@ -40,9 +41,6 @@ const EditLocation = ({
     } = useForm<IDepartment>({
         resolver: zodResolver(editEntityFormSchema),
     });
-
-    const { params } = useParamAllData();
-    const { data } = useZoneQuery(params, []);
 
     const editEntity = useEditDepartmentQuery({
         toast,
@@ -73,7 +71,7 @@ const EditLocation = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Ubicación
+                        Departamento
                     </label>
                     <InputText
                         {...register("name")}
@@ -107,6 +105,25 @@ const EditLocation = ({
                     {errors.idCostCenter && (
                         <small className="p-invalid text-danger">
                             {errors.idCostCenter.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
+                    <label htmlFor="idOrganizationalUnit" className="w-full">
+                        Unidad Organizacional
+                    </label>
+                    <GenericDropDown
+                        id="idOrganizationalUnit"
+                        isValid={!!errors.idOrganizationalUnit}
+                        text="name"
+                        useQuery={useOrganizationalUnitQuery}
+                        setValue={setValue}
+                        watch={watch}
+                        idValueEdit={entity.idOrganizationalUnit}
+                    />
+                    {errors.idOrganizationalUnit && (
+                        <small className="p-invalid text-danger">
+                            {errors.idOrganizationalUnit.message?.toString()}
                         </small>
                     )}
                 </div>

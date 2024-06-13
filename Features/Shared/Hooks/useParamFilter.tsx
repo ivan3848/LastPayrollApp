@@ -126,9 +126,27 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
         );
     };
 
-    const clearFilter = () =>
+    const clearFilters = () => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                if (draft.filter) {
+                    draft.filter.filters = [];
+                }
+            })
+        );
+    };
+
+    const clearSorts = () => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.sorts = [];
+            })
+        );
+    };
+
+    const clear = () =>
         setParams({
-            filter: { page: 1, pageSize: 5 },
+            filter: { page: 1, pageSize: 5, allData: false, filters: [] },
         });
 
     const setSorts = (sorts: { sortBy: string; isAsc: boolean }[]) => {
@@ -144,7 +162,9 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
         setPageSize,
         setGlobalFilter,
         setFilters,
-        clearFilter,
+        clear,
+        clearFilters,
+        clearSorts,
         setSorts,
         params,
     };

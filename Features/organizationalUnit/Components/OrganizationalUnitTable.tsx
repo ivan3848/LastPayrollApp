@@ -108,12 +108,12 @@ const OrganizationalUnitTable = ({
         >
             <Column
                 field="name"
-                header="Nombre"
+                header="Unidad organizacional"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por Unidad Organizacional"
+                filterPlaceholder="Buscar por unidad organizacional"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e as any)}
                 onFilterClear={clearFilters}

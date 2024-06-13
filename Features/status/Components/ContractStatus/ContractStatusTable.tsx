@@ -1,5 +1,5 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useParamFilter, { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -31,7 +31,9 @@ const ContractStatusTable = ({
         clearSorts,
         clearFilters,
         params,
-    } = useParamFilter();
+    } = useParamFilterByTableName({
+      tableName: "ContractStatus",
+    });
 
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useStatusQuery(params, listOfDependencies);

@@ -10,8 +10,6 @@ import "../styles/layout/layout.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./(full-page)/auth/login/page";
 import { Suspense, useEffect, useState } from "react";
-import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
-import { ProgressSpinner } from "primereact/progressspinner";
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -19,9 +17,7 @@ interface RootLayoutProps {
 
 const queryClient = new QueryClient();
 
-export default function RootLayout({ children }: RootLayoutProps) {
-    const [hasSession, setHasSession] = useState(true);
-
+const RootLayout = ({ children }: RootLayoutProps) => {
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
@@ -34,10 +30,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {!hasSession ? <LayoutProvider>{children}</LayoutProvider> : <Login changeSessionStatus={setHasSession} />}
+                        {localStorage.getItem('hasSession') ? <LayoutProvider>{children}</LayoutProvider> : <Login />}
                     </PrimeReactProvider>
                 </QueryClientProvider>
             </body>
         </html>
     );
 }
+
+export default RootLayout;

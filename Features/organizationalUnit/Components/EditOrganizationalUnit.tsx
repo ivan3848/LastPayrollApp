@@ -40,9 +40,6 @@ const EditOrganizationalUnit = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const { params } = useParamAllData();
-    const { data } = useZoneQuery(params, []);
-
     const editEntity = useEditOrganizationalUnit({
         toast,
         setEditEntityDialog,
@@ -71,7 +68,7 @@ const EditOrganizationalUnit = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Unidad Organizacional
+                        Unidad organizacional
                     </label>
                     <InputText
                         {...register("name")}

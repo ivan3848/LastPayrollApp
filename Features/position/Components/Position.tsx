@@ -6,15 +6,13 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IOrganizationalUnit } from "../Types/IOrganizationalUnit";
-import AddOrganizationalUnit from "./AddOrganizationalUnit";
-import EditOrganizationalUnit from "./EditOrganizationalUnit";
+import { IPosition } from "../Types/IPosition";
+import AddPosition from "./AddPosition";
+import EditPosition from "./EditPosition";
 
-const OrganizationalUnitTable = dynamic(
-    () => import("./OrganizationalUnitTable")
-);
+const PositionTable = dynamic(() => import("./PositionTable"));
 
-const OrganizationalUnit = () => {
+const Position = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -27,26 +25,33 @@ const OrganizationalUnit = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IOrganizationalUnit>();
+    } = useCrudModals<IPosition>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IOrganizationalUnit) => {
+    const handleEdit = (entity: IPosition) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IOrganizationalUnit) => {
+    const handleDelete = (entity: IPosition) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Unidad organizacional", "Acciones"];
+    const entityProperties = [
+        "Posición",
+        "Departamento",
+        "Posición superior",
+        "Ocupación",
+        "Salario mínimo",
+        "Salario máximo",
+    ];
 
     return (
         <div className="grid">
@@ -59,7 +64,7 @@ const OrganizationalUnit = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <OrganizationalUnitTable
+                        <PositionTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -68,7 +73,7 @@ const OrganizationalUnit = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddOrganizationalUnit
+                        <AddPosition
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -77,7 +82,7 @@ const OrganizationalUnit = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditOrganizationalUnit
+                        <EditPosition
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -87,8 +92,8 @@ const OrganizationalUnit = () => {
                     )}
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idOrganizationalUnit ?? 0}
-                            endpoint="employee/organizationalUnit"
+                            id={entity?.idPosition ?? 0}
+                            endpoint="employee/position"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
@@ -101,4 +106,4 @@ const OrganizationalUnit = () => {
     );
 };
 
-export default OrganizationalUnit;
+export default Position;

@@ -29,8 +29,6 @@ const AddOrganizationalUnit = ({
         handleSubmit,
         register,
         reset,
-        setValue,
-        watch,
         formState: { errors },
     } = useForm<IOrganizationalUnit>({
         resolver: zodResolver(addEntityFormSchema),
@@ -64,7 +62,7 @@ const AddOrganizationalUnit = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Unidad Organizacional
+                        Unidad organizacional
                     </label>
                     <InputText
                         {...register("name")}
