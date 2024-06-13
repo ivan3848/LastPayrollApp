@@ -3,10 +3,15 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
-import OrganizationalUnit from "@/Features/organizationalUnit/Components/OrganizationalUnit";
 
+const OrganizationalUnit = dynamic(
+    () => import("@/Features/organizationalUnit/Components/OrganizationalUnit")
+);
 const Department = dynamic(
     () => import("@/Features/departments/Components/Department")
+);
+const Position = dynamic(
+    () => import("@/Features/position/Components/Position")
 );
 
 const DepartmentTabs = () => {
@@ -32,14 +37,14 @@ const DepartmentTabs = () => {
                     </TabPanel>
                     <TabPanel header="Posición" leftIcon="pi pi-link mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            {/* <Department /> */}
+                            <Position />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel header="Vacantes" leftIcon="pi pi-qrcode mr-2">
+                    {/* <TabPanel header="Vacantes" leftIcon="pi pi-qrcode mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            {/* <Department /> */}
+                            <Department />
                         </Suspense>
-                    </TabPanel>
+                    </TabPanel> */}
                 </TabView>
             </div>
         </div>

@@ -14,12 +14,12 @@ const AppMenu = () => {
                 },
                 {
                     label: "Asignaciones",
-                    icon: "pi pi-fw pi-users",
+                    icon: "pi pi-fw pi-clipboard",
                     to: "/maintenance/asignation",
                 },
                 {
                     label: "Departamentos",
-                    icon: "pi pi-fw pi-users",
+                    icon: "pi pi-fw pi-warehouse",
                     to: "/maintenance/departments",
                 },
                 {

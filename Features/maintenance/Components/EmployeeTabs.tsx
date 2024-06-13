@@ -77,7 +77,7 @@ const EmployeeTabs = () => {
                             <MaritalStatus />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel
+                    {/* <TabPanel
                         header="Horarios de trabajo"
                         leftIcon={
                             <RiCalendarScheduleFill
@@ -87,9 +87,9 @@ const EmployeeTabs = () => {
                         }
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            {/* <MaritalStatus /> */}
+                            <MaritalStatus />
                         </Suspense>
-                    </TabPanel>
+                    </TabPanel> */}
                     <TabPanel
                         header="Medidas de contratación"
                         leftIcon={<FaFileContract className="mr-2" size={18} />}

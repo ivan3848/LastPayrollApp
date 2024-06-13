@@ -29,3 +29,4 @@ export const CACHE_KEY_CONTRACT_TYPE = "contracttype";
 export const CACHE_KEY_CANCELATION_TYPE_STATUS = "cancelationtypestatus";
 export const CACHE_KEY_CONCEPT = "concept";
 export const CACHE_KEY_WORK_SCHEDULER = "workscheduler";
+export const CACHE_KEY_OCCUPATION = "occupation";
