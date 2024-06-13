@@ -1,2 +1,7 @@
- ✓ Compiled in 6.7s (878 modules)
- ✓ Compiled in 1291ms (1289 modules)
+> Ready on http://localhost:\\.\pipe\118a7de9-7c5a-4acd-bd57-ae034020c3d7
+ ✓ Compiled /middleware in 352ms (228 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 3s (1085 modules)
+ GET / 500 in 3526ms
+ GET / 500 in 46ms
+ GET / 500 in 56ms
