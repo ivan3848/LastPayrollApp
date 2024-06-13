@@ -1,5 +1,5 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -7,8 +7,8 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IStatus } from "../../Types/IStatus";
 import useStatusQuery from "../../Hooks/useStatusQuery";
+import { IStatus } from "../../Types/IStatus";
 
 interface Props {
     submitted: boolean;
@@ -31,8 +31,12 @@ const CancelationReasonStatusTable = ({
         clearSorts,
         clearFilters,
         params,
-    } = useParamFilter();
+    } = useParamFilterByTableName({
+        tableName: "CancelationStatus",
+    });
 
+
+    
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useStatusQuery(params, listOfDependencies);
 
