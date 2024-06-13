@@ -1,0 +1,11 @@
+> Ready on http://localhost:\\.\pipe\78b90e0f-ff59-4e97-bfb1-29acf2722bbb
+ ✓ Compiled /middleware in 335ms (228 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 2.5s (1085 modules)
+ GET / 500 in 3091ms
+ GET / 500 in 81ms
+ ✓ Compiled /favicon.ico in 351ms (705 modules)
+ GET /favicon.ico 200 in 477ms
+ GET / 500 in 243ms
+ GET /favicon.ico 200 in 15ms
+ GET / 500 in 72ms
