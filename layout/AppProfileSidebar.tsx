@@ -38,15 +38,15 @@ const AppProfileSidebar = () => {
             className="layout-profile-sidebar w-full sm:w-25rem"
         >
             <div className="flex flex-column mx-auto md:mx-0">
-                <span className="mb-2 font-semibold">
+                {/* <span className="mb-2 font-semibold">
                     {adminInfo?.employeeName}
                 </span>
                 <span className="text-color-secondary font-medium mb-5">
                     {adminInfo?.rol}
-                </span>
+                </span> */}
 
-                <ul className="list-none m-0 p-0" style={{ display: "none" }}>
-                    <li>
+                <ul className="list-none m-0 p-0">
+                    <li style={{ display: "none" }}>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
                                 <i className="pi pi-user text-xl text-primary"></i>
@@ -61,7 +61,7 @@ const AppProfileSidebar = () => {
                             </div>
                         </a>
                     </li>
-                    <li>
+                    <li style={{ display: "none" }}>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
                                 <i className="pi pi-money-bill text-xl text-primary"></i>
@@ -76,7 +76,7 @@ const AppProfileSidebar = () => {
                             </div>
                         </a>
                     </li>
-                    <li>
+                    <li style={{ display: "none" }}>
                         <a className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
                             <span>
                                 <i className="pi pi-cog text-xl text-primary"></i>
@@ -92,16 +92,19 @@ const AppProfileSidebar = () => {
                         </a>
                     </li>
                     <li>
-                        <a onClick={handleLogOut} className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150">
+                        <a
+                            onClick={handleLogOut}
+                            className="cursor-pointer flex surface-border mb-3 p-3 align-items-center border-1 surface-border border-round hover:surface-hover transition-colors transition-duration-150"
+                        >
                             <span>
                                 <i className="pi pi-power-off text-xl text-primary"></i>
                             </span>
                             <div className="ml-3">
                                 <span className="mb-2 font-semibold">
-                                    Sign Out
+                                    Cerrar Sesión
                                 </span>
                                 <p className="text-color-secondary m-0">
-                                    Sed ut perspiciatis
+                                    Cerrar sesión en la aplicación
                                 </p>
                             </div>
                         </a>

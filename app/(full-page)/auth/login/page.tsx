@@ -4,13 +4,14 @@ import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
-import { useContext, useRef } from "react";
+import { useContext, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
 import { ILogin } from "../types/ILogin";
 import { Toast } from "primereact/toast";
 import SignIn from "./LoginServerActions";
+import { FaTruckField } from "react-icons/fa6";
 
 const loginFormSchema = z.object({
     username: z
@@ -33,6 +34,7 @@ interface Props {
 
 const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
     const toast = useRef<Toast | null>(null);
+    const [loading, setLoading] = useState(false); // Step 1: Loading state
 
     const show = (message: string) => {
         toast.current?.show({
@@ -52,14 +54,18 @@ const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
     } = useForm<ILogin>({ resolver: zodResolver(loginFormSchema) });
 
     const onSubmit = async (data: ILogin) => {
+        setLoading(true);
+
         const response = await SignIn(data);
 
         if (response === "success") {
             changeSessionStatus?.(false);
-            router.push("/")
+            router.push("/");
             reset();
             return;
         }
+        setLoading(false);
+
         show(response);
     };
 
@@ -147,6 +153,8 @@ const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
                                 label="Iniciar Sesión"
                                 className="w-full"
                                 type="submit"
+                                loading={loading}
+                                iconPos="right"
                             ></Button>
                         </div>
                     </form>
