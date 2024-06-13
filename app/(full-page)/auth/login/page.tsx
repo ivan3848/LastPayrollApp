@@ -11,6 +11,7 @@ import { LayoutContext } from "../../../../layout/context/layoutcontext";
 import { ILogin } from "../types/ILogin";
 import { Toast } from "primereact/toast";
 import SignIn from "./LoginServerActions";
+import { Page } from "@/types";
 
 const loginFormSchema = z.object({
     username: z
@@ -27,11 +28,7 @@ const loginFormSchema = z.object({
         }),
 });
 
-interface Props {
-    changeSessionStatus?: (hasSession: boolean) => void;
-}
-
-const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
+const Login: Page = () => {
     const toast = useRef<Toast | null>(null);
 
     const show = (message: string) => {
@@ -55,7 +52,7 @@ const Login: React.FC<Props> = ({ changeSessionStatus }: Props) => {
         const response = await SignIn(data);
 
         if (response === "success") {
-            changeSessionStatus?.(false);
+            localStorage.setItem('hasSession', 'true');
             router.push("/")
             reset();
             return;
