@@ -14,17 +14,20 @@ const DepartmentTabs = () => {
         <div className="grid crud-demo">
             <div className="col-12">
                 <TabView>
-                    <TabPanel header="Departamento" leftIcon="pi pi-globe mr-2">
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <Department />
-                        </Suspense>
-                    </TabPanel>
                     <TabPanel
                         header="Unidad Organizacional"
-                        leftIcon="pi pi-globe mr-2"
+                        leftIcon="pi pi-sitemap mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <OrganizationalUnit />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Departamento"
+                        leftIcon="pi pi-warehouse mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <Department />
                         </Suspense>
                     </TabPanel>
                 </TabView>
