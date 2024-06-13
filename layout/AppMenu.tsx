@@ -34,6 +34,17 @@ const AppMenu = () => {
                 },
             ],
         },
+        {
+            label: "Empleado",
+            icon: "pi pi-fw pi-cog",
+            items: [
+                {
+                    label: "Cambio De Horario",
+                    icon: "pi pi-fw pi-map-marker",
+                    to: "/employee/workscheduler",
+                },
+            ],
+        },
     ];
 
     return <AppSubMenu model={model} />;
