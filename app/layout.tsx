@@ -10,6 +10,7 @@ import "../styles/layout/layout.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./(full-page)/auth/login/page";
 import { Suspense, useEffect, useState } from "react";
+import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -18,6 +19,16 @@ interface RootLayoutProps {
 const queryClient = new QueryClient();
 
 const RootLayout = ({ children }: RootLayoutProps) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+        const session = async () => {
+            const checkSession = await sessionCheck();
+            if (checkSession)
+                setIsLoggedIn(true);
+        };
+        session();
+    }, []);
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
@@ -30,7 +41,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        <LayoutProvider>{children}</LayoutProvider>
+                        {isLoggedIn ? <LayoutProvider>{children}</LayoutProvider> : <Login hasSession={setIsLoggedIn} />}
                     </PrimeReactProvider>
                 </QueryClientProvider>
             </body>

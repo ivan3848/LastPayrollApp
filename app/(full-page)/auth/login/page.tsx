@@ -28,7 +28,11 @@ const loginFormSchema = z.object({
         }),
 });
 
-const Login: Page = () => {
+interface Props {
+    hasSession: (value: boolean) => void;
+}
+
+const Login = ({ hasSession }: Props) => {
     const toast = useRef<Toast | null>(null);
     const [loading, setLoading] = useState(false); // Step 1: Loading state
 
@@ -55,7 +59,7 @@ const Login: Page = () => {
         const response = await SignIn(data);
 
         if (response === "success") {
-            localStorage.setItem('hasSession', 'true');
+            hasSession(true);
             router.push("/")
             reset();
             return;
