@@ -1,11 +1,11 @@
 import { classNames } from "primereact/utils";
 import React from "react";
 
-interface Props<T> {
+interface Props {
     isChecked: boolean;
 }
 
-function GenericTableCheck<T>({ isChecked }: Props<T>) {
+function GenericTableCheck({ isChecked }: Props) {
     return (
         <>
             <i
