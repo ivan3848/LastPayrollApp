@@ -1,9 +1,11 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
@@ -11,11 +13,6 @@ import { useForm } from "react-hook-form";
 import useEditConceptQuery from "../Hooks/useEditConceptQuery";
 import { IConcept } from "../Types/IConcept";
 import conceptFormSchemas from "../Validations/ConceptFormSchemas";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
-import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
 
 interface Props {
     entity: IConcept;
@@ -347,7 +344,7 @@ const EditConcept = ({
                         <div className="field-checkbox">
                             <GenericCheckBox
                                 id="beforeIsr"
-                                text="Antes de ISR"
+                                text="Excluir de ISR"
                                 watch={watch}
                                 setValue={setValue}
                                 currentValue={entity.beforeIsr}

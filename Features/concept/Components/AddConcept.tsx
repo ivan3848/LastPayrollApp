@@ -324,7 +324,7 @@ const AddConcept = ({
                         <div className="field-checkbox">
                             <GenericCheckBox
                                 id="BeforeIsr"
-                                text="Antes de ISR"
+                                text="Excluir de ISR"
                                 watch={watch}
                                 setValue={setValue}
                             />
