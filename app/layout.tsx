@@ -9,7 +9,7 @@ import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Login from "./(full-page)/auth/login/page";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
 
 interface RootLayoutProps {
@@ -29,6 +29,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         };
         session();
     }, []);
+
     return (
         <html lang="en" suppressHydrationWarning>
             <head>
