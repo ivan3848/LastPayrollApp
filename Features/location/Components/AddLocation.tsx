@@ -65,7 +65,7 @@ const AddLocation = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Ubicación
+                        Nombre de ubicación
                     </label>
                     <InputText
                         {...register("name")}

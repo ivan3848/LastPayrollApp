@@ -158,7 +158,7 @@ const ConceptTable = ({
         >
             <Column
                 field="conceptCode"
-                header="Código de concepto"
+                header="Código"
                 sortable
                 filter
                 filterField="conceptCode"
@@ -182,7 +182,7 @@ const ConceptTable = ({
 
             <Column
                 field="conceptType"
-                header="Tipo de concepto"
+                header="Tipo"
                 sortable
                 filter
                 filterField="idConceptType"
@@ -202,7 +202,7 @@ const ConceptTable = ({
 
             <Column
                 field="percentValue"
-                header="Porcentaje de concepto"
+                header="Porcentaje"
                 sortable
                 filter
                 filterField="percentValue"

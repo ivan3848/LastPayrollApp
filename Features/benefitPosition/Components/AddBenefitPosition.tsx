@@ -83,7 +83,7 @@ const AddBenefitPosition = ({
                 </div>
                 <div className="field">
                     <label htmlFor="idConcept" className="w-full">
-                        Concepto del beneficio
+                        Beneficio
                     </label>
                     <GenericConceptDropDown
                         id="idConcept"
