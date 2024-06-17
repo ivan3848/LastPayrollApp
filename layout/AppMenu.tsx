@@ -37,6 +37,11 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-map-marker",
                     to: "/maintenance/location",
                 },
+                {
+                    label: "Calendar",
+                    icon: "pi pi-fw pi-calendar",
+                    to: "/maintenance/calendar",
+                },
             ],
         },
     ];
