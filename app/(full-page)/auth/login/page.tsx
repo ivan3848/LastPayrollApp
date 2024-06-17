@@ -28,11 +28,7 @@ const loginFormSchema = z.object({
         }),
 });
 
-interface Props {
-    hasSession: (value: boolean) => void;
-}
-
-const Login = ({ hasSession }: Props) => {
+const Login: Page = () => {
     const toast = useRef<Toast | null>(null);
     const [loading, setLoading] = useState(false); // Step 1: Loading state
 
@@ -59,8 +55,7 @@ const Login = ({ hasSession }: Props) => {
         const response = await SignIn(data);
 
         if (response === "success") {
-            hasSession(true);
-            router.push("/")
+            window.location.reload();
             reset();
             return;
         }

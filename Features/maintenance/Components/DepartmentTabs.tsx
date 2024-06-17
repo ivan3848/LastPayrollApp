@@ -13,6 +13,9 @@ const Department = dynamic(
 const Position = dynamic(
     () => import("@/Features/position/Components/Position")
 );
+const HierarchyPosition = dynamic(
+    () => import("@/Features/hierarchyPosition/Components/HierarchyPosition")
+);
 
 const DepartmentTabs = () => {
     return (
@@ -40,11 +43,11 @@ const DepartmentTabs = () => {
                             <Position />
                         </Suspense>
                     </TabPanel>
-                    {/* <TabPanel header="Vacantes" leftIcon="pi pi-qrcode mr-2">
+                    <TabPanel header="Vacantes" leftIcon="pi pi-user-plus mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
-                            <Department />
+                            <HierarchyPosition />
                         </Suspense>
-                    </TabPanel> */}
+                    </TabPanel>
                 </TabView>
             </div>
         </div>
