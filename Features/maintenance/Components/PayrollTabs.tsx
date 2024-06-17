@@ -23,6 +23,22 @@ const PayrollTabs = () => {
             <div className="col-12">
                 <TabView>
                     <TabPanel
+                        header="Centros de costos"
+                        leftIcon="pi pi-database mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <CostCenter />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Cuentas contables"
+                        leftIcon="pi pi-book mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <AccountingAccount />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
                         header="Bancos"
                         leftIcon="pi pi-building-columns mr-2"
                     >
@@ -38,28 +54,12 @@ const PayrollTabs = () => {
                             <SalaryNewsStatus />
                         </Suspense>
                     </TabPanel>
-                    {/* <TabPanel
+                    <TabPanel
                         header="Conceptos de nómina"
                         leftIcon="pi pi-wallet mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Concept />
-                        </Suspense>
-                    </TabPanel> */}
-                    <TabPanel
-                        header="Cuentas contables"
-                        leftIcon="pi pi-book mr-2"
-                    >
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <AccountingAccount />
-                        </Suspense>
-                    </TabPanel>
-                    <TabPanel
-                        header="Centros de costos"
-                        leftIcon="pi pi-database mr-2"
-                    >
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <CostCenter />
                         </Suspense>
                     </TabPanel>
                 </TabView>

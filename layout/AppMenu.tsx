@@ -8,9 +8,9 @@ const AppMenu = () => {
             icon: "pi pi-fw pi-cog",
             items: [
                 {
-                    label: "Asignaciones",
-                    icon: "pi pi-fw pi-clipboard",
-                    to: "/maintenance/asignation",
+                    label: "Nómina",
+                    icon: "pi pi-fw pi-th-large",
+                    to: "/maintenance/payroll",
                 },
                 {
                     label: "Departamentos",
@@ -18,9 +18,9 @@ const AppMenu = () => {
                     to: "/maintenance/departments",
                 },
                 {
-                    label: "Empleados",
-                    icon: "pi pi-fw pi-users",
-                    to: "/maintenance/employee",
+                    label: "Asignaciones",
+                    icon: "pi pi-fw pi-clipboard",
+                    to: "/maintenance/asignation",
                 },
                 {
                     label: "Información Personal",
@@ -28,9 +28,9 @@ const AppMenu = () => {
                     to: "/maintenance/personalInformation",
                 },
                 {
-                    label: "Nómina",
-                    icon: "pi pi-fw pi-th-large",
-                    to: "/maintenance/payroll",
+                    label: "Empleados",
+                    icon: "pi pi-fw pi-users",
+                    to: "/maintenance/employee",
                 },
                 {
                     label: "Ubicaciones",

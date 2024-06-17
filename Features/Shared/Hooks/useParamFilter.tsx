@@ -33,7 +33,7 @@ const useParamFilter = () => {
         );
 
     const setFilters = (
-        filters: { column: string; value: string | number }[]
+        filters: { column: string; value: any }[]
     ) => {
         setParams((currentParams) =>
             produce(currentParams, (draft) => {

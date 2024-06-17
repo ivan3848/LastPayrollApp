@@ -82,7 +82,7 @@ const AddToolWorkPosition = ({
                 </div>
                 <div className="field">
                     <label htmlFor="idToolWorkDefinition" className="w-full">
-                        Herramienta de posición
+                        Herramienta
                     </label>
                     <GenericDropDown
                         id="idToolWorkDefinition"

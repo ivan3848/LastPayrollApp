@@ -1,6 +1,4 @@
 import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
-import { IStatus } from "@/Features/status/Types/IStatus";
-import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
 import { useEffect } from "react";
