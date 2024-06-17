@@ -1,13 +1,16 @@
 "use client";
 
+import { IDepartment } from "@/Features/departments/Types/IDepartment";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IWorkScheduler } from "../Types/IWorkScheduler";
-import WorkSchedulerTable from "./WorkSchedulerTable";
 
-const Department = () => {
+const WorkSchedulerTable = dynamic(() => import("./WorkSchedulerTable"));
+
+const WorkScheduler = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -20,32 +23,38 @@ const Department = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IWorkScheduler>();
+    } = useCrudModals<IDepartment>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IWorkScheduler) => {
+    const handleEdit = (entity: IDepartment) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IWorkScheduler) => {
+    const handleDelete = (entity: IDepartment) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["HOrario", "Acciones"];
+    const entityProperties = [
+        "Horario de Trabajo",
+        "Acciones",
+        "Nombre De Empleado",
+        "Fecha De Inicio",
+    ];
 
     return (
         <div className="grid">
             <div className="w-full">
                 <div className="card">
                     <Toast ref={toast} />
+
                     <Suspense
                         fallback={
                             <TableSkeletonTemplate items={entityProperties} />
@@ -58,10 +67,21 @@ const Department = () => {
                             handleEdit={handleEdit}
                         />
                     </Suspense>
+
+                    {deleteEntityDialog && (
+                        <DeleteEntity
+                            id={entity?.idDepartment ?? 0}
+                            endpoint="employee/department"
+                            deleteEntityDialog={deleteEntityDialog}
+                            setDeleteEntityDialog={setDeleteEntityDialog}
+                            setSubmitted={setSubmitted}
+                            toast={toast}
+                        />
+                    )}
                 </div>
             </div>
         </div>
     );
 };
 
-export default Department;
+export default WorkScheduler;

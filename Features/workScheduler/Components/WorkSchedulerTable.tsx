@@ -1,24 +1,22 @@
+import { IDepartment } from "@/Features/departments/Types/IDepartment";
+import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IWorkScheduler } from "../Types/IWorkScheduler";
-import useWorkSchedulerQuery from "../Hooks/useWorkSchedulerQuery";
 
 interface Props {
     submitted: boolean;
     handleAdd: () => void;
-    handleEdit: (entity: IWorkScheduler) => void;
-    handleDelete: (entity: IWorkScheduler) => void;
+    handleEdit: (entity: IDepartment) => void;
+    handleDelete: (entity: IDepartment) => void;
 }
 
-const DepartmentTable = ({
+const WorkSchedulerTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -35,10 +33,7 @@ const DepartmentTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useWorkSchedulerQuery(
-        params,
-        listOfDependencies
-    );
+    const { data, isLoading } = useEmployeeQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -70,7 +65,7 @@ const DepartmentTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Cambio De horario</h3>
+            <h3 className="m-0">Cambio de horario</h3>
         </div>
     );
 
@@ -99,57 +94,50 @@ const DepartmentTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="name"
+                field="workSchedulerName"
                 header="Horario de trabajo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="name"
-                filterPlaceholder="Buscar por horario de trabajo"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-
-            <Column
-                field="workSchedulerCode"
-                header="Horario de trabajo"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="workSchedulerCode"
-                filterPlaceholder="Buscar por horario de trabajo"
+                filterField="workSchedulerName"
+                filterPlaceholder="Buscar por Horario de trabajo"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="workSchedulerCode"
-                header="País"
+                field="employeeName"
+                header="Nombre del empleado"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idWorkScheduler"
-                filterPlaceholder="Buscar por país"
-                filterElement={(event: any) => (
-                    <TableDropDownFilter
-                        useQuery={useWorkSchedulerQuery}
-                        text="name"
-                        column="idWorkScheduler"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                )}
+                filterField="employeeName"
+                filterPlaceholder="Buscar por nombre del empleado"
                 showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
+                onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
+            ></Column>
+            <Column
+                field={"startDate"}
+                header="Fecha de inicio"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="startDate"
+                filterPlaceholder="Buscar por nombre del empleado"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+                body={(rowData) => {
+                    const startDate = rowData.startDate?.split("T")[0] ?? "";
+                    return <span>{startDate}</span>;
+                }}
             ></Column>
 
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IWorkScheduler>
+                    <ActionTableTemplate<IDepartment>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
@@ -161,4 +149,4 @@ const DepartmentTable = ({
     );
 };
 
-export default DepartmentTable;
+export default WorkSchedulerTable;
