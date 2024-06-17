@@ -59,8 +59,7 @@ const Login = ({ hasSession }: Props) => {
         const response = await SignIn(data);
 
         if (response === "success") {
-            hasSession(true);
-            router.push("/")
+            window.location.reload();
             reset();
             return;
         }
