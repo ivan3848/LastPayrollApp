@@ -2,14 +2,12 @@ import { IDepartment } from "@/Features/departments/Types/IDepartment";
 import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import MegaMenus from "./MegaMenus";
 
 interface Props {
     submitted: boolean;
@@ -67,8 +65,7 @@ const WorkSchedulerTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Cambio de horario</h3>
-            <MegaMenus />
+            <h3 className="m-0">Employee Details</h3>
         </div>
     );
 
