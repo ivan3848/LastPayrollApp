@@ -68,10 +68,10 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                     <li className="topbar-user-logged">
                         <span className="text-right lg:block">
                             <span className="block text-sm font-medium text-black dark:text-white">
-                                {adminInfo.employeeName}
+                                {adminInfo?.employeeName}
                             </span>
                             <span className="block text-xs">
-                                {adminInfo.rol}
+                                {adminInfo?.rol}
                             </span>
                         </span>
                     </li>

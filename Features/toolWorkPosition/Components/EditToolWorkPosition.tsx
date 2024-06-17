@@ -1,4 +1,3 @@
-
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
@@ -74,7 +73,7 @@ const EditToolWorkPosition = ({
                         id="idPosition"
                         isValid={!!errors.idPosition}
                         text="name"
-                       useQuery={usePositionQuery}
+                        useQuery={usePositionQuery}
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idPosition}
@@ -87,7 +86,7 @@ const EditToolWorkPosition = ({
                 </div>
                 <div className="field">
                     <label htmlFor="idToolWorkDefinition" className="w-full">
-                        Herramienta de posición
+                        Herramienta
                     </label>
                     <GenericDropDown
                         id="idToolWorkDefinition"

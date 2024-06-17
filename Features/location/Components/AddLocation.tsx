@@ -1,6 +1,5 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
 import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
@@ -11,7 +10,6 @@ import { useForm } from "react-hook-form";
 import useAddLocationQuery from "../Hooks/useAddLocationQuery";
 import { ILocation } from "../Types/ILocation";
 import locationFormSchemas from "../Validations/LocationFormSchemas";
-import useCountryQuery from "@/Features/country/Hooks/useCountryQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -67,7 +65,7 @@ const AddLocation = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Ubicación
+                        Nombre de ubicación
                     </label>
                     <InputText
                         {...register("name")}

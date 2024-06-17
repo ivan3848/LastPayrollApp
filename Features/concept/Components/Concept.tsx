@@ -44,7 +44,12 @@ const Concept = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Código de concepto", "Concepto", "Porcentaje", "Monto"];
+    const entityProperties = [
+        "Código de concepto",
+        "Concepto",
+        "Porcentaje",
+        "Monto",
+    ];
 
     return (
         <div className="grid">
@@ -65,16 +70,16 @@ const Concept = () => {
                         />
                     </Suspense>
 
-                    {/* {addEntityDialog && (
+                    {addEntityDialog && (
                         <AddConcept
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )} */}
+                    )}
 
-                    {/* {editEntityDialog && (
+                    {editEntityDialog && (
                         <EditConcept
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
@@ -82,7 +87,7 @@ const Concept = () => {
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )} */}
+                    )}
                     {deleteEntityDialog && (
                         <DeleteEntity
                             id={entity?.idConcept ?? 0}

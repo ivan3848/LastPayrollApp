@@ -2,8 +2,8 @@ import { Badge } from "primereact/badge";
 import { Sidebar } from "primereact/sidebar";
 import { useContext, useEffect, useState } from "react";
 import { LayoutContext } from "./context/layoutcontext";
-import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
 import { logout } from "@/app/(full-page)/auth/services/AuthService";
+import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
 
 const AppProfileSidebar = () => {
     const { layoutState, setLayoutState } = useContext(LayoutContext);
@@ -39,12 +39,12 @@ const AppProfileSidebar = () => {
             className="layout-profile-sidebar w-full sm:w-25rem"
         >
             <div className="flex flex-column mx-auto md:mx-0">
-                {/* <span className="mb-2 font-semibold">
+                <span className="mb-2 font-semibold">
                     {adminInfo?.employeeName}
                 </span>
                 <span className="text-color-secondary font-medium mb-5">
                     {adminInfo?.rol}
-                </span> */}
+                </span>
 
                 <ul className="list-none m-0 p-0">
                     <li style={{ display: "none" }}>

@@ -1,5 +1,6 @@
 export interface IConcept {
     idConcept: number;
+    idConceptType: number;
     name: string;
     idAccountingAccount: number;
     percentValue: number;

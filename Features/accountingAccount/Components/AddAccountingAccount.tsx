@@ -61,7 +61,7 @@ const AddAccountingAccount = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Cuenta
+                        Nombre de cuenta
                     </label>
                     <InputText
                         {...register("name")}
