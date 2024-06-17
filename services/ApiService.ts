@@ -7,8 +7,8 @@ import Cookies from "js-cookie";
 const user = Cookies.get("auth") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    //baseURL: "http://localhost:5038/",
-    baseURL: "http://specialistnomgateway.objectlink.com:5038/",
+    baseURL: "http://localhost:5038/",
+    // baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",
         IdCompany: user?.idCompany ?? "2",
@@ -32,7 +32,7 @@ class ApiService<Q, R> {
             params: params?.filter
         }).then(res => res.data);
     }
-    
+
     async get(missEndpoint?: string): Promise<R> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
