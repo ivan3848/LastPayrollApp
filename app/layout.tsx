@@ -1,16 +1,16 @@
 "use client";
 import { LayoutProvider } from "../layout/context/layoutcontext";
 
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/primereact.css";
+import { useEffect, useState } from "react";
 import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Login from "./(full-page)/auth/login/page";
-import { useEffect, useState } from "react";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
+import Login from "./(full-page)/auth/login/page";
 
 interface RootLayoutProps {
     children: React.ReactNode;
