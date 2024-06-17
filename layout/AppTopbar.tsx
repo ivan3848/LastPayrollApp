@@ -12,17 +12,17 @@ import {
 import AppBreadcrumb from "./AppBreadCrumb";
 import { LayoutContext } from "./context/layoutcontext";
 import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
-
+ 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const { onMenuToggle, showProfileSidebar, showConfigSidebar } =
         useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const [adminInfo, setAdminInfo] = useState({} as any);
-
+ 
     const onConfigButtonClick = () => {
         showConfigSidebar();
     };
-
+ 
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
     }));
@@ -31,7 +31,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
             const sessionData = await sessionCheck();
             setAdminInfo(sessionData);
         };
-
+ 
         onProfileSidebarShow();
     }, []);
     return (
@@ -45,10 +45,10 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 >
                     <i className="pi pi-bars"></i>
                 </button>
-
+ 
                 <AppBreadcrumb className="topbar-breadcrumb"></AppBreadcrumb>
             </div>
-
+ 
             <div className="topbar-end">
                 <ul className="topbar-menu">
                     <li className="topbar-search">
@@ -64,7 +64,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             />
                         </span>
                     </li>
-
+ 
                     <li className="topbar-user-logged">
                         <span className="text-right lg:block">
                             <span className="block text-sm font-medium text-black dark:text-white">
@@ -103,7 +103,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         </div>
     );
 });
-
+ 
 AppTopbar.displayName = "AppTopbar";
-
+ 
 export default AppTopbar;
