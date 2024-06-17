@@ -45,7 +45,7 @@ const EmployeeTabs = () => {
                         </Suspense>
                     </TabPanel>
                     <TabPanel
-                        header="Tipos de contratos"
+                        header="Contratos"
                         leftIcon="pi pi-clipboard mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
@@ -53,7 +53,7 @@ const EmployeeTabs = () => {
                         </Suspense>
                     </TabPanel>
                     <TabPanel
-                        header="Tipos De Desvinculaciones"
+                        header="Tipos de desvinculaciones"
                         leftIcon="pi pi-user-minus mr-2"
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>

@@ -42,7 +42,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {isLoggedIn ? <LayoutProvider>{children}</LayoutProvider> : <Login hasSession={setIsLoggedIn} />}
+                        {isLoggedIn ? <LayoutProvider>{children}</LayoutProvider> : <Login />}
                     </PrimeReactProvider>
                 </QueryClientProvider>
             </body>

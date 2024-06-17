@@ -32,7 +32,7 @@ class ApiService<Q, R> {
             params: params?.filter
         }).then(res => res.data);
     }
-    
+
     async get(missEndpoint?: string): Promise<R> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
