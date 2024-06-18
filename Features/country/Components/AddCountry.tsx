@@ -8,6 +8,8 @@ import useAddCountryQuery from "../Hooks/useAddCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import countryService from "../Services/countryService";
 
 interface Props {
     addEntityDialog: boolean;
@@ -33,11 +35,12 @@ const AddCountry = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddCountryQuery({
+    const addEntity = useAddEntityQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
+        service: countryService,
     });
 
     const onSubmit = (data: ICountry) => {

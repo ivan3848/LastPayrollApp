@@ -1,24 +1,20 @@
-import { ProductService } from "@/demo/service/ProductService";
+import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTableExpandedRows,
     DataTablePageEvent,
-    DataTableRowEvent,
     DataTableSortEvent,
     DataTableValueArray,
 } from "primereact/datatable";
-import { Rating } from "primereact/rating";
-import { Tag } from "primereact/tag";
-import { Toast } from "primereact/toast";
-import React, { useEffect, useRef, useState } from "react";
-import { IWorkScheduler, IWorkSchedulerDetail } from "../Types/IWorkScheduler";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
-import { CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
+import { useState } from "react";
 import workSchedulerService from "../Services/workSchedulerService";
-import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import { IWorkScheduler, IWorkSchedulerDetail } from "../Types/IWorkScheduler";
+import "animate.css";
 
 interface Props {
     submitted: boolean;
@@ -94,10 +90,9 @@ const WorkSchedulerTable = ({
     const cleanEndDate = (rowData: IWorkSchedulerDetail) => {
         return new Date(rowData.end).toLocaleTimeString();
     };
-
     const rowExpansionTemplate = (data: IWorkScheduler) => {
         return (
-            <div className="p-3">
+            <div className="p-3 animate__animated animate__fadeIn">
                 <h5>Turnos de: {data.name}</h5>
                 <DataTable value={data.workSchedulerDetail}>
                     <Column
@@ -159,7 +154,7 @@ const WorkSchedulerTable = ({
             first={data.firstRow!}
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
-            <Column expander={allowExpansion} style={{ width: "5rem" }} />
+            <Column expander={allowExpansion} style={{ width: "5px" }} />
 
             <Column
                 field="name"
