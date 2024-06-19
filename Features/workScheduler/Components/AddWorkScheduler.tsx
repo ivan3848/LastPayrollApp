@@ -1,15 +1,15 @@
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddCountryQuery from "../Hooks/useAddCountryQuery";
-import { ICountry } from "../Types/ICountry";
-import countryFormSchemas from "../Validations/CountryFormSchemas";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import countryService from "../Services/countryService";
+import workSchedulerService from "../Services/workSchedulerService";
+import { IWorkScheduler } from "../Types/IWorkScheduler";
+import workSchedulerFormSchemas from "../Validations/WorkSchedulerFormSchemas";
+import AddWorkSchedulerDetail from "@/Features/workSchedulerDetail/Components/AddWorkSchedulerDetail";
 
 interface Props {
     addEntityDialog: boolean;
@@ -18,20 +18,20 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddCountry = ({
+const AddWorkScheduler = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = countryFormSchemas();
+    const { addEntityFormSchema } = workSchedulerFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
         formState: { errors },
-    } = useForm<ICountry>({
+    } = useForm<IWorkScheduler>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
@@ -40,10 +40,10 @@ const AddCountry = ({
         setAddEntityDialog,
         setSubmitted,
         reset,
-        service: countryService,
+        service: workSchedulerService,
     });
 
-    const onSubmit = (data: ICountry) => {
+    const onSubmit = (data: IWorkScheduler) => {
         addEntity.mutate(data);
         return;
     };
@@ -56,7 +56,7 @@ const AddCountry = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar País"
+            header="Agregar Horario"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -64,7 +64,7 @@ const AddCountry = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        País
+                        Horario
                     </label>
                     <InputText
                         {...register("name")}
@@ -80,10 +80,28 @@ const AddCountry = ({
                         </small>
                     )}
                 </div>
+                <div className="field">
+                    <label htmlFor="workSchedulerCode" className="w-full">
+                        Código
+                    </label>
+                    <InputText
+                        {...register("workSchedulerCode")}
+                        id="workSchedulerCode"
+                        className={classNames({
+                            "p-invalid": errors.workSchedulerCode,
+                        })}
+                    />
+                    {errors.workSchedulerCode && (
+                        <small className="p-invalid text-danger">
+                            {errors.workSchedulerCode.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <AddWorkSchedulerDetail />
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );
 };
 
-export default AddCountry;
+export default AddWorkScheduler;
