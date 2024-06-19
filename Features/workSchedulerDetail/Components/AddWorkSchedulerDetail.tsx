@@ -6,6 +6,12 @@ import workSchedulerDetailFormSchemas from "../Validations/WorkSchedulerDetailFo
 import { Calendar } from "primereact/calendar";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 import { Checkbox } from "primereact/checkbox";
+import {
+    addHours,
+    createDateFromTime,
+} from "@/Features/Shared/Helpers/DateHelper";
+import { useState } from "react";
+import { Nullable } from "primereact/ts-helpers";
 
 interface Props {}
 
@@ -37,7 +43,7 @@ const AddWorkSchedulerDetail = ({}: Props) => {
                 </label>
                 <GenericInputNumber
                     id="week"
-                    isValid={!errors.week}
+                    isValid={!!errors.week}
                     minValue={1}
                     maxValue={5}
                     setValue={setValue}
@@ -49,25 +55,44 @@ const AddWorkSchedulerDetail = ({}: Props) => {
                     </small>
                 )}
             </div>
+            
             <div className="field">
                 <label htmlFor="start" className="w-full">
                     Hora de inicio
                 </label>
-                {/* <Calendar
-                    value={watch("start")}
-                    onChange={(e) => setValue("start", e.value)}
-                    hourFormat="12"
+                <Calendar
+                    id="start"
+                    value={addHours(watch("start") ?? new Date(), 4)}
+                    onChange={(e) =>
+                        e.value &&
+                        setValue(
+                            "start",
+                            createDateFromTime(e.value?.toLocaleTimeString()!)
+                        )
+                    }
                     timeOnly
-                /> */}
+                    showIcon
+                    hourFormat="12"
+                    mask="99:99 aa"
+                />
                 <label htmlFor="end" className="w-full">
                     Hora de salida
                 </label>
-                {/* <Calendar
-                    value={watch("end")}
-                    onChange={(e) => setValue("start", e.value)}
-                    hourFormat="12"
+                <Calendar
+                    id="end"
+                    value={addHours(watch("end") ?? new Date(), 4)}
+                    onChange={(e) =>
+                        e.value &&
+                        setValue(
+                            "end",
+                            createDateFromTime(e.value?.toLocaleTimeString()!)
+                        )
+                    }
                     timeOnly
-                /> */}
+                    showIcon
+                    hourFormat="12"
+                    mask="99:99 aa"
+                />
             </div>
 
             <div className="grid">
@@ -79,7 +104,7 @@ const AddWorkSchedulerDetail = ({}: Props) => {
                             watch={watch}
                             setValue={setValue}
                         />
-{/* 
+                        {/* 
                         <div className="field-checkbox">
                             <Checkbox
                                 inputId={1}
