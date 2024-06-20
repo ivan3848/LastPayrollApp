@@ -12,6 +12,7 @@ import {
 } from "@/Features/Shared/Helpers/DateHelper";
 import { useState } from "react";
 import { Nullable } from "primereact/ts-helpers";
+import SelectDays from "./SelectDays";
 
 interface Props {}
 
@@ -55,7 +56,7 @@ const AddWorkSchedulerDetail = ({}: Props) => {
                     </small>
                 )}
             </div>
-            
+
             <div className="field">
                 <label htmlFor="start" className="w-full">
                     Hora de inicio
@@ -95,51 +96,7 @@ const AddWorkSchedulerDetail = ({}: Props) => {
                 />
             </div>
 
-            <div className="grid">
-                <div className="col-12 md:col-4">
-                    <div className="field-checkbox">
-                        <GenericCheckBox
-                            id="isSpecial"
-                            text="Especial"
-                            watch={watch}
-                            setValue={setValue}
-                        />
-                        {/* 
-                        <div className="field-checkbox">
-                            <Checkbox
-                                inputId={1}
-                                name={id}
-                                value={id}
-                                checked={watch(id)}
-                                onChange={(e) => setValue(id, e.checked!)}
-                            />
-                            <label htmlFor={id}>{text}</label>
-                        </div> */}
-                    </div>
-                </div>
-
-                <div className="col-12 md:col-4">
-                    <div className="field-checkbox">
-                        <GenericCheckBox
-                            id="isBonification"
-                            text="Bonificación"
-                            watch={watch}
-                            setValue={setValue}
-                        />
-                    </div>
-                </div>
-
-                <div className="col-12 md:col-4">
-                    <div className="field-checkbox">
-                        <GenericCheckBox
-                            id="isCommission"
-                            text="Comisión"
-                            watch={watch}
-                            setValue={setValue}
-                        />
-                    </div>
-                </div>
-            </div>
+            {/* <SelectDays /> */}
         </form>
     );
 };
