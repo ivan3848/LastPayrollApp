@@ -71,7 +71,7 @@ const CalendarDemo: Page = () => {
 
     useEffect(() => {
         (async () => {
-            const data = (await schedulerService.get()) as IScheduler[];
+            const data = (await schedulerService.get()) as any;
             console.log(typeof (await schedulerService.get()));
 
             const _events: Demo.Event[] = data.map((item: IScheduler) => {
