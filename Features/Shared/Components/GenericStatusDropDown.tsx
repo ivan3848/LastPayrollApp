@@ -23,7 +23,6 @@ function GenericStatusDropDown<T>({
     setValue,
     watch,
 }: Props<T>) {
-
     useEffect(() => {
         if (idValueEdit) {
             setValue(id, idValueEdit);
