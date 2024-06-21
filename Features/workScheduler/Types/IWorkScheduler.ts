@@ -7,11 +7,11 @@ export interface IWorkScheduler {
 }
 
 export interface IWorkSchedulerDetail {
-    idWorkSchedulerDetail: number;
-    idWorkScheduler: number;
+    idWorkSchedulerDetail?: number;
+    idWorkScheduler?: number;
     start: Date;
     end: Date;
     days: string;
     week: number;
-    workScheduler: string;
+    workScheduler?: string;
 }
