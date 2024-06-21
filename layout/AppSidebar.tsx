@@ -30,9 +30,9 @@ const AppSidebar = () => {
                             x="5"
                             y="32"
                             fill="var(--logo-color)"
-                            font-family="Arial"
-                            font-size="39.8"
-                            font-weight="bold"
+                            fontFamily="Arial"
+                            fontSize="39.8"
+                            fontWeight="bold"
                         >
                             SPECIALISTNOM
                         </text>
