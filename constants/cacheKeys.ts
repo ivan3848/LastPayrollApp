@@ -30,3 +30,4 @@ export const CACHE_KEY_CANCELATION_TYPE_STATUS = "cancelationtypestatus";
 export const CACHE_KEY_CONCEPT = "concept";
 export const CACHE_KEY_WORK_SCHEDULER = "workscheduler";
 export const CACHE_KEY_OCCUPATION = "occupation";
+export const CACHE_KEY_SCHEDULER = "scheduler";
