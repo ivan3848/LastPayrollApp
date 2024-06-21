@@ -52,6 +52,23 @@ const CalendarDemo: Page = () => {
             end: end ? end : (start as DateInput),
         }));
     };
+    function getColor(concept: string) {
+        switch (concept) {
+            case "Fecha de corte":
+                return "#ff8914";
+            case "Día feriado":
+                return "#0EAB20";
+            case "Fecha de pago":
+                return "#146aff";
+            case "Día no laborable":
+                return "#4d6a96";
+            case "Pago de impuestos":
+                return "#f51818";
+            default:
+                return "#f52925";
+        }
+    }
+
     useEffect(() => {
         (async () => {
             const data = (await schedulerService.get()) as IScheduler[];
@@ -66,11 +83,11 @@ const CalendarDemo: Page = () => {
                     textColor: "#212121",
                     location: item.concept,
                     description: item.concept,
-                    borderColor: "#FFB6B6",
-                    backgroundColor: "#FFB6B6",
+                    borderColor: getColor(item.concept),
+                    backgroundColor: getColor(item.concept),
                     tag: {
-                        name: "Company A",
-                        color: "#FFB6B6",
+                        name: item.concept,
+                        color: getColor(item.concept),
                     },
                 };
             });
