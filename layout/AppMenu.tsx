@@ -44,7 +44,7 @@ const AppMenu = () => {
             icon: "pi pi-fw pi-cog",
             items: [
                 {
-                    label: "Cambio De Horario",
+                    label: "Cambios de Empleado",
                     icon: "pi pi-fw pi-clock",
                     to: "/employee/workscheduler",
                 },

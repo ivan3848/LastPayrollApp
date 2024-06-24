@@ -3,4 +3,5 @@ export interface IWorkScheduler {
     workSchedulerCode: string;
     name: string;
     workSchedulerDetail: [];
+    workSchedulerName?: string;
 }
