@@ -1,7 +1,5 @@
 "use client";
-// fullcalendar core import
 import FullCalendar from "@fullcalendar/react";
-// fullcalendar plugins imports
 import type { Demo, Page } from "@/types";
 import { DateInput, DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -12,17 +10,26 @@ import { Calendar as PRCalendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
 import React, { useEffect, useState } from "react";
-import { EventService } from "@/demo/service/EventService";
-
 import schedulerService from "@/Features/calendar/Services/schedulerService";
 import { IScheduler } from "@/Features/calendar/Types/IScheduler";
+import { useForm } from "react-hook-form";
+import { statusByTableNameService } from "@/Features/status/Services/statusService";
+
 const CalendarDemo: Page = () => {
     const [events, setEvents] = useState<Demo.Event[]>([]);
     const [tags, setTags] = useState<Demo.Event["tag"][]>([]);
     const [showDialog, setShowDialog] = useState(false);
     const [view, setView] = useState("");
+
+    const {
+        handleSubmit,
+        reset,
+        setValue,
+        watch,
+        formState: { errors },
+    } = useForm<IScheduler>();
+
     const [changedEvent, setChangedEvent] = useState<Demo.Event>({
         concept: "",
         start: "",
@@ -37,6 +44,7 @@ const CalendarDemo: Page = () => {
             color: "#FFB6B6",
         },
     });
+
     const onEventClick = (e: EventClickArg) => {
         const { start, end } = e.event;
         let plainEvent = e.event.toPlainObject({
@@ -52,27 +60,30 @@ const CalendarDemo: Page = () => {
             end: end ? end : (start as DateInput),
         }));
     };
+
     function getColor(concept: string) {
         switch (concept) {
             case "Fecha de corte":
-                return "#ff8914";
+                return "#FF8914";
             case "Día feriado":
                 return "#0EAB20";
             case "Fecha de pago":
-                return "#146aff";
+                return "#146AFF";
             case "Día no laborable":
-                return "#4d6a96";
+                return "#4D6A96";
             case "Pago de impuestos":
-                return "#f51818";
+                return "#F51818";
             default:
-                return "#f52925";
+                return "#F52925";
         }
     }
 
     useEffect(() => {
         (async () => {
             const data = (await schedulerService.get()) as any;
-            console.log(typeof (await schedulerService.get()));
+            const schedulerType = await statusByTableNameService.get(
+                "Scheduler"
+            );
 
             const _events: Demo.Event[] = data.map((item: IScheduler) => {
                 return {
@@ -91,10 +102,16 @@ const CalendarDemo: Page = () => {
                     },
                 };
             });
-            console.log(_events);
-            const eventData = await EventService.getEvents();
+
             setEvents(_events);
-            const _tags = eventData.map((event) => event.tag);
+
+            const _tags = schedulerType.map((item) => {
+                return {
+                    name: item.description,
+                    color: getColor(item.description),
+                };
+            });
+
             setTags(_tags);
         })();
     }, []);
@@ -110,18 +127,21 @@ const CalendarDemo: Page = () => {
                 textColor: "#212121",
             };
             setShowDialog(false);
+            console.log(_clickedEvent);
             if (_clickedEvent.id) {
-                const _events = events.map((i) =>
-                    i.id?.toString() === _clickedEvent.id?.toString()
-                        ? (i = _clickedEvent)
-                        : i
-                );
-                setEvents(_events);
+                setEvents((prevState) => [
+                    ...prevState,
+                    {
+                        ..._clickedEvent,
+                        title: _clickedEvent.concept,
+                    },
+                ]);
             } else {
                 setEvents((prevState) => [
                     ...prevState,
                     {
                         ..._clickedEvent,
+                        title: _clickedEvent.concept,
                         id: Math.floor(Math.random() * 10000).toString(),
                     },
                 ]);
@@ -149,8 +169,8 @@ const CalendarDemo: Page = () => {
             textColor: "",
             description: "",
             tag: {
-                name: "Company A",
-                color: "#FFB6B6",
+                name: "Fecha de corte",
+                color: "#FF8914",
             },
         });
     };
@@ -180,6 +200,10 @@ const CalendarDemo: Page = () => {
             </div>
         );
     };
+
+    function onSubmit() {
+        alert("onsubmit");
+    }
 
     const footer = (
         <>
@@ -211,7 +235,7 @@ const CalendarDemo: Page = () => {
                         events={events}
                         eventClick={onEventClick}
                         select={onDateSelect}
-                        initialDate="2022-05-11"
+                        initialDate={new Date()}
                         initialView="dayGridMonth"
                         height={720}
                         plugins={[
@@ -250,13 +274,6 @@ const CalendarDemo: Page = () => {
                         <>
                             {view === "display" ? (
                                 <React.Fragment>
-                                    <span className="text-900 font-semibold block mb-2">
-                                        Description
-                                    </span>
-                                    <span className="block mb-3">
-                                        {changedEvent.description}
-                                    </span>
-
                                     <div className="grid">
                                         <div className="col-6">
                                             <div className="text-900 font-semibold mb-2">
@@ -316,157 +333,152 @@ const CalendarDemo: Page = () => {
                                     </div>
                                 </React.Fragment>
                             ) : (
-                                <div className="grid p-fluid formgrid">
-                                    <div className="col-12 md:col-6 field">
-                                        <label
-                                            htmlFor="concept"
-                                            className="text-900 font-semibold"
-                                        >
-                                            Title
-                                        </label>
-                                        <span className="p-input-icon-left">
-                                            <i className="pi pi-pencil"></i>
-                                            <InputText
-                                                id="concept"
-                                                value={changedEvent.concept}
+                                <form
+                                    className="grid p-fluid"
+                                    onSubmit={handleSubmit(onSubmit)}
+                                >
+                                    <div className="grid p-fluid formgrid">
+                                        <div className="col-12 md:col-6 field">
+                                            <label
+                                                htmlFor="concept"
+                                                className="text-900 font-semibold"
+                                            >
+                                                Title
+                                            </label>
+                                            <span className="p-input-icon-left">
+                                                <i className="pi pi-pencil"></i>
+                                                <InputText
+                                                    id="concept"
+                                                    value={changedEvent.concept}
+                                                    onChange={(e) =>
+                                                        setChangedEvent(
+                                                            (prevState) => ({
+                                                                ...prevState,
+                                                                concept:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        )
+                                                    }
+                                                    type="text"
+                                                    placeholder="Title"
+                                                />
+                                            </span>
+                                        </div>
+                                        <div className="col-12 md:col-6 field">
+                                            <label
+                                                htmlFor="location"
+                                                className="text-900 font-semibold"
+                                            >
+                                                Location
+                                            </label>
+                                            <span className="p-input-icon-left">
+                                                <i className="pi pi-map-marker"></i>
+                                                <InputText
+                                                    id="location"
+                                                    value={
+                                                        changedEvent.location
+                                                    }
+                                                    onChange={(e) =>
+                                                        setChangedEvent(
+                                                            (prevState) => ({
+                                                                ...prevState,
+                                                                location:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        )
+                                                    }
+                                                    type="text"
+                                                    placeholder="Location"
+                                                />
+                                            </span>
+                                        </div>
+                                        <div className="col-12 md:col-6 field">
+                                            <label
+                                                htmlFor="start"
+                                                className="text-900 font-semibold"
+                                            >
+                                                Start Date
+                                            </label>
+                                            <PRCalendar
+                                                id="start"
+                                                maxDate={
+                                                    changedEvent.end as Date
+                                                }
+                                                value={
+                                                    changedEvent.start as Date
+                                                }
                                                 onChange={(e) =>
                                                     setChangedEvent(
                                                         (prevState) => ({
                                                             ...prevState,
-                                                            concept:
-                                                                e.target.value,
+                                                            start: e.value as
+                                                                | DateInput
+                                                                | undefined,
                                                         })
                                                     )
                                                 }
-                                                type="text"
-                                                placeholder="Title"
+                                                showTime
+                                                required
                                             />
-                                        </span>
-                                    </div>
-                                    <div className="col-12 md:col-6 field">
-                                        <label
-                                            htmlFor="location"
-                                            className="text-900 font-semibold"
-                                        >
-                                            Location
-                                        </label>
-                                        <span className="p-input-icon-left">
-                                            <i className="pi pi-map-marker"></i>
-                                            <InputText
-                                                id="location"
-                                                value={changedEvent.location}
+                                        </div>
+                                        <div className="col-12 md:col-6 field">
+                                            <label
+                                                htmlFor="end"
+                                                className="text-900 font-semibold"
+                                            >
+                                                End Date
+                                            </label>
+                                            <PRCalendar
+                                                id="end"
+                                                minDate={
+                                                    changedEvent.start as Date
+                                                }
+                                                value={changedEvent.end as Date}
                                                 onChange={(e) =>
                                                     setChangedEvent(
                                                         (prevState) => ({
                                                             ...prevState,
-                                                            location:
-                                                                e.target.value,
+                                                            end: e.value as DateInput,
                                                         })
                                                     )
                                                 }
-                                                type="text"
-                                                placeholder="Location"
+                                                showTime
+                                                required
                                             />
-                                        </span>
+                                        </div>
+                                        <div className="col-12 field">
+                                            <label
+                                                htmlFor="company-color"
+                                                className="text-900 font-semibold"
+                                            >
+                                                Tipo
+                                            </label>
+                                            <Dropdown
+                                                inputId="company-color"
+                                                value={changedEvent.tag}
+                                                options={tags}
+                                                onChange={(e) =>
+                                                    setChangedEvent(
+                                                        (prevState) => ({
+                                                            ...prevState,
+                                                            tag: e.value,
+                                                        })
+                                                    )
+                                                }
+                                                optionLabel="name"
+                                                placeholder="Select a Tag"
+                                                valueTemplate={
+                                                    selectedItemTemplate
+                                                }
+                                                itemTemplate={
+                                                    itemOptionTemplate
+                                                }
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="col-12 field">
-                                        <label
-                                            htmlFor="description"
-                                            className="text-900 font-semibold"
-                                        >
-                                            Event Description
-                                        </label>
-                                        <InputTextarea
-                                            id="description"
-                                            rows={5}
-                                            value={changedEvent.description}
-                                            onChange={(e) =>
-                                                setChangedEvent(
-                                                    (prevState) => ({
-                                                        ...prevState,
-                                                        description:
-                                                            e.target.value,
-                                                    })
-                                                )
-                                            }
-                                            style={{ resize: "none" }}
-                                        ></InputTextarea>
-                                    </div>
-
-                                    <div className="col-12 md:col-6 field">
-                                        <label
-                                            htmlFor="start"
-                                            className="text-900 font-semibold"
-                                        >
-                                            Start Date
-                                        </label>
-                                        <PRCalendar
-                                            id="start"
-                                            maxDate={changedEvent.end as Date}
-                                            value={changedEvent.start as Date}
-                                            onChange={(e) =>
-                                                setChangedEvent(
-                                                    (prevState) => ({
-                                                        ...prevState,
-                                                        start: e.value as
-                                                            | DateInput
-                                                            | undefined,
-                                                    })
-                                                )
-                                            }
-                                            showTime
-                                            required
-                                        />
-                                    </div>
-                                    <div className="col-12 md:col-6 field">
-                                        <label
-                                            htmlFor="end"
-                                            className="text-900 font-semibold"
-                                        >
-                                            End Date
-                                        </label>
-                                        <PRCalendar
-                                            id="end"
-                                            minDate={changedEvent.start as Date}
-                                            value={changedEvent.end as Date}
-                                            onChange={(e) =>
-                                                setChangedEvent(
-                                                    (prevState) => ({
-                                                        ...prevState,
-                                                        end: e.value as DateInput,
-                                                    })
-                                                )
-                                            }
-                                            showTime
-                                            required
-                                        />
-                                    </div>
-                                    <div className="col-12 field">
-                                        <label
-                                            htmlFor="company-color"
-                                            className="text-900 font-semibold"
-                                        >
-                                            Color
-                                        </label>
-                                        <Dropdown
-                                            inputId="company-color"
-                                            value={changedEvent.tag}
-                                            options={tags}
-                                            onChange={(e) =>
-                                                setChangedEvent(
-                                                    (prevState) => ({
-                                                        ...prevState,
-                                                        tag: e.value,
-                                                    })
-                                                )
-                                            }
-                                            optionLabel="name"
-                                            placeholder="Select a Tag"
-                                            valueTemplate={selectedItemTemplate}
-                                            itemTemplate={itemOptionTemplate}
-                                        />
-                                    </div>
-                                </div>
+                                </form>
                             )}
                         </>
                     </Dialog>

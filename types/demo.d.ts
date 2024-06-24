@@ -239,6 +239,7 @@ declare namespace Demo {
     interface Event extends EventInput {
         location?: string;
         description?: string;
+        concept?: string;
         tag?: {
             name: string;
             color: string;
