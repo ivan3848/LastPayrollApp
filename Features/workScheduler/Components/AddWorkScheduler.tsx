@@ -7,11 +7,12 @@ import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
 import workSchedulerService from "../Services/workSchedulerService";
-import { IWorkScheduler, IWorkSchedulerDetail } from "../Types/IWorkScheduler";
+import { IWorkScheduler } from "../Types/IWorkScheduler";
 import workSchedulerFormSchemas from "../Validations/WorkSchedulerFormSchemas";
 import AddWorkSchedulerDetail from "@/Features/workSchedulerDetail/Components/AddWorkSchedulerDetail";
 import { useWorkSchedulerDetailStore } from "@/Features/workSchedulerDetail/store/workSchedulerDetailStore";
 import { addHours } from "@/Features/Shared/Helpers/DateHelper";
+import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
 
 interface Props {
     addEntityDialog: boolean;

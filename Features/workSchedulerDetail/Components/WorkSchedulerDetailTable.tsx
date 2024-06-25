@@ -1,8 +1,8 @@
+import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useWorkSchedulerDetailStore } from "../store/workSchedulerDetailStore";
-import { Button } from "primereact/button";
-import { IWorkSchedulerDetail } from "@/Features/workScheduler/Types/IWorkScheduler";
+import { IWorkSchedulerDetail } from "../Types/IWorkSchedulerDetail";
 
 const WorkSchedulerDetailTable = () => {
     const { data, removeWorkSchedulerDetail } = useWorkSchedulerDetailStore();

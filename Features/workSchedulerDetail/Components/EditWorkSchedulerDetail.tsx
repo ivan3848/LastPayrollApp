@@ -1,13 +1,16 @@
+import { addHours } from "@/Features/Shared/Helpers/DateHelper";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import { IWorkScheduler } from "@/Features/workScheduler/Types/IWorkScheduler";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { InputNumber } from "primereact/inputnumber";
 import { Nullable } from "primereact/ts-helpers";
 import { classNames } from "primereact/utils";
 import { useState } from "react";
-import { useWorkSchedulerDetailStore } from "../store/workSchedulerDetailStore";
-import SelectDays from "./SelectDays";
-import WorkSchedulerDetailTable from "./WorkSchedulerDetailTable";
+import workSchedulerDetailService from "../Services/workSchedulerServiceDetail";
 import { IWorkSchedulerDetail } from "../Types/IWorkSchedulerDetail";
+import EditWorkSchedulerDetailTable from "./EditWorkSchedulerDetailTable";
+import SelectDays from "./SelectDays";
 
 interface ErrorState {
     week?: string;
@@ -16,8 +19,13 @@ interface ErrorState {
     days?: string;
 }
 
-const AddWorkSchedulerDetail = () => {
-    const { addWorkSchedulerDetail } = useWorkSchedulerDetailStore();
+interface Props {
+    entity: IWorkScheduler;
+    setSubmitted: (value: boolean) => void;
+    toast: React.MutableRefObject<any>;
+}
+
+const EditWorkSchedulerDetail = ({ entity, toast, setSubmitted }: Props) => {
     const [errors, setErrors] = useState<ErrorState>({});
 
     const validateForm = () => {
@@ -46,27 +54,34 @@ const AddWorkSchedulerDetail = () => {
         new Date("2024-01-01 17:00:00")
     );
 
-    const onSubmit = () => {
-        if (!validateForm()) return;
-
-        const data: IWorkSchedulerDetail = {
-            idWorkSchedulerDetail: Math.random(),
-            week,
-            start: start!,
-            end: end!,
-            days: days!,
-        };
-
-        addWorkSchedulerDetail(data);
-        reset();
-        return;
-    };
-
     const reset = () => {
         setWeek(1);
         setDays("");
         setStart(new Date("2024-01-01 08:00:00"));
         setEnd(new Date("2024-01-01 17:00:00"));
+    };
+
+    const addEntity = useAddEntityQuery({
+        toast,
+        setSubmitted,
+        reset,
+        service: workSchedulerDetailService,
+    });
+
+    const onSubmit = () => {
+        if (!validateForm()) return;
+
+        const data: IWorkSchedulerDetail = {
+            idWorkScheduler: entity.idWorkScheduler,
+            week,
+            start: addHours(start!, -4),
+            end: addHours(end!, -4),
+            days: days!,
+        };
+
+        addEntity.mutate(data);
+
+        return;
     };
 
     return (
@@ -153,10 +168,14 @@ const AddWorkSchedulerDetail = () => {
                     label="Agregar Turno"
                 />
 
-                <WorkSchedulerDetailTable />
+                <EditWorkSchedulerDetailTable
+                    details={entity.workSchedulerDetail}
+                    toast={toast}
+                    setSubmitted={setSubmitted}
+                />
             </form>
         </div>
     );
 };
 
-export default AddWorkSchedulerDetail;
+export default EditWorkSchedulerDetail;
