@@ -3,9 +3,9 @@ import { useMutation } from "@tanstack/react-query";
 
 interface Props<T> {
     toast: React.MutableRefObject<any>;
-    setAddEntityDialog: (value: boolean) => void;
+    setAddEntityDialog?: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
-    reset: () => void;
+    reset?: () => void;
     service: ApiService<T, T>;
 }
 function useAddEntityQuery<T> ({
@@ -26,8 +26,9 @@ function useAddEntityQuery<T> ({
             });
         },
         onSuccess: () => {
-            reset();
-            setAddEntityDialog(false);
+            if(reset) reset();
+            if(setAddEntityDialog) setAddEntityDialog(false);
+
             setSubmitted(true);
 
             toast.current?.show({

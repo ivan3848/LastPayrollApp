@@ -1,3 +1,5 @@
+import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
+
 export interface IWorkScheduler {
     idWorkScheduler: number;
     name: string;
@@ -6,12 +8,3 @@ export interface IWorkScheduler {
     action?: React.ReactNode;
 }
 
-export interface IWorkSchedulerDetail {
-    idWorkSchedulerDetail: number;
-    idWorkScheduler: number;
-    start: Date;
-    end: Date;
-    days: string;
-    week: number;
-    workScheduler: string;
-}

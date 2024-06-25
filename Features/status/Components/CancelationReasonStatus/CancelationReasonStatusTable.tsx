@@ -32,11 +32,9 @@ const CancelationReasonStatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "CancelationStatus",
+        tableName: "CancelationReasonStatus",
     });
 
-
-    
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useStatusQuery(params, listOfDependencies);
 

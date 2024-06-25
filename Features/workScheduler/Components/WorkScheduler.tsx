@@ -8,6 +8,7 @@ import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import AddWorkScheduler from "./AddWorkScheduler";
+import EditWorkScheduler from "./EditWorkScheduler";
 
 const WorkSchedulerTable = dynamic(() => import("./WorkSchedulerTable"));
 
@@ -72,16 +73,16 @@ const WorkScheduler = () => {
                             toast={toast}
                         />
                     )}
-{/* 
+
                     {editEntityDialog && (
-                        <EditCity
+                        <EditWorkScheduler
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )} */}
+                    )}
                     {deleteEntityDialog && (
                         <DeleteEntity
                             id={entity?.idWorkScheduler ?? 0}
