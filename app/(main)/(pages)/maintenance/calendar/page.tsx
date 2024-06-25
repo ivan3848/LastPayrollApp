@@ -14,15 +14,17 @@ import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import React, { useEffect, useState } from "react";
-import { EventService } from "../../../../demo/service/EventService";
+import { EventService } from "@/demo/service/EventService";
 
+import schedulerService from "@/Features/calendar/Services/schedulerService";
+import { IScheduler } from "@/Features/calendar/Types/IScheduler";
 const CalendarDemo: Page = () => {
     const [events, setEvents] = useState<Demo.Event[]>([]);
     const [tags, setTags] = useState<Demo.Event["tag"][]>([]);
     const [showDialog, setShowDialog] = useState(false);
     const [view, setView] = useState("");
     const [changedEvent, setChangedEvent] = useState<Demo.Event>({
-        title: "",
+        concept: "",
         start: "",
         end: "",
         allDay: false,
@@ -50,16 +52,51 @@ const CalendarDemo: Page = () => {
             end: end ? end : (start as DateInput),
         }));
     };
+    function getColor(concept: string) {
+        switch (concept) {
+            case "Fecha de corte":
+                return "#ff8914";
+            case "Día feriado":
+                return "#0EAB20";
+            case "Fecha de pago":
+                return "#146aff";
+            case "Día no laborable":
+                return "#4d6a96";
+            case "Pago de impuestos":
+                return "#f51818";
+            default:
+                return "#f52925";
+        }
+    }
 
     useEffect(() => {
-        EventService.getEvents().then((data) => {
-            setEvents(data);
-            const _tags: Demo.Event["tag"][] = [];
-            data.forEach((event) => {
-                _tags.push(event.tag);
+        (async () => {
+            const data = (await schedulerService.get()) as any;
+            console.log(typeof (await schedulerService.get()));
+
+            const _events: Demo.Event[] = data.map((item: IScheduler) => {
+                return {
+                    id: item.idScheduler.toString(),
+                    title: item.concept,
+                    start: item.date,
+                    end: item.time,
+                    textColor: "#212121",
+                    location: item.concept,
+                    description: item.concept,
+                    borderColor: getColor(item.concept),
+                    backgroundColor: getColor(item.concept),
+                    tag: {
+                        name: item.concept,
+                        color: getColor(item.concept),
+                    },
+                };
             });
+            console.log(_events);
+            const eventData = await EventService.getEvents();
+            setEvents(_events);
+            const _tags = eventData.map((event) => event.tag);
             setTags(_tags);
-        });
+        })();
     }, []);
 
     const handleSave = () => {
@@ -93,8 +130,8 @@ const CalendarDemo: Page = () => {
     };
 
     const validate = () => {
-        let { start, end, title } = changedEvent;
-        return start && end && title;
+        let { start, end, concept } = changedEvent;
+        return start && end && concept;
     };
 
     const onEditClick = () => {
@@ -106,7 +143,7 @@ const CalendarDemo: Page = () => {
         setShowDialog(true);
         setChangedEvent({
             ...e,
-            title: "",
+            concept: "",
             location: "",
             borderColor: "",
             textColor: "",
@@ -165,7 +202,6 @@ const CalendarDemo: Page = () => {
             ) : null}
         </>
     );
-
     return (
         <div className="grid">
             <div className="col-12">
@@ -201,7 +237,7 @@ const CalendarDemo: Page = () => {
                         headerClassName="text-900 font-semibold text-xl"
                         header={
                             view === "display"
-                                ? changedEvent.title
+                                ? changedEvent.concept
                                 : view === "new"
                                 ? "New Event"
                                 : "Edit Event"
@@ -283,7 +319,7 @@ const CalendarDemo: Page = () => {
                                 <div className="grid p-fluid formgrid">
                                     <div className="col-12 md:col-6 field">
                                         <label
-                                            htmlFor="title"
+                                            htmlFor="concept"
                                             className="text-900 font-semibold"
                                         >
                                             Title
@@ -291,14 +327,14 @@ const CalendarDemo: Page = () => {
                                         <span className="p-input-icon-left">
                                             <i className="pi pi-pencil"></i>
                                             <InputText
-                                                id="title"
-                                                value={changedEvent.title}
+                                                id="concept"
+                                                value={changedEvent.concept}
                                                 onChange={(e) =>
                                                     setChangedEvent(
                                                         (prevState) => ({
                                                             ...prevState,
-                                                            title: e.target
-                                                                .value,
+                                                            concept:
+                                                                e.target.value,
                                                         })
                                                     )
                                                 }

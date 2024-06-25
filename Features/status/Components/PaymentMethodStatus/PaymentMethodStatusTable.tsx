@@ -1,5 +1,7 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
+import {
+    useParamFilterByTableName,
+} from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -17,7 +19,7 @@ interface Props {
     handleDelete: (entity: IStatus) => void;
 }
 
-const CancelationReasonStatusTable = ({
+const PaymentMethodStatusTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -32,7 +34,7 @@ const CancelationReasonStatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "CancelationReasonStatus",
+        tableName: "BankPaymentMethod",
     });
 
     const listOfDependencies: boolean[] = [submitted];
@@ -68,7 +70,7 @@ const CancelationReasonStatusTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Motivos De Desvinculación</h3>
+            <h3 className="m-0">Método de pago</h3>
 
             <Button
                 label="Agregar"
@@ -82,7 +84,7 @@ const CancelationReasonStatusTable = ({
 
     return (
         <DataTable
-            id="CancelationReasonStatus-Table"
+            id="PaymentMethodStatus-Table"
             dataKey="idStatus"
             value={data?.items}
             lazy
@@ -106,12 +108,12 @@ const CancelationReasonStatusTable = ({
         >
             <Column
                 field="description"
-                header="Motivo de desvinculación"
+                header="Método de pago"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="description"
-                filterPlaceholder="Buscar por motivo"
+                filterPlaceholder="Buscar por método de pago"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
@@ -131,4 +133,4 @@ const CancelationReasonStatusTable = ({
     );
 };
 
-export default CancelationReasonStatusTable;
+export default PaymentMethodStatusTable;

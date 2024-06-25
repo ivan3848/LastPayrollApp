@@ -27,8 +27,7 @@ const AppProfileSidebar = () => {
 
     const handleLogOut = async () => {
         await logout();
-        window.location.href = "/";
-        localStorage.removeItem("hasSession");
+        window.location.reload();
     };
 
     return (

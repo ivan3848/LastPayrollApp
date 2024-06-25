@@ -32,3 +32,5 @@ export const CACHE_KEY_WORK_SCHEDULER = "workscheduler";
 export const CACHE_KEY_OCCUPATION = "occupation";
 export const CACHE_KEY_EMPLOYEE = "employee";
 export const CACHE_KEY_EMPLOYEE_HISTORY = "employeeHistory";
+
+export const CACHE_KEY_SCHEDULER = "scheduler";

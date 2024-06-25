@@ -1,22 +1,38 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
+import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
+    DataTableExpandedRows,
     DataTablePageEvent,
     DataTableSortEvent,
+    DataTableValueArray,
 } from "primereact/datatable";
-import { IWorkScheduler } from "../Types/IWorkScheduler";
-import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
+import { useState } from "react";
+import workSchedulerService from "../Services/workSchedulerService";
+import { IWorkScheduler, IWorkSchedulerDetail } from "../Types/IWorkScheduler";
+import "animate.css";
 
 interface Props {
     submitted: boolean;
+    handleAdd: () => void;
     handleEdit: (entity: IWorkScheduler) => void;
     handleDelete: (entity: IWorkScheduler) => void;
-    handleAdd: (entity: IWorkScheduler) => void;
 }
 
-const WorkSchedulerTable = ({ submitted, handleDelete, handleEdit }: Props) => {
+const WorkSchedulerTable = ({
+    submitted,
+    handleDelete,
+    handleEdit,
+    handleAdd,
+}: Props) => {
+    const [expandedRows, setExpandedRows] = useState<
+        DataTableExpandedRows | DataTableValueArray | undefined
+    >(undefined);
+
     const {
         setPage,
         setPageSize,
@@ -28,7 +44,12 @@ const WorkSchedulerTable = ({ submitted, handleDelete, handleEdit }: Props) => {
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useEmployeeQuery(params, listOfDependencies);
+    const { data, isLoading } = useEntityQuery(
+        params,
+        listOfDependencies,
+        CACHE_KEY_WORK_SCHEDULER,
+        workSchedulerService
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -58,17 +79,63 @@ const WorkSchedulerTable = ({ submitted, handleDelete, handleEdit }: Props) => {
         ]);
     };
 
+    const allowExpansion = (rowData: IWorkScheduler) => {
+        return rowData.workSchedulerDetail!.length > 0;
+    };
+
+    const cleanStartDate = (rowData: IWorkSchedulerDetail) => {
+        return new Date(rowData.start).toLocaleTimeString();
+    };
+
+    const cleanEndDate = (rowData: IWorkSchedulerDetail) => {
+        return new Date(rowData.end).toLocaleTimeString();
+    };
+    const rowExpansionTemplate = (data: IWorkScheduler) => {
+        return (
+            <div className="p-3 animate__animated animate__fadeIn">
+                <h5>Turnos de: {data.name}</h5>
+                <DataTable value={data.workSchedulerDetail}>
+                    <Column
+                        field="start"
+                        body={cleanStartDate}
+                        header="Hora de entrada"
+                    ></Column>
+                    <Column
+                        field="end"
+                        body={cleanEndDate}
+                        header="Hora de salida"
+                    ></Column>
+                    <Column field="days" header="Días"></Column>
+                    <Column field="week" header="Turno"></Column>
+                </DataTable>
+            </div>
+        );
+    };
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Horario</h3>
+            <h3 className="m-0">Horarios</h3>
+
+            <Button
+                label="Agregar"
+                icon="pi pi-plus"
+                severity="info"
+                className="mr-2"
+                onClick={handleAdd}
+            />
         </div>
     );
 
     return (
         <DataTable
-            id="workScheduler-Table"
-            dataKey="idEmployee"
-            value={data?.items}
+            value={data.items}
+            expandedRows={expandedRows}
+            onRowToggle={(e) => setExpandedRows(e.data)}
+            rowExpansionTemplate={rowExpansionTemplate}
+            dataKey="idWorkScheduler"
+            header={header}
+            tableStyle={{ minWidth: "60rem" }}
+            id="WorkScheduler-Table"
             lazy
             paginator
             loading={isLoading}
@@ -81,31 +148,35 @@ const WorkSchedulerTable = ({ submitted, handleDelete, handleEdit }: Props) => {
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
             emptyMessage="No hay registros para mostrar."
-            header={header}
             onPage={onPage}
             rowsPerPageOptions={[5, 10, 25]}
             rows={data?.pageSize!}
             first={data.firstRow!}
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
+            <Column expander={allowExpansion} style={{ width: "5px" }} />
+
             <Column
-                field="workSchedulerName"
+                field="name"
                 header="Horario"
-                filter
-                filterField="name"
-                filterPlaceholder="Buscar por Horario"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-            <Column
-                field="employeeName"
-                header="Nombre del empleado"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por departamento"
+                filterPlaceholder="Buscar por horario"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="workSchedulerCode"
+                header="Código"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="workSchedulerCode"
+                filterPlaceholder="Buscar por código"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}

@@ -23,11 +23,22 @@ const CancelationReasonStatus = dynamic(
             "../../status/Components/CancelationReasonStatus/CancelationReasonStatus"
         )
 );
+const WorkScheduler = dynamic(
+    () => import("../../workScheduler/Components/WorkScheduler")
+);
 const EmployeeTabs = () => {
     return (
         <div className="grid crud-demo">
             <div className="col-12">
                 <TabView>
+                    <TabPanel
+                        header="Horarios"
+                        leftIcon="pi pi-calendar-clock mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <WorkScheduler />
+                        </Suspense>
+                    </TabPanel>
                     <TabPanel
                         header="Medidas de contratación"
                         leftIcon="pi pi-book mr-2"

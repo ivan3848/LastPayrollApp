@@ -6,13 +6,13 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IWorkScheduler } from "../Types/IWorkScheduler";
-import AddWorkScheduler from "./AddWorkScheduler";
-import EditWorkScheduler from "./EditWorkScheduler";
+import { IStatus } from "../../Types/IStatus";
+import AddPaymentMethodStatus from "./AddPaymentMethodStatus";
+import EditPaymentMethodStatus from "./EditPaymentMethodStatus";
 
-const WorkSchedulerTable = dynamic(() => import("./WorkSchedulerTable"));
+const PaymentMethodStatusTable = dynamic(() => import("./PaymentMethodStatusTable"));
 
-const WorkScheduler = () => {
+const PaymentMethodStatus = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,26 +25,26 @@ const WorkScheduler = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IWorkScheduler>();
+    } = useCrudModals<IStatus>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IWorkScheduler) => {
+    const handleEdit = (entity: IStatus) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IWorkScheduler) => {
+    const handleDelete = (entity: IStatus) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Horario", "Código", "Acciones"];
+    const entityProperties = ["Método de pago", "Acciones"];
 
     return (
         <div className="grid">
@@ -57,7 +57,7 @@ const WorkScheduler = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <WorkSchedulerTable
+                        <PaymentMethodStatusTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -66,7 +66,7 @@ const WorkScheduler = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddWorkScheduler
+                        <AddPaymentMethodStatus
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -75,7 +75,7 @@ const WorkScheduler = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditWorkScheduler
+                        <EditPaymentMethodStatus
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -85,8 +85,8 @@ const WorkScheduler = () => {
                     )}
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idWorkScheduler ?? 0}
-                            endpoint="employee/workScheduler"
+                            id={entity?.idStatus ?? 0}
+                            endpoint="employee/status"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
@@ -99,4 +99,4 @@ const WorkScheduler = () => {
     );
 };
 
-export default WorkScheduler;
+export default PaymentMethodStatus;

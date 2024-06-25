@@ -20,14 +20,6 @@ const AsignationTabs = () => {
         <div className="grid crud-demo">
             <div className="col-12">
                 <TabView>
-                    {/* <TabPanel
-                        header="Horarios de trabajo"
-                        leftIcon="pi pi-calendar-clock mr-2"
-                    >
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <MaritalStatus />
-                        </Suspense>
-                    </TabPanel> */}
                     <TabPanel
                         header="Beneficio de posición"
                         leftIcon="pi pi-gift mr-2"

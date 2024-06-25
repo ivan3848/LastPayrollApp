@@ -4,12 +4,10 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddCountryQuery from "../Hooks/useAddCountryQuery";
-import { ICountry } from "../Types/ICountry";
-import countryFormSchemas from "../Validations/CountryFormSchemas";
+import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
+import { IStatus } from "../../Types/IStatus";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import countryService from "../Services/countryService";
+import statusFormSchemas from "../../Validations/StatusFormSchemas";
 
 interface Props {
     addEntityDialog: boolean;
@@ -18,32 +16,32 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddCountry = ({
+const AddPaymentMethodStatus = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = countryFormSchemas();
+    const { addEntityFormSchema } = statusFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
         formState: { errors },
-    } = useForm<ICountry>({
+    } = useForm<IStatus>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddEntityQuery({
+    const addEntity = useAddStatusQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
-        service: countryService,
     });
 
-    const onSubmit = (data: ICountry) => {
+    const onSubmit = (data: IStatus) => {
+        data.tableName = "BankPaymentMethod";
         addEntity.mutate(data);
         return;
     };
@@ -56,27 +54,27 @@ const AddCountry = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar País"
+            header="Agregar Método de Pago"
             modal
             className="p-fluid"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
-                    <label htmlFor="name" className="w-full">
-                        País
+                    <label htmlFor="description" className="w-full">
+                        Método de pago
                     </label>
                     <InputText
-                        {...register("name")}
-                        id="name"
+                        {...register("description")}
+                        id="description"
                         autoFocus
                         className={classNames({
-                            "p-invalid": errors.name,
+                            "p-invalid": errors.description,
                         })}
                     />
-                    {errors.name && (
+                    {errors.description && (
                         <small className="p-invalid text-danger">
-                            {errors.name.message?.toString()}
+                            {errors.description.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -86,4 +84,4 @@ const AddCountry = ({
     );
 };
 
-export default AddCountry;
+export default AddPaymentMethodStatus;

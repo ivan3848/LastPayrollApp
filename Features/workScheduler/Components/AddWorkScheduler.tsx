@@ -1,8 +1,5 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { addHours } from "@/Features/Shared/Helpers/DateHelper";
-import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
-import EditWorkSchedulerDetail from "@/Features/workSchedulerDetail/Components/EditWorkSchedulerDetail";
-import { useWorkSchedulerDetailStore } from "@/Features/workSchedulerDetail/store/workSchedulerDetailStore";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
@@ -12,24 +9,25 @@ import { useForm } from "react-hook-form";
 import workSchedulerService from "../Services/workSchedulerService";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import workSchedulerFormSchemas from "../Validations/WorkSchedulerFormSchemas";
+import AddWorkSchedulerDetail from "@/Features/workSchedulerDetail/Components/AddWorkSchedulerDetail";
+import { useWorkSchedulerDetailStore } from "@/Features/workSchedulerDetail/store/workSchedulerDetailStore";
+import { addHours } from "@/Features/Shared/Helpers/DateHelper";
 import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
 
 interface Props {
-    entity: IWorkScheduler;
-    editEntityDialog: boolean;
-    setEditEntityDialog: (value: boolean) => void;
+    addEntityDialog: boolean;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditWorkScheduler = ({
-    editEntityDialog,
-    setEditEntityDialog,
+const AddWorkScheduler = ({
+    addEntityDialog,
+    setAddEntityDialog,
     setSubmitted,
     toast,
-    entity,
 }: Props) => {
-    const { editEntityFormSchema } = workSchedulerFormSchemas();
+    const { addEntityFormSchema } = workSchedulerFormSchemas();
     const { data: details, clearData } = useWorkSchedulerDetailStore();
 
     const {
@@ -38,12 +36,12 @@ const EditWorkScheduler = ({
         reset,
         formState: { errors },
     } = useForm<IWorkScheduler>({
-        resolver: zodResolver(editEntityFormSchema),
+        resolver: zodResolver(addEntityFormSchema),
     });
 
-    const editEntity = useEditEntityQuery({
+    const addEntity = useAddEntityQuery({
         toast,
-        setEditEntityDialog,
+        setAddEntityDialog,
         setSubmitted,
         reset,
         service: workSchedulerService,
@@ -57,22 +55,20 @@ const EditWorkScheduler = ({
                 end: addHours(detail.end, -4),
             } as IWorkSchedulerDetail;
         });
-
-        data.idWorkScheduler = entity.idWorkScheduler;
-        editEntity.mutate(data);
+        addEntity.mutate(data);
         clearData();
         return;
     };
 
     const hideDialog = () => {
-        setEditEntityDialog(false);
+        setAddEntityDialog(false);
     };
 
     return (
         <Dialog
-            visible={editEntityDialog}
+            visible={addEntityDialog}
             style={{ width: "600px" }}
-            header="Editar Horario"
+            header="Agregar Horario"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -86,7 +82,6 @@ const EditWorkScheduler = ({
                         {...register("name")}
                         id="name"
                         autoFocus
-                        defaultValue={entity.name}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
@@ -104,7 +99,6 @@ const EditWorkScheduler = ({
                     <InputText
                         {...register("workSchedulerCode")}
                         id="workSchedulerCode"
-                        defaultValue={entity.workSchedulerCode}
                         className={classNames({
                             "p-invalid": errors.workSchedulerCode,
                         })}
@@ -115,15 +109,11 @@ const EditWorkScheduler = ({
                         </small>
                     )}
                 </div>
-                <EditWorkSchedulerDetail
-                    entity={entity}
-                    toast={toast}
-                    setSubmitted={setSubmitted}
-                />
+                <AddWorkSchedulerDetail />
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );
 };
 
-export default EditWorkScheduler;
+export default AddWorkScheduler;

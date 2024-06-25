@@ -16,6 +16,12 @@ const CostCenter = dynamic(
 const SalaryNewsStatus = dynamic(
     () => import("../../status/Components/SalaryNewsStatus/SalaryNewsStatus")
 );
+const PaymentMethodStatus = dynamic(
+    () =>
+        import(
+            "../../status/Components/PaymentMethodStatus/PaymentMethodStatus"
+        )
+);
 
 const PayrollTabs = () => {
     return (
@@ -30,10 +36,7 @@ const PayrollTabs = () => {
                             <CostCenter />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel
-                        header="Cuentas contables"
-                        leftIcon="pi pi-book mr-2"
-                    >
+                    <TabPanel header="Cuentas" leftIcon="pi pi-book mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <AccountingAccount />
                         </Suspense>
@@ -54,12 +57,17 @@ const PayrollTabs = () => {
                             <SalaryNewsStatus />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel
-                        header="Conceptos de nómina"
-                        leftIcon="pi pi-wallet mr-2"
-                    >
+                    <TabPanel header="Conceptos" leftIcon="pi pi-wallet mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Concept />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Métodos de pago"
+                        leftIcon="pi pi-money-bill mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <PaymentMethodStatus />
                         </Suspense>
                     </TabPanel>
                 </TabView>

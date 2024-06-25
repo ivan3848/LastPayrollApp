@@ -1,22 +1,21 @@
-import ApiService from "@/services/ApiService";
 import { useMutation } from "@tanstack/react-query";
+import schedulerService from "../Services/schedulerService";
+import { IScheduler } from "../Types/IScheduler";
 
-interface Props<T> {
+interface Props {
     toast: React.MutableRefObject<any>;
-    setAddEntityDialog?: (value: boolean) => void;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
-    reset?: () => void;
-    service: ApiService<T, T>;
+    reset: () => void;
 }
-function useAddEntityQuery<T> ({
+const useAddSchedulerQuery = ({
     toast,
     setAddEntityDialog,
     setSubmitted,
     reset,
-    service
-}: Props<T>) {
+}: Props) => {
     return useMutation({
-        mutationFn: (entity: T) => service.post(entity),
+        mutationFn: (entity: IScheduler) => schedulerService.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -26,9 +25,8 @@ function useAddEntityQuery<T> ({
             });
         },
         onSuccess: () => {
-            if(reset) reset();
-            if(setAddEntityDialog) setAddEntityDialog(false);
-
+            reset();
+            setAddEntityDialog(false);
             setSubmitted(true);
 
             toast.current?.show({
@@ -41,4 +39,4 @@ function useAddEntityQuery<T> ({
     });
 };
 
-export default useAddEntityQuery;
+export default useAddSchedulerQuery;

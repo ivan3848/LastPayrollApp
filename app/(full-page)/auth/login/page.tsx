@@ -1,17 +1,16 @@
 "use client";
+import { Page } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
+import { Toast } from "primereact/toast";
 import { useContext, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
 import { ILogin } from "../types/ILogin";
-import { Toast } from "primereact/toast";
 import SignIn from "./LoginServerActions";
-import { Page } from "@/types";
 
 const loginFormSchema = z.object({
     username: z
@@ -64,7 +63,6 @@ const Login: Page = () => {
         show(response);
     };
 
-    const router = useRouter();
     const { layoutConfig } = useContext(LayoutContext);
     const dark = layoutConfig?.colorScheme !== "light";
 
