@@ -8,6 +8,7 @@ import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
 import { IStatus } from "../../Types/IStatus";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import statusFormSchemas from "../../Validations/StatusFormSchemas";
+import { TABLE_NAME_CANCELATION_TYPE } from "@/constants/StatusTableName";
 
 interface Props {
     addEntityDialog: boolean;
@@ -41,7 +42,7 @@ const AddCancelationTypeStatus = ({
     });
 
     const onSubmit = (data: IStatus) => {
-        data.tableName = "CancelationTypeStatus";
+        data.tableName = TABLE_NAME_CANCELATION_TYPE;
         addEntity.mutate(data);
         return;
     };

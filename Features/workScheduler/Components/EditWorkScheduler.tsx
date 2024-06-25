@@ -115,7 +115,11 @@ const EditWorkScheduler = ({
                         </small>
                     )}
                 </div>
-                <EditWorkSchedulerDetail entity={entity} toast={toast} setSubmitted={setSubmitted} />
+                <EditWorkSchedulerDetail
+                    entity={entity}
+                    toast={toast}
+                    setSubmitted={setSubmitted}
+                />
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>

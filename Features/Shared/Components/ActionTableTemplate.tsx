@@ -12,7 +12,6 @@ function ActionTableTemplate<T>({
     handleEdit,
     handleDelete,
 }: Props<T>) {
-
     return (
         <>
             <Button

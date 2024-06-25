@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import useAddBankQuery from "../Hooks/useAddBankQuery";
 import { IBank } from "../Types/IBank";
 import bankFormSchemas from "../Validations/BankFormSchemas";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     addEntityDialog: boolean;
@@ -73,7 +74,7 @@ const AddBank = ({
                         setValue={setValue}
                         watch={watch}
                         isFocus={true}
-                        tableName="BankPaymentMethod"
+                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
                     />
                     {errors.idStatusAccountType && (
                         <small className="p-invalid text-danger">

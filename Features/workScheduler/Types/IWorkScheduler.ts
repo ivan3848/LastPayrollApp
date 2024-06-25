@@ -3,8 +3,7 @@ import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWork
 export interface IWorkScheduler {
     idWorkScheduler: number;
     name: string;
-    workSchedulerCode?: string
+    workSchedulerCode?: string;
     workSchedulerDetail: IWorkSchedulerDetail[];
     action?: React.ReactNode;
 }
-

@@ -13,8 +13,9 @@ import {
 } from "primereact/datatable";
 import { useState } from "react";
 import workSchedulerService from "../Services/workSchedulerService";
-import { IWorkScheduler, IWorkSchedulerDetail } from "../Types/IWorkScheduler";
 import "animate.css";
+import { IWorkScheduler } from "../Types/IWorkScheduler";
+import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
 
 interface Props {
     submitted: boolean;

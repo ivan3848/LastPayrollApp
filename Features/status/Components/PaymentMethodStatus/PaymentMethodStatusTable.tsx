@@ -11,6 +11,7 @@ import {
 } from "primereact/datatable";
 import useStatusQuery from "../../Hooks/useStatusQuery";
 import { IStatus } from "../../Types/IStatus";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +35,7 @@ const PaymentMethodStatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "BankPaymentMethod",
+        tableName: TABLE_NAME_BANK_PAYMENT_METHOD,
     });
 
     const listOfDependencies: boolean[] = [submitted];
