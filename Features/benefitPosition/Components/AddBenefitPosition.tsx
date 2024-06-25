@@ -1,4 +1,3 @@
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
@@ -10,6 +9,7 @@ import useAddBenefitPositionQuery from "../Hooks/useAddBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
 
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 
 interface Props {
@@ -90,7 +90,7 @@ const AddBenefitPosition = ({
                         isValid={!!errors.idConcept}
                         setValue={setValue}
                         watch={watch}
-                        code="PROC"
+                        code={CONCEPT_TYPE_BENEFIT}
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">

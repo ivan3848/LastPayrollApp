@@ -15,6 +15,7 @@ import {
 import useBenefitPositionQuery from "../Hooks/useBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 
 interface Props {
     submitted: boolean;
@@ -136,7 +137,7 @@ const BenefitPositionTable = ({
                     <TableDropDownConceptFilter
                         setFilters={setFilters}
                         clearFilters={clearFilters}
-                        code="PROC"
+                        code={CONCEPT_TYPE_BENEFIT}
                     />
                 }
                 showFilterMenuOptions={false}

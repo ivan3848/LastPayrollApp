@@ -8,6 +8,7 @@ import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
 import { IStatus } from "../../Types/IStatus";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import statusFormSchemas from "../../Validations/StatusFormSchemas";
+import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
 
 interface Props {
     addEntityDialog: boolean;
@@ -41,7 +42,7 @@ const AddContractStatus = ({
     });
 
     const onSubmit = (data: IStatus) => {
-        data.tableName = "ContractStatus";
+        data.tableName = TABLE_NAME_CONTRACT;
         addEntity.mutate(data);
         return;
     };

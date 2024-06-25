@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import { IStatus } from "../../Types/IStatus";
 import useStatusQuery from "../../Hooks/useStatusQuery";
+import { TABLE_NAME_CANCELATION_TYPE } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -32,7 +33,7 @@ const StatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "CancelationTypeStatus",
+        tableName: TABLE_NAME_CANCELATION_TYPE,
     });
 
     const listOfDependencies: boolean[] = [submitted];

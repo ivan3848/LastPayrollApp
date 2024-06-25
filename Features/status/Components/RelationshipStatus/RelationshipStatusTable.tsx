@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import { IStatus } from "../../Types/IStatus";
 import useStatusQuery from "../../Hooks/useStatusQuery";
+import { TABLE_NAME_RELATIONSHIP } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -32,7 +33,7 @@ const RelationshipStatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "RelationshipStatus",
+        tableName: TABLE_NAME_RELATIONSHIP,
     });
 
     const listOfDependencies: boolean[] = [submitted];
