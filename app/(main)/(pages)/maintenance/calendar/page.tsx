@@ -42,6 +42,8 @@ const CalendarDemo: Page = () => {
         tag: {
             name: "Company A",
             color: "#FFB6B6",
+            idStatus:
+                tags.find((x) => x?.name === "Fecha de corte")?.idStatus || 0,
         },
     });
 
@@ -88,7 +90,7 @@ const CalendarDemo: Page = () => {
             const _events: Demo.Event[] = data.map((item: IScheduler) => {
                 return {
                     id: item.idScheduler.toString(),
-                    title: item.concept,
+                    title: item.title,
                     start: item.date,
                     end: item.time,
                     textColor: "#212121",
@@ -102,19 +104,28 @@ const CalendarDemo: Page = () => {
                     },
                 };
             });
-
+            console.log(_events);
             setEvents(_events);
 
             const _tags = schedulerType.map((item) => {
                 return {
                     name: item.description,
                     color: getColor(item.description),
+                    idStatus: item.idStatus,
                 };
             });
 
             setTags(_tags);
         })();
     }, []);
+
+    function subtractFourHours(dates: string) {
+        const date = new Date(dates);
+        const fourHoursInMs = 4 * 60 * 60 * 1000;
+        const adjustedDate = new Date(date.getTime() - fourHoursInMs);
+
+        return adjustedDate;
+    }
 
     const handleSave = () => {
         if (!validate()) {
@@ -126,8 +137,9 @@ const CalendarDemo: Page = () => {
                 borderColor: changedEvent.tag?.color ?? "#fff",
                 textColor: "#212121",
             };
+
             setShowDialog(false);
-            console.log(_clickedEvent);
+
             if (_clickedEvent.id) {
                 setEvents((prevState) => [
                     ...prevState,
@@ -137,11 +149,51 @@ const CalendarDemo: Page = () => {
                     },
                 ]);
             } else {
+                const eventCreated = {
+                    title: _clickedEvent.concept,
+                    textColor: "#212121",
+                    location: _clickedEvent.tag?.name,
+                    description: _clickedEvent.tag?.name,
+                    borderColor: getColor(_clickedEvent.tag?.name as string),
+                    backgroundColor: getColor(
+                        _clickedEvent.tag?.name as string
+                    ),
+                    tag: {
+                        name: _clickedEvent.tag?.name,
+                        color: getColor(_clickedEvent.tag?.name as string),
+                        idStatus: _clickedEvent.tag?.idStatus || 0,
+                    },
+                } as Demo.Event;
+
+                const res = {
+                    ...eventCreated,
+                    start: _clickedEvent.start,
+                    end: _clickedEvent.end,
+                    id: Math.floor(Math.random() * 10000).toString(),
+                };
+                const adjustedStart = subtractFourHours(
+                    _clickedEvent.start as string
+                );
+                const adjustedEnd = subtractFourHours(
+                    _clickedEvent.end as string
+                );
+                const _scheduler = {
+                    concept: res.title,
+                    date: adjustedStart,
+                    time: adjustedEnd,
+                    idStatus: res.tag?.idStatus,
+                } as IScheduler;
+
+                console.log(_scheduler);
+
+                schedulerService.post(_scheduler);
+                setShowDialog(false);
                 setEvents((prevState) => [
                     ...prevState,
                     {
-                        ..._clickedEvent,
-                        title: _clickedEvent.concept,
+                        ...eventCreated,
+                        start: _clickedEvent.start,
+                        end: _clickedEvent.end,
                         id: Math.floor(Math.random() * 10000).toString(),
                     },
                 ]);
@@ -171,6 +223,9 @@ const CalendarDemo: Page = () => {
             tag: {
                 name: "Fecha de corte",
                 color: "#FF8914",
+                idStatus:
+                    tags.find((x) => x?.name === "Fecha de corte")?.idStatus ||
+                    0,
             },
         });
     };
@@ -218,7 +273,7 @@ const CalendarDemo: Page = () => {
             {view === "new" || view === "edit" ? (
                 <Button
                     type="button"
-                    label="Save"
+                    label="Guardar"
                     icon="pi pi-check"
                     disabled={!changedEvent.start || !changedEvent.end}
                     onClick={handleSave}
@@ -263,8 +318,8 @@ const CalendarDemo: Page = () => {
                             view === "display"
                                 ? changedEvent.concept
                                 : view === "new"
-                                ? "New Event"
-                                : "Edit Event"
+                                ? "Nuevo Evento"
+                                : "Editar Evento"
                         }
                         breakpoints={{ "960px": "75vw", "640px": "90vw" }}
                         footer={footer}
@@ -277,7 +332,17 @@ const CalendarDemo: Page = () => {
                                     <div className="grid">
                                         <div className="col-6">
                                             <div className="text-900 font-semibold mb-2">
-                                                Start
+                                                Titulo
+                                            </div>
+                                            <p className="flex align-items-center m-0">
+                                                <span>
+                                                    {changedEvent.title}
+                                                </span>
+                                            </p>
+                                        </div>
+                                        <div className="col-6">
+                                            <div className="text-900 font-semibold mb-2">
+                                                Inicio
                                             </div>
                                             <p className="flex align-items-center m-0">
                                                 <i className="pi pi-fw pi-clock text-700 mr-2"></i>
@@ -290,7 +355,7 @@ const CalendarDemo: Page = () => {
                                         </div>
                                         <div className="col-6">
                                             <div className="text-900 font-semibold mb-2">
-                                                End
+                                                Fin
                                             </div>
                                             <p className="flex align-items-center m-0">
                                                 <i className="pi pi-fw pi-clock text-700 mr-2"></i>
@@ -303,18 +368,7 @@ const CalendarDemo: Page = () => {
                                         </div>
                                         <div className="col-12">
                                             <div className="text-900 font-semibold mb-2">
-                                                Location
-                                            </div>
-                                            <p className="flex align-items-center m-0">
-                                                <i className="pi pi-fw pi-clock text-700 mr-2"></i>
-                                                <span>
-                                                    {changedEvent.location}
-                                                </span>
-                                            </p>
-                                        </div>
-                                        <div className="col-12">
-                                            <div className="text-900 font-semibold mb-2">
-                                                Color
+                                                Tipo
                                             </div>
                                             <p className="flex align-items-center m-0">
                                                 <span
@@ -337,13 +391,13 @@ const CalendarDemo: Page = () => {
                                     className="grid p-fluid"
                                     onSubmit={handleSubmit(onSubmit)}
                                 >
-                                    <div className="grid p-fluid formgrid">
-                                        <div className="col-12 md:col-6 field">
+                                    <div className="col-12">
+                                        <div className="col-6 md:col-12 field">
                                             <label
                                                 htmlFor="concept"
                                                 className="text-900 font-semibold"
                                             >
-                                                Title
+                                                Titulo
                                             </label>
                                             <span className="p-input-icon-left">
                                                 <i className="pi pi-pencil"></i>
@@ -361,45 +415,16 @@ const CalendarDemo: Page = () => {
                                                         )
                                                     }
                                                     type="text"
-                                                    placeholder="Title"
+                                                    placeholder="Fecha de corte"
                                                 />
                                             </span>
                                         </div>
-                                        <div className="col-12 md:col-6 field">
-                                            <label
-                                                htmlFor="location"
-                                                className="text-900 font-semibold"
-                                            >
-                                                Location
-                                            </label>
-                                            <span className="p-input-icon-left">
-                                                <i className="pi pi-map-marker"></i>
-                                                <InputText
-                                                    id="location"
-                                                    value={
-                                                        changedEvent.location
-                                                    }
-                                                    onChange={(e) =>
-                                                        setChangedEvent(
-                                                            (prevState) => ({
-                                                                ...prevState,
-                                                                location:
-                                                                    e.target
-                                                                        .value,
-                                                            })
-                                                        )
-                                                    }
-                                                    type="text"
-                                                    placeholder="Location"
-                                                />
-                                            </span>
-                                        </div>
-                                        <div className="col-12 md:col-6 field">
+                                        <div className="col-6 md:col-12 field">
                                             <label
                                                 htmlFor="start"
                                                 className="text-900 font-semibold"
                                             >
-                                                Start Date
+                                                Inicio
                                             </label>
                                             <PRCalendar
                                                 id="start"
@@ -421,14 +446,17 @@ const CalendarDemo: Page = () => {
                                                 }
                                                 showTime
                                                 required
+                                                showIcon
+                                                mask="99/99/9999 99:99"
+                                                hourFormat="12"
                                             />
                                         </div>
-                                        <div className="col-12 md:col-6 field">
+                                        <div className="col-6 md:col-12 field">
                                             <label
                                                 htmlFor="end"
                                                 className="text-900 font-semibold"
                                             >
-                                                End Date
+                                                Fin
                                             </label>
                                             <PRCalendar
                                                 id="end"
@@ -445,7 +473,10 @@ const CalendarDemo: Page = () => {
                                                     )
                                                 }
                                                 showTime
+                                                mask="99/99/9999 99:99"
                                                 required
+                                                showIcon
+                                                hourFormat="12"
                                             />
                                         </div>
                                         <div className="col-12 field">

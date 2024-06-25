@@ -243,6 +243,7 @@ declare namespace Demo {
         tag?: {
             name: string;
             color: string;
+            idStatus: number;
         };
     }
 
