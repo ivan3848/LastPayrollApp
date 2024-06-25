@@ -1,3 +1,4 @@
+import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
 import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
@@ -76,7 +77,7 @@ const AddConcept = ({
                         setValue={setValue}
                         watch={watch}
                         isFocus={true}
-                        tableName="ConceptType"
+                        tableName={TABLE_NAME_CONCEPT_TYPE}
                     />
                     {errors.idConceptType && (
                         <small className="p-invalid text-danger">

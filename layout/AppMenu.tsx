@@ -38,20 +38,25 @@ const AppMenu = () => {
                     to: "/maintenance/location",
                 },
                 {
-                    label: "Calendar",
+                    label: "Calendario",
                     icon: "pi pi-fw pi-calendar",
                     to: "/maintenance/calendar",
                 },
             ],
         },
         {
-            label: "Empleado",
-            icon: "pi pi-fw pi-cog",
+            label: "Empleados",
+            icon: "pi pi-fw pi-users",
             items: [
                 {
-                    label: "Cambios de Empleado",
-                    icon: "pi pi-fw pi-clock",
-                    to: "/employee/workscheduler",
+                    label: "Gestión Empleados",
+                    icon: "pi pi-fw pi-users",
+                    to: "/employee/employee",
+                },
+                {
+                    label: "Cambios masivos",
+                    icon: "pi pi-fw pi-chart-bar",
+                    to: "/employee/employee",
                 },
             ],
         },

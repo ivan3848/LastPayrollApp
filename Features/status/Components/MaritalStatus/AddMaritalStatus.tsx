@@ -8,6 +8,7 @@ import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
 import { IStatus } from "../../Types/IStatus";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import statusFormSchemas from "../../Validations/StatusFormSchemas";
+import { TABLE_NAME_MARITAL } from "@/constants/StatusTableName";
 
 interface Props {
     addEntityDialog: boolean;
@@ -41,7 +42,7 @@ const AddMaritalStatus = ({
     });
 
     const onSubmit = (data: IStatus) => {
-        data.tableName = "MaritalStatus";
+        data.tableName = TABLE_NAME_MARITAL;
         addEntity.mutate(data);
         return;
     };

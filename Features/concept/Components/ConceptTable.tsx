@@ -1,9 +1,8 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
+import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import {
@@ -11,14 +10,9 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useConceptQuery from "../Hooks/useConceptQuery";
 import { IConcept } from "../Types/IConcept";
-import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
-import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
-import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { classNames } from "primereact/utils";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 
 interface Props {
     submitted: boolean;
@@ -191,7 +185,7 @@ const ConceptTable = ({
                     <TableDropDownStatusFilter
                         setFilters={setFilters}
                         clearFilters={clearFilters}
-                        tableName="ConceptType"
+                        tableName={TABLE_NAME_CONCEPT_TYPE}
                     />
                 }
                 showFilterMenuOptions={false}
