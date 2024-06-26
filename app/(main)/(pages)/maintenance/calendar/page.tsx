@@ -22,13 +22,7 @@ const CalendarDemo: Page = () => {
     const [showDialog, setShowDialog] = useState(false);
     const [view, setView] = useState("");
 
-    const {
-        handleSubmit,
-        reset,
-        setValue,
-        watch,
-        formState: { errors },
-    } = useForm<IScheduler>();
+    const { handleSubmit } = useForm<IScheduler>();
 
     const [changedEvent, setChangedEvent] = useState<Demo.Event>({
         concept: "",
@@ -104,7 +98,6 @@ const CalendarDemo: Page = () => {
                     },
                 };
             });
-            console.log(_events);
             setEvents(_events);
 
             const _tags = schedulerType.map((item) => {
@@ -141,11 +134,36 @@ const CalendarDemo: Page = () => {
             setShowDialog(false);
 
             if (_clickedEvent.id) {
+                const res = {
+                    ..._clickedEvent,
+                    title: _clickedEvent.title,
+                    concept: _clickedEvent.description,
+                };
+                const adjustedStart = subtractFourHours(
+                    _clickedEvent.start as string
+                );
+                const adjustedEnd = subtractFourHours(
+                    _clickedEvent.end as string
+                );
+
+                const _scheduler = {
+                    idScheduler: parseInt(res.id as string),
+                    concept: res.title,
+                    date: adjustedStart,
+                    time: adjustedEnd,
+                    idStatus: tags.find(
+                        (x) => x?.name === _clickedEvent.tag?.name
+                    )?.idStatus,
+                } as IScheduler;
+
+                schedulerService.put(_scheduler);
+
                 setEvents((prevState) => [
                     ...prevState,
                     {
                         ..._clickedEvent,
-                        title: _clickedEvent.concept,
+                        title: _clickedEvent.title,
+                        concept: _clickedEvent.description,
                     },
                 ]);
             } else {
@@ -184,10 +202,10 @@ const CalendarDemo: Page = () => {
                     idStatus: res.tag?.idStatus,
                 } as IScheduler;
 
-                console.log(_scheduler);
-
                 schedulerService.post(_scheduler);
+
                 setShowDialog(false);
+
                 setEvents((prevState) => [
                     ...prevState,
                     {
@@ -202,12 +220,16 @@ const CalendarDemo: Page = () => {
     };
 
     const validate = () => {
-        let { start, end, concept } = changedEvent;
-        return start && end && concept;
+        let { start, end, title, location } = changedEvent;
+        return start && end && title && location;
     };
 
     const onEditClick = () => {
         setView("edit");
+    };
+
+    const onDeleteClick = () => {
+        setView("delete");
     };
 
     const onDateSelect = (e: DateSelectArg) => {
@@ -263,12 +285,21 @@ const CalendarDemo: Page = () => {
     const footer = (
         <>
             {view === "display" ? (
-                <Button
-                    type="button"
-                    label="Edit"
-                    icon="pi pi-pencil"
-                    onClick={onEditClick}
-                />
+                <>
+                    <Button
+                        severity="danger"
+                        type="button"
+                        label="Eliminar"
+                        icon="pi pi-times"
+                        onClick={onDeleteClick}
+                    />
+                    <Button
+                        type="button"
+                        label="Editar"
+                        icon="pi pi-pencil"
+                        onClick={onEditClick}
+                    />
+                </>
             ) : null}
             {view === "new" || view === "edit" ? (
                 <Button
@@ -281,6 +312,7 @@ const CalendarDemo: Page = () => {
             ) : null}
         </>
     );
+    console.log(view);
     return (
         <div className="grid">
             <div className="col-12">
@@ -316,10 +348,10 @@ const CalendarDemo: Page = () => {
                         headerClassName="text-900 font-semibold text-xl"
                         header={
                             view === "display"
-                                ? changedEvent.concept
+                                ? changedEvent.title
                                 : view === "new"
-                                ? "Nuevo Evento"
-                                : "Editar Evento"
+                                ? "Nuevo evento"
+                                : "Editar evento"
                         }
                         breakpoints={{ "960px": "75vw", "640px": "90vw" }}
                         footer={footer}
@@ -332,13 +364,13 @@ const CalendarDemo: Page = () => {
                                     <div className="grid">
                                         <div className="col-6">
                                             <div className="text-900 font-semibold mb-2">
-                                                Titulo
+                                                Descripción
                                             </div>
-                                            <p className="flex align-items-center m-0">
-                                                <span>
-                                                    {changedEvent.title}
-                                                </span>
-                                            </p>
+                                            <p className="flex align-items-center m-0"></p>
+                                        </div>
+                                        <div className="col-6">
+                                            <div className="text-900 font-semibold mb-2"></div>
+                                            <p className="flex align-items-center m-0"></p>
                                         </div>
                                         <div className="col-6">
                                             <div className="text-900 font-semibold mb-2">
@@ -403,14 +435,13 @@ const CalendarDemo: Page = () => {
                                                 <i className="pi pi-pencil"></i>
                                                 <InputText
                                                     id="concept"
-                                                    value={changedEvent.concept}
+                                                    value={changedEvent.title}
                                                     onChange={(e) =>
                                                         setChangedEvent(
                                                             (prevState) => ({
                                                                 ...prevState,
-                                                                concept:
-                                                                    e.target
-                                                                        .value,
+                                                                title: e.target
+                                                                    .value,
                                                             })
                                                         )
                                                     }
