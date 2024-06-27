@@ -86,12 +86,7 @@ const EditEmployeeWorkScheduler = ({
     };
 
     return (
-        <Dialog
-            visible={editEntityDialog}
-            style={{ width: "450px" }}
-            header="Editar Horario"
-            className="p-fluid"
-            onHide={hideDialog}
+        <
         >
             <div className="field">
                 <label htmlFor="name" className="w-full">
@@ -142,7 +137,7 @@ const EditEmployeeWorkScheduler = ({
 
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
-        </Dialog>
+        </>
     );
 };
 
