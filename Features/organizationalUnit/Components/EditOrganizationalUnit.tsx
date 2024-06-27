@@ -1,16 +1,13 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
-import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
+import useEditOrganizationalUnit from "../Hooks/useEditOrganizationalUnit";
 import { IOrganizationalUnit } from "../Types/IOrganizationalUnit";
 import organizationalUnitFormSchema from "../Validation/OrganizationalUnitFormSchema";
-import useEditOrganizationalUnit from "../Hooks/useEditOrganizationalUnit";
 
 interface Props {
     entity: IOrganizationalUnit;
@@ -33,8 +30,6 @@ const EditOrganizationalUnit = ({
         handleSubmit,
         register,
         reset,
-        watch,
-        setValue,
         formState: { errors },
     } = useForm<IOrganizationalUnit>({
         resolver: zodResolver(editEntityFormSchema),
