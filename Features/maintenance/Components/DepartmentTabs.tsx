@@ -3,6 +3,7 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import HierarchyPositionSalary from "@/Features/hierarchyPositionSalary/Components/HierarchyPositionSalary";
 
 const OrganizationalUnit = dynamic(
     () => import("@/Features/organizationalUnit/Components/OrganizationalUnit")
@@ -46,6 +47,11 @@ const DepartmentTabs = () => {
                     <TabPanel header="Vacantes" leftIcon="pi pi-user-plus mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <HierarchyPosition />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel header="Cambiar Position" leftIcon="pi pi-user-plus mr-2">
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <HierarchyPositionSalary />
                         </Suspense>
                     </TabPanel>
                 </TabView>
