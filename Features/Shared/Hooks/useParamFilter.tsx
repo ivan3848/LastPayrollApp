@@ -32,9 +32,7 @@ const useParamFilter = () => {
             })
         );
 
-    const setFilters = (
-        filters: { column: string; value: any }[]
-    ) => {
+    const setFilters = (filters: { column: string; value: any }[]) => {
         setParams((currentParams) =>
             produce(currentParams, (draft) => {
                 draft.filter!.filters = filters;
@@ -128,6 +126,8 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
     const setFilters = (
         filters: { column: string; value: string | number }[]
     ) => {
+        filters.push({ column: "tableName", value: tableName! });
+
         setParams((currentParams) =>
             produce(currentParams, (draft) => {
                 draft.filter!.filters = filters;
@@ -139,7 +139,9 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
         setParams((currentParams) =>
             produce(currentParams, (draft) => {
                 if (draft.filter) {
-                    draft.filter.filters = [];
+                    draft.filter.filters = [
+                        { column: "tableName", value: tableName! },
+                    ];
                 }
             })
         );
@@ -155,7 +157,12 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
 
     const clear = () =>
         setParams({
-            filter: { page: 1, pageSize: 5, allData: false, filters: [] },
+            filter: {
+                page: 1,
+                pageSize: 5,
+                allData: false,
+                filters: [{ column: "tableName", value: tableName! }],
+            },
         });
 
     const setSorts = (sorts: { sortBy: string; isAsc: boolean }[]) => {

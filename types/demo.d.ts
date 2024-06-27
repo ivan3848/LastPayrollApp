@@ -185,14 +185,14 @@ declare namespace Demo {
         rating?: number;
         orders?: ProductOrder[];
         [key: string]:
-            | string
-            | string[]
-            | number
-            | boolean
-            | undefined
-            | ProductOrder[]
-            | InventoryStatus
-            | File[];
+        | string
+        | string[]
+        | number
+        | boolean
+        | undefined
+        | ProductOrder[]
+        | InventoryStatus
+        | File[];
     };
 
     type ProductOrder = {

@@ -15,6 +15,7 @@ import useBankQuery from "../Hooks/useBankQuery";
 import { IBank } from "../Types/IBank";
 import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
 import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -157,7 +158,7 @@ const BankTable = ({
                 filterPlaceholder="Buscar por método de pago"
                 filterElement={
                     <TableDropDownStatusFilter
-                        tableName="BankPaymentMethod"
+                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />

@@ -8,6 +8,7 @@ import useAddStatusQuery from "../../Hooks/useAddStatusQuery";
 import { IStatus } from "../../Types/IStatus";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import statusFormSchemas from "../../Validations/StatusFormSchemas";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     addEntityDialog: boolean;
@@ -41,7 +42,7 @@ const AddPaymentMethodStatus = ({
     });
 
     const onSubmit = (data: IStatus) => {
-        data.tableName = "BankPaymentMethod";
+        data.tableName = TABLE_NAME_BANK_PAYMENT_METHOD;
         addEntity.mutate(data);
         return;
     };

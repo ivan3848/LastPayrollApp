@@ -11,6 +11,7 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 
 interface Props {
     entity: IBenefitPosition;
@@ -96,7 +97,7 @@ const EditBenefitPosition = ({
                         setValue={setValue}
                         watch={watch}
                         idValueEdit={entity.idConcept}
-                        code="PROC"
+                        code={CONCEPT_TYPE_BENEFIT}
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">

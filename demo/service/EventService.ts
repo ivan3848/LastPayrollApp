@@ -1,3 +1,4 @@
+import { IScheduler } from "@/Features/calendar/Types/IScheduler";
 import type { Demo } from "@/types";
 
 export const EventService = {

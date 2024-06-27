@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 import useEditBankQuery from "../Hooks/useEditBankQuery";
 import { IBank } from "../Types/IBank";
 import bankFormSchemas from "../Validations/BankFormSchemas";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     entity: IBank;
@@ -75,7 +76,7 @@ const EditBank = ({
                         isValid={!!errors.idStatusAccountType}
                         setValue={setValue}
                         watch={watch}
-                        tableName="BankPaymentMethod"
+                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
                         idValueEdit={entity.idStatusAccountType}
                     />
                     {errors.idStatusAccountType && (

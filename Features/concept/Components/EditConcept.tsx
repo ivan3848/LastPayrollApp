@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import useEditConceptQuery from "../Hooks/useEditConceptQuery";
 import { IConcept } from "../Types/IConcept";
 import conceptFormSchemas from "../Validations/ConceptFormSchemas";
+import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
 
 interface Props {
     entity: IConcept;
@@ -79,7 +80,7 @@ const EditConcept = ({
                         setValue={setValue}
                         watch={watch}
                         isFocus={true}
-                        tableName="ConceptType"
+                        tableName={TABLE_NAME_CONCEPT_TYPE}
                         idValueEdit={entity.idConceptType}
                     />
                     {errors.idConceptType && (

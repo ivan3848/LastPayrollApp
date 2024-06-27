@@ -10,6 +10,9 @@ import workSchedulerService from "../Services/workSchedulerService";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import workSchedulerFormSchemas from "../Validations/WorkSchedulerFormSchemas";
 import AddWorkSchedulerDetail from "@/Features/workSchedulerDetail/Components/AddWorkSchedulerDetail";
+import { useWorkSchedulerDetailStore } from "@/Features/workSchedulerDetail/store/workSchedulerDetailStore";
+import { addHours } from "@/Features/Shared/Helpers/DateHelper";
+import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
 
 interface Props {
     addEntityDialog: boolean;
@@ -25,6 +28,7 @@ const AddWorkScheduler = ({
     toast,
 }: Props) => {
     const { addEntityFormSchema } = workSchedulerFormSchemas();
+    const { data: details, clearData } = useWorkSchedulerDetailStore();
 
     const {
         handleSubmit,
@@ -44,7 +48,15 @@ const AddWorkScheduler = ({
     });
 
     const onSubmit = (data: IWorkScheduler) => {
+        data.workSchedulerDetail = details.map((detail) => {
+            return {
+                ...detail,
+                start: addHours(detail.start, -4),
+                end: addHours(detail.end, -4),
+            } as IWorkSchedulerDetail;
+        });
         addEntity.mutate(data);
+        clearData();
         return;
     };
 
@@ -55,7 +67,7 @@ const AddWorkScheduler = ({
     return (
         <Dialog
             visible={addEntityDialog}
-            style={{ width: "450px" }}
+            style={{ width: "600px" }}
             header="Agregar Horario"
             modal
             className="p-fluid"

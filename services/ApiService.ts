@@ -13,7 +13,7 @@ const axiosInstance = axios.create({
         "Content-Type": "application/json",
         IdCompany: user?.idCompany ?? "2",
         IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
-    }
+    },
 });
 
 class ApiService<Q, R> {
@@ -25,19 +25,25 @@ class ApiService<Q, R> {
         this.params = params;
     }
 
-    async getForTable(params: IParamsApi, missEndpoint?: string): Promise<IResponse<R>> {
+    async getForTable(
+        params: IParamsApi,
+        missEndpoint?: string
+    ): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
-        return await axiosInstance.get<IResponse<R>>(finalEndpoint, {
-            params: params?.filter
-        }).then(res => res.data);
+        return await axiosInstance
+            .get<IResponse<R>>(finalEndpoint, {
+                params: params?.filter,
+            })
+            .then((res) => res.data);
     }
 
     async get(missEndpoint?: string): Promise<R> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
 
-        return await axiosInstance.get<R>(finalEndpoint, {
-        }).then(res => res.data);
+        return await axiosInstance
+            .get<R>(finalEndpoint, {})
+            .then((res) => res.data);
     }
 
     async post(body: Q, missEndpoint?: string): Promise<R | string> {
@@ -97,6 +103,6 @@ class ApiService<Q, R> {
 
 const concatEndpoint = (endpoint: string, missEndpoint?: string) => {
     return missEndpoint ? `${endpoint}${missEndpoint}` : endpoint;
-}
+};
 
 export default ApiService;

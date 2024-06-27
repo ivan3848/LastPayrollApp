@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import { IStatus } from "../../Types/IStatus";
 import useStatusQuery from "../../Hooks/useStatusQuery";
+import { TABLE_NAME_SALARY_NEWS } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -32,7 +33,7 @@ const SalaryNewsStatusTable = ({
         clearFilters,
         params,
     } = useParamFilterByTableName({
-        tableName: "SalaryNewsStatus",
+        tableName: TABLE_NAME_SALARY_NEWS,
     });
 
     const listOfDependencies: boolean[] = [submitted];

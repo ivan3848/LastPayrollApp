@@ -1,9 +1,8 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
+import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import {
@@ -11,14 +10,9 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useConceptQuery from "../Hooks/useConceptQuery";
 import { IConcept } from "../Types/IConcept";
-import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
-import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
-import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import { classNames } from "primereact/utils";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 
 interface Props {
     submitted: boolean;
@@ -191,7 +185,7 @@ const ConceptTable = ({
                     <TableDropDownStatusFilter
                         setFilters={setFilters}
                         clearFilters={clearFilters}
-                        tableName="ConceptType"
+                        tableName={TABLE_NAME_CONCEPT_TYPE}
                     />
                 }
                 showFilterMenuOptions={false}
@@ -357,12 +351,12 @@ const ConceptTable = ({
             />
 
             <Column
-                field="IsProfit"
+                field="isProfit"
                 header="Beneficio"
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.IsProfit} />}
+                body={(e) => <GenericTableCheck isChecked={e.isProfit} />}
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -407,12 +401,12 @@ const ConceptTable = ({
             />
 
             <Column
-                field="BeforeIsr"
+                field="beforeIsr"
                 header="Excluir de ISR"
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.BeforeIsr} />}
+                body={(e) => <GenericTableCheck isChecked={e.beforeIsr} />}
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -439,13 +433,13 @@ const ConceptTable = ({
             />
 
             <Column
-                field="IsForChargeTaxIsr"
+                field="isForChargeTaxIsr"
                 header="Para ISR"
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
                 body={(e) => (
-                    <GenericTableCheck isChecked={e.IsForChargeTaxIsr} />
+                    <GenericTableCheck isChecked={e.isForChargeTaxIsr} />
                 )}
                 filter
                 showAddButton={false}
@@ -456,71 +450,6 @@ const ConceptTable = ({
                 filterElement={verifiedFilterTemplate}
             />
 
-            <Column
-                field="isForChargeTax"
-                header="Para TSS"
-                dataType="boolean"
-                bodyClassName="text-center"
-                style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isForChargeTax} />}
-                filter
-                showAddButton={false}
-                showApplyButton={false}
-                showClearButton={false}
-                showFilterMatchModes={false}
-                showFilterMenuOptions={false}
-                filterElement={verifiedFilterTemplate}
-            />
-
-            <Column
-                field="isForChargeTax"
-                header="Para TSS"
-                dataType="boolean"
-                bodyClassName="text-center"
-                style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isForChargeTax} />}
-                filter
-                showAddButton={false}
-                showApplyButton={false}
-                showClearButton={false}
-                showFilterMatchModes={false}
-                showFilterMenuOptions={false}
-                filterElement={verifiedFilterTemplate}
-            />
-
-            <Column
-                field="isForChargeTax"
-                header="Para TSS"
-                dataType="boolean"
-                bodyClassName="text-center"
-                style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isForChargeTax} />}
-                filter
-                showAddButton={false}
-                showApplyButton={false}
-                showClearButton={false}
-                showFilterMatchModes={false}
-                showFilterMenuOptions={false}
-                filterElement={verifiedFilterTemplate}
-            />
-
-            <Column
-                field="isForChargeTaxISR"
-                header="Para ISR"
-                dataType="boolean"
-                bodyClassName="text-center"
-                style={{ minWidth: "8rem" }}
-                body={(e) => (
-                    <GenericTableCheck isChecked={e.isForChargeTaxISR} />
-                )}
-                filter
-                showAddButton={false}
-                showApplyButton={false}
-                showClearButton={false}
-                showFilterMatchModes={false}
-                showFilterMenuOptions={false}
-                filterElement={verifiedFilterTemplate}
-            />
             <Column
                 header="Acciones"
                 body={(rowData) => (
