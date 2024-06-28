@@ -31,4 +31,8 @@ interface IEmployee {
     IsDependantExist?: boolean;
     IdCompany?: number;
     IdPerson?: number;
+    IdDepartment?: number;
+    Department?: string;
+    IdPosition?: number;
+    Position?: string;
 }

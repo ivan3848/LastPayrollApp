@@ -1,5 +1,5 @@
 import GenericDropDown from '@/Features/Shared/Components/GenericDropDown';
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useForm } from 'react-hook-form';
 import usePositionQuery from '@/Features/position/Hooks/usePositionQuery';
 import useDepartmentQuery from '@/Features/departments/Hooks/useDepartmentQuery';
@@ -10,6 +10,7 @@ import GenericStatusDropDown from '@/Features/Shared/Components/GenericStatusDro
 import DialogFooterButtons from '@/Features/Shared/Components/DialogFooterButtons';
 import useChangePositionSalaryQuery from '../hooks/useChangePositionSalary';
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
+import useEmployeeQuery from '../hooks/useEmployeeQuery';
 
 
 interface Props {
@@ -30,7 +31,7 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
         formState: { errors },
     } = useForm<IPositionSalary>();
 
-    const changePositionSalaryEntity = useChangePositionSalaryQuery({
+    const changePositionSalaryEdit = useChangePositionSalaryQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
@@ -38,7 +39,8 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
     });
 
     const onFormSubmit = (data: IPositionSalary) => {
-        changePositionSalaryEntity.mutate(data);
+        changePositionSalaryEdit.mutate(data);
+        return;
     }
 
     const onDepartmentChange = () => {
@@ -47,6 +49,11 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
     }
 
     const onPositionChange = () => {
+        setFilters([{ column: 'idPosition', value: watch('idPosition') }]);
+        setAllData(true);
+    }
+
+    const onPositionManagerChange = () => {
         setFilters([{ column: 'idPosition', value: watch('idPosition') }]);
         setAllData(true);
     }
@@ -82,6 +89,7 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
                                 <GenericDropDown
                                     id="idDepartment"
                                     isValid={!!errors.idDepartment}
+                                    idValueEdit={employee.IdDepartment}
                                     text="name"
                                     useQuery={useDepartmentQuery}
                                     setValue={setValue}
@@ -103,6 +111,7 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
                                     isValid={!!errors.idPosition}
                                     text="name"
                                     useQuery={usePositionQuery}
+                                    idValueEdit={employee.IdPosition}
                                     setValue={setValue}
                                     watch={watch}
                                     isDisabled={!watch('idDepartment')}
@@ -125,10 +134,13 @@ const HierarchyPositionSalary = (employee: IEmployee, { toast, setSubmitted, set
                                     id="idHierarchyPositionManager"
                                     isValid={!!errors.idHierarchyPositionManager}
                                     text="name"
-                                    useQuery={usePositionQuery}
+                                    useQuery={useEmployeeQuery}
+                                    idValueEdit={employee.IdHierarchyPositionManager}
                                     setValue={setValue}
                                     watch={watch}
                                     isDisabled={!watch('idPosition')}
+                                    param={params}
+                                    onChange={onPositionManagerChange}
                                 />
                                 {errors.idHierarchyPositionManager && (
                                     <small className="p-invalid text-danger">

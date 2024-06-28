@@ -49,11 +49,6 @@ const DepartmentTabs = () => {
                             <HierarchyPosition />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel header="Cambiar Position" leftIcon="pi pi-user-plus mr-2">
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <HierarchyPositionSalary />
-                        </Suspense>
-                    </TabPanel>
                 </TabView>
             </div>
         </div>
