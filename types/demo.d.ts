@@ -240,6 +240,7 @@ declare namespace Demo {
         location?: string;
         description?: string;
         concept?: string;
+        title?: string;
         tag?: {
             name: string;
             color: string;

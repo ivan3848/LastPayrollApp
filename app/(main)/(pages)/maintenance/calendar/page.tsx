@@ -1,30 +1,30 @@
 "use client";
-import FullCalendar from "@fullcalendar/react";
+import schedulerService from "@/Features/calendar/Services/schedulerService";
+import { IScheduler } from "@/Features/calendar/Types/IScheduler";
+import { statusByTableNameService } from "@/Features/status/Services/statusService";
 import type { Demo, Page } from "@/types";
 import { DateInput, DateSelectArg, EventClickArg } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
+import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Button } from "primereact/button";
 import { Calendar as PRCalendar } from "primereact/calendar";
+import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import React, { useEffect, useState } from "react";
-import schedulerService from "@/Features/calendar/Services/schedulerService";
-import { IScheduler } from "@/Features/calendar/Types/IScheduler";
 import { useForm } from "react-hook-form";
-import { statusByTableNameService } from "@/Features/status/Services/statusService";
 
 const CalendarDemo: Page = () => {
     const [events, setEvents] = useState<Demo.Event[]>([]);
     const [tags, setTags] = useState<Demo.Event["tag"][]>([]);
     const [showDialog, setShowDialog] = useState(false);
     const [view, setView] = useState("");
-
     const { handleSubmit } = useForm<IScheduler>();
-
     const [changedEvent, setChangedEvent] = useState<Demo.Event>({
+        id: "",
         concept: "",
         start: "",
         end: "",
@@ -42,18 +42,20 @@ const CalendarDemo: Page = () => {
     });
 
     const onEventClick = (e: EventClickArg) => {
-        const { start, end } = e.event;
+        const { start, end, id } = e.event;
         let plainEvent = e.event.toPlainObject({
             collapseExtendedProps: true,
             collapseColor: true,
         });
         setView("display");
         setShowDialog(true);
+
         setChangedEvent((prevChangeState) => ({
             ...prevChangeState,
             ...plainEvent,
             start: start as DateInput,
             end: end ? end : (start as DateInput),
+            id: id,
         }));
     };
 
@@ -74,6 +76,8 @@ const CalendarDemo: Page = () => {
         }
     }
 
+    const [submitted, setSubmitted] = useState(false);
+
     useEffect(() => {
         (async () => {
             const data = (await schedulerService.get()) as any;
@@ -85,6 +89,7 @@ const CalendarDemo: Page = () => {
                 return {
                     id: item.idScheduler.toString(),
                     title: item.title,
+                    concept: item.title,
                     start: item.date,
                     end: item.time,
                     textColor: "#212121",
@@ -98,6 +103,7 @@ const CalendarDemo: Page = () => {
                     },
                 };
             });
+
             setEvents(_events);
 
             const _tags = schedulerType.map((item) => {
@@ -110,7 +116,7 @@ const CalendarDemo: Page = () => {
 
             setTags(_tags);
         })();
-    }, []);
+    }, [submitted]);
 
     function subtractFourHours(dates: string) {
         const date = new Date(dates);
@@ -129,26 +135,23 @@ const CalendarDemo: Page = () => {
                 backgroundColor: changedEvent.tag?.color ?? "#fff",
                 borderColor: changedEvent.tag?.color ?? "#fff",
                 textColor: "#212121",
+                id: changedEvent.id,
             };
 
             setShowDialog(false);
 
             if (_clickedEvent.id) {
-                const res = {
-                    ..._clickedEvent,
-                    title: _clickedEvent.title,
-                    concept: _clickedEvent.description,
-                };
                 const adjustedStart = subtractFourHours(
                     _clickedEvent.start as string
                 );
+
                 const adjustedEnd = subtractFourHours(
                     _clickedEvent.end as string
                 );
 
                 const _scheduler = {
-                    idScheduler: parseInt(res.id as string),
-                    concept: res.title,
+                    idScheduler: parseInt(changedEvent.id as string),
+                    concept: _clickedEvent.title,
                     date: adjustedStart,
                     time: adjustedEnd,
                     idStatus: tags.find(
@@ -162,13 +165,14 @@ const CalendarDemo: Page = () => {
                     ...prevState,
                     {
                         ..._clickedEvent,
+                        concept: _clickedEvent.concept,
                         title: _clickedEvent.title,
-                        concept: _clickedEvent.description,
                     },
                 ]);
             } else {
                 const eventCreated = {
                     title: _clickedEvent.concept,
+                    concept: _clickedEvent.concept,
                     textColor: "#212121",
                     location: _clickedEvent.tag?.name,
                     description: _clickedEvent.tag?.name,
@@ -187,7 +191,6 @@ const CalendarDemo: Page = () => {
                     ...eventCreated,
                     start: _clickedEvent.start,
                     end: _clickedEvent.end,
-                    id: Math.floor(Math.random() * 10000).toString(),
                 };
                 const adjustedStart = subtractFourHours(
                     _clickedEvent.start as string
@@ -195,8 +198,9 @@ const CalendarDemo: Page = () => {
                 const adjustedEnd = subtractFourHours(
                     _clickedEvent.end as string
                 );
+
                 const _scheduler = {
-                    concept: res.title,
+                    concept: _clickedEvent.title,
                     date: adjustedStart,
                     time: adjustedEnd,
                     idStatus: res.tag?.idStatus,
@@ -204,6 +208,7 @@ const CalendarDemo: Page = () => {
 
                 schedulerService.post(_scheduler);
 
+                setSubmitted(!submitted);
                 setShowDialog(false);
 
                 setEvents((prevState) => [
@@ -212,7 +217,7 @@ const CalendarDemo: Page = () => {
                         ...eventCreated,
                         start: _clickedEvent.start,
                         end: _clickedEvent.end,
-                        id: Math.floor(Math.random() * 10000).toString(),
+                        title: _clickedEvent.title,
                     },
                 ]);
             }
@@ -220,16 +225,30 @@ const CalendarDemo: Page = () => {
     };
 
     const validate = () => {
-        let { start, end, title, location } = changedEvent;
-        return start && end && title && location;
+        let { start, end, title } = changedEvent;
+        return start && end && title;
     };
 
     const onEditClick = () => {
         setView("edit");
     };
 
+    const accept = () => {
+        schedulerService.delete(parseInt(changedEvent.id as string));
+        setEvents((prevState) =>
+            prevState.filter((x) => x.id !== changedEvent.id)
+        );
+        setShowDialog(false);
+    };
+
     const onDeleteClick = () => {
-        setView("delete");
+        confirmDialog({
+            message: "¿Seguro que desea eliminar este evento?",
+            header: "Aviso",
+            icon: "pi pi-info-circle",
+            acceptClassName: "p-button-danger",
+            accept,
+        });
     };
 
     const onDateSelect = (e: DateSelectArg) => {
@@ -237,6 +256,7 @@ const CalendarDemo: Page = () => {
         setShowDialog(true);
         setChangedEvent({
             ...e,
+            title: "",
             concept: "",
             location: "",
             borderColor: "",
@@ -312,9 +332,10 @@ const CalendarDemo: Page = () => {
             ) : null}
         </>
     );
-    console.log(view);
+
     return (
         <div className="grid">
+            <ConfirmDialog />
             <div className="col-12">
                 <div className="card">
                     <h5>Calendar</h5>
@@ -426,7 +447,7 @@ const CalendarDemo: Page = () => {
                                     <div className="col-12">
                                         <div className="col-6 md:col-12 field">
                                             <label
-                                                htmlFor="concept"
+                                                htmlFor="title"
                                                 className="text-900 font-semibold"
                                             >
                                                 Titulo
@@ -434,14 +455,14 @@ const CalendarDemo: Page = () => {
                                             <span className="p-input-icon-left">
                                                 <i className="pi pi-pencil"></i>
                                                 <InputText
-                                                    id="concept"
+                                                    id="title"
                                                     value={changedEvent.title}
                                                     onChange={(e) =>
                                                         setChangedEvent(
                                                             (prevState) => ({
                                                                 ...prevState,
                                                                 title: e.target
-                                                                    .value,
+                                                                    .value as string,
                                                             })
                                                         )
                                                     }
