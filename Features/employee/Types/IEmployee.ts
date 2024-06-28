@@ -7,7 +7,7 @@ export interface IEmployee {
     salary?: number;
     idWorkScheduler?: number;
     email?: string | null;
-    startDate?: Date;
+    startDate: Date;
     endWorkDate?: Date;
     haveKid?: boolean | null;
     numberOfKid?: number | null;
@@ -32,4 +32,5 @@ export interface IEmployee {
     workSchedulerName?: string | null;
     department?: string | null;
     position?: string | null;
+    identification?: string | null;
 }
