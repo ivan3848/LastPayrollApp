@@ -8,7 +8,6 @@ import {
     DataTableSortEvent,
 } from "primereact/datatable";
 import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
-import { IWorkScheduler } from "@/Features/workScheduler/Types/IWorkScheduler";
 import useBankEmployeeHistory from "../../Hooks/useBankEmployeeHistory";
 import { IEmployeeHistory } from "../../Types/IEmployeeHistory";
 
@@ -68,16 +67,15 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Horario</h3>
+            <h3 className="m-0">Historial Bancario</h3>
         </div>
     );
 
     return (
         <DataTable
-            id="workScheduler-Table"
+            id="asf-Table"
             dataKey="idEmployee"
             value={data?.items}
-            lazy
             paginator
             loading={isLoading}
             onSort={onSort}
@@ -94,28 +92,10 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
             rowsPerPageOptions={[5, 10, 25]}
             rows={data?.pageSize!}
             first={data.firstRow!}
-            currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+            currentPageReportTemplate="Mostrando registros del{first} al {last} de {totalRecords}"
         >
-            <Column
-                field="startDate"
-                header="Fecha de Inicio"
-                filter
-                filterField="startDate"
-                filterPlaceholder="Buscar por Fecha"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-            <Column
-                field="paymentMethod"
-                header="Metodo"
-                filter
-                filterField="paymentMethod"
-                filterPlaceholder="Buscar por Horario"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
+            <Column field="startDate" header="Fecha de Inicio"></Column>
+            <Column field="paymentMethod" header="Metodo"></Column>
             <Column
                 field="accountNumber"
                 header="Numero De Cuenta"
@@ -133,13 +113,6 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
                 field={"bankName"}
                 header="Nombre del banco"
                 headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="bankName"
-                filterPlaceholder="Buscar"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
             ></Column>
 
             <Column

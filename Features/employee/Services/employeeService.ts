@@ -19,5 +19,9 @@ const bankEmployeeHistory = new ApiService<IEmployee, IBankEmployeeHistory>(
     "employee/bankEmployeeHistory"
 );
 
+const bankEmployeeHistoryByIdEmployee = new ApiService<IEmployee, IBankEmployeeHistory>(
+    `employee/bankEmployeeHistory/employeeId/`
+);
+
 export default employeeService;
-export { employeeChangeService, employeeHistory, bankEmployeeHistory };
+export { employeeChangeService, employeeHistory, bankEmployeeHistory, bankEmployeeHistoryByIdEmployee };

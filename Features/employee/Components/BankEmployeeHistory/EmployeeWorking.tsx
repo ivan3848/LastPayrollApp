@@ -6,8 +6,6 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import EmployeeChanges from "./EmployeeChanges";
-import { IWorkScheduler } from "@/Features/workScheduler/Types/IWorkScheduler";
-import EditEmployeeWorkScheduler from "./EditEmployeeWorkScheduler";
 import { IEmployeeHistory } from "../../Types/IEmployeeHistory";
 
 const EmployeeWorking = () => {
@@ -51,23 +49,22 @@ const EmployeeWorking = () => {
     return (
         <div className="grid">
             <div className="w-full">
-                <div className="card">
-                    <Toast ref={toast} />
+                <Toast ref={toast} />
 
-                    <Suspense
-                        fallback={
-                            <TableSkeletonTemplate items={entityProperties} />
-                        }
-                    >
-                        <EmployeeChanges
-                            submitted={submitted}
-                            handleAdd={handleAdd}
-                            handleDelete={handleDelete}
-                            handleEdit={handleEdit}
-                        />
-                    </Suspense>
+                <Suspense
+                    fallback={
+                        <TableSkeletonTemplate items={entityProperties} />
+                    }
+                >
+                    <EmployeeChanges
+                        submitted={submitted}
+                        handleAdd={handleAdd}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                    />
+                </Suspense>
 
-                    {/* {editEntityDialog && (
+                {/* {editEntityDialog && (
                         // <EditEmployeeWorkScheduler
                         //     entity={entity!}
                         //     editEntityDialog={editEntityDialog}
@@ -76,17 +73,16 @@ const EmployeeWorking = () => {
                         //     toast={toast}
                         // />
                     )} */}
-                    {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idWorkScheduler ?? 0}
-                            endpoint="employee/employee"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
-                            setSubmitted={setSubmitted}
-                            toast={toast}
-                        />
-                    )}
-                </div>
+                {deleteEntityDialog && (
+                    <DeleteEntity
+                        id={entity?.idWorkScheduler ?? 0}
+                        endpoint="employee/employee"
+                        deleteEntityDialog={deleteEntityDialog}
+                        setDeleteEntityDialog={setDeleteEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                )}
             </div>
         </div>
     );

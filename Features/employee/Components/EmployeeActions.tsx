@@ -4,7 +4,7 @@ import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
-import { Ripple } from "primereact/ripple";
+import EmployeeWorking from "./BankEmployeeHistory/EmployeeWorking";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -53,6 +53,9 @@ const EmployeeActions = ({
                 <div>
                     {openAction === EmployeeOptionsEnum.NoOption && (
                         <EmployeeOptions setAction={setOpenAction} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.BankManagement && (
+                        <EmployeeWorking />
                     )}
                 </div>
             </Dialog>

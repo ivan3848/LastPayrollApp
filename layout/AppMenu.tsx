@@ -58,11 +58,6 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-chart-bar",
                     to: "/employee/employee",
                 },
-                {
-                    label: "Horarios to be looked",
-                    icon: "pi pi-fw pi-calendar-plus",
-                    to: "/employee/workScheduler",
-                },
             ],
         },
     ];

@@ -21,6 +21,9 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Gestión Bancaria"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() =>
+                        setAction(EmployeeOptionsEnum.BankManagement)
+                    }
                 />
                 <Button
                     label="Dependientes"
