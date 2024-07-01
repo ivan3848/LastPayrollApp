@@ -171,12 +171,14 @@ const CalendarDemo: Page = () => {
                 ]);
             } else {
                 const eventCreated = {
-                    title: _clickedEvent.concept,
+                    title: _clickedEvent.title,
                     concept: _clickedEvent.concept,
                     textColor: "#212121",
                     location: _clickedEvent.tag?.name,
                     description: _clickedEvent.tag?.name,
                     borderColor: getColor(_clickedEvent.tag?.name as string),
+                    start: subtractFourHours(_clickedEvent.start as string),
+                    end: subtractFourHours(_clickedEvent.end as string),
                     backgroundColor: getColor(
                         _clickedEvent.tag?.name as string
                     ),
@@ -187,39 +189,18 @@ const CalendarDemo: Page = () => {
                     },
                 } as Demo.Event;
 
-                const res = {
-                    ...eventCreated,
-                    start: _clickedEvent.start,
-                    end: _clickedEvent.end,
-                };
-                const adjustedStart = subtractFourHours(
-                    _clickedEvent.start as string
-                );
-                const adjustedEnd = subtractFourHours(
-                    _clickedEvent.end as string
-                );
-
                 const _scheduler = {
-                    concept: _clickedEvent.title,
-                    date: adjustedStart,
-                    time: adjustedEnd,
-                    idStatus: res.tag?.idStatus,
+                    concept: eventCreated.title,
+                    date: eventCreated.start,
+                    time: eventCreated.end,
+                    idStatus: eventCreated.tag?.idStatus,
                 } as IScheduler;
 
                 schedulerService.post(_scheduler);
 
                 setSubmitted(!submitted);
                 setShowDialog(false);
-
-                setEvents((prevState) => [
-                    ...prevState,
-                    {
-                        ...eventCreated,
-                        start: _clickedEvent.start,
-                        end: _clickedEvent.end,
-                        title: _clickedEvent.title,
-                    },
-                ]);
+                setEvents((prevState) => [...prevState, eventCreated]);
             }
         }
     };
