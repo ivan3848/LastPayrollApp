@@ -7,6 +7,7 @@ import employeeService from "../Services/employeeService";
 import { IEmployee } from "../Types/IEmployee";
 
 import emptyImage from "@/constants/emptyImage";
+import { useRouter } from "next/router";
 import { DataView, DataViewLayoutOptions } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
@@ -14,6 +15,7 @@ import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
 import { ChangeEvent, useState } from "react";
 import EmployeeActions from "./EmployeeActions";
+import Link from "next/link";
 
 interface Props {
     submitted: boolean;
@@ -257,16 +259,18 @@ export default function EmployeeTable({
                 setShowEmployeeActions={setShowEmployeeActions}
                 employee={employee!}
             />
-            
+
             <div className="grid">
                 <div className="col-12">
-                    <div className="flex justify-content-between my-5">
+                    <div className="flex justify-content-between mb-5">
                         <h3>Empleados</h3>
 
-                        <Button
-                            label="Agregar Empleado"
-                            icon="pi pi-user-plus"
-                        />
+                        <Link href="/employee/addEmployee">
+                            <Button
+                                label="Agregar Empleado"
+                                icon="pi pi-user-plus"
+                            />
+                        </Link>
                     </div>
 
                     <DataView

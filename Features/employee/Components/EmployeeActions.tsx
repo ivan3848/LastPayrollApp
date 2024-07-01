@@ -1,10 +1,9 @@
 import { Dialog } from "primereact/dialog";
 import { useState } from "react";
+import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
-import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
-import { Ripple } from "primereact/ripple";
 
 interface Props {
     showEmployeeActions: boolean;

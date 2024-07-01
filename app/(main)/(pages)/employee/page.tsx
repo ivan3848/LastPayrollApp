@@ -1,6 +1,6 @@
 import Employee from "@/Features/employee/Components/Employee";
 
-export default function WorkScheduler() {
+export default function EmployeeManagment() {
     return (
         <div className="card">
             <Employee />
