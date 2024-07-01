@@ -1,6 +1,4 @@
 "use client";
-
-import WorkScheduler from "@/Features/workScheduler/Components/WorkScheduler";
 import { TabPanel, TabView } from "primereact/tabview";
 import { CiBank } from "react-icons/ci";
 
@@ -12,9 +10,7 @@ const EmployeeChanges = () => {
                     <TabPanel
                         header="Cambios"
                         leftIcon={<CiBank className="mr-2" size={18} />}
-                    >
-                        <WorkScheduler />
-                    </TabPanel>
+                    ></TabPanel>
                 </TabView>
             </div>
         </div>

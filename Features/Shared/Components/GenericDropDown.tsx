@@ -14,6 +14,9 @@ interface Props<T> {
     idValueEdit?: number;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
+    isDisabled?: boolean;
+    param?: IParamsApi;
+    onChange?: (e: DropdownChangeEvent) => void;
     useQuery: (
         params: IParamsApi,
         dependencies: boolean[]
@@ -28,6 +31,9 @@ function GenericDropDown<T>({
     setValue,
     watch,
     useQuery,
+    isDisabled,
+    param,
+    onChange,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -36,7 +42,7 @@ function GenericDropDown<T>({
     }, [id, idValueEdit, setValue]);
 
     const { params } = useParamAllData();
-    const { data } = useQuery(params, []);
+    const { data } = useQuery(param ?? params, []);
 
     return (
         <>
@@ -44,7 +50,10 @@ function GenericDropDown<T>({
                 value={data.items.find(
                     (item: any) => item[id] === (watch(id) ?? idValueEdit)
                 )}
-                onChange={(e: DropdownChangeEvent) => setValue(id, e.value[id])}
+                onChange={(e: DropdownChangeEvent) => {
+                    setValue(id, e.value[id]);
+                    onChange && onChange(e);
+                }}
                 options={data.items}
                 optionLabel={text}
                 placeholder="Seleccione una opción..."
@@ -56,6 +65,7 @@ function GenericDropDown<T>({
                     },
                     "w-full"
                 )}
+                disabled={isDisabled}
             />
         </>
     );

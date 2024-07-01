@@ -4,4 +4,5 @@ export interface IScheduler {
     time: Date;
     concept: string;
     idStatus: number;
+    title: string;
 }

@@ -71,6 +71,14 @@ const useParamFilter = () => {
             filter: { page: 1, pageSize: 5, allData: false, filters: [] },
         });
 
+    const setAllData = (allData: boolean) => {
+        setParams((currentParams) =>
+            produce(currentParams, (draft) => {
+                draft.filter!.allData = allData;
+            })
+        );
+    };
+
     return {
         setPage,
         setPageSize,
@@ -81,6 +89,7 @@ const useParamFilter = () => {
         clearFilters,
         clearSorts,
         params,
+        setAllData,
     };
 };
 

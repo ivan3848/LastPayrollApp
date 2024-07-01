@@ -3,6 +3,7 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import HierarchyPositionSalary from "@/Features/hierarchyPositionSalary/Components/HierarchyPositionSalary";
 
 const OrganizationalUnit = dynamic(
     () => import("@/Features/organizationalUnit/Components/OrganizationalUnit")
