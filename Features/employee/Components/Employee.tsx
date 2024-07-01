@@ -49,7 +49,6 @@ const Employee = () => {
             <div className="w-full">
                 <div>
                     <Toast ref={toast} />
-
                     <Suspense
                         fallback={
                             <TableSkeletonTemplate items={entityProperties} />

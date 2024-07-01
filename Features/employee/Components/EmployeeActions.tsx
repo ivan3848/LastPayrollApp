@@ -5,6 +5,7 @@ import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { Ripple } from "primereact/ripple";
+import FireEmployee from "./FireEmployee";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -53,6 +54,9 @@ const EmployeeActions = ({
                 <div>
                     {openAction === EmployeeOptionsEnum.NoOption && (
                         <EmployeeOptions setAction={setOpenAction} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.FireEmployee && (
+                        <FireEmployee employee={employee} />
                     )}
                 </div>
             </Dialog>
