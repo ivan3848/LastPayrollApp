@@ -34,3 +34,4 @@ export const CACHE_KEY_EMPLOYEE = "employee";
 export const CACHE_KEY_EMPLOYEE_HISTORY = "employeeHistory";
 export const CACHE_KEY_SCHEDULER = "scheduler";
 export const CACHE_KEY_HIERARCHY_POSITION_SALARY = "hierarchyPositionSalary";
+export const CACHE_KEY_BANk_EMPLOYEE_HISTORY = "bankEmployeeHistory";

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
@@ -9,12 +9,14 @@ import {
 } from "primereact/datatable";
 import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
 import { IWorkScheduler } from "@/Features/workScheduler/Types/IWorkScheduler";
+import useBankEmployeeHistory from "../../Hooks/useBankEmployeeHistory";
+import { IEmployeeHistory } from "../../Types/IEmployeeHistory";
 
 interface Props {
     submitted: boolean;
-    handleEdit: (entity: IWorkScheduler) => void;
-    handleDelete: (entity: IWorkScheduler) => void;
-    handleAdd: (entity: IWorkScheduler) => void;
+    handleEdit: (entity: IEmployeeHistory) => void;
+    handleDelete: (entity: IEmployeeHistory) => void;
+    handleAdd: (entity: IEmployeeHistory) => void;
 }
 
 const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
@@ -29,7 +31,12 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useEmployeeQuery(params, listOfDependencies);
+    const { data, isLoading } = useBankEmployeeHistory(
+        params,
+        listOfDependencies
+    );
+    const employeeData = useEmployeeQuery(params, listOfDependencies);
+    const start = data.items[0]?.startDate!;
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -90,23 +97,46 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="workSchedulerName"
-                header="Horario"
+                field="startDate"
+                header="Fecha de Inicio"
                 filter
-                filterField="name"
+                filterField="startDate"
+                filterPlaceholder="Buscar por Fecha"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+            <Column
+                field="paymentMethod"
+                header="Metodo"
+                filter
+                filterField="paymentMethod"
                 filterPlaceholder="Buscar por Horario"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="employeeName"
-                header="Nombre del empleado"
+                field="accountNumber"
+                header="Numero De Cuenta"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="name"
-                filterPlaceholder="Buscar por departamento"
+                filterField="accountNumber"
+                filterPlaceholder="Buscar Numero De Cuenta"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field={"bankName"}
+                header="Nombre del banco"
+                headerStyle={{ minWidth: "15rem" }}
+                sortable
+                filter
+                filterField="bankName"
+                filterPlaceholder="Buscar"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
@@ -115,7 +145,7 @@ const EmployeeChanges = ({ submitted, handleDelete, handleEdit }: Props) => {
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IWorkScheduler>
+                    <ActionTableTemplate<IEmployeeHistory>
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}

@@ -1,23 +1,21 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { IEmployee } from "../../employee/Types/IEmployee";
 import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { IEmployeeChange } from "@/Features/employee/Types/IEmployeeChange";
 import { Calendar } from "primereact/calendar";
 import { Nullable } from "primereact/ts-helpers";
-import GenericFieldValue from "@/Features/Shared/Components/GenericFieldValue";
 import useEmployeeHistory from "@/Features/employee/Hooks/useEmployeeHistoryQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import workSchedulerFormSchemas from "@/Features/workScheduler/Validations/WorkSchedulerFormSchemas";
-import useWorkSchedulerQuery from "@/Features/workScheduler/Hooks/useWorkSchedulerQuery";
+import editEmployeeWSFromSchemas from "../../Validation/editEmployeeWSFromSchemas";
+import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
+import { IBankEmployeeHistory } from "../../Types/IBankEmployeeHistory";
 
 interface Props {
-    entity: IEmployee;
+    entity: IBankEmployeeHistory;
 
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
@@ -32,7 +30,8 @@ const EditEmployeeWorkScheduler = ({
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = workSchedulerFormSchemas();
+    const { editEntityFormSchema } = editEmployeeWSFromSchemas();
+    const changeType = "Cambio de horario";
 
     const { params } = useParamFilter();
 
@@ -42,14 +41,12 @@ const EditEmployeeWorkScheduler = ({
     if (isLoading) {
         return <div>Loading...</div>;
     }
-    console.log(data.items);
 
     const orderByLastDate = data.items.sort((a, b) => {
         return (
             new Date(b.startDate!).getTime() - new Date(a.startDate!).getTime()
         );
     });
-    console.log(orderByLastDate);
 
     const [start, setStart] = useState<Nullable<Date>>(new Date());
 
@@ -63,7 +60,6 @@ const EditEmployeeWorkScheduler = ({
     } = useForm<IEmployeeChange>({
         resolver: zodResolver(editEntityFormSchema),
     });
-    const changeType = "Cambio de horario";
     const editEntity = useEditEmployeeQuery({
         toast,
         setEditEntityDialog,
@@ -86,38 +82,54 @@ const EditEmployeeWorkScheduler = ({
     };
 
     return (
-        <
-        >
+        <>
             <div className="field">
                 <label htmlFor="name" className="w-full">
-                    Horario Actual
+                    Numero de cuenta actual
                 </label>
-                <InputText defaultValue={entity.workSchedulerName!} disabled />
+                <InputText defaultValue={entity.accountNumber!} disabled />
             </div>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="field">
-                    <label htmlFor="idWorkScheduler" className="w-full">
-                        Nuevo Horario
+                <div className="field col-12 md:col-3">
+                    <label htmlFor="idBan</form>k" className="w-full">
+                        Banco
                     </label>
                     <GenericDropDown
-                        id="idWorkScheduler"
+                        id="idBank"
                         isValid={!!errors.idChange}
                         text="name"
-                        idValueEdit={entity.idWorkScheduler}
-                        useQuery={useWorkSchedulerQuery}
+                        idValueEdit={entity.idBank}
+                        useQuery={useBankQuery}
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.idChange && (
+                    {errors.idWorkScheduler && (
                         <small className="p-invalid text-danger">
-                            {errors.idChange.message?.toString()}
+                            {errors.idWorkScheduler.message?.toString()}
                         </small>
                     )}
 
-                    <div className="flex-auto">
+                    <label htmlFor="idBan</form>k" className="w-full">
+                        Banco
+                    </label>
+                    <GenericDropDown
+                        id="idBank"
+                        isValid={!!errors.idChange}
+                        text="name"
+                        idValueEdit={entity.idBank}
+                        useQuery={useBankQuery}
+                        setValue={setValue}
+                        watch={watch}
+                    />
+                    {errors.idWorkScheduler && (
+                        <small className="p-invalid text-danger">
+                            {errors.idWorkScheduler.message?.toString()}
+                        </small>
+                    )}
+                    <div>
                         <label htmlFor="buttondisplay" className=" block m-1">
-                            Fecha de cambio
+                            Fecha de Inicio
                         </label>
                         <Calendar
                             id="buttondisplay"
@@ -125,13 +137,11 @@ const EditEmployeeWorkScheduler = ({
                             showIcon
                             onChange={(e) => setStart(e.value)}
                         />
-                    </div>
-
-                    <div className="field">
-                        <label htmlFor="reason" className="w-full">
-                            Cambios pendientes
-                        </label>
-                        <GenericFieldValue valueOrDefault={""} />
+                        {errors.dateChange && (
+                            <small className="p-invalid text-danger">
+                                {errors.dateChange.message?.toString()}
+                            </small>
+                        )}
                     </div>
                 </div>
 
