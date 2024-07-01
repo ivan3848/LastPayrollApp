@@ -38,7 +38,7 @@ const EmployeeProfile = ({ employee }: Props) => {
                             }`}
                             alt={employee.employeeName!}
                         />
-                        <div className="text-2xl font-bold text-900">
+                        <div className="text-2xl font-bold text-900 text-center">
                             {employee.idEmployee} - {employee.employeeName}
                         </div>
                     </div>

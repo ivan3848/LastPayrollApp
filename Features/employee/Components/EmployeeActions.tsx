@@ -1,9 +1,10 @@
-import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Fieldset } from "primereact/fieldset";
-import { IEmployee } from "../Types/IEmployee";
-import EmployeeProfile from "./EmployeeProfile";
 import { useState } from "react";
+import { IEmployee } from "../Types/IEmployee";
+import EmployeeOptions from "./EmployeeOptions";
+import EmployeeProfile from "./EmployeeProfile";
+import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
+import { Ripple } from "primereact/ripple";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -16,26 +17,21 @@ const EmployeeActions = ({
     setShowEmployeeActions,
     employee,
 }: Props) => {
-    const [dialogHeader, setDialogHeader] = useState<string>(
-        "Seleccione una acción"
-    );
-    const [openAction, setOpenAction] = useState<string>(
-        "Seleccione una acción"
+    const [openAction, setOpenAction] = useState<EmployeeOptionsEnum>(
+        EmployeeOptionsEnum.NoOption
     );
 
-    const handleActionClick = (action: string) => {
-        setOpenAction(action);
-        switch (openAction) {
-            case "false":
-                setDialogHeader("Desactivar Empleado");
-                break;
-
-            default:
-                setDialogHeader("Seleccione una acción");
-                setOpenAction("");
-                break;
-        }
-    };
+    const headerTitle = (
+        <div className="inline-flex align-items-center justify-content-center gap-5">
+            {openAction !== EmployeeOptionsEnum.NoOption && (
+                <i
+                    className="cursor-pointer pi pi-arrow-left"
+                    onClick={() => setOpenAction(EmployeeOptionsEnum.NoOption)}
+                ></i>
+            )}
+            <span className="font-bold white-space-nowrap">{openAction}</span>
+        </div>
+    );
 
     return (
         <>
@@ -43,114 +39,22 @@ const EmployeeActions = ({
                 visible={showEmployeeActions}
                 onHide={() => setShowEmployeeActions(false)}
                 dismissableMask
-                draggable
+                draggable={false}
                 maximizable
                 resizable
-                header={dialogHeader}
+                header={headerTitle}
                 focusOnShow
                 style={{ width: "850px" }}
             >
-                <div className="my-5">
+                <div className="mb-5">
                     <EmployeeProfile employee={employee} />
                 </div>
 
-                <Fieldset legend="Funciones" toggleable>
-                    <Button
-                        label="Cubrir Posición"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Gestión Bancaria"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Dependientes"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Seguros"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Herramientas"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Desvincular"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                </Fieldset>
-
-                <br />
-
-                <Fieldset legend="Compensaciones" toggleable>
-                    <Button
-                        label="Beneficios"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Deducciones"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Prestamos"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="ISR A Favor"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Comisiones"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                </Fieldset>
-
-                <br />
-
-                <Fieldset legend="Absentismos" toggleable>
-                    <Button
-                        label="Licencias"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Permisos"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Horas Extras"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Plan De Horario"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Vacaciones"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                    <Button
-                        label="Suplencias"
-                        icon="pi pi-search"
-                        className="m-2"
-                    />
-                </Fieldset>
+                <div>
+                    {openAction === EmployeeOptionsEnum.NoOption && (
+                        <EmployeeOptions setAction={setOpenAction} />
+                    )}
+                </div>
             </Dialog>
         </>
     );
