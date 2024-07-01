@@ -7,7 +7,7 @@ export interface IEmployee {
     salary?: number;
     idWorkScheduler?: number;
     email?: string | null;
-    startDate?: Date;
+    startDate: Date;
     endWorkDate?: Date;
     haveKid?: boolean | null;
     numberOfKid?: number | null;
@@ -16,6 +16,7 @@ export interface IEmployee {
     isGroupManager?: boolean | null;
     workRelation?: string | null;
     sindicate?: boolean;
+    isActive?: boolean;
     extraHours?: boolean;
     temporal?: boolean;
     idContractType?: number | null;
@@ -29,4 +30,7 @@ export interface IEmployee {
     description?: string | null;
     employeeName?: string | null;
     workSchedulerName?: string | null;
+    department?: string | null;
+    position?: string | null;
+    identification?: string | null;
 }

@@ -51,7 +51,7 @@ const AppMenu = () => {
                 {
                     label: "Gestión Empleados",
                     icon: "pi pi-fw pi-users",
-                    to: "/employee/employee",
+                    to: "/employee",
                 },
                 {
                     label: "Cambios masivos",

@@ -41,7 +41,7 @@ function GenericDropDown<T>({
         }
     }, [id, idValueEdit, setValue]);
 
-    let { params } = useParamAllData();
+    const { params } = useParamAllData();
     const { data } = useQuery(param ?? params, []);
 
     return (
