@@ -25,6 +25,10 @@ const AddEmployeeTabs = () => {
         },
     ];
 
+    const test = () => {
+        return <div>Test</div>;
+    };
+
     return (
         <div className="card">
             <Steps
@@ -32,7 +36,9 @@ const AddEmployeeTabs = () => {
                 activeIndex={activeIndex}
                 onSelect={(e) => setActiveIndex(e.index)}
                 readOnly={false}
-            />
+            >
+                {test()}
+            </Steps>
         </div>
     );
 };

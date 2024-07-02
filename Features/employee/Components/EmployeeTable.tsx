@@ -167,7 +167,7 @@ export default function EmployeeTable({
                             </p>
                         </div>
                     </div>
-                    <div className="flex justify-center flex-wrap gap-1">
+                    <div className="flex justify-content-center flex-wrap gap-1">
                         {actionButtons(employee)}
                     </div>
                 </div>
@@ -196,6 +196,7 @@ export default function EmployeeTable({
                     className="min-w-min"
                     label="Editar"
                     icon="pi pi-pencil"
+                    disabled
                 />
                 <Button
                     size="small"

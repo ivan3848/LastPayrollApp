@@ -5,11 +5,13 @@ const benefitPositionFormSchemas = () => {
         idBenefitPosition: z.number().optional(),
         idPosition: z.number({ required_error: "El campo es requerido" }),
         idConcept: z.number({ required_error: "El campo es requerido" }),
+        amount: z.number().optional(),
     });
 
     const addEntityFormSchema = z.object({
         idPosition: z.number({ required_error: "El campo es requerido" }),
         idConcept: z.number({ required_error: "El campo es requerido" }),
+        amount: z.number().optional(),
     });
 
     return { editEntityFormSchema, addEntityFormSchema };

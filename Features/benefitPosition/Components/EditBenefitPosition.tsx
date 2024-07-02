@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditBenefitPositionQuery from "../Hooks/useEditBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
@@ -12,6 +11,9 @@ import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConcept
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
+import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
+import benefitPositionService from "../Services/benefitPositionService";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
     entity: IBenefitPosition;
@@ -41,11 +43,12 @@ const EditBenefitPosition = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const editEntity = useEditBenefitPositionQuery({
+    const editEntity = useEditEntityQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
+        service: benefitPositionService,
     });
 
     const onSubmit = (data: IBenefitPosition) => {
@@ -102,6 +105,25 @@ const EditBenefitPosition = ({
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">
                             {errors.idConcept.message?.toString()}
+                        </small>
+                    )}
+                </div>
+
+                <div className="field">
+                    <label htmlFor="amount" className="w-full">
+                        Monto
+                    </label>
+                    <GenericInputNumber
+                        {...register("amount")}
+                        id="amount"
+                        currentValue={entity.amount}
+                        isValid={!!errors.amount}
+                        setValue={setValue}
+                        watch={watch}
+                    />
+                    {errors.amount && (
+                        <small className="p-invalid text-danger">
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>
