@@ -1,6 +1,7 @@
 "use client";
 
 import { MenuItem } from "primereact/menuitem";
+import { ScrollPanel } from "primereact/scrollpanel";
 import { Steps } from "primereact/steps";
 import { useState } from "react";
 
@@ -9,10 +10,11 @@ const AddEmployeeTabs = () => {
     const items: MenuItem[] = [
         {
             label: "Información Personal",
-            command: (event) => {},
+            icon: "pi pi-id-card",
+            expanded: true,
         },
         {
-            label: "Seat",
+            label: "Información Del Empleado",
             command: (event) => {},
         },
         {
@@ -25,20 +27,19 @@ const AddEmployeeTabs = () => {
         },
     ];
 
-    const test = () => {
-        return <div>Test</div>;
-    };
-
     return (
-        <div className="card">
-            <Steps
-                model={items}
-                activeIndex={activeIndex}
-                onSelect={(e) => setActiveIndex(e.index)}
-                readOnly={false}
-            >
-                {test()}
-            </Steps>
+        <div className="col-12">
+            <h5>Agregar Empleado</h5>
+            <div className="card">
+                <Steps
+                    model={items}
+                    activeIndex={activeIndex}
+                    onSelect={(e) => setActiveIndex(e.index)}
+                    readOnly={false}
+                />
+                {activeIndex === 0 && <div>INFORMACIÓN PERSONAL</div>}
+                {activeIndex === 1 && <div>INFORMACIÓN DEL EMPLEADO</div>}
+            </div>
         </div>
     );
 };
