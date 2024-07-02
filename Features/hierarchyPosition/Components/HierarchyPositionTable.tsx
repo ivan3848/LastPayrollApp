@@ -173,7 +173,7 @@ const HierarchyPositionTable = ({
                 onFilterClear={clearFilters}
             ></Column>
 
-            <Column
+            {/* <Column
                 field="positionCode"
                 header="Código"
                 headerStyle={{ minWidth: "15rem" }}
@@ -184,11 +184,11 @@ const HierarchyPositionTable = ({
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
-            ></Column>
+            ></Column> */}
 
             <Column
-                field="position"
-                header="Posición"
+                field="departmentPosition"
+                header="Departamento y posición"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
@@ -197,7 +197,7 @@ const HierarchyPositionTable = ({
                 filterElement={
                     <TableDropDownFilter
                         useQuery={usePositionQuery}
-                        text="name"
+                        text="departmentPosition"
                         column="idPosition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}

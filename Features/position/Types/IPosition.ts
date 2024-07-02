@@ -2,6 +2,7 @@ export interface IPosition {
     name: string;
     occupation?: string;
     department?: string;
+    departmentPosition?: string;
     positionManager?: string;
     maxSalary?: number;
     minSalary?: number;

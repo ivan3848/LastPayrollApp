@@ -22,6 +22,7 @@ const hierarchyPositionFormSchemas = () => {
             }),
         positionCode: z.string().optional(),
         idPosition: z.number({ required_error: "El campo es requerido" }),
+        vacancyAmount: z.number().min(1),
     });
 
     return { editEntityFormSchema, addEntityFormSchema };
