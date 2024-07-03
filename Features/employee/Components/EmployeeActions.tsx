@@ -4,6 +4,7 @@ import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
+import FireEmployee from "./FireEmployee";
 
 interface Props {
     showEmployeeActions: boolean;
