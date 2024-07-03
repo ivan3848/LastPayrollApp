@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { bankEmployeeHistory } from "@/Features/employee/Services/employeeService";
-import { IBankEmployeeHistory } from "../Components/BankEmployeeHistory/types/IBankEmployeeHistory";
+import { bankEmployeeHistory, employeeChangeService } from "@/Features/employee/Services/employeeService";
+import { IBankEmployeeHistory } from "../types/IBankEmployeeHistory";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -8,7 +8,7 @@ interface Props {
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useEditEmployeeQuery = ({
+const useEditBankEmployeeHistoryQuery = ({
     toast,
     setEditEntityDialog,
     setSubmitted,
@@ -16,7 +16,7 @@ const useEditEmployeeQuery = ({
 }: Props) => {
     return useMutation({
         mutationFn: (entity: IBankEmployeeHistory) =>
-            bankEmployeeHistory.put(entity),
+            bankEmployeeHistory.post(entity),
 
         onError: (error: any) => {
             toast.current?.show({
@@ -41,4 +41,4 @@ const useEditEmployeeQuery = ({
     });
 };
 
-export default useEditEmployeeQuery;
+export default useEditBankEmployeeHistoryQuery;

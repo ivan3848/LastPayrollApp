@@ -5,10 +5,15 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import EmployeeChanges from "./EmployeeChanges";
-import { IEmployeeHistory } from "../../Types/IEmployeeHistory";
+import EmployeeChanges from "./BankEmployeeHistoryTable";
+import EditBankEmployeeHistory from "./EditBankEmployeeHistory";
+import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 
-const EmployeeWorking = () => {
+interface props {
+    id: number;
+}
+
+const BankEmployeeHistory = ({ id }: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -21,30 +26,26 @@ const EmployeeWorking = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IEmployeeHistory>();
+    } = useCrudModals<IBankEmployeeHistory>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IEmployeeHistory) => {
+    const handleEdit = (entity: IBankEmployeeHistory) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IEmployeeHistory) => {
+    const handleDelete = (entity: IBankEmployeeHistory) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = [
-        "Nombre del empleado",
-        "Fecha de inicio",
-        "Horario",
-    ];
+    const entityProperties = ["Numero De Cuenta", "Fecha de inicio", "Metodo"];
 
     return (
         <div className="grid">
@@ -61,22 +62,24 @@ const EmployeeWorking = () => {
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        id={id}
                     />
                 </Suspense>
 
-                {/* {editEntityDialog && (
-                        // <EditEmployeeWorkScheduler
-                        //     entity={entity!}
-                        //     editEntityDialog={editEntityDialog}
-                        //     setEditEntityDialog={setEditEntityDialog}
-                        //     setSubmitted={setSubmitted}
-                        //     toast={toast}
-                        // />
-                    )} */}
+                {editEntityDialog && (
+                    <EditBankEmployeeHistory
+                        setEditEntityDialog={setEditEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        entity={entity!}
+                        editEntityDialog={false}
+                    />
+                )}
+
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idWorkScheduler ?? 0}
-                        endpoint="employee/employee"
+                        id={entity?.idBankEmployeeHistory ?? 0}
+                        endpoint="employee/bankEmployeeHistory"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
@@ -88,4 +91,4 @@ const EmployeeWorking = () => {
     );
 };
 
-export default EmployeeWorking;
+export default BankEmployeeHistory;

@@ -1,12 +1,12 @@
-interface IEmployee { 
-    IdEmployee: number;
+interface IEmployee {
+    IdEmployee?: number;
     IdStatusActionClass?: number;
     IdWorkScheduler?: number;
     IdHierarchyPosition?: number;
     StartDate?: Date;
-    salary: number;
+    salary?: number;
     Email?: string;
-    IdHierarchyPositionManager: number;
+    IdHierarchyPositionManager?: number;
     Sindicate?: boolean;
     ExtraHours?: boolean;
     Temporal?: boolean;

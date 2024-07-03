@@ -4,7 +4,7 @@ import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
-import EmployeeWorking from "./BankEmployeeHistory/EmployeeWorking";
+import EmployeeWorking from "./BankEmployeeHistory/BankEmployeeHistory";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -55,7 +55,7 @@ const EmployeeActions = ({
                         <EmployeeOptions setAction={setOpenAction} />
                     )}
                     {openAction === EmployeeOptionsEnum.BankManagement && (
-                        <EmployeeWorking />
+                        <EmployeeWorking id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>
