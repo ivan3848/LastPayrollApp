@@ -53,6 +53,9 @@ const EmployeeActions = ({
                     {openAction === EmployeeOptionsEnum.NoOption && (
                         <EmployeeOptions setAction={setOpenAction} />
                     )}
+                    {openAction === EmployeeOptionsEnum.FireEmployee && (
+                        <FireEmployee employee={employee} />
+                    )}
                 </div>
             </Dialog>
         </>
