@@ -4,8 +4,8 @@ const editBankEmployeeHistory = () => {
     const editEntityFormSchema = z.object({
       idBank: z.number(),
         accountNumber: z.string(),
-        paymentMethod: z.string(),
-
+        paymentMethod: z.string().optional(),
+        idStatusAccountType: z.number(),
     })
 
 

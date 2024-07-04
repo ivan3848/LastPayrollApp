@@ -12,6 +12,8 @@ import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import editBankEmployeeHistory from "./Validation/editBankEmployeeHistory";
 import useBankEmployeeHistoryQuery from "./Hooks/useBankEmployeeHistoryQuery";
 import { InputText } from "primereact/inputtext";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -28,8 +30,6 @@ const EditBankEmployeeHistory = ({
     toast,
 }: Props) => {
     const { editEntityFormSchema } = editBankEmployeeHistory();
-    const changeType = "Cambio de horario";
-
     const { params } = useParamFilter();
 
     const listOfDependencies: boolean[] = [true];
@@ -78,126 +78,129 @@ const EditBankEmployeeHistory = ({
         setEditEntityDialog(false);
     };
 
-    const paymentOptions = [
-        { value: "direct deposit", label: "Direct Deposit" },
-        { value: "check", label: "Check" },
-        { value: "cash", label: "Cash" },
+    const options = [
+        { label: "Activo", value: 1 },
+        { label: "Inactivo", value: 0 },
     ];
-
     return (
-        <div className="edit-bank-employee-history">
-            <div className="field">
-                <label htmlFor="name" className="w-full">
+        <div className="card p-fluid relative">
+            <div className="field mb-4">
+                <label htmlFor="name" className="text-lg font-semibold">
                     Formulario Para cambios de banco
                 </label>
             </div>
-
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <div
-                    className="p-fluid grid form-grid"
-                    style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                        width: "100%",
-                        padding: "0 1rem",
-                        margin: "1rem",
-                    }}
-                >
-                    <div className="form-group">
-                        <label htmlFor="idBank" className="w-full">
-                            Banco
-                        </label>
-                        <GenericDropDown
-                            id="idBank"
-                            isValid={!!errors.idBank}
-                            text="name"
-                            idValueEdit={entity.idBank}
-                            useQuery={useBankQuery}
-                            setValue={setValue}
-                            watch={watch}
-                        />
-                        {errors.idBank && (
-                            <small className="p-invalid text-danger">
-                                {errors.idBank.message?.toString()}
-                            </small>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="accountNumber" className="w-full">
-                            Numero de cuenta
-                        </label>
-                        <InputText
-                            {...register("accountNumber")}
-                            id="accountNumber"
-                            autoFocus
-                            defaultValue={entity?.accountNumber}
-                        />
-                        {errors.accountNumber && (
-                            <small className="p-invalid text-danger">
-                                {errors.accountNumber.message?.toString()}
-                            </small>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="buttondisplay">Fecha de Inicio</label>
-                        <Calendar
-                            value={start}
-                            showIcon
-                            onChange={(e) => setStart(e.value)}
-                        />
-                        {errors.startDate && (
-                            <small className="p-invalid text-danger">
-                                {errors.startDate.message?.toString()}
-                            </small>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="buttondisplay">Fecha de Final</label>
-                        <Calendar
-                            id="buttondisplay"
-                            value={start}
-                            showIcon
-                            onChange={(e) => setStart(e.value)}
-                        />
-                        {errors.endDate && (
-                            <small className="p-invalid text-danger">
-                                {errors.endDate.message?.toString()}
-                            </small>
-                        )}
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="paymentMethod">Método de Pago</label>
-                        <select
-                            {...register("paymentMethod")}
-                            id="paymentMethod"
-                            className="w-full p-inputtext p-component p-filled p-inputtext-filled p-dropdown"
-                        >
-                            {paymentOptions.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="isActive">Método de Pago</label>
-                        <select
-                            {...register("isActive")}
-                            id="isActive"
-                            className="w-full p-inputtext p-component p-filled p-inputtext-filled p-dropdown"
-                        >
-                            <option value={"0"}>Activo</option>
-                            <option value={"1"}>Inactivo</option>
-                        </select>
-                    </div>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="grid grid-cols-1 lg:grid-cols-2 gap-4"
+            >
+                <div className="form-group">
+                    <label htmlFor="idBank" className="block mb-1">
+                        Banco
+                    </label>
+                    <GenericDropDown
+                        id="idBank"
+                        isValid={!!errors.idBank}
+                        text="name"
+                        idValueEdit={entity.idBank}
+                        useQuery={useBankQuery}
+                        setValue={setValue}
+                        watch={watch}
+                    />
+                    {errors.idBank && (
+                        <small className="text-red-600">
+                            {errors.idBank.message?.toString()}
+                        </small>
+                    )}
                 </div>
 
-                <DialogFooterButtons hideDialog={hideDialog} />
+                <div className="form-group">
+                    <label htmlFor="accountNumber" className="block mb-1">
+                        Numero de cuenta
+                    </label>
+                    <InputText
+                        {...register("accountNumber")}
+                        id="accountNumber"
+                        autoFocus
+                        defaultValue={entity?.accountNumber}
+                    />
+                    {errors.accountNumber && (
+                        <small className="text-red-600">
+                            {errors.accountNumber.message?.toString()}
+                        </small>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="startDate" className="block mb-1">
+                        Fecha de Inicio
+                    </label>
+                    <Calendar
+                        value={start}
+                        showIcon
+                        onChange={(e) => setStart(e.value)}
+                    />
+                    {errors.startDate && (
+                        <small className="text-red-600">
+                            {errors.startDate.message?.toString()}
+                        </small>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="endDate" className="block mb-1">
+                        Fecha de Final
+                    </label>
+                    <Calendar
+                        id="endDate"
+                        value={start}
+                        showIcon
+                        onChange={(e) => setStart(e.value)}
+                    />
+                    {errors.endDate && (
+                        <small className="text-red-600">
+                            {errors.endDate.message?.toString()}
+                        </small>
+                    )}
+                </div>
+
+                {/* <div className="form-group">
+                    <label htmlFor="isActive" className="block mb-1">
+                        Estado
+                    </label>
+
+                    <SelectButton
+                        value={"isActive"}
+                        {...register("isActive")}
+                        options={options}
+                    />
+                    {errors.isActive && (
+                        <small className="text-red-600">
+                            {errors.isActive.message?.toString()}
+                        </small>
+                    )}
+                </div> */}
+
+                <div className="form-group">
+                    <label htmlFor="idStatus" className="block mb-1">
+                        Método de pago
+                    </label>
+                    <GenericStatusDropDown
+                        id="idStatusAccountType"
+                        isValid={!!errors.idStatusAccountType}
+                        setValue={setValue}
+                        watch={watch}
+                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
+                        idValueEdit={entity.idStatusAccountType}
+                    />
+                    {errors.idStatusAccountType && (
+                        <small className="text-red-600">
+                            {errors.idStatusAccountType.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="ml-auto">
+                    <DialogFooterButtons hideDialog={hideDialog} />
+                </div>
             </form>
         </div>
     );

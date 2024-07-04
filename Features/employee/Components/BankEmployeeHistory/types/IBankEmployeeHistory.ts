@@ -7,6 +7,7 @@ export interface IBankEmployeeHistory {
     accountNumber?: string;
     startDate?: string;
     endDate?: string;
-    isActive?: boolean;
+    isActive?: number;
     bankName?: string;
+    idStatusAccountType?: number;
 }

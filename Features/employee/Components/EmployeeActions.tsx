@@ -44,7 +44,7 @@ const EmployeeActions = ({
                 resizable
                 header={headerTitle}
                 focusOnShow
-                style={{ width: "850px" }}
+                style={{ width: "80vw" }}
             >
                 <div className="mb-5">
                     <EmployeeProfile employee={employee} />
