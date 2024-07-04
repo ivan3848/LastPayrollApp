@@ -43,7 +43,7 @@ const LandingPage: Page = () => {
             ></div>
             <div className="landing-wrapper">
                 <div className="flex align-items-center justify-content-between relative lg:static py-6 px-4 mx-0 md:px-7 lg:px-8 lg:py-6 lg:mx-8">
-                    <Link href="/" className="cursor-pointer">
+                    <Link href="/employee" className="cursor-pointer">
                         <svg
                             width="124"
                             height="22"
