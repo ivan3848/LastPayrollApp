@@ -1,38 +1,38 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { ICountry } from "../Types/ICountry";
-import countryFormSchemas from "../Validations/CountryFormSchemas";
-import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
-import countryService from "../Services/countryService";
+import groupManagerService from "../Services/groupManagerService";
+import { IGroupManager } from "../Types/IGroupManager";
+import groupManagerFormSchemas from "../Validations/GroupManagerFormSchemas";
 
 interface Props {
-    entity: ICountry;
+    entity: IGroupManager;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const EditCountry = ({
+const EditGroupManager = ({
     entity,
     editEntityDialog,
     setEditEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { editEntityFormSchema } = countryFormSchemas();
+    const { editEntityFormSchema } = groupManagerFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
         formState: { errors },
-    } = useForm<ICountry>({
+    } = useForm<IGroupManager>({
         resolver: zodResolver(editEntityFormSchema),
     });
 
@@ -41,11 +41,11 @@ const EditCountry = ({
         setEditEntityDialog,
         setSubmitted,
         reset,
-        service: countryService
+        service: groupManagerService,
     });
 
-    const onSubmit = (data: ICountry) => {
-        data.idCountry = entity.idCountry;
+    const onSubmit = (data: IGroupManager) => {
+        data.idGroupManager = entity.idGroupManager;
         editEntity.mutate(data);
         return;
     };
@@ -58,7 +58,7 @@ const EditCountry = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "450px" }}
-            header="Editar País"
+            header="Editar Grupo"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -66,7 +66,7 @@ const EditCountry = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        País
+                        Grupo
                     </label>
                     <InputText
                         {...register("name")}
@@ -89,4 +89,4 @@ const EditCountry = ({
     );
 };
 
-export default EditCountry;
+export default EditGroupManager;

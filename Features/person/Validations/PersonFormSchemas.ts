@@ -24,8 +24,17 @@ const personFormSchemas = () => {
         secondLastName: z
             .string()
             .optional(),
-        employeeImage: z.string().optional(),
-        birthDate: z.date({ message: "El campo es requerido" }).optional(),
+        birthDate: z.date({ required_error: "El campo es requerido" }).refine((date) => {
+            const today = new Date();
+            const age = today.getFullYear() - date.getFullYear();
+            const m = today.getMonth() - date.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < date.getDate())) {
+                return age - 1 >= 18;
+            }
+            return age >= 18;
+        }, {
+            message: "La persona debe ser mayor de edad (18 años o más)",
+        }),
         idStatusMarital: z.number().optional(),
         idNationality: z.number({ required_error: "El campo es requerido" }),
         idGender: z.number({ required_error: "El campo es requerido" }),
@@ -58,7 +67,6 @@ const personFormSchemas = () => {
         secondLastName: z
             .string()
             .optional(),
-        employeeImage: z.string().optional(),
         birthDate: z.date({ required_error: "El campo es requerido" }).refine((date) => {
             const today = new Date();
             const age = today.getFullYear() - date.getFullYear();

@@ -182,7 +182,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                         )}
                     </div>
                     <div className="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="idGender">Genero</label>
+                        <label htmlFor="idGender">Género</label>
                         <GenericStatusDropDown
                             id="idGender"
                             isValid={!!errors.idGender}

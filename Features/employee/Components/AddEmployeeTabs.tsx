@@ -5,6 +5,7 @@ import { Steps } from "primereact/steps";
 import { useState } from "react";
 import AddPerson from "./../../person/Components/AddPerson";
 import { IPerson } from "@/Features/person/Types/IPerson";
+import AddEmployee from "./AddEmployee";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
@@ -16,13 +17,16 @@ const AddEmployeeTabs = () => {
         },
         {
             label: "Información Del Empleado",
+            // disabled: !!!person?.identification,
         },
-        {
-            label: "Payment",
-        },
-        {
-            label: "Confirmation",
-        },
+        // {
+        //     label: "Payment",
+        //     disabled: !!!employee?.idEmployee,
+        // },
+        // {
+        //     label: "Confirmation",
+        //     disabled: !!!person?.identification,
+        // },
     ];
 
     return (
@@ -36,8 +40,12 @@ const AddEmployeeTabs = () => {
                     readOnly={false}
                     className="mb-6"
                 />
-                {step === 0 && <AddPerson setStep={setStep} setPerson={setPerson}/>}
-                {step === 1 && <div>INFORMACIÓN DEL EMPLEADO</div>}
+                {step === 0 && (
+                    <AddPerson setStep={setStep} setPerson={setPerson} />
+                )}
+                {step === 1 && (
+                    <AddEmployee setStep={setStep} setEmployee={setEmployee} />
+                )}
             </div>
         </div>
     );
