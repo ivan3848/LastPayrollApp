@@ -16,6 +16,14 @@ import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDro
 import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
 import useContractTypeQuery from "@/Features/contractType/Hooks/useContractTypeQuery";
 import useGroupManagerQuery from "@/Features/groupManager/Hooks/useGroupManagerQuery";
+import useDisabilityQuery from "@/Features/disability/Hooks/useDisabilityQuery";
+import usePayrollAreaQuery from "@/Features/payrollArea/Hooks/usePayrollAreaQuery";
+import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
+import {
+    FileUpload,
+    FileUploadHandlerEvent,
+    FileUploadUploadEvent,
+} from "primereact/fileupload";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
@@ -50,6 +58,20 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
     const onPositionManagerChange = () => {
         setFilters([{ column: "idPosition", value: watch("idPosition") }]);
         setAllData(true);
+    };
+
+    const onImageUploadChange = async (event: FileUploadHandlerEvent) => {
+        const file = event.files[0];
+        const reader = new FileReader();
+        let blob = await fetch(URL.createObjectURL(file)).then((r) => r.blob());
+
+        reader.readAsDataURL(blob);
+
+        reader.onloadend = function () {
+            const base64data = reader.result;
+            console.log(base64data);
+            setValue("employeeImage", base64data?.toString() ?? "");
+        };
     };
 
     const onSubmit = (data: IEmployee) => {
@@ -136,7 +158,22 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             </small>
                         )}
                     </div>
-
+                    <div className="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="idPayrollArea">Area De Nómina</label>
+                        <GenericDropDown
+                            id="idPayrollArea"
+                            isValid={!!errors.idPayrollArea}
+                            setValue={setValue}
+                            watch={watch}
+                            text="name"
+                            useQuery={usePayrollAreaQuery}
+                        />
+                        {errors.idPayrollArea && (
+                            <small className="p-invalid text-red-500">
+                                {errors.idPayrollArea.message?.toString()}
+                            </small>
+                        )}
+                    </div>
                     <div className="field col-12 md:col-6 lg:col-4">
                         <label htmlFor="functionDescription">
                             Descripción De Función
@@ -149,22 +186,6 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                         {errors.functionDescription && (
                             <small className="p-invalid text-red-500">
                                 {errors.functionDescription.message?.toString()}
-                            </small>
-                        )}
-                    </div>
-                    <div className="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="idPayrollArea">Area De Nómina</label>
-                        {/* <GenericDropDown
-                            id="idPayrollArea"
-                            isValid={!!errors.idPayrollArea}
-                            setValue={setValue}
-                            watch={watch}
-                            text="name"
-                            useQuery={useNationalityQuery}
-                        /> */}
-                        {errors.idPayrollArea && (
-                            <small className="p-invalid text-red-500">
-                                {errors.idPayrollArea.message?.toString()}
                             </small>
                         )}
                     </div>
@@ -291,6 +312,64 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                                 {errors.idGroupManager.message?.toString()}
                             </small>
                         )}
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="idDisability">Discapacidad</label>
+                        <GenericDropDown
+                            id="idDisability"
+                            isValid={!!errors.idDisability}
+                            setValue={setValue}
+                            watch={watch}
+                            text="name"
+                            useQuery={useDisabilityQuery}
+                        />
+                        {errors.idDisability && (
+                            <small className="p-invalid text-red-500">
+                                {errors.idDisability.message?.toString()}
+                            </small>
+                        )}
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="workRelation"
+                                text="Labor Directa"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="sindicate"
+                                text="Sindicato"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="extraHours"
+                                text="Genera Horas Extras"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field-checkbox">
+                            <FileUpload
+                                mode="basic"
+                                name="demo[]"
+                                url="/api/upload"
+                                accept="image/*"
+                                customUpload
+                                uploadHandler={onImageUploadChange}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

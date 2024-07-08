@@ -1,11 +1,9 @@
-import React from "react";
-import { IEmployee } from "../Types/IEmployee";
-import { Card } from "primereact/card";
-import { Tag } from "primereact/tag";
 import emptyImage from "@/constants/emptyImage";
-import { classNames } from "primereact/utils";
 import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";
+import { Tag } from "primereact/tag";
+import { classNames } from "primereact/utils";
+import { IEmployee } from "../Types/IEmployee";
 
 interface Props {
     employee: IEmployee;
@@ -33,7 +31,7 @@ const EmployeeProfile = ({ employee }: Props) => {
                     <div className="flex-row">
                         <img
                             className="sm:w-16rem xl:w-9rem shadow-2 xl:block mx-auto border-circle mb-2"
-                            src={`data:image/jpeg;base64,${
+                            src={`${
                                 employee.employeeImage ?? emptyImage
                             }`}
                             alt={employee.employeeName!}
