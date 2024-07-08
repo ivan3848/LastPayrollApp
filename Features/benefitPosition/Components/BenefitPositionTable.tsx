@@ -1,10 +1,11 @@
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
+import { CACHE_KEY_BENEFIT_POSITION } from "@/constants/cacheKeys";
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -12,10 +13,8 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useBenefitPositionQuery from "../Hooks/useBenefitPositionQuery";
+import benefitPositionService from "../Services/benefitPositionService";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
-import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
-import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 
 interface Props {
     submitted: boolean;
@@ -41,9 +40,11 @@ const BenefitPositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useBenefitPositionQuery(
+    const { data, isLoading } = useEntityQuery(
         params,
-        listOfDependencies
+        listOfDependencies,
+        CACHE_KEY_BENEFIT_POSITION,
+        benefitPositionService
     );
 
     const onPage = (event: DataTablePageEvent) => {
@@ -63,6 +64,15 @@ const BenefitPositionTable = ({
                 clearSorts();
                 break;
         }
+    };
+
+    const onFilter = (event: any) => {
+        setFilters([
+            {
+                column: event.field,
+                value: event.constraints.constraints?.[0].value,
+            },
+        ]);
     };
 
     const header = (
@@ -125,6 +135,7 @@ const BenefitPositionTable = ({
                 showClearButton={false}
                 onFilterClear={clearFilters}
             ></Column>
+
             <Column
                 field="concept"
                 header="Concepto"
@@ -143,6 +154,18 @@ const BenefitPositionTable = ({
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
+                field="amount"
+                header="Monto"
+                sortable
+                filter
+                filterField="amount"
+                filterPlaceholder="Buscar por monto"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
 

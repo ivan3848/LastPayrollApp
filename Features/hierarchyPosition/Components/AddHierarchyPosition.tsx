@@ -12,6 +12,7 @@ import hierarchyPositionFormSchemas from "../Validations/HierarchyPositionFormSc
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import hierarchyPositionService from "../Services/hierarchyPositionService";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
     addEntityDialog: boolean;
@@ -67,6 +68,25 @@ const AddHierarchyPosition = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
+                    <label htmlFor="idPosition" className="w-full">
+                        Posición
+                    </label>
+                    <GenericDropDown
+                        id="idPosition"
+                        isValid={!!errors.idPosition}
+                        text="departmentPosition"
+                        useQuery={usePositionQuery}
+                        setValue={setValue}
+                        watch={watch}
+                        onChange={(e) => setValue("name", e.value.name)}
+                    />
+                    {errors.idPosition && (
+                        <small className="p-invalid text-danger">
+                            {errors.idPosition.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
                     <label htmlFor="name" className="w-full">
                         Vacante
                     </label>
@@ -74,6 +94,7 @@ const AddHierarchyPosition = ({
                         {...register("name")}
                         id="name"
                         autoFocus
+                        defaultValue={watch("name")}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
@@ -86,36 +107,20 @@ const AddHierarchyPosition = ({
                 </div>
                 <div className="field">
                     <label htmlFor="positionCode" className="w-full">
-                        Código
+                        Cantidad de vacantes
                     </label>
-                    <InputText
-                        {...register("positionCode")}
-                        id="positionCode"
-                        className={classNames({
-                            "p-invalid": errors.name,
-                        })}
-                    />
-                    {errors.positionCode && (
-                        <small className="p-invalid text-danger">
-                            {errors.positionCode.message?.toString()}
-                        </small>
-                    )}
-                </div>
-                <div className="field">
-                    <label htmlFor="idPosition" className="w-full">
-                        Posición
-                    </label>
-                    <GenericDropDown
-                        id="idPosition"
-                        isValid={!!errors.idPosition}
-                        text="name"
-                        useQuery={usePositionQuery}
+                    <GenericInputNumber
+                        {...register("vacancyAmount")}
+                        id="vacancyAmount"
+                        isValid={!!errors.vacancyAmount}
                         setValue={setValue}
                         watch={watch}
+                        minValue={1}
+                        currentValue={1}
                     />
-                    {errors.idPosition && (
+                    {errors.vacancyAmount && (
                         <small className="p-invalid text-danger">
-                            {errors.idPosition.message?.toString()}
+                            {errors.vacancyAmount.message?.toString()}
                         </small>
                     )}
                 </div>

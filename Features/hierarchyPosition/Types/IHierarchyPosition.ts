@@ -6,4 +6,5 @@ export interface IHierarchyPosition {
     position?: string;
     idPosition: number;
     isOccupied?: boolean;
+    vacancyAmount?: number;
 }

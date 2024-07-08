@@ -44,7 +44,7 @@ const BenefitPosition = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Posición", "Concepto", "Acciones"];
+    const entityProperties = ["Posición", "Concepto", "Monto", "Acciones"];
 
     return (
         <div className="grid">

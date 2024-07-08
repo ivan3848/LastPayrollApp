@@ -1,10 +1,10 @@
 import { Dialog } from "primereact/dialog";
 import { useState } from "react";
+import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
-import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
-import EmployeeWorking from "./BankEmployeeHistory/BankEmployeeHistory";
+import FireEmployee from "./FireEmployee";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -53,6 +53,9 @@ const EmployeeActions = ({
                 <div>
                     {openAction === EmployeeOptionsEnum.NoOption && (
                         <EmployeeOptions setAction={setOpenAction} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.FireEmployee && (
+                        <FireEmployee employee={employee} />
                     )}
                     {openAction === EmployeeOptionsEnum.BankManagement && (
                         <EmployeeWorking id={employee.idEmployee!} />

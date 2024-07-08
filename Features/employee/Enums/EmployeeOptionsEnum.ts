@@ -3,4 +3,5 @@ export enum EmployeeOptionsEnum {
     CoverPosition = "Cubrir Posición",
     BankManagement = "Gestión Bancaria",
     Dependant = "Dependientes",
+    FireEmployee = "Desvincular",
 }

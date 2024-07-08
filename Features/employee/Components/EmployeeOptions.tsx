@@ -42,6 +42,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Desvincular"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.FireEmployee)}
                 />
             </Fieldset>
 

@@ -72,6 +72,26 @@ const EditHierarchyPosition = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
+                    <label htmlFor="idPosition" className="w-full">
+                        Posición
+                    </label>
+                    <GenericDropDown
+                        id="idPosition"
+                        isValid={!!errors.idPosition}
+                        text="name"
+                        useQuery={usePositionQuery}
+                        setValue={setValue}
+                        watch={watch}
+                        idValueEdit={entity.idPosition}
+                        isDisabled
+                    />
+                    {errors.idPosition && (
+                        <small className="p-invalid text-danger">
+                            {errors.idPosition.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="field">
                     <label htmlFor="name" className="w-full">
                         Vacante
                     </label>
@@ -90,7 +110,7 @@ const EditHierarchyPosition = ({
                         </small>
                     )}
                 </div>
-                <div className="field">
+                {/* <div className="field">
                     <label htmlFor="positionCode" className="w-full">
                         Código
                     </label>
@@ -107,26 +127,7 @@ const EditHierarchyPosition = ({
                             {errors.positionCode.message?.toString()}
                         </small>
                     )}
-                </div>
-                <div className="field">
-                    <label htmlFor="idPosition" className="w-full">
-                        Posición
-                    </label>
-                    <GenericDropDown
-                        id="idPosition"
-                        isValid={!!errors.idPosition}
-                        text="name"
-                        useQuery={usePositionQuery}
-                        setValue={setValue}
-                        watch={watch}
-                        idValueEdit={entity.idPosition}
-                    />
-                    {errors.idPosition && (
-                        <small className="p-invalid text-danger">
-                            {errors.idPosition.message?.toString()}
-                        </small>
-                    )}
-                </div>
+                </div> */}
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>

@@ -5,12 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useAddBenefitPositionQuery from "../Hooks/useAddBenefitPositionQuery";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import benefitPositionFormSchemas from "../Validations/benefitPositionFormSchemas";
 
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import benefitPositionService from "../Services/benefitPositionService";
 
 interface Props {
     addEntityDialog: boolean;
@@ -32,16 +34,18 @@ const AddBenefitPosition = ({
         reset,
         setValue,
         watch,
+        register,
         formState: { errors },
     } = useForm<IBenefitPosition>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddBenefitPositionQuery({
+    const addEntity = useAddEntityQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
+        service: benefitPositionService,
     });
 
     const onSubmit = (data: IBenefitPosition) => {
@@ -95,6 +99,24 @@ const AddBenefitPosition = ({
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">
                             {errors.idConcept.message?.toString()}
+                        </small>
+                    )}
+                </div>
+
+                <div className="field">
+                    <label htmlFor="amount" className="w-full">
+                        Monto
+                    </label>
+                    <GenericInputNumber
+                        {...register("amount")}
+                        id="amount"
+                        isValid={!!errors.amount}
+                        setValue={setValue}
+                        watch={watch}
+                    />
+                    {errors.amount && (
+                        <small className="p-invalid text-danger">
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>

@@ -59,7 +59,6 @@ const Login: Page = () => {
             return;
         }
         setLoading(false);
-
         show(response);
     };
 

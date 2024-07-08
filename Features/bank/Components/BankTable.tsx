@@ -149,7 +149,7 @@ const BankTable = ({
             ></Column>
 
             <Column
-                field="StatusAccountType"
+                field="statusAccountType"
                 header="Método de pago"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
