@@ -3,7 +3,6 @@ export interface IBankEmployeeHistory {
     idEmployee?: number;
     idBank?: number;
     idEmployeeAuthorize?: number;
-    paymentMethod?: string;
     accountNumber?: string;
     startDate?: string;
     endDate?: string;

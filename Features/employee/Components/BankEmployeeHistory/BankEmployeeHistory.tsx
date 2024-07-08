@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import EmployeeChanges from "./BankEmployeeHistoryTable";
 import EditBankEmployeeHistory from "./EditBankEmployeeHistory";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
+import AddBankEmployeeHistory from "./AddBankEmployeeHistory";
 
 interface props {
     id: number;
@@ -45,7 +46,12 @@ const BankEmployeeHistory = ({ id }: props) => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Numero De Cuenta", "Fecha de inicio", "Metodo"];
+    const entityProperties = [
+        "Numero De Cuenta",
+        "Fecha de inicio",
+        "Método de pago",
+        "Fecha final",
+    ];
 
     return (
         <div className="grid">
@@ -62,7 +68,7 @@ const BankEmployeeHistory = ({ id }: props) => {
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
-                        id={id}
+                        idEmployee={id}
                     />
                 </Suspense>
 
@@ -73,6 +79,16 @@ const BankEmployeeHistory = ({ id }: props) => {
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={false}
+                    />
+                )}
+
+                {addEntityDialog && (
+                    <AddBankEmployeeHistory
+                        addEntityDialog={addEntityDialog}
+                        setAddEntityDialog={setAddEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        id={id}
                     />
                 )}
 

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { bankEmployeeHistory } from "@/Features/employee/Services/employeeService";
 import { IBankEmployeeHistory } from "../Components/BankEmployeeHistory/types/IBankEmployeeHistory";
+import bankEmployeeHistory from "../Components/BankEmployeeHistory/Services/bankEmpleeHistoryService";
 
 interface Props {
     toast: React.MutableRefObject<any>;

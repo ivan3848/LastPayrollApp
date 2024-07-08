@@ -9,11 +9,12 @@ import { Nullable } from "primereact/ts-helpers";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
-import editBankEmployeeHistory from "./Validation/editBankEmployeeHistory";
+import editBankEmployeeHistory from "./Validation/BankEmployeeHistoryFormSchema";
 import useBankEmployeeHistoryQuery from "./Hooks/useBankEmployeeHistoryQuery";
 import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
+import { SelectButton } from "primereact/selectbutton";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -43,6 +44,7 @@ const EditBankEmployeeHistory = ({
     }
 
     const [start, setStart] = useState<Nullable<Date>>(new Date());
+    const [endDate, setEndDate] = useState<Nullable<Date>>(new Date());
 
     const {
         handleSubmit,
@@ -66,10 +68,9 @@ const EditBankEmployeeHistory = ({
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
         data.startDate = start?.toISOString();
-        data.endDate = start?.toISOString();
+        data.endDate = endDate?.toISOString();
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
-        data.paymentMethod = data.paymentMethod;
         editEntity.mutate(data);
         return;
     };
@@ -112,8 +113,25 @@ const EditBankEmployeeHistory = ({
                         </small>
                     )}
                 </div>
-
                 <div className="form-group">
+                    <label htmlFor="idStatus" className="block mb-1">
+                        Método de pago
+                    </label>
+                    <GenericStatusDropDown
+                        id="idStatusAccountType"
+                        isValid={!!errors.idStatusAccountType}
+                        setValue={setValue}
+                        watch={watch}
+                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
+                        idValueEdit={entity.idStatusAccountType}
+                    />
+                    {errors.idStatusAccountType && (
+                        <small className="text-red-600">
+                            {errors.idStatusAccountType.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="form-group ">
                     <label htmlFor="accountNumber" className="block mb-1">
                         Numero de cuenta
                     </label>
@@ -124,9 +142,9 @@ const EditBankEmployeeHistory = ({
                         defaultValue={entity?.accountNumber}
                     />
                     {errors.accountNumber && (
-                        <small className="text-red-600">
+                        <p className="text-red-600">
                             {errors.accountNumber.message?.toString()}
-                        </small>
+                        </p>
                     )}
                 </div>
 
@@ -152,9 +170,9 @@ const EditBankEmployeeHistory = ({
                     </label>
                     <Calendar
                         id="endDate"
-                        value={start}
+                        value={endDate}
                         showIcon
-                        onChange={(e) => setStart(e.value)}
+                        onChange={(e) => setEndDate(e.value)}
                     />
                     {errors.endDate && (
                         <small className="text-red-600">
@@ -163,41 +181,6 @@ const EditBankEmployeeHistory = ({
                     )}
                 </div>
 
-                {/* <div className="form-group">
-                    <label htmlFor="isActive" className="block mb-1">
-                        Estado
-                    </label>
-
-                    <SelectButton
-                        value={"isActive"}
-                        {...register("isActive")}
-                        options={options}
-                    />
-                    {errors.isActive && (
-                        <small className="text-red-600">
-                            {errors.isActive.message?.toString()}
-                        </small>
-                    )}
-                </div> */}
-
-                <div className="form-group">
-                    <label htmlFor="idStatus" className="block mb-1">
-                        Método de pago
-                    </label>
-                    <GenericStatusDropDown
-                        id="idStatusAccountType"
-                        isValid={!!errors.idStatusAccountType}
-                        setValue={setValue}
-                        watch={watch}
-                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
-                        idValueEdit={entity.idStatusAccountType}
-                    />
-                    {errors.idStatusAccountType && (
-                        <small className="text-red-600">
-                            {errors.idStatusAccountType.message?.toString()}
-                        </small>
-                    )}
-                </div>
                 <div className="ml-auto">
                     <DialogFooterButtons hideDialog={hideDialog} />
                 </div>
