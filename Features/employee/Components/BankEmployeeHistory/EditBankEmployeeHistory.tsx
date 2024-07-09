@@ -14,7 +14,7 @@ import useBankEmployeeHistoryQuery from "./Hooks/useBankEmployeeHistoryQuery";
 import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
-import { SelectButton } from "primereact/selectbutton";
+import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -94,7 +94,7 @@ const EditBankEmployeeHistory = ({
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-4"
             >
-                <div className="form-group">
+                <div className="field col-12 md:col-3">
                     <label htmlFor="idBank" className="block mb-1">
                         Banco
                     </label>
@@ -112,8 +112,6 @@ const EditBankEmployeeHistory = ({
                             {errors.idBank.message?.toString()}
                         </small>
                     )}
-                </div>
-                <div className="form-group">
                     <label htmlFor="idStatus" className="block mb-1">
                         Método de pago
                     </label>
@@ -131,24 +129,22 @@ const EditBankEmployeeHistory = ({
                         </small>
                     )}
                 </div>
-                <div className="form-group ">
-                    <label htmlFor="accountNumber" className="block mb-1">
-                        Numero de cuenta
+                <div className="field col-12 md:col-3">
+                    <label htmlFor="endDate" className="block mb-1">
+                        Fecha de Final
                     </label>
-                    <InputText
-                        {...register("accountNumber")}
-                        id="accountNumber"
-                        autoFocus
-                        defaultValue={entity?.accountNumber}
+                    <Calendar
+                        id="endDate"
+                        value={endDate}
+                        showIcon
+                        onChange={(e) => setEndDate(e.value)}
                     />
-                    {errors.accountNumber && (
-                        <p className="text-red-600">
-                            {errors.accountNumber.message?.toString()}
-                        </p>
+                    {errors.endDate && (
+                        <small className="text-red-600">
+                            {errors.endDate.message?.toString()}
+                        </small>
                     )}
-                </div>
 
-                <div className="form-group">
                     <label htmlFor="startDate" className="block mb-1">
                         Fecha de Inicio
                     </label>
@@ -164,24 +160,42 @@ const EditBankEmployeeHistory = ({
                     )}
                 </div>
 
-                <div className="form-group">
-                    <label htmlFor="endDate" className="block mb-1">
-                        Fecha de Final
+                <div className="field col-12 md:col-3">
+                    <label htmlFor="accountNumber" className="block mb-1">
+                        Numero de cuenta
                     </label>
-                    <Calendar
-                        id="endDate"
-                        value={endDate}
-                        showIcon
-                        onChange={(e) => setEndDate(e.value)}
+                    <InputText
+                        {...register("accountNumber")}
+                        id="accountNumber"
+                        autoFocus
+                        defaultValue={entity?.accountNumber}
                     />
-                    {errors.endDate && (
-                        <small className="text-red-600">
-                            {errors.endDate.message?.toString()}
-                        </small>
+                    {errors.accountNumber && (
+                        <p className="text-red-600">
+                            {errors.accountNumber.message?.toString()}
+                        </p>
                     )}
+
+                    <div className="mt-5">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isDeposit"
+                                text={"Para deposito"}
+                                watch={watch}
+                                setValue={setValue}
+                                currentValue={entity.isDeposit}
+                            />
+                        </div>
+
+                        {errors.isDeposit && (
+                            <small className="text-red-600">
+                                {errors.isDeposit.message?.toString()}
+                            </small>
+                        )}
+                    </div>
                 </div>
 
-                <div className="ml-auto">
+                <div className="my-auto">
                     <DialogFooterButtons hideDialog={hideDialog} />
                 </div>
             </form>

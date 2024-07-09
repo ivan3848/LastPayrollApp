@@ -79,9 +79,11 @@ const BankEmployeeHistoryTable = ({
                 />
                 <Column
                     field="isDeposit"
-                    header="Deposito"
+                    header="Para deposito"
                     dataType="boolean"
-                    body={(e) => <GenericTableCheck isChecked={e.isActive} />}
+                    bodyClassName="text-center"
+                    style={{ minWidth: "8rem" }}
+                    body={(e) => <GenericTableCheck isChecked={e.isDeposit} />}
                 />
                 <Column
                     header="Acciones"

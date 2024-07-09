@@ -8,7 +8,7 @@ const BankEmployeeHistoryFormSchema = () => {
             .min(4, { message: "El campo debe tener al menos 4 caracteres" }),
         paymentMethod: z.string().optional(),
         idStatusAccountType: z.number(),
-        isActive: z.boolean(),
+        isDeposit: z.boolean().optional(),
     });
 
     const addEntityFormSchema = z
