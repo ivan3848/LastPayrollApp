@@ -24,6 +24,8 @@ import {
     FileUploadHandlerEvent,
     FileUploadUploadEvent,
 } from "primereact/fileupload";
+import { Tooltip } from "primereact/tooltip";
+import ImageUploadTemplate from "@/Features/Shared/Components/ImageUploadTemplate";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
@@ -359,17 +361,9 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             />
                         </div>
                     </div>
-                    <div className="field col-12 md:col-6 lg:col-3">
-                        <div className="field-checkbox">
-                            <FileUpload
-                                mode="basic"
-                                name="demo[]"
-                                url="/api/upload"
-                                accept="image/*"
-                                customUpload
-                                uploadHandler={onImageUploadChange}
-                            />
-                        </div>
+                    <div className="field col-12">
+                        <label htmlFor="photo">Imagen Del Empleado</label>
+                        <ImageUploadTemplate />
                     </div>
                 </div>
             </div>
