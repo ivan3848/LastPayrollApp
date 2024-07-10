@@ -89,9 +89,7 @@ export default function EmployeeTable({
                 >
                     <img
                         className="w-7 sm:w-16rem xl:w-7rem shadow-2 block xl:block mx-auto border-circle"
-                        src={`data:image/jpeg;base64,${
-                            employee.employeeImage ?? emptyImage
-                        }`}
+                        src={employee.employeeImage ?? emptyImage}
                         alt={employee.employeeName!}
                     />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
@@ -150,9 +148,7 @@ export default function EmployeeTable({
                     <div className="flex flex-column align-items-center gap-1 py-2">
                         <img
                             className="w-5 shadow-2 border-circle"
-                            src={`data:image/jpeg;base64,${
-                                employee.employeeImage ?? emptyImage
-                            }`}
+                            src={employee.employeeImage ?? emptyImage}
                             alt={employee.employeeName!}
                         />
                         <div className="text-2xl font-bold">

@@ -1,6 +1,4 @@
-import {
-    TABLE_NAME_RELATIONSHIP
-} from "@/constants/StatusTableName";
+import { TABLE_NAME_RELATIONSHIP } from "@/constants/StatusTableName";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
@@ -15,9 +13,10 @@ interface Props {
         contactName?: string,
         contactNumber?: string
     ) => void;
+    addEmployeeInformation: () => void;
 }
 
-const EmergencyEmployeeContact = ({ setContactInformation}: Props) => {
+const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformation }: Props) => {
     const { addEntityFormSchema } = employeeFormSchemas();
 
     const {
@@ -31,7 +30,11 @@ const EmergencyEmployeeContact = ({ setContactInformation}: Props) => {
     });
 
     const onSubmit = (data: IEmployee) => {
-        setContactInformation(data.idStatusRelationship, data.contactName, data.contactNumber);
+        setContactInformation(
+            data.idStatusRelationship,
+            data.contactName,
+            data.contactNumber
+        );
         return;
     };
 
@@ -93,6 +96,7 @@ const EmergencyEmployeeContact = ({ setContactInformation}: Props) => {
                     iconPos="right"
                     label="Contratar"
                     className="p-button-primary"
+                    onClick={addEmployeeInformation}
                 />
             </div>
         </form>

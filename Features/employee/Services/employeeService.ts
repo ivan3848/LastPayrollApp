@@ -6,6 +6,7 @@ import { IEmployeeHistory } from "../Types/IEmployeeHistory";
 const employeeService = new ApiService<IEmployee, IEmployee>(
     "employee/employee"
 );
+
 const employeeChangeService = new ApiService<IEmployeeChange, IEmployee>(
     "employee/employee/employeeChange"
 );

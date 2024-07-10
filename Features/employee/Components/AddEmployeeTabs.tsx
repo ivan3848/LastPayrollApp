@@ -11,6 +11,8 @@ import personService from "@/Features/person/Services/personService";
 import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 import AddEmployee from "./AddEmployee";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import employeeService from "../Services/employeeService";
+import ApiService from "@/services/ApiService";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
@@ -45,9 +47,29 @@ const AddEmployeeTabs = () => {
         },
     ];
 
-    const addPerson = () => {
-        useAddEntityQuery( toast, service: personService);
-    }
+    const addPerson = useAddEntityQuery({
+        toast,
+        service: personService,
+        setEntity: setPerson,
+    });
+
+    const addEmployee = useAddEntityQuery<IEmployee>({
+        toast,
+        service: employeeService as ApiService<IEmployee, IEmployee>,
+        setEntity: setEmployee,
+    });
+
+    const addEmployeeInformation = () => {
+        console.log(person);
+        console.log(employee);
+        addPerson.mutate(person!);
+        setEmployee((prevEmployee) => ({
+            ...prevEmployee!,
+            idPerson: person?.idPerson,
+        }));
+        console.log(employee);
+        addEmployee.mutate(employee!);
+    };
 
     return (
         <div className="col-12">
@@ -69,7 +91,10 @@ const AddEmployeeTabs = () => {
                     <AddEmployee setStep={setStep} setEmployee={setEmployee} />
                 )}
                 {step === 2 && (
-                    <EmergencyEmployeeContact setContactInformation={setContactInformation} />
+                    <EmergencyEmployeeContact
+                        setContactInformation={setContactInformation}
+                        addEmployeeInformation={addEmployeeInformation}
+                    />
                 )}
             </div>
         </div>

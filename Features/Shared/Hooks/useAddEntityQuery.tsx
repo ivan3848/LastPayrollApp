@@ -7,6 +7,7 @@ interface Props<T> {
     setSubmitted?: (value: boolean) => void;
     reset?: () => void;
     service: ApiService<T, T>;
+    setEntity: (value: T) => void;
 }
 function useAddEntityQuery<T>({
     toast,
@@ -14,6 +15,7 @@ function useAddEntityQuery<T>({
     setSubmitted,
     reset,
     service,
+    setEntity,
 }: Props<T>) {
     return useMutation({
         mutationFn: (entity: T) => service.post(entity),
@@ -25,11 +27,13 @@ function useAddEntityQuery<T>({
                 life: 3000,
             });
         },
-        onSuccess: () => {
+        onSuccess: (event: any) => {
             if (reset) reset();
             if (setAddEntityDialog) setAddEntityDialog(false);
             if (setSubmitted) setSubmitted(true);
 
+            setEntity(event);
+            
             toast?.current?.show({
                 severity: "success",
                 summary: "Insertado!",

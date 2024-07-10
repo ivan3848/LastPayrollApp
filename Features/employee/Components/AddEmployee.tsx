@@ -75,6 +75,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             setValue={setValue}
                             watch={watch}
                             minValue={1}
+                            isFocus={true}
                         />
 
                         {errors.idEmployee && (
@@ -270,7 +271,6 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             isValid={!!errors.idStatusActionClass}
                             setValue={setValue}
                             watch={watch}
-                            isFocus={true}
                             tableName={TABLE_NAME_CONTRACT}
                         />
                         {errors.idStatusActionClass && (
