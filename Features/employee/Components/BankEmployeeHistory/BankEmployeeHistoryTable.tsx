@@ -40,7 +40,7 @@ const BankEmployeeHistoryTable = ({
     );
 
     const formatDate = (date: string) => {
-        const formattedDate = new Date(date).toLocaleDateString("en-US", {
+        const formattedDate = new Date(date).toLocaleDateString("es-Es", {
             month: "2-digit",
             day: "2-digit",
             year: "2-digit",
@@ -67,7 +67,7 @@ const BankEmployeeHistoryTable = ({
                     field="startDate"
                     header="Fecha de Inicio"
                     body={(rowData: IBankEmployeeHistory) =>
-                        formatDate(rowData.startDate!)
+                        formatDate(rowData.startDate?.toString()!)
                     }
                 />
                 <Column

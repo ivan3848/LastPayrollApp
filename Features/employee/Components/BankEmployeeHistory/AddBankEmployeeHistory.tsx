@@ -135,6 +135,7 @@ const AddBankEmployeeHistory = ({
                     <Calendar
                         id="startDate"
                         {...register("startDate")}
+                        value={new Date()}
                         showIcon
                     />
                     {errors.startDate && (

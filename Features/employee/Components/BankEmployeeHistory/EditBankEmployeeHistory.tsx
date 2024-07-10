@@ -45,9 +45,6 @@ const EditBankEmployeeHistory = ({
         return <div>Loading...</div>;
     }
 
-    const [start, setStart] = useState<Nullable<Date>>(new Date());
-    const [endDate, setEndDate] = useState<Nullable<Date>>(new Date());
-
     const {
         handleSubmit,
         register,
@@ -65,12 +62,14 @@ const EditBankEmployeeHistory = ({
         reset,
     });
 
+    const startDateGotten = new Date(entity.startDate!);
+
     const onSubmit = (data: IBankEmployeeHistory) => {
-        console.log(data);
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
-        data.startDate = start?.toISOString();
-        data.endDate = endDate?.toISOString();
+        data.startDate = data.startDate;
+        data.endDate = data.endDate;
+
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
         data.isDeposit;
@@ -139,9 +138,9 @@ const EditBankEmployeeHistory = ({
                         Fecha de Inicio
                     </label>
                     <Calendar
-                        value={start}
+                        id="startDate"
                         showIcon
-                        onChange={(e) => setStart(e.value)}
+                        {...register("startDate")}
                     />
                     {errors.startDate && (
                         <small className="text-red-600">
@@ -152,12 +151,7 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="endDate" className="block mb-1">
                         Fecha de Final
                     </label>
-                    <Calendar
-                        id="endDate"
-                        value={endDate}
-                        showIcon
-                        onChange={(e) => setEndDate(e.value)}
-                    />
+                    <Calendar id="endDate" {...register("endDate")} showIcon />
                     {errors.endDate && (
                         <small className="text-red-600">
                             {errors.endDate.message?.toString()}

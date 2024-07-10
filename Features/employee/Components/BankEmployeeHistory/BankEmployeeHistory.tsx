@@ -5,10 +5,10 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import EmployeeChanges from "./BankEmployeeHistoryTable";
 import EditBankEmployeeHistory from "./EditBankEmployeeHistory";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import AddBankEmployeeHistory from "./AddBankEmployeeHistory";
+import BankEmployeeHistoryTable from "./BankEmployeeHistoryTable";
 
 interface props {
     id: number;
@@ -63,7 +63,7 @@ const BankEmployeeHistory = ({ id }: props) => {
                         <TableSkeletonTemplate items={entityProperties} />
                     }
                 >
-                    <EmployeeChanges
+                    <BankEmployeeHistoryTable
                         submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
