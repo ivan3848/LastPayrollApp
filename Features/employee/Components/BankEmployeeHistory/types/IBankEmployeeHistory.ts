@@ -9,4 +9,5 @@ export interface IBankEmployeeHistory {
     bankName?: string;
     idStatusAccountType?: number;
     isDeposit?: boolean;
+    isActive?: boolean;
 }

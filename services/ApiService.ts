@@ -90,17 +90,14 @@ class ApiService<Q, R> {
         }
     }
 
-    async getById( id: number): Promise<R[]> {
+    async getById(id: number): Promise<R[]> {
         const finalEndpoint = concatEndpoint(this.endpoint, `${id}`);
         return await axiosInstance
-            .get<R[]>(finalEndpoint, {
-            })
+            .get<R[]>(finalEndpoint, {})
             .then((res) => res.data);
     }
 
     async delete(id: number, missEndpoint?: string): Promise<string> {
-        console.log(missEndpoint)
-
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {
             await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);

@@ -78,7 +78,7 @@ const BankEmployeeHistory = ({ id }: props) => {
                         setSubmitted={setSubmitted}
                         toast={toast}
                         entity={entity!}
-                        editEntityDialog={false}
+                        editEntityDialog={editEntityDialog}
                     />
                 )}
 

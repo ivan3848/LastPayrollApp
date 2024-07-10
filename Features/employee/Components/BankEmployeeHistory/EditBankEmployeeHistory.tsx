@@ -15,6 +15,7 @@ import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
+import { Dialog } from "primereact/dialog";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -29,6 +30,7 @@ const EditBankEmployeeHistory = ({
     setEditEntityDialog,
     setSubmitted,
     toast,
+    editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = editBankEmployeeHistory();
     const { params } = useParamFilter();
@@ -71,6 +73,7 @@ const EditBankEmployeeHistory = ({
         data.endDate = endDate?.toISOString();
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
+        data.isDeposit;
         editEntity.mutate(data);
         return;
     };
@@ -79,17 +82,19 @@ const EditBankEmployeeHistory = ({
         setEditEntityDialog(false);
     };
 
-    const options = [
-        { label: "Activo", value: 1 },
-        { label: "Inactivo", value: 0 },
-    ];
     return (
-        <div className="card p-fluid relative">
-            <div className="field mb-4">
-                <label htmlFor="name" className="text-lg font-semibold">
-                    Formulario Para cambios de banco
-                </label>
-            </div>
+        <Dialog
+            visible={editEntityDialog}
+            header="Editar Banco al empleado"
+            modal
+            style={{
+                width: "45vw",
+                overflow: "hidden",
+                maxHeight: "80vh",
+                position: "relative",
+            }}
+            onHide={hideDialog}
+        >
             <form
                 onSubmit={handleSubmit(onSubmit)}
                 className="grid grid-cols-1 lg:grid-cols-2 gap-4"
@@ -130,6 +135,20 @@ const EditBankEmployeeHistory = ({
                     )}
                 </div>
                 <div className="field col-12 md:col-3">
+                    <label htmlFor="startDate" className="block mb-1">
+                        Fecha de Inicio
+                    </label>
+                    <Calendar
+                        value={start}
+                        showIcon
+                        onChange={(e) => setStart(e.value)}
+                    />
+                    {errors.startDate && (
+                        <small className="text-red-600">
+                            {errors.startDate.message?.toString()}
+                        </small>
+                    )}
+
                     <label htmlFor="endDate" className="block mb-1">
                         Fecha de Final
                     </label>
@@ -144,23 +163,9 @@ const EditBankEmployeeHistory = ({
                             {errors.endDate.message?.toString()}
                         </small>
                     )}
-
-                    <label htmlFor="startDate" className="block mb-1">
-                        Fecha de Inicio
-                    </label>
-                    <Calendar
-                        value={start}
-                        showIcon
-                        onChange={(e) => setStart(e.value)}
-                    />
-                    {errors.startDate && (
-                        <small className="text-red-600">
-                            {errors.startDate.message?.toString()}
-                        </small>
-                    )}
                 </div>
 
-                <div className="field col-12 md:col-3">
+                <div className="field col-12 md:col-3 ">
                     <label htmlFor="accountNumber" className="block mb-1">
                         Numero de cuenta
                     </label>
@@ -176,8 +181,8 @@ const EditBankEmployeeHistory = ({
                         </p>
                     )}
 
-                    <div className="mt-5">
-                        <div className="field-checkbox">
+                    <div>
+                        <div className="field-checkbox mt-5">
                             <GenericCheckBox
                                 id="isDeposit"
                                 text={"Para deposito"}
@@ -195,11 +200,11 @@ const EditBankEmployeeHistory = ({
                     </div>
                 </div>
 
-                <div className="my-auto">
+                <div style={{ position: "absolute", bottom: 3, width: "80%" }}>
                     <DialogFooterButtons hideDialog={hideDialog} />
                 </div>
             </form>
-        </div>
+        </Dialog>
     );
 };
 

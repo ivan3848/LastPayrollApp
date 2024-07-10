@@ -54,6 +54,8 @@ const AddBankEmployeeHistory = ({
         data.startDate = data!.startDate!;
         data.endDate = data!.endDate!;
         data.idStatusAccountType = data!.idStatusAccountType!;
+        data.isActive = true;
+
         addEntity.mutate(data);
         return;
     };
