@@ -1,31 +1,25 @@
+import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
+import useContractTypeQuery from "@/Features/contractType/Hooks/useContractTypeQuery";
+import useDepartmentQuery from "@/Features/departments/Hooks/useDepartmentQuery";
+import useDisabilityQuery from "@/Features/disability/Hooks/useDisabilityQuery";
+import useGroupManagerQuery from "@/Features/groupManager/Hooks/useGroupManagerQuery";
+import usePayrollAreaQuery from "@/Features/payrollArea/Hooks/usePayrollAreaQuery";
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
+import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import ImageUploadTemplate from "@/Features/Shared/Components/ImageUploadTemplate";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useWorkSchedulerQuery from "@/Features/workScheduler/Hooks/useWorkSchedulerQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
-import { useForm } from "react-hook-form";
-import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import useDepartmentQuery from "@/Features/departments/Hooks/useDepartmentQuery";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import useEmployeeQuery from "../Hooks/useEmployeeQuery";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import useWorkSchedulerQuery from "@/Features/workScheduler/Hooks/useWorkSchedulerQuery";
 import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
-import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
-import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
-import useContractTypeQuery from "@/Features/contractType/Hooks/useContractTypeQuery";
-import useGroupManagerQuery from "@/Features/groupManager/Hooks/useGroupManagerQuery";
-import useDisabilityQuery from "@/Features/disability/Hooks/useDisabilityQuery";
-import usePayrollAreaQuery from "@/Features/payrollArea/Hooks/usePayrollAreaQuery";
-import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
-import {
-    FileUpload,
-    FileUploadHandlerEvent,
-    FileUploadUploadEvent,
-} from "primereact/fileupload";
-import { Tooltip } from "primereact/tooltip";
-import ImageUploadTemplate from "@/Features/Shared/Components/ImageUploadTemplate";
+import { useForm } from "react-hook-form";
+import useEmployeeQuery from "../Hooks/useEmployeeQuery";
+import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
@@ -60,20 +54,6 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
     const onPositionManagerChange = () => {
         setFilters([{ column: "idPosition", value: watch("idPosition") }]);
         setAllData(true);
-    };
-
-    const onImageUploadChange = async (event: FileUploadHandlerEvent) => {
-        const file = event.files[0];
-        const reader = new FileReader();
-        let blob = await fetch(URL.createObjectURL(file)).then((r) => r.blob());
-
-        reader.readAsDataURL(blob);
-
-        reader.onloadend = function () {
-            const base64data = reader.result;
-            console.log(base64data);
-            setValue("employeeImage", base64data?.toString() ?? "");
-        };
     };
 
     const onSubmit = (data: IEmployee) => {
@@ -363,7 +343,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                     </div>
                     <div className="field col-12">
                         <label htmlFor="photo">Imagen Del Empleado</label>
-                        <ImageUploadTemplate />
+                        <ImageUploadTemplate setValue={setValue} />
                     </div>
                 </div>
             </div>

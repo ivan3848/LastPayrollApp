@@ -2,18 +2,26 @@ import {
     FileUpload,
     FileUploadHeaderTemplateOptions,
     FileUploadSelectEvent,
-    ItemTemplateOptions
+    ItemTemplateOptions,
 } from "primereact/fileupload";
 import { ProgressBar } from "primereact/progressbar";
 import { Tag } from "primereact/tag";
 import { Tooltip } from "primereact/tooltip";
 import { useRef, useState } from "react";
+import { Toast } from "primereact/toast";
+import { UseFormSetValue } from "react-hook-form";
 
-export default function ImageUploadTemplate() {
+interface Props {
+    setValue: UseFormSetValue<any>;
+}
+
+export default function ImageUploadTemplate({ setValue }: Props) {
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef<FileUpload>(null);
+    const toast = useRef<Toast | null>(null);
 
     const onTemplateSelect = async (e: FileUploadSelectEvent) => {
+        if (!imageValidator(e.files[0].type)) return;
 
         setTotalSize(e.files[0].size);
         const file = e.files[0];
@@ -24,9 +32,32 @@ export default function ImageUploadTemplate() {
 
         reader.onloadend = function () {
             const base64data = reader.result;
-            console.log(base64data);
-            // setValue("employeeImage", base64data?.toString() ?? "");
+            setValue("employeeImage", base64data?.toString() ?? "");
         };
+    };
+
+    const imageValidator = (type: string) => {
+        console.log(type);
+        const acceptedImageTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/svg+xml",
+        ];
+
+        const isValid = acceptedImageTypes.includes(type);
+        
+        if (!isValid) {
+            toast.current?.show({
+                severity: "error",
+                summary: "Error",
+                detail: "El archivo seleccionado no es una imagen. Por favor, seleccione una imagen válida.",
+                life: 3000,
+            });
+            setTotalSize(0);
+            fileUploadRef.current?.clear();
+        }
+        return isValid;
     };
 
     const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
@@ -128,6 +159,8 @@ export default function ImageUploadTemplate() {
 
     return (
         <div>
+            <Toast ref={toast} />
+
             <Tooltip
                 target=".custom-choose-btn"
                 content="Seleccionar imagen"

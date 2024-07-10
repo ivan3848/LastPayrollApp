@@ -1,37 +1,59 @@
 "use client";
 
+import { IPerson } from "@/Features/person/Types/IPerson";
+import { useMutation } from "@tanstack/react-query";
 import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
-import { useState } from "react";
+import { Toast } from "primereact/toast";
+import { useRef, useState } from "react";
 import AddPerson from "./../../person/Components/AddPerson";
-import { IPerson } from "@/Features/person/Types/IPerson";
+import personService from "@/Features/person/Services/personService";
+import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 import AddEmployee from "./AddEmployee";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
     const [person, setPerson] = useState<IPerson>();
     const [employee, setEmployee] = useState<IEmployee>();
+    const toast = useRef(null);
+
+    const setContactInformation = (
+        idStatusRelationship?: number,
+        contactName?: string,
+        contactNumber?: string
+    ) => {
+        setEmployee((prevEmployee) => ({
+            ...prevEmployee!,
+            idStatusRelationship,
+            contactName,
+            contactNumber,
+        }));
+    };
+
     const items: MenuItem[] = [
         {
             label: "Información Personal",
         },
         {
             label: "Información Del Empleado",
-            // disabled: !!!person?.identification,
+            disabled: !!!person?.identification,
         },
-        // {
-        //     label: "Payment",
-        //     disabled: !!!employee?.idEmployee,
-        // },
-        // {
-        //     label: "Confirmation",
-        //     disabled: !!!person?.identification,
-        // },
+        {
+            label: "Contacto De Emergencias",
+            disabled: !!!employee?.idEmployee,
+        },
     ];
+
+    const addPerson = () => {
+        useAddEntityQuery( toast, service: personService);
+    }
 
     return (
         <div className="col-12">
             <h3>Agregar Empleado</h3>
+            <Toast ref={toast} />
+
             <div className="card">
                 <Steps
                     model={items}
@@ -45,6 +67,9 @@ const AddEmployeeTabs = () => {
                 )}
                 {step === 1 && (
                     <AddEmployee setStep={setStep} setEmployee={setEmployee} />
+                )}
+                {step === 2 && (
+                    <EmergencyEmployeeContact setContactInformation={setContactInformation} />
                 )}
             </div>
         </div>

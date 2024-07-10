@@ -20,6 +20,7 @@ interface IEmployee {
     idContractType?: number;
     zipCode?: string;
     contactName?: string;
+    contactNumber?: string;
     idStatusRelationship?: number;
     employeeImage?: string;
     groupManagerAuthorize?: string;
