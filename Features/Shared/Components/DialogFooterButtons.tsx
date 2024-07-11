@@ -6,7 +6,7 @@ interface Props {
 
 const DialogFooterButtons = ({ hideDialog }: Props) => {
     return (
-        <div className="flex justify-content-end">
+        <div className="flex justify-content-end mt-3">
             <Button
                 label="Cancelar"
                 icon="pi pi-times"

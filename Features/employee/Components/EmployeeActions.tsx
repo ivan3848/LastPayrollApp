@@ -5,6 +5,7 @@ import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import FireEmployee from "./FireEmployee";
+import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -44,7 +45,7 @@ const EmployeeActions = ({
                 resizable
                 header={headerTitle}
                 focusOnShow
-                style={{ width: "850px" }}
+                style={{ width: "80vw" }}
             >
                 <div className="mb-5">
                     <EmployeeProfile employee={employee} />
@@ -56,6 +57,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.FireEmployee && (
                         <FireEmployee employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.BankManagement && (
+                        <BankEmployeeHistory id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>

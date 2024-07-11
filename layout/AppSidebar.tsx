@@ -17,7 +17,7 @@ const AppSidebar = () => {
     return (
         <>
             <div className="sidebar-header">
-                <Link href="/" className="app-logo">
+                <Link href="/employee" className="app-logo">
                     <svg
                         width="300"
                         height="40"

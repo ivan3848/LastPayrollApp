@@ -1,7 +1,6 @@
 import useCountryQuery from "@/Features/country/Hooks/useCountryQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";

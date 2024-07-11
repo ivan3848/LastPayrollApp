@@ -1,23 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
-import { IBankEmployeeHistory } from "../Components/BankEmployeeHistory/types/IBankEmployeeHistory";
-import bankEmployeeHistory from "../Components/BankEmployeeHistory/Services/bankEmpleeHistoryService";
+import bankEmployeeHistory from "../Services/bankEmpleeHistoryService";
+import { IBankEmployeeHistory } from "../types/IBankEmployeeHistory";
 
 interface Props {
     toast: React.MutableRefObject<any>;
-    setEditEntityDialog: (value: boolean) => void;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useEditEmployeeQuery = ({
+const useAddBankEmployeeHistory = ({
     toast,
-    setEditEntityDialog,
+    setAddEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IBankEmployeeHistory) =>
-            bankEmployeeHistory.put(entity),
-
+        mutationFn: (entity: IBankEmployeeHistory) => bankEmployeeHistory.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -28,17 +26,17 @@ const useEditEmployeeQuery = ({
         },
         onSuccess: () => {
             reset();
-            setEditEntityDialog(false);
+            setAddEntityDialog(false);
             setSubmitted(true);
 
             toast.current?.show({
                 severity: "success",
-                summary: "Editado!",
-                detail: "Registro editado correctamente",
+                summary: "Insertado!",
+                detail: "Registro agregado correctamente",
                 life: 3000,
             });
         },
     });
 };
 
-export default useEditEmployeeQuery;
+export default useAddBankEmployeeHistory;

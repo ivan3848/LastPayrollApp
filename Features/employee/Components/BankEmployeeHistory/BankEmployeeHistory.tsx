@@ -1,0 +1,110 @@
+"use client";
+
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
+import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import { Toast } from "primereact/toast";
+import { Suspense } from "react";
+import EditBankEmployeeHistory from "./EditBankEmployeeHistory";
+import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
+import AddBankEmployeeHistory from "./AddBankEmployeeHistory";
+import BankEmployeeHistoryTable from "./BankEmployeeHistoryTable";
+
+interface props {
+    id: number;
+}
+
+const BankEmployeeHistory = ({ id }: props) => {
+    const {
+        deleteEntityDialog,
+        setDeleteEntityDialog,
+        addEntityDialog,
+        setAddEntityDialog,
+        editEntityDialog,
+        setEditEntityDialog,
+        entity,
+        setEntity,
+        submitted,
+        setSubmitted,
+        toast,
+    } = useCrudModals<IBankEmployeeHistory>();
+
+    const handleAdd = () => {
+        setSubmitted(false);
+        setAddEntityDialog(true);
+    };
+
+    const handleEdit = (entity: IBankEmployeeHistory) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setEditEntityDialog(true);
+    };
+
+    const handleDelete = (entity: IBankEmployeeHistory) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setDeleteEntityDialog(true);
+    };
+
+    const entityProperties = [
+        "Numero De Cuenta",
+        "Fecha de inicio",
+        "Método de pago",
+        "Fecha final",
+    ];
+
+    return (
+        <div className="grid">
+            <div className="w-full">
+                <Toast ref={toast} />
+
+                <Suspense
+                    fallback={
+                        <TableSkeletonTemplate items={entityProperties} />
+                    }
+                >
+                    <BankEmployeeHistoryTable
+                        submitted={submitted}
+                        handleAdd={handleAdd}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                        idEmployee={id}
+                    />
+                </Suspense>
+
+                {editEntityDialog && (
+                    <EditBankEmployeeHistory
+                        setEditEntityDialog={setEditEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        entity={entity!}
+                        editEntityDialog={editEntityDialog}
+                    />
+                )}
+
+                {addEntityDialog && (
+                    <AddBankEmployeeHistory
+                        addEntityDialog={addEntityDialog}
+                        setAddEntityDialog={setAddEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        id={id}
+                    />
+                )}
+
+                {deleteEntityDialog && (
+                    <DeleteEntity
+                        id={entity?.idBankEmployeeHistory ?? 0}
+                        endpoint="employee/bankEmployeeHistory"
+                        deleteEntityDialog={deleteEntityDialog}
+                        setDeleteEntityDialog={setDeleteEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default BankEmployeeHistory;

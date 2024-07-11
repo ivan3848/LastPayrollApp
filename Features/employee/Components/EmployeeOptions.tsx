@@ -5,6 +5,7 @@ import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 
 interface Props {
     setAction: (action: EmployeeOptionsEnum) => void;
+    onSubmit?: () => void;
 }
 
 const EmployeeOptions = ({ setAction }: Props) => {
@@ -21,6 +22,10 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Gestión Bancaria"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() =>
+                        setAction(EmployeeOptionsEnum.BankManagement)
+                    }
+                    onSubmit={() => console.log("hola")}
                 />
                 <Button
                     label="Dependientes"
