@@ -135,8 +135,10 @@ const AddBankEmployeeHistory = ({
                     <Calendar
                         id="startDate"
                         {...register("startDate")}
-                        value={new Date()}
                         showIcon
+                        onSelect={() =>
+                            setValue("startDate", watch("startDate"))
+                        }
                     />
                     {errors.startDate && (
                         <small className="text-red-600">

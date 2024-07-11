@@ -10,12 +10,8 @@ const BankEmployeeHistoryFormSchema = () => {
             paymentMethod: z.string().optional(),
             idStatusAccountType: z.number(),
             isDeposit: z.boolean().optional(),
-            startDate: z
-                .date({ message: "La fecha de inicio es requerida" })
-                .optional(),
-            endDate: z
-                .date({ message: "La fecha final es requerida" })
-                .optional(),
+            startDate: z.date({ message: "La fecha de inicio es requerida" }),
+            endDate: z.date({ message: "La fecha final es requerida" }),
         })
         .refine(
             (data) => {
