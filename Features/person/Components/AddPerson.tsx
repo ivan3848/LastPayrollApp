@@ -18,9 +18,10 @@ import { Button } from "primereact/button";
 interface Props {
     setPerson: (value: IPerson) => void;
     setStep: (value: number) => void;
+    person?: IPerson;
 }
 
-const AddPerson = ({ setPerson, setStep }: Props) => {
+const AddPerson = ({ setPerson, setStep, person }: Props) => {
     const { addEntityFormSchema } = personFormSchemas();
 
     const {
@@ -35,7 +36,6 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
     });
 
     const onSubmit = (data: IPerson) => {
-        console.log(data);
         setPerson(data);
         setStep(1);
         return;
@@ -52,6 +52,10 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             mask="999-9999999-9"
                             id="identification"
                             autoFocus
+                            defaultValue={person?.identification.replace(
+                                "-",
+                                ""
+                            )}
                         />
 
                         {errors.identification && (
@@ -66,6 +70,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="firstName"
                             type="text"
                             {...register("firstName")}
+                            defaultValue={person?.firstName}
                         />
                         {errors.firstName && (
                             <small className="p-invalid text-red-500">
@@ -79,6 +84,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="middleName"
                             type="text"
                             {...register("middleName")}
+                            defaultValue={person?.middleName}
                         />
                         {errors.middleName && (
                             <small className="p-invalid text-red-500">
@@ -92,6 +98,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="firstLastName"
                             type="text"
                             {...register("firstLastName")}
+                            defaultValue={person?.firstLastName}
                         />
                         {errors.firstLastName && (
                             <small className="p-invalid text-red-500">
@@ -105,6 +112,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="secondLastName"
                             type="text"
                             {...register("secondLastName")}
+                            defaultValue={person?.secondLastName}
                         />
                         {errors.secondLastName && (
                             <small className="p-invalid text-red-500">
@@ -117,7 +125,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
 
                         <Calendar
                             id="birthDate"
-                            value={watch("birthDate")}
+                            value={watch("birthDate") ?? person?.birthDate}
                             onChange={(e) => setValue("birthDate", e.value!)}
                             showIcon
                         />
@@ -133,6 +141,8 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             {...register("phoneNumber")}
                             mask="999-999-9999"
                             id="phoneNumber"
+                            defaultValue={person?.phoneNumber}
+                            key={person?.phoneNumber}
                         />
 
                         {errors.phoneNumber && (
@@ -147,6 +157,8 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             {...register("cellphoneNumber")}
                             mask="999-999-9999"
                             id="cellphoneNumber"
+                            defaultValue={person?.cellphoneNumber}
+                            key={person?.cellphoneNumber}
                         />
 
                         {errors.cellphoneNumber && (
@@ -161,6 +173,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="email"
                             type="email"
                             {...register("email")}
+                            defaultValue={person?.email}
                         />
                         {errors.email && (
                             <small className="p-invalid text-red-500">
@@ -174,6 +187,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             id="address"
                             type="text"
                             {...register("address")}
+                            defaultValue={person?.address}
                         />
                         {errors.address && (
                             <small className="p-invalid text-red-500">
@@ -189,6 +203,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             setValue={setValue}
                             watch={watch}
                             tableName={TABLE_NAME_GENDER}
+                            idValueEdit={person?.idGender}
                         />
                         {errors.idGender && (
                             <small className="p-invalid text-red-500">
@@ -205,6 +220,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={useNationalityQuery}
+                            idValueEdit={person?.idNationality}
                         />
                         {errors.idNationality && (
                             <small className="p-invalid text-red-500">
@@ -221,6 +237,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={useEducationQuery}
+                            idValueEdit={person?.idEducation}
                         />
                         {errors.idEducation && (
                             <small className="p-invalid text-red-500">
@@ -236,6 +253,7 @@ const AddPerson = ({ setPerson, setStep }: Props) => {
                             setValue={setValue}
                             watch={watch}
                             tableName={TABLE_NAME_MARITAL}
+                            idValueEdit={person?.idStatusMarital}
                         />
                         {errors.idStatusMarital && (
                             <small className="p-invalid text-red-500">

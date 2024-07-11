@@ -24,9 +24,10 @@ import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
 interface Props {
     setEmployee: (value: IEmployee) => void;
     setStep: (value: number) => void;
+    employee?: IEmployee;
 }
 
-const AddEmployee = ({ setEmployee, setStep }: Props) => {
+const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
     const { addEntityFormSchema } = employeeFormSchemas();
     const { setFilters, params, setAllData } = useParamFilter();
 
@@ -57,7 +58,6 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
     };
 
     const onSubmit = (data: IEmployee) => {
-        console.log(data);
         setEmployee(data);
         setStep(2);
         return;
@@ -76,6 +76,8 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             watch={watch}
                             minValue={1}
                             isFocus={true}
+                            format={false}
+                            currentValue={employee?.idEmployee}
                         />
 
                         {errors.idEmployee && (
@@ -94,6 +96,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             setValue={setValue}
                             watch={watch}
                             onChange={onDepartmentChange}
+                            idValueEdit={employee?.idDepartment}
                         />
                         {errors.idDepartment && (
                             <small className="p-invalid text-red-500">
@@ -113,6 +116,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             isDisabled={!watch("idDepartment")}
                             param={params}
                             onChange={onPositionChange}
+                            idValueEdit={employee?.idPosition}
                         />
                         {errors.idPosition && (
                             <small className="p-invalid text-red-500">
@@ -134,6 +138,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             isDisabled={!watch("idPosition")}
                             param={params}
                             onChange={onPositionManagerChange}
+                            idValueEdit={employee?.idHierarchyPositionManager}
                         />
                         {errors.idHierarchyPositionManager && (
                             <small className="p-invalid text-red-500">
@@ -150,6 +155,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={usePayrollAreaQuery}
+                            idValueEdit={employee?.idPayrollArea}
                         />
                         {errors.idPayrollArea && (
                             <small className="p-invalid text-red-500">
@@ -165,6 +171,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             id="functionDescription"
                             autoResize
                             {...register("functionDescription")}
+                            defaultValue={employee?.functionDescription}
                         />
                         {errors.functionDescription && (
                             <small className="p-invalid text-red-500">
@@ -181,6 +188,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={useWorkSchedulerQuery}
+                            idValueEdit={employee?.idWorkScheduler}
                         />
                         {errors.idWorkScheduler && (
                             <small className="p-invalid text-red-500">
@@ -196,6 +204,7 @@ const AddEmployee = ({ setEmployee, setStep }: Props) => {
                             isValid={!!errors.salary}
                             setValue={setValue}
                             watch={watch}
+                            currentValue={employee?.salary}
                         />
                         {errors.salary && (
                             <small className="p-invalid text-red-500">

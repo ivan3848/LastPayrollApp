@@ -37,7 +37,6 @@ export default function ImageUploadTemplate({ setValue }: Props) {
     };
 
     const imageValidator = (type: string) => {
-        console.log(type);
         const acceptedImageTypes = [
             "image/jpeg",
             "image/png",

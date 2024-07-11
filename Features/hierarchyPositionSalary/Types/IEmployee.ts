@@ -1,5 +1,6 @@
 interface IEmployee {
     idEmployee: number;
+    idPerson?: number;
     idStatusActionClass?: number;
     idWorkScheduler?: number;
     idHierarchyPosition?: number;
@@ -31,7 +32,6 @@ interface IEmployee {
     employeeCustomerId?: string;
     isDependantExist?: boolean;
     idCompany?: number;
-    idPerson?: number;
     idDepartment?: number;
     department?: string;
     idPosition?: number;

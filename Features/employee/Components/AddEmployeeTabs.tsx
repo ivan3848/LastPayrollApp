@@ -59,16 +59,19 @@ const AddEmployeeTabs = () => {
         setEntity: setEmployee,
     });
 
-    const addEmployeeInformation = () => {
+    const addEmployeeInformation = async () => {
+        await addPerson.mutate(person!);
         console.log(person);
-        console.log(employee);
-        addPerson.mutate(person!);
-        setEmployee((prevEmployee) => ({
-            ...prevEmployee!,
-            idPerson: person?.idPerson,
-        }));
-        console.log(employee);
-        addEmployee.mutate(employee!);
+
+        const updatedEmployee = {
+            ...employee!, // Ensure prevEmployee is accessible here, might need to adjust scope
+            idPerson: person!.idPerson,
+        };
+
+        console.log(updatedEmployee);
+        await addEmployee.mutate(updatedEmployee!);
+
+        setEmployee(() => employee);
     };
 
     return (
@@ -85,13 +88,22 @@ const AddEmployeeTabs = () => {
                     className="mb-6"
                 />
                 {step === 0 && (
-                    <AddPerson setStep={setStep} setPerson={setPerson} />
+                    <AddPerson
+                        setStep={setStep}
+                        setPerson={setPerson}
+                        person={person}
+                    />
                 )}
                 {step === 1 && (
-                    <AddEmployee setStep={setStep} setEmployee={setEmployee} />
+                    <AddEmployee
+                        setStep={setStep}
+                        setEmployee={setEmployee}
+                        employee={employee}
+                    />
                 )}
                 {step === 2 && (
                     <EmergencyEmployeeContact
+                        // employee={employee}
                         setContactInformation={setContactInformation}
                         addEmployeeInformation={addEmployeeInformation}
                     />

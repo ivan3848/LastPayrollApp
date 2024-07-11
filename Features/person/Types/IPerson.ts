@@ -1,4 +1,5 @@
 export interface IPerson {
+    idPerson?: number;
     identification: string;
     idStatusMarital?: number;
     statusMarital: string;
@@ -15,7 +16,6 @@ export interface IPerson {
     identificationDisplay: string;
     birthDate: Date;
     idEducation: number;
-    idPerson: number;
     idGender?: number;
     gender?: string;
 }
