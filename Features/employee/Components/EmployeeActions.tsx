@@ -6,6 +6,7 @@ import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import FireEmployee from "./FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
+import Dependant from "./Dependant/Dependant";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -60,6 +61,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.BankManagement && (
                         <BankEmployeeHistory id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Dependant && (
+                        <Dependant id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>
