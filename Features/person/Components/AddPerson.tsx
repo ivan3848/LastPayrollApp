@@ -52,12 +52,8 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             mask="999-9999999-9"
                             id="identification"
                             autoFocus
-                            defaultValue={person?.identification.replace(
-                                "-",
-                                ""
-                            )}
+                            defaultValue={person?.identification}
                         />
-
                         {errors.identification && (
                             <small className="p-invalid text-red-500">
                                 {errors.identification.message?.toString()}
