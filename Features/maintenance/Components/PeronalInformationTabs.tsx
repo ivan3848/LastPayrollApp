@@ -17,6 +17,9 @@ const RelationshipStatus = dynamic(
     () =>
         import("../../status/Components/RelationshipStatus/RelationshipStatus")
 );
+const GenderStatus = dynamic(
+    () => import("../../status/Components/GenderStatus/GenderStatus")
+);
 
 const PersonalInformationTabs = () => {
     return (
@@ -53,6 +56,11 @@ const PersonalInformationTabs = () => {
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <RelationshipStatus />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel header="Generos" leftIcon="pi pi-mars mr-2">
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <GenderStatus />
                         </Suspense>
                     </TabPanel>
                 </TabView>

@@ -1,8 +1,8 @@
-import type { MenuModel } from "@/types";
+import { AppMenuItem } from "@/types/layout";
 import AppSubMenu from "./AppSubMenu";
 
 const AppMenu = () => {
-    const model: MenuModel[] = [
+    const model: AppMenuItem[] = [
         {
             label: "Mantenimientos",
             icon: "pi pi-fw pi-cog",
@@ -52,6 +52,12 @@ const AppMenu = () => {
                     label: "Gestión Empleados",
                     icon: "pi pi-fw pi-users",
                     to: "/employee",
+                },
+                {
+                    label: "Agregar Empleado",
+                    to: "/employee/addEmployee",
+                    icon: "pi pi-user-plus",
+                    visible: false,
                 },
                 {
                     label: "Cambios masivos",

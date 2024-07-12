@@ -1,12 +1,10 @@
 import AddEmployeeTabs from "@/Features/employee/Components/AddEmployeeTabs";
 import React from "react";
 
-const page = () => {
+export default function AddEmployee() {
     return (
         <div className="card">
             <AddEmployeeTabs />
         </div>
     );
-};
-
-export default page;
+}
