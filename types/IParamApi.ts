@@ -7,7 +7,7 @@ export default interface IParamsApi {
         filters?:
         {
             column: string,
-            value: string | number
+            value: any
         }[]
         sorts?:
         {

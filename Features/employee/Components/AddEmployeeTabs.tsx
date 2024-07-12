@@ -1,24 +1,27 @@
 "use client";
 
+import AddHierarchyPosition from "@/Features/hierarchyPosition/Components/AddHierarchyPosition";
+import { IHierarchyPosition } from "@/Features/hierarchyPosition/Types/IHierarchyPosition";
 import { IPerson } from "@/Features/person/Types/IPerson";
-import { useMutation } from "@tanstack/react-query";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { addEmployeeService } from "../Services/employeeService";
+import { IInsertEmployee } from "../Types/IInsertEmployee";
 import AddPerson from "./../../person/Components/AddPerson";
-import personService from "@/Features/person/Services/personService";
-import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 import AddEmployee from "./AddEmployee";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import employeeService from "../Services/employeeService";
-import ApiService from "@/services/ApiService";
+import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
     const [person, setPerson] = useState<IPerson>();
     const [employee, setEmployee] = useState<IEmployee>();
-    const toast = useRef(null);
+
+    const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
+        useCrudModals<IHierarchyPosition>();
 
     const setContactInformation = (
         idStatusRelationship?: number,
@@ -39,7 +42,7 @@ const AddEmployeeTabs = () => {
         },
         {
             label: "Información Del Empleado",
-            disabled: !!!person?.identification,
+            // disabled: !!!person?.identification,
         },
         {
             label: "Contacto De Emergencias",
@@ -47,31 +50,26 @@ const AddEmployeeTabs = () => {
         },
     ];
 
-    const addPerson = useAddEntityQuery({
+    const addEmployee = useAddEntityQuery<IInsertEmployee>({
         toast,
-        service: personService,
-        setEntity: setPerson,
-    });
-
-    const addEmployee = useAddEntityQuery<IEmployee>({
-        toast,
-        service: employeeService as ApiService<IEmployee, IEmployee>,
+        service: addEmployeeService,
         setEntity: setEmployee,
     });
 
-    const addEmployeeInformation = async () => {
-        await addPerson.mutate(person!);
-        console.log(person);
+    const AddEmployeeInformation = () => {
+        const employeeToAdd = {
+            ...employee!,
+            person: {
+                ...person!,
+            },
+        } as IInsertEmployee;
 
-        const updatedEmployee = {
-            ...employee!, // Ensure prevEmployee is accessible here, might need to adjust scope
-            idPerson: person!.idPerson,
-        };
+        addEmployee.mutate(employeeToAdd);
+    };
 
-        console.log(updatedEmployee);
-        await addEmployee.mutate(updatedEmployee!);
-
-        setEmployee(() => employee);
+    const handleAdd = () => {
+        setSubmitted(false);
+        setAddEntityDialog(true);
     };
 
     return (
@@ -79,6 +77,14 @@ const AddEmployeeTabs = () => {
             <h3>Agregar Empleado</h3>
             <Toast ref={toast} />
 
+            {addEntityDialog && (
+                <AddHierarchyPosition
+                    addEntityDialog={addEntityDialog}
+                    setAddEntityDialog={setAddEntityDialog}
+                    setSubmitted={setSubmitted}
+                    toast={toast}
+                />
+            )}
             <div className="card">
                 <Steps
                     model={items}
@@ -99,13 +105,14 @@ const AddEmployeeTabs = () => {
                         setStep={setStep}
                         setEmployee={setEmployee}
                         employee={employee}
+                        handleAdd={handleAdd}
                     />
                 )}
                 {step === 2 && (
                     <EmergencyEmployeeContact
-                        // employee={employee}
+                        employee={employee}
                         setContactInformation={setContactInformation}
-                        addEmployeeInformation={addEmployeeInformation}
+                        addEmployeeInformation={AddEmployeeInformation}
                     />
                 )}
             </div>

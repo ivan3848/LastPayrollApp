@@ -7,7 +7,7 @@ interface Props<T> {
     setSubmitted?: (value: boolean) => void;
     reset?: () => void;
     service: ApiService<T, T>;
-    setEntity: (value: any) => void;
+    setEntity?: (value: any) => void;
 }
 function useAddEntityQuery<T>({
     toast,
@@ -18,27 +18,27 @@ function useAddEntityQuery<T>({
     setEntity,
 }: Props<T>) {
     return useMutation({
-        mutationFn: async (entity: T) => {
-            try {
-                const response = await service.post(entity);
-                if (reset) reset();
-                if (setAddEntityDialog) setAddEntityDialog(false);
-                if (setSubmitted) setSubmitted(true);
-                setEntity(response);
-                toast?.current?.show({
-                    severity: "success",
-                    summary: "Insertado!",
-                    detail: "Registro agregado correctamente",
-                    life: 3000,
-                });
-            } catch (error: any) {
-                toast?.current?.show({
-                    severity: "warn",
-                    summary: "Error",
-                    detail: error.response.data,
-                    life: 3000,
-                });
-            }
+        mutationFn: (entity: T) => service.post(entity),
+        onError: (error: any) => {
+            toast?.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: error.response.data,
+                life: 3000,
+            });
+        },
+        onSuccess: (data: any) => {
+            if (reset) reset();
+            if (setAddEntityDialog) setAddEntityDialog(false);
+            if (setSubmitted) setSubmitted(true);
+            if (setEntity) setEntity(data);
+            
+            toast?.current?.show({
+                severity: "success",
+                summary: "Insertado!",
+                detail: "Registro agregado correctamente",
+                life: 3000,
+            });
         },
     });
 }

@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
-import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
+import employeeContactFormSchemas from "../Validations/EmployeeContactFormSchemas";
 
 interface Props {
     setContactInformation: (
@@ -14,10 +14,15 @@ interface Props {
         contactNumber?: string
     ) => void;
     addEmployeeInformation: () => void;
+    employee?: IEmployee;
 }
 
-const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformation }: Props) => {
-    const { addEntityFormSchema } = employeeFormSchemas();
+const EmergencyEmployeeContact = ({
+    setContactInformation,
+    addEmployeeInformation,
+    employee,
+}: Props) => {
+    const { addEntityFormSchema } = employeeContactFormSchemas();
 
     const {
         handleSubmit,
@@ -35,6 +40,7 @@ const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformatio
             data.contactName,
             data.contactNumber
         );
+        addEmployeeInformation();
         return;
     };
 
@@ -52,6 +58,8 @@ const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformatio
                             tableName={TABLE_NAME_RELATIONSHIP}
                             setValue={setValue}
                             watch={watch}
+                            isFocus={true}
+                            idValueEdit={employee?.idStatusRelationship}
                         />
                         {errors.idStatusRelationship && (
                             <small className="p-invalid text-red-500">
@@ -65,6 +73,7 @@ const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformatio
                             id="contactName"
                             type="text"
                             {...register("contactName")}
+                            defaultValue={employee?.contactName}
                         />
                         {errors.contactName && (
                             <small className="p-invalid text-red-500">
@@ -80,6 +89,8 @@ const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformatio
                             {...register("contactNumber")}
                             mask="999-999-9999"
                             id="contactNumber"
+                            type="text"
+                            defaultValue={employee?.contactNumber}
                         />
 
                         {errors.contactNumber && (
@@ -93,10 +104,10 @@ const EmergencyEmployeeContact = ({ setContactInformation, addEmployeeInformatio
             <div className="flex justify-content-end">
                 <Button
                     icon="pi pi-user-plus"
-                    iconPos="right"
+                    iconPos="left"
                     label="Contratar"
+                    type="submit"
                     className="p-button-primary"
-                    onClick={addEmployeeInformation}
                 />
             </div>
         </form>

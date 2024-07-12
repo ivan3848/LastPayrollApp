@@ -128,6 +128,7 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             value={watch("birthDate") ?? person?.birthDate}
                             onChange={(e) => setValue("birthDate", e.value!)}
                             showIcon
+                            showButtonBar
                         />
                         {errors.birthDate && (
                             <small className="p-invalid text-red-500">

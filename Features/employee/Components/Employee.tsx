@@ -15,33 +15,11 @@ const Employee = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
-        addEntityDialog,
-        setAddEntityDialog,
-        editEntityDialog,
-        setEditEntityDialog,
         entity,
-        setEntity,
         submitted,
         setSubmitted,
         toast,
     } = useCrudModals<IEmployee>();
-
-    const handleAdd = () => {
-        setSubmitted(false);
-        setAddEntityDialog(true);
-    };
-
-    const handleEdit = (entity: IEmployee) => {
-        setEntity(entity);
-        setSubmitted(false);
-        setEditEntityDialog(true);
-    };
-
-    const handleDelete = (entity: IEmployee) => {
-        setEntity(entity);
-        setSubmitted(false);
-        setDeleteEntityDialog(true);
-    };
 
     const skeleton = () => {
         return (
@@ -76,30 +54,9 @@ const Employee = () => {
                     <Suspense fallback={skeleton()}>
                         <EmployeeTable
                             submitted={submitted}
-                            handleAdd={handleAdd}
-                            handleDelete={handleDelete}
-                            handleEdit={handleEdit}
                         />
                     </Suspense>
 
-                    {/* {addEntityDialog && (
-                        <AddEmployee
-                            addEntityDialog={addEntityDialog}
-                            setAddEntityDialog={setAddEntityDialog}
-                            setSubmitted={setSubmitted}
-                            toast={toast}
-                        />
-                    )} */}
-
-                    {/* {editEntityDialog && (
-                        <EditEmployee
-                            entity={entity!}
-                            editEntityDialog={editEntityDialog}
-                            setEditEntityDialog={setEditEntityDialog}
-                            setSubmitted={setSubmitted}
-                            toast={toast}
-                        />
-                    )} */}
                     {deleteEntityDialog && (
                         <DeleteEntity
                             id={entity?.idEmployee ?? 0}

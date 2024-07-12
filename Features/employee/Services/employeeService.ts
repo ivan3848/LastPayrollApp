@@ -2,7 +2,13 @@ import ApiService from "@/services/ApiService";
 import { IEmployee } from "../Types/IEmployee";
 import { IEmployeeChange } from "../Types/IEmployeeChange";
 import { IEmployeeHistory } from "../Types/IEmployeeHistory";
+import { IInsertEmployee } from "../Types/IInsertEmployee";
+
 const employeeService = new ApiService<IEmployee, IEmployee>(
+    "employee/employee"
+);
+
+const addEmployeeService = new ApiService<IInsertEmployee, IInsertEmployee>(
     "employee/employee"
 );
 
@@ -17,4 +23,4 @@ const employeeHistory = new ApiService<IEmployee, IEmployeeHistory>(
 
 
 export default employeeService;
-export { employeeChangeService, employeeHistory };
+export { employeeChangeService, employeeHistory, addEmployeeService };

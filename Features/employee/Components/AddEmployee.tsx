@@ -3,6 +3,7 @@ import useContractTypeQuery from "@/Features/contractType/Hooks/useContractTypeQ
 import useDepartmentQuery from "@/Features/departments/Hooks/useDepartmentQuery";
 import useDisabilityQuery from "@/Features/disability/Hooks/useDisabilityQuery";
 import useGroupManagerQuery from "@/Features/groupManager/Hooks/useGroupManagerQuery";
+import useGetFreeHierarchyPosition from "@/Features/hierarchyPosition/Hooks/useGetFreeHierarchyPosition";
 import usePayrollAreaQuery from "@/Features/payrollArea/Hooks/usePayrollAreaQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
@@ -15,26 +16,28 @@ import useWorkSchedulerQuery from "@/Features/workScheduler/Hooks/useWorkSchedul
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
+import { DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useForm } from "react-hook-form";
-import useEmployeeQuery from "../Hooks/useEmployeeQuery";
 import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
+import { useEffect, useState } from "react";
+import { IHierarchyPosition } from "@/Features/hierarchyPosition/Types/IHierarchyPosition";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
     setStep: (value: number) => void;
+    handleAdd: () => void;
     employee?: IEmployee;
 }
 
-const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
+const AddEmployee = ({ setEmployee, setStep, employee, handleAdd }: Props) => {
     const { addEntityFormSchema } = employeeFormSchemas();
     const { setFilters, params, setAllData } = useParamFilter();
 
     const {
         handleSubmit,
         register,
-        reset,
         watch,
         setValue,
         formState: { errors },
@@ -42,19 +45,49 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
         resolver: zodResolver(addEntityFormSchema),
     });
 
+    const idPosition = watch("idPosition") ?? 0;
+    const [freeHierarchyPosition, setFreeHierarchyPosition] = useState<
+        IHierarchyPosition[]
+    >([]);
+
+    useEffect(() => {
+        const FetchData = async () => {
+            const data = useGetFreeHierarchyPosition(idPosition, [
+                !idPosition,
+            ]);
+            setFreeHierarchyPosition(data.data.items);
+        };
+
+        FetchData();
+    }, [idPosition]);
+    
     const onDepartmentChange = () => {
         setFilters([{ column: "idDepartment", value: watch("idDepartment") }]);
         setAllData(true);
     };
 
-    const onPositionChange = () => {
-        setFilters([{ column: "idPosition", value: watch("idPosition") }]);
-        setAllData(true);
+    const OnPositionChange = () => {
+        if (freeHierarchyPosition.length > 0) {
+            setValue(
+                "idHierarchyPosition",
+                freeHierarchyPosition[0].idHierarchyPosition
+            );
+            setFilters([{ column: "idPosition", value: watch("idPosition") }]);
+            setAllData(true);
+            return;
+        }
+
+        handleAdd();
     };
 
-    const onPositionManagerChange = () => {
-        setFilters([{ column: "idPosition", value: watch("idPosition") }]);
-        setAllData(true);
+    const onPositionManagerChange = (e: DropdownChangeEvent) => {
+        setValue(
+            "idHierarchyPositionManager",
+            watch(
+                "idHierarchyPositionManager",
+                e.target.value.idHierarchyPosition
+            )
+        );
     };
 
     const onSubmit = (data: IEmployee) => {
@@ -115,7 +148,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             watch={watch}
                             isDisabled={!watch("idDepartment")}
                             param={params}
-                            onChange={onPositionChange}
+                            onChange={OnPositionChange}
                             idValueEdit={employee?.idPosition}
                         />
                         {errors.idPosition && (
@@ -128,7 +161,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                         <label htmlFor="idHierarchyPositionManager">
                             Supervisor
                         </label>
-                        <GenericDropDown
+                        {/* <GenericDropDown
                             id="idHierarchyPosition"
                             isValid={!!errors.idHierarchyPositionManager}
                             text="employeeName"
@@ -139,7 +172,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             param={params}
                             onChange={onPositionManagerChange}
                             idValueEdit={employee?.idHierarchyPositionManager}
-                        />
+                        /> */}
                         {errors.idHierarchyPositionManager && (
                             <small className="p-invalid text-red-500">
                                 {errors.idHierarchyPositionManager.message?.toString()}
@@ -216,9 +249,10 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                         <label htmlFor="startDate">Fecha De Inicio</label>
                         <Calendar
                             id="startDate"
-                            value={watch("startDate")}
+                            value={watch("startDate") ?? employee?.startDate}
                             onChange={(e) => setValue("startDate", e.value!)}
                             showIcon
+                            showButtonBar
                         />
                         {errors.startDate && (
                             <small className="p-invalid text-red-500">
@@ -227,14 +261,15 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                         )}
                     </div>
                     <div className="field col-12 md:col-6 lg:col-4">
-                        <label htmlFor="endWorkDate">
-                            Fecha De Termino (opcional)
-                        </label>
+                        <label htmlFor="endWorkDate">Fecha De Termino</label>
                         <Calendar
                             id="endWorkDate"
-                            value={watch("endWorkDate")}
+                            value={
+                                watch("endWorkDate") ?? employee?.endWorkDate
+                            }
                             onChange={(e) => setValue("endWorkDate", e.value!)}
                             showIcon
+                            showButtonBar
                         />
                         {errors.endWorkDate && (
                             <small className="p-invalid text-red-500">
@@ -248,6 +283,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             id="email"
                             type="email"
                             {...register("email")}
+                            defaultValue={employee?.email}
                         />
                         {errors.email && (
                             <small className="p-invalid text-red-500">
@@ -264,6 +300,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             watch={watch}
                             text="description"
                             useQuery={useContractTypeQuery}
+                            idValueEdit={employee?.idContractType}
                         />
                         {errors.idContractType && (
                             <small className="p-invalid text-red-500">
@@ -281,6 +318,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             setValue={setValue}
                             watch={watch}
                             tableName={TABLE_NAME_CONTRACT}
+                            idValueEdit={employee?.idStatusActionClass}
                         />
                         {errors.idStatusActionClass && (
                             <small className="p-invalid text-red-500">
@@ -297,6 +335,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={useGroupManagerQuery}
+                            idValueEdit={employee?.idGroupManager}
                         />
                         {errors.idGroupManager && (
                             <small className="p-invalid text-red-500">
@@ -313,6 +352,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                             watch={watch}
                             text="name"
                             useQuery={useDisabilityQuery}
+                            idValueEdit={employee?.idDisability}
                         />
                         {errors.idDisability && (
                             <small className="p-invalid text-red-500">
@@ -327,6 +367,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                                 text="Labor Directa"
                                 watch={watch}
                                 setValue={setValue}
+                                currentValue={employee?.workRelation}
                             />
                         </div>
                     </div>
@@ -337,6 +378,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                                 text="Sindicato"
                                 watch={watch}
                                 setValue={setValue}
+                                currentValue={employee?.sindicate}
                             />
                         </div>
                     </div>
@@ -347,6 +389,7 @@ const AddEmployee = ({ setEmployee, setStep, employee }: Props) => {
                                 text="Genera Horas Extras"
                                 watch={watch}
                                 setValue={setValue}
+                                currentValue={employee?.extraHours}
                             />
                         </div>
                     </div>

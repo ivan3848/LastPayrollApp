@@ -193,6 +193,7 @@ const useParamAllData = () => {
 
     return {
         params,
+        setParams,
     };
 };
 

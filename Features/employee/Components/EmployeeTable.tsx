@@ -19,9 +19,6 @@ import Link from "next/link";
 
 interface Props {
     submitted: boolean;
-    handleAdd: () => void;
-    handleEdit: (entity: IEmployee) => void;
-    handleDelete: (entity: IEmployee) => void;
 }
 
 const sortOptions = [
@@ -34,9 +31,6 @@ const sortOptions = [
 
 export default function EmployeeTable({
     submitted,
-    handleDelete,
-    handleEdit,
-    handleAdd,
 }: Props) {
     const {
         setPage,

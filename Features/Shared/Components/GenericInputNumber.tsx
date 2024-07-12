@@ -46,6 +46,9 @@ const GenericInputNumber = ({
             showButtons
             autoFocus={isFocus}
             format={format}
+            minFractionDigits={2}
+            maxFractionDigits={2}
+            prefix="RD$"
         />
     );
 };
