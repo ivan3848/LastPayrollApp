@@ -4,10 +4,10 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { IToolWorkDefinition } from "../Types/IToolWorkDefinition";
-import toolWorkDefinitionFormSchemas from "../Validations/ToolWorkDefinitionFormSchemas";
+import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
+import ToolWorkDefinitionEmployeeFormSchemas from "../Validations/ToolWorkDefinitionEmployeeFormSchemas";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import useAddToolWorkDefinitionQuery from "../Hooks/useAddTookWorkDefinitionQuery";
+import useAddToolWorkDefinitionEmployeeQuery from "../Hooks/useAddTookWorkDefinitionEmployeeQuery";
 
 interface Props {
     addEntityDialog: boolean;
@@ -16,31 +16,31 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddToolWorkDefinition = ({
+const AddToolWorkDefinitionEmployee = ({
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
-    const { addEntityFormSchema } = toolWorkDefinitionFormSchemas();
+    const { addEntityFormSchema } = ToolWorkDefinitionEmployeeFormSchemas();
 
     const {
         handleSubmit,
         register,
         reset,
         formState: { errors },
-    } = useForm<IToolWorkDefinition>({
+    } = useForm<IToolWorkDefinitionEmployee>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddToolWorkDefinitionQuery({
+    const addEntity = useAddToolWorkDefinitionEmployeeQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
     });
 
-    const onSubmit = (data: IToolWorkDefinition) => {
+    const onSubmit = (data: IToolWorkDefinitionEmployee) => {
         addEntity.mutate(data);
         return;
     };
@@ -60,24 +60,24 @@ const AddToolWorkDefinition = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
-                    <label htmlFor="name" className="w-full">
+                    <label htmlFor="description" className="w-full">
                         Herramienta
                     </label>
                     <InputText
-                        {...register("name")}
-                        id="name"
-                        autoFocus 
+                        {...register("description")}
+                        id="description"
+                        autoFocus
                         className={classNames({
-                            "p-invalid": errors.name,
+                            "p-invalid": errors.description,
                         })}
                     />
-                    {errors.name && (
+                    {errors.description && (
                         <small className="p-invalid text-danger">
-                            {errors.name.message?.toString()}
+                            {errors.description.message?.toString()}
                         </small>
                     )}
                 </div>
-                <div className="field">
+                {/* <div className="field">
                     <label htmlFor="code" className="w-full">
                         Código
                     </label>
@@ -112,11 +112,11 @@ const AddToolWorkDefinition = ({
                             {errors.description.message?.toString()}
                         </small>
                     )}
-                </div>
+                </div> */}
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>
     );
 };
 
-export default AddToolWorkDefinition;
+export default AddToolWorkDefinitionEmployee;
