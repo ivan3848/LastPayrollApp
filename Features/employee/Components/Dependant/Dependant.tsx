@@ -4,10 +4,13 @@ import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import { IDependant } from "./Types/IDependant";
 import DependantTable from "./DependantTable";
 import AddDependant from "./AddDependant";
+import { IPerson } from "@/Features/person/Types/IPerson";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import { addDependantService } from "./Services/dependantService";
 
 interface props {
     id: number;
@@ -28,6 +31,24 @@ const Dependant = ({ id }: props) => {
         toast,
     } = useCrudModals<IDependant>();
 
+    const [person, setPerson] = useState<IPerson>();
+    const [dependant, setDependant] = useState<IDependant>();
+
+    const addEntity = useAddEntityQuery<IDependant>({
+        toast,
+        service: addDependantService,
+        setEntity: setPerson,
+    });
+
+    const AddDependants = () => {
+        const dependantToAdd = {
+            ...dependant!,
+            person: {
+                ...person!,
+            },
+        } as IDependant;
+        addEntity.mutate(dependantToAdd);
+    };
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
@@ -78,11 +99,13 @@ const Dependant = ({ id }: props) => {
 
                 {addEntityDialog && (
                     <AddDependant
-                        addEntityDialog={addEntityDialog}
-                        setAddEntityDialog={setAddEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
                         id={id}
+                        addEntityDialog={addEntityDialog}
+                        setDependant={setDependant}
+                        person={person!}
+                        setAddEntityDialog={setAddEntityDialog}
+                        addDependant={AddDependants}
+                        toast={toast}
                     />
                 )}
 

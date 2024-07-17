@@ -1,96 +1,149 @@
-import { TABLE_NAME_RELATIONSHIP } from "@/constants/StatusTableName";
-import useAddPersonQuery from "@/Features/person/Components/Hooks/useAddPersonQuery";
-import personFormSchemas from "@/Features/person/Components/Validations/PersonFormSchemas";
-import { IPerson } from "@/Features/person/Types/IPerson";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dialog } from "primereact/dialog";
-import React from "react";
+import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
+import { InputMask } from "primereact/inputmask";
+import { IPerson } from "@/Features/person/Types/IPerson";
+import dependantFormSchema from "./Validation/dependantFormSchema";
+import { Dialog } from "primereact/dialog";
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import { IDependant } from "./Types/IDependant";
 
 interface Props {
-    id: number;
-    addEntityDialog: boolean;
+    setDependant: (value: IDependant) => void;
     setAddEntityDialog: (value: boolean) => void;
-    setSubmitted: (value: boolean) => void;
+    addDependant: () => void;
+    addEntityDialog: boolean;
     toast: React.MutableRefObject<any>;
+    id: number;
+    person: IPerson;
 }
 
 const AddDependant = ({
-    addEntityDialog,
     setAddEntityDialog,
-    setSubmitted,
-    toast,
+    addEntityDialog,
+    addDependant,
+    setDependant,
+    id,
+    person,
 }: Props) => {
-    const { addEntityFormSchema } = personFormSchemas();
+    const { addEntityFormSchema } = dependantFormSchema();
 
     const {
         handleSubmit,
         register,
-        reset,
-        setValue,
-        watch,
         formState: { errors },
     } = useForm<IPerson>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddPersonQuery({
-        toast,
-        setAddEntityDialog,
-        setSubmitted,
-        reset,
-    });
-
-    const onSubmit = (data: IPerson) => {
-        addEntity.mutate(data);
+    const onSubmit = (data: IDependant) => {
+        data.idEmployee = id;
+        const updatedData = {
+            ...data,
+            person: person,
+        };
+        setDependant(updatedData);
+        addDependant();
         return;
     };
 
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
-
     return (
         <Dialog
             visible={addEntityDialog}
-            header="Agregar Person"
+            style={{ width: "50vw" }}
+            header="Agregar Dependiente"
             modal
-            style={{ width: "45vw" }}
             className="p-fluid"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="field">
-                    <label htmlFor="idConceptType" className="w-full">
-                        Tipo de concepto
-                    </label>
-                    <GenericStatusDropDown
-                        id="IdStatusRelationship"
-                        isValid={!!errors.dependant?.idStatusRelationship}
-                        setValue={setValue}
-                        watch={watch}
-                        isFocus={true}
-                        tableName={TABLE_NAME_RELATIONSHIP}
-                    />
-                    {errors.dependant?.idStatusRelationship && (
-                        <small className="p-invalid text-danger">
-                            {errors.dependant?.idStatusRelationship.message?.toString()}
-                        </small>
-                    )}
-
-                    <label htmlFor="name" className="w-full">
-                        Nombre
-                    </label>
-                    <input
-                        type="text"
-                        {...register("firstName")}
-                        className="w-full"
-                    />
+                <div className="col-12">
+                    <div className="p-fluid formgrid grid">
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="identification">
+                                Identificación
+                            </label>
+                            <InputMask
+                                {...register("identification")}
+                                mask="999-9999999-9"
+                                id="identification"
+                                autoFocus
+                                defaultValue={person?.identification}
+                            />
+                            {errors.identification && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.identification.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="firstName">Primer Nombre</label>
+                            <InputText
+                                id="firstName"
+                                type="text"
+                                {...register("firstName")}
+                                defaultValue={person?.firstName}
+                            />
+                            {errors.firstName && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.firstName.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="middleName">Segundo Nombre</label>
+                            <InputText
+                                id="middleName"
+                                type="text"
+                                {...register("middleName")}
+                                defaultValue={person?.middleName}
+                            />
+                            {errors.middleName && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.middleName.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="firstLastName">
+                                Primer Apellido
+                            </label>
+                            <InputText
+                                id="firstLastName"
+                                type="text"
+                                {...register("firstLastName")}
+                                defaultValue={person?.firstLastName}
+                            />
+                            {errors.firstLastName && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.firstLastName.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="secondLastName">
+                                Segundo Apellido
+                            </label>
+                            <InputText
+                                id="secondLastName"
+                                type="text"
+                                {...register("secondLastName")}
+                                defaultValue={person?.secondLastName}
+                            />
+                            {errors.secondLastName && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.secondLastName.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                    </div>
                 </div>
-
-                <DialogFooterButtons hideDialog={hideDialog} />
+                <div className="flex justify-content-end">
+                    <DialogFooterButtons hideDialog={hideDialog} />
+                </div>
             </form>
         </Dialog>
     );

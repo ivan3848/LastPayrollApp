@@ -1,11 +1,17 @@
 import ApiService from "@/services/ApiService";
 import { IDependant } from "../Types/IDependant";
 
-const dependant = new ApiService<IDependant, IDependant>("employee/dependant");
+const dependantService = new ApiService<IDependant, IDependant>(
+    "employee/dependant"
+);
 
-const dependantByIdEmployee = new ApiService<IDependant, IDependant>(
+const addDependantService = new ApiService<IDependant, IDependant>(
+    "employee/dependant"
+);
+
+const dependantByIdEmployeeService = new ApiService<IDependant, IDependant>(
     `employee/dependant/byIdEmployee/`
 );
 
-export default dependant;
-export { dependantByIdEmployee };
+export default dependantService;
+export { dependantByIdEmployeeService, addDependantService };

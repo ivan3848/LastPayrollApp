@@ -5,7 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import { IDependant } from "./Types/IDependant";
-import useDependantService from "./Hooks/useDependantService";
+import useAddDependantQuery from "./Hooks/useAddDependantQuery";
 
 interface Props {
     idEmployee: number;
@@ -24,11 +24,6 @@ const DependantTable = ({
 }: Props) => {
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useDependantService(
-        params,
-        listOfDependencies,
-        idEmployee
-    );
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -39,16 +34,7 @@ const DependantTable = ({
 
     return (
         <Card className="m-2">
-            <DataTable
-                value={data}
-                header={header}
-                className="p-datatable-sm"
-                dataKey="idBankEmployeeHistory"
-                paginator
-                rows={5}
-                rowsPerPageOptions={[5, 10, 15]}
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            >
+            <DataTable header={header}>
                 <Column field="bankName" header="Nombre" />
                 <Column field="paymentMethod" header="Parentesco" />
                 <Column field="accountNumber" header="Número de Cuenta" />

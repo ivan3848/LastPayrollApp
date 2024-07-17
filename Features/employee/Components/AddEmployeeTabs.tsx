@@ -9,11 +9,12 @@ import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
 import { useState } from "react";
-import { addEmployeeService } from "../Services/employeeService";
 import { IInsertEmployee } from "../Types/IInsertEmployee";
 import AddPerson from "./../../person/Components/AddPerson";
 import AddEmployee from "./AddEmployee";
 import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
+import { addDependantService } from "./Dependant/Services/dependantService";
+import { IDependant } from "./Dependant/Types/IDependant";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
@@ -50,9 +51,9 @@ const AddEmployeeTabs = () => {
         },
     ];
 
-    const addEmployee = useAddEntityQuery<IInsertEmployee>({
+    const addEmployee = useAddEntityQuery<IDependant>({
         toast,
-        service: addEmployeeService,
+        service: addDependantService,
         setEntity: setEmployee,
     });
 

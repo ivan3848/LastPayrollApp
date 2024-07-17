@@ -52,15 +52,13 @@ const AddEmployee = ({ setEmployee, setStep, employee, handleAdd }: Props) => {
 
     useEffect(() => {
         const FetchData = async () => {
-            const data = useGetFreeHierarchyPosition(idPosition, [
-                !idPosition,
-            ]);
+            const data = useGetFreeHierarchyPosition(idPosition, [!idPosition]);
             setFreeHierarchyPosition(data.data.items);
         };
 
         FetchData();
     }, [idPosition]);
-    
+
     const onDepartmentChange = () => {
         setFilters([{ column: "idDepartment", value: watch("idDepartment") }]);
         setAllData(true);
