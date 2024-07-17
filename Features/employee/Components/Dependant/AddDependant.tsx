@@ -3,10 +3,10 @@ import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
 import { InputMask } from "primereact/inputmask";
 import { IPerson } from "@/Features/person/Types/IPerson";
-import dependantFormSchema from "./Validation/dependantFormSchema";
 import { Dialog } from "primereact/dialog";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { IDependant } from "./Types/IDependant";
+import dependantFormSchema from "./Validation/DependantFormSchema";
 
 interface Props {
     setDependant: (value: IDependant) => void;
@@ -23,11 +23,10 @@ const AddDependant = ({
     addEntityDialog,
     addDependant,
     setDependant,
-    id,
     person,
+    id,
 }: Props) => {
     const { addEntityFormSchema } = dependantFormSchema();
-
     const {
         handleSubmit,
         register,
@@ -38,11 +37,8 @@ const AddDependant = ({
 
     const onSubmit = (data: IDependant) => {
         data.idEmployee = id;
-        const updatedData = {
-            ...data,
-            person: person,
-        };
-        setDependant(updatedData);
+        setDependant(data);
+        console.log(data);
         addDependant();
         return;
     };
