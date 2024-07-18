@@ -2,7 +2,7 @@ import { IPerson } from "@/Features/person/Types/IPerson";
 
 export interface IInsertEmployee {
     idHierarchyPosition?: number;
-    idHierarchyPositionManager?: number | null;
+    idEmployeeManager?: number | null;
     functionDescription?: string | null;
     idPayrollArea?: number;
     salary?: number;

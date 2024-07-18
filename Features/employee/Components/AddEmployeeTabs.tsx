@@ -42,7 +42,7 @@ const AddEmployeeTabs = () => {
         },
         {
             label: "Información Del Empleado",
-            // disabled: !!!person?.identification,
+            disabled: !!!person?.identification,
         },
         {
             label: "Contacto De Emergencias",
@@ -85,6 +85,7 @@ const AddEmployeeTabs = () => {
                     toast={toast}
                 />
             )}
+
             <div className="card">
                 <Steps
                     model={items}
@@ -100,6 +101,7 @@ const AddEmployeeTabs = () => {
                         person={person}
                     />
                 )}
+                
                 {step === 1 && (
                     <AddEmployee
                         setStep={setStep}
@@ -109,6 +111,7 @@ const AddEmployeeTabs = () => {
                         toast={toast}
                     />
                 )}
+
                 {step === 2 && (
                     <EmergencyEmployeeContact
                         employee={employee}
