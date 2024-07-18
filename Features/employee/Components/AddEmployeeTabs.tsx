@@ -99,9 +99,10 @@ const AddEmployeeTabs = () => {
                         setStep={setStep}
                         setPerson={setPerson}
                         person={person}
+                        step={step}
                     />
                 )}
-                
+
                 {step === 1 && (
                     <AddEmployee
                         setStep={setStep}

@@ -14,26 +14,36 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import useNationalityQuery from "@/Features/nationality/Hooks/useNationalityQuery";
 import useEducationQuery from "@/Features/education/Hooks/useEducationQuery";
 import { Button } from "primereact/button";
+import { useEffect } from "react";
 
 interface Props {
     setPerson: (value: IPerson) => void;
     setStep: (value: number) => void;
     person?: IPerson;
+    step: number;
 }
 
-const AddPerson = ({ setPerson, setStep, person }: Props) => {
+const AddPerson = ({ setPerson, setStep, person, step }: Props) => {
     const { addEntityFormSchema } = personFormSchemas();
 
     const {
         handleSubmit,
         register,
-        reset,
         watch,
         setValue,
         formState: { errors },
     } = useForm<IPerson>({
         resolver: zodResolver(addEntityFormSchema),
     });
+
+    useEffect(() => {
+        console.log("person", person);
+        if (person) {
+            Object.keys(person).forEach((key) => {
+                setValue(key as keyof IPerson, person[key as keyof IPerson]);
+            });
+        }
+    }, [person, setValue, step, setStep]);
 
     const onSubmit = (data: IPerson) => {
         setPerson(data);
@@ -53,6 +63,7 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             id="identification"
                             autoFocus
                             defaultValue={person?.identification}
+                            key={person?.identification}
                         />
                         {errors.identification && (
                             <small className="p-invalid text-red-500">
@@ -125,6 +136,7 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             onChange={(e) => setValue("birthDate", e.value!)}
                             showIcon
                             showButtonBar
+                            key={person?.birthDate.toString()}
                         />
                         {errors.birthDate && (
                             <small className="p-invalid text-red-500">

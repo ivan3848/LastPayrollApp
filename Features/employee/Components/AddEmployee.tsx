@@ -50,6 +50,7 @@ const AddEmployee = ({ setEmployee, setStep, employee, toast }: Props) => {
         setValue,
         formState: { errors },
     } = useForm<IEmployee>({
+        defaultValues: {},
         resolver: zodResolver(addEntityFormSchema),
     });
 
