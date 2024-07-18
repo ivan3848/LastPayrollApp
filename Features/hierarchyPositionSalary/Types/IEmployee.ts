@@ -7,7 +7,7 @@ interface IEmployee {
     startDate?: Date;
     salary: number;
     email?: string;
-    idHierarchyPositionManager: number;
+    idEmployeeManager: number;
     sindicate?: boolean;
     extraHours?: boolean;
     temporal?: boolean;

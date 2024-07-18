@@ -106,6 +106,7 @@ const AddEmployeeTabs = () => {
                         setEmployee={setEmployee}
                         employee={employee}
                         handleAdd={handleAdd}
+                        toast={toast}
                     />
                 )}
                 {step === 2 && (

@@ -12,10 +12,11 @@ interface Props<T> {
     text: string;
     id: string;
     idValueEdit?: number;
-    setValue: UseFormSetValue<any>;
-    watch: (field: string) => any;
+    idToSet?: string;
     isDisabled?: boolean;
     param?: IParamsApi;
+    setValue: UseFormSetValue<any>;
+    watch: (field: string) => any;
     onChange?: (e: DropdownChangeEvent) => void;
     useQuery: (
         params: IParamsApi,
@@ -28,11 +29,12 @@ function GenericDropDown<T>({
     text,
     id,
     idValueEdit,
+    isDisabled,
+    param,
+    idToSet = id,
     setValue,
     watch,
     useQuery,
-    isDisabled,
-    param,
     onChange,
 }: Props<T>) {
     useEffect(() => {
@@ -48,10 +50,10 @@ function GenericDropDown<T>({
         <>
             <Dropdown
                 value={data.items.find(
-                    (item: any) => item[id] === (watch(id) ?? idValueEdit)
+                    (item: any) => item[id] === (watch(idToSet) ?? idValueEdit)
                 )}
                 onChange={(e: DropdownChangeEvent) => {
-                    setValue(id, e.value[id]);
+                    setValue(idToSet, e.value[id]);
                     onChange && onChange(e);
                 }}
                 options={data.items}
