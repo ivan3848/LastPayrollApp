@@ -11,6 +11,7 @@ import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmploye
 import useToolWorkDefinitionEmployeeQuery from "../Hooks/useToolWorkDefinitionEmployeeQuery";
 
 interface Props {
+    idEmployee: number;
     submitted: boolean;
     handleAdd: () => void;
     handleEdit: (entity: IToolWorkDefinitionEmployee) => void;
@@ -22,6 +23,7 @@ const ToolWorkDefinitionEmployeeTable = ({
     handleDelete,
     handleEdit,
     handleAdd,
+    idEmployee,
 }: Props) => {
     const {
         setPage,
@@ -34,7 +36,11 @@ const ToolWorkDefinitionEmployeeTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useToolWorkDefinitionEmployeeQuery(params, listOfDependencies);
+    const { data, isLoading } = useToolWorkDefinitionEmployeeQuery(
+        params,
+        listOfDependencies,
+        idEmployee
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -82,7 +88,7 @@ const ToolWorkDefinitionEmployeeTable = ({
         <DataTable
             id="ToolWorkDefinitionEmployee-Table"
             dataKey="idToolWorkDefinitionEmployee"
-            value={data?.items}
+            value={data}
             lazy
             paginator
             loading={isLoading}
@@ -91,15 +97,13 @@ const ToolWorkDefinitionEmployeeTable = ({
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
             sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
             sortMode="single"
-            totalRecords={data?.totalCount}
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
             emptyMessage="No hay registros para mostrar."
             header={header}
             onPage={onPage}
             rowsPerPageOptions={[5, 10, 25]}
-            rows={data?.pageSize!}
-            first={data.firstRow!}
+            rows={5}
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
