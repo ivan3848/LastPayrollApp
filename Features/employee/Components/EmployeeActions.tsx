@@ -61,6 +61,9 @@ const EmployeeActions = ({
                     {openAction === EmployeeOptionsEnum.BankManagement && (
                         <BankEmployeeHistory id={employee.idEmployee!} />
                     )}
+                    {openAction === EmployeeOptionsEnum.Tools && (
+                        <BankEmployeeHistory id={employee.idEmployee!} />
+                    )}
                 </div>
             </Dialog>
         </>
