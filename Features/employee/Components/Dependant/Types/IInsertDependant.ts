@@ -1,5 +1,3 @@
-import { IPerson } from "@/Features/person/Types/IPerson";
-
 export interface IInsertDependant {
     idDependant?: number;
     idEmployee?: number;

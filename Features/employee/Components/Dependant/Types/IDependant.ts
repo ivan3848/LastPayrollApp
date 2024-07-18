@@ -2,25 +2,16 @@ import { IPerson } from "@/Features/person/Types/IPerson";
 
 export interface IDependant {
     idDependant?: number;
+    identification: string;
     idEmployee?: number;
     idStatusRelationship?: number;
+    relationship?: string;
     idPerson?: number;
-    identification: string;
-    idStatusMarital?: number;
-    statusMarital: string;
-    statusEducation: string;
-    firstName: string;
+    firstName?: string;
     middleName?: string;
-    firstLastName: string;
+    lastName?: string;
     secondLastName?: string;
-    address?: string;
-    email?: string;
-    phoneNumber?: string;
-    cellphoneNumber?: string;
-    idNationality: number;
-    identificationDisplay: string;
+    fullName?: string;
     birthDate: Date;
-    idEducation: number;
-    idGender?: number;
-    gender?: string;
+    person?: IPerson;
 }

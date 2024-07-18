@@ -63,7 +63,6 @@ const EditBankEmployeeHistory = ({
     });
 
     const onSubmit = (data: IBankEmployeeHistory) => {
-        console.log(data);
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
         data.startDate = data!.startDate!;
@@ -132,26 +131,30 @@ const EditBankEmployeeHistory = ({
                     )}
                 </div>
                 <div className="field col-12 md:col-3">
-                    <label htmlFor="startDate" className="block mb-1">
-                        Fecha de Inicio
-                    </label>
+                    <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        {...register("startDate")}
+                        value={watch("startDate")}
+                        onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
+                        showButtonBar
                     />
                     {errors.startDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.startDate.message?.toString()}
                         </small>
                     )}
 
-                    <label htmlFor="endDate" className="block mt-2">
-                        Fecha final
-                    </label>
-                    <Calendar id="endDate" {...register("endDate")} showIcon />
+                    <label htmlFor="startDate">Fecha final</label>
+                    <Calendar
+                        id="endDate"
+                        value={watch("endDate")}
+                        onChange={(e) => setValue("endDate", e.value!)}
+                        showIcon
+                        showButtonBar
+                    />
                     {errors.endDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}
                         </small>
                     )}

@@ -4,13 +4,11 @@ import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import { IDependant } from "./Types/IDependant";
 import DependantTable from "./DependantTable";
 import AddDependant from "./AddDependant";
-import { IPerson } from "@/Features/person/Types/IPerson";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import { addDependantService } from "./Services/dependantService";
+import EditDependant from "./EditDependant";
 
 interface props {
     id: number;
@@ -31,24 +29,6 @@ const Dependant = ({ id }: props) => {
         toast,
     } = useCrudModals<IDependant>();
 
-    const [person, setPerson] = useState<IPerson>();
-    const [dependant, setDependant] = useState<IDependant>();
-
-    const addEntity = useAddEntityQuery<IDependant>({
-        toast,
-        service: addDependantService,
-        setEntity: setPerson,
-    });
-
-    const AddDependants = () => {
-        const dependantToAdd = {
-            ...dependant!,
-            person: {
-                ...person!,
-            },
-        } as IDependant;
-        addEntity.mutate(dependantToAdd);
-    };
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
@@ -66,7 +46,7 @@ const Dependant = ({ id }: props) => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Nombre", "Parentesco", "Acción"];
+    const entityProperties = ["Nombre", "Relación", "Acción"];
 
     return (
         <div className="grid">
@@ -87,25 +67,25 @@ const Dependant = ({ id }: props) => {
                     />
                 </Suspense>
 
-                {/* {editEntityDialog && (
+                {editEntityDialog && (
                     <EditDependant
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={editEntityDialog}
+                        id={id}
                     />
-                )}  */}
+                )}
 
                 {addEntityDialog && (
                     <AddDependant
                         id={id}
                         addEntityDialog={addEntityDialog}
-                        setDependant={setDependant}
-                        person={person!}
                         setAddEntityDialog={setAddEntityDialog}
-                        addDependant={AddDependants}
+                        handleAdd={handleAdd}
                         toast={toast}
+                        setSubmitted={setSubmitted}
                     />
                 )}
 

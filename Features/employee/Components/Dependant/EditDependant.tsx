@@ -1,72 +1,85 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InputText } from "primereact/inputtext";
-import { useForm } from "react-hook-form";
-import { InputMask } from "primereact/inputmask";
-import { IPerson } from "@/Features/person/Types/IPerson";
-import { Dialog } from "primereact/dialog";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { IDependant } from "./Types/IDependant";
-import dependantFormSchema from "./Validation/DependantFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
+import { useForm } from "react-hook-form";
+import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import dependantService from "./Services/dependantService";
-import { IInsertDependant } from "./Types/IInsertDependant";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_RELATIONSHIP } from "@/constants/StatusTableName";
+import { Dialog } from "primereact/dialog";
+import { IDependant } from "./Types/IDependant";
+import dependantFormSchema from "./Validation/DependantFormSchema";
+import useDependant from "./Hooks/useDependant";
+import { IInsertDependant } from "./Types/IInsertDependant";
+import { InputMask } from "primereact/inputmask";
+import useEditDependant from "./Hooks/useEditDependant";
+import { IPerson } from "@/Features/person/Types/IPerson";
 
 interface Props {
-    setAddEntityDialog: (value: boolean) => void;
-    addEntityDialog: boolean;
-    id: number;
-    person?: IPerson;
-    handleAdd: () => void;
+    entity: IDependant;
+    editEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    id: number;
+    person?: IPerson;
 }
 
-const AddDependant = ({
-    setAddEntityDialog,
-    addEntityDialog,
-    id,
-    toast,
+const EditBankEmployeeHistory = ({
+    entity,
+    setEditEntityDialog,
     setSubmitted,
-    person,
+    toast,
+    editEntityDialog,
+    id,
 }: Props) => {
-    const { addEntityFormSchema } = dependantFormSchema();
+    const { editEntityFormSchema } = dependantFormSchema();
+    const { params } = useParamFilter();
+
+    const listOfDependencies: boolean[] = [true];
+    const { data, isLoading } = useDependant(params, listOfDependencies);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     const {
         handleSubmit,
         register,
-        watch,
         reset,
+        watch,
         setValue,
         formState: { errors },
     } = useForm<IInsertDependant>({
-        resolver: zodResolver(addEntityFormSchema),
+        resolver: zodResolver(editEntityFormSchema),
     });
-
-    const addEntity = useAddEntityQuery({
+    const editEntity = useEditDependant({
         toast,
-        setAddEntityDialog,
+        setEditEntityDialog,
         setSubmitted,
         reset,
-        service: dependantService,
     });
 
     const onSubmit = (data: IDependant) => {
         data.idEmployee = id;
+        data.idPerson = entity.idPerson;
+        data.idDependant = entity.idDependant;
         data.person = { ...data };
-        addEntity.mutate(data);
+        editEntity.mutate(data);
+        return;
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
     };
+
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Agregar Dependiente"
+            header="Editar Dependiente"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -78,12 +91,10 @@ const AddDependant = ({
                             <label htmlFor="identification">
                                 Identificación
                             </label>
-                            <InputMask
+                            <InputText
                                 {...register("identification")}
-                                mask="999-9999999-9"
                                 id="identification"
-                                autoFocus
-                                defaultValue={person?.identification}
+                                defaultValue={entity.identification}
                             />
                             {errors.identification && (
                                 <small className="p-invalid text-red-500">
@@ -97,7 +108,7 @@ const AddDependant = ({
                                 id="firstName"
                                 type="text"
                                 {...register("firstName")}
-                                defaultValue={person?.firstName}
+                                defaultValue={entity.firstName}
                             />
                             {errors.firstName && (
                                 <small className="p-invalid text-red-500">
@@ -111,7 +122,7 @@ const AddDependant = ({
                                 id="middleName"
                                 type="text"
                                 {...register("middleName")}
-                                defaultValue={person?.middleName}
+                                defaultValue={entity?.middleName}
                             />
                             {errors.middleName && (
                                 <small className="p-invalid text-red-500">
@@ -127,7 +138,7 @@ const AddDependant = ({
                                 id="firstLastName"
                                 type="text"
                                 {...register("firstLastName")}
-                                defaultValue={person?.firstLastName}
+                                defaultValue={entity?.lastName}
                             />
                             {errors.firstLastName && (
                                 <small className="p-invalid text-red-500">
@@ -143,7 +154,7 @@ const AddDependant = ({
                                 id="secondLastName"
                                 type="text"
                                 {...register("secondLastName")}
-                                defaultValue={person?.secondLastName}
+                                defaultValue={entity?.secondLastName}
                             />
                             {errors.secondLastName && (
                                 <small className="p-invalid text-red-500">
@@ -158,10 +169,7 @@ const AddDependant = ({
                             </label>
                             <Calendar
                                 id="birthDate"
-                                value={
-                                    watch("birthDate") ??
-                                    new Date().toDateString()
-                                }
+                                value={entity.birthDate}
                                 onChange={(e) =>
                                     setValue("birthDate", e.value!)
                                 }
@@ -203,4 +211,4 @@ const AddDependant = ({
     );
 };
 
-export default AddDependant;
+export default EditBankEmployeeHistory;
