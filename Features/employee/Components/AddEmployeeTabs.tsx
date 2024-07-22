@@ -85,6 +85,7 @@ const AddEmployeeTabs = () => {
                     toast={toast}
                 />
             )}
+
             <div className="card">
                 <Steps
                     model={items}
@@ -100,14 +101,17 @@ const AddEmployeeTabs = () => {
                         person={person}
                     />
                 )}
+                
                 {step === 1 && (
                     <AddEmployee
                         setStep={setStep}
                         setEmployee={setEmployee}
                         employee={employee}
                         handleAdd={handleAdd}
+                        toast={toast}
                     />
                 )}
+
                 {step === 2 && (
                     <EmergencyEmployeeContact
                         employee={employee}

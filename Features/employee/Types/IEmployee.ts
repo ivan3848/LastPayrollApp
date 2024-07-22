@@ -1,7 +1,8 @@
 export interface IEmployee {
     idEmployee?: number;
     idHierarchyPosition?: number;
-    idHierarchyPositionManager?: number | null;
+    idEmployeeManager?: number | null;
+    employeeManagerName?: string | null;
     functionDescription?: string | null;
     idPayrollArea?: number;
     salary?: number;

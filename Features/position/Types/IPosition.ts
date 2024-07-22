@@ -13,4 +13,5 @@ export interface IPosition {
     idPositionManager: number;
     isActive?: boolean;
     action?: React.ReactNode;
+    idVacancy?: number;
 }

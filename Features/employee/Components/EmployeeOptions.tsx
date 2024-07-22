@@ -37,6 +37,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Herramientas"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Tools)}
                 />
                 <Button
                     label="Desvincular"
