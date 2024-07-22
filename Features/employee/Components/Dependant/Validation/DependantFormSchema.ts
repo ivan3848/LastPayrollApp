@@ -4,7 +4,8 @@ const dependantFormSchema = () => {
     const editEntityFormSchema = z.object({
         identification: z
             .string()
-            .length(13, { message: "El campo debe tener 13 caracteres." }),
+            .length(13, { message: "El campo debe tener 13 caracteres." })
+            .optional(),
         firstName: z
             .string()
             .min(2, { message: "El campo debe tener al menos 2 caracteres." })
@@ -28,7 +29,8 @@ const dependantFormSchema = () => {
     const addEntityFormSchema = z.object({
         identification: z
             .string()
-            .length(13, { message: "El campo debe tener 13 caracteres." }),
+            .length(13, { message: "El campo debe tener 13 caracteres." })
+            .optional(),
         firstName: z
             .string()
             .min(2, { message: "El campo debe tener al menos 2 caracteres." })
