@@ -32,7 +32,14 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     icon="pi pi-search"
                     className="m-2"
                 />
-                <Button label="Seguros" icon="pi pi-search" className="m-2" />
+                <Button
+                    label="Seguros"
+                    icon="pi pi-search"
+                    className="m-2"
+                    onClick={() =>
+                        setAction(EmployeeOptionsEnum.PersonInsurance)
+                    }
+                />
                 <Button
                     label="Herramientas"
                     icon="pi pi-search"
