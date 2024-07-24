@@ -62,6 +62,8 @@ const EditBankEmployeeHistory = ({
         reset,
     });
 
+    console.log(entity);
+
     const onSubmit = (data: IDependant) => {
         data.idEmployee = id;
         data.idPerson = entity.idPerson;
@@ -169,7 +171,7 @@ const EditBankEmployeeHistory = ({
                             </label>
                             <Calendar
                                 id="birthDate"
-                                value={entity.birthDate}
+                                value={new Date(entity.birthDate)}
                                 onChange={(e) =>
                                     setValue("birthDate", e.value!)
                                 }

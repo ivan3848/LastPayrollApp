@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
-import { Nullable } from "primereact/ts-helpers";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
@@ -134,7 +133,7 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={watch("startDate")}
+                        value={new Date(entity.startDate)}
                         onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
                         showButtonBar
@@ -145,10 +144,10 @@ const EditBankEmployeeHistory = ({
                         </small>
                     )}
 
-                    <label htmlFor="startDate">Fecha final</label>
+                    <label htmlFor="endDate">Fecha final</label>
                     <Calendar
                         id="endDate"
-                        value={watch("endDate")}
+                        value={new Date(entity.endDate)}
                         onChange={(e) => setValue("endDate", e.value!)}
                         showIcon
                         showButtonBar
