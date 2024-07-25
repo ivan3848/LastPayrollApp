@@ -92,6 +92,7 @@ const ToolWorkDefinitionEmployee = ({ id }: Props) => {
                             setEditEntityDialog={setEditEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
+                            idEmployee={id}
                         />
                     )}
                     {deleteEntityDialog && (

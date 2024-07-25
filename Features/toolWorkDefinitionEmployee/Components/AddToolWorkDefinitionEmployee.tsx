@@ -92,6 +92,8 @@ const AddToolWorkDefinitionEmployee = ({
                         id="assignationDate"
                         value={watch("assignationDate") ?? new Date()}
                         onChange={(e) => setValue("assignationDate", e.value!)}
+                        onFocus={() => setValue("assignationDate", new Date())}
+                        autoFocus
                         showIcon
                         showButtonBar
                     />

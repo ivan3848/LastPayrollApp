@@ -26,7 +26,7 @@ const useEditToolWorkDefinitionEmployeeQuery = ({
             });
         },
         onSuccess: () => {
-            reset();
+            if (reset) reset();
             setEditEntityDialog(false);
             setSubmitted(true);
 

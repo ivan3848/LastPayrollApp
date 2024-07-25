@@ -4,4 +4,5 @@ export interface IToolWorkDefinitionEmployee {
     idEmployee: number
     assignationDate?: Date
     description: string
+    toolWorkDefinitionName: string
 }
