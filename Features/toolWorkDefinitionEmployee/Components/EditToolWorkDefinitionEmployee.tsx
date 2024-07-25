@@ -3,11 +3,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useEditToolWorkDefinitionEmployeeQuery from "../Hooks/useEditToolWorkDefinitionEmployeeQuery";
 import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
 import ToolWorkDefinitionEmployeeFormSchemas from "../Validations/ToolWorkDefinitionEmployeeFormSchemas";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import { Calendar } from "primereact/calendar";
+import useToolWorkDefinitionQuery from "@/Features/toolWorkDefinition/Hooks/useToolWorkDefinitionQuery";
+import { Nullable } from "primereact/ts-helpers";
 
 interface Props {
     entity: IToolWorkDefinitionEmployee;
@@ -15,6 +19,7 @@ interface Props {
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    idEmployee: number;
 }
 
 const EditToolWorkDefinitionEmployee = ({
@@ -23,6 +28,7 @@ const EditToolWorkDefinitionEmployee = ({
     setEditEntityDialog,
     setSubmitted,
     toast,
+    idEmployee,
 }: Props) => {
     const { editEntityFormSchema } = ToolWorkDefinitionEmployeeFormSchemas();
 
@@ -30,6 +36,8 @@ const EditToolWorkDefinitionEmployee = ({
         handleSubmit,
         register,
         reset,
+        setValue,
+        watch,
         formState: { errors },
     } = useForm<IToolWorkDefinitionEmployee>({
         resolver: zodResolver(editEntityFormSchema),
@@ -42,8 +50,11 @@ const EditToolWorkDefinitionEmployee = ({
         reset,
     });
 
+    const dateToEdit = new Date(entity.assignationDate?.toString()!);
+
     const onSubmit = (data: IToolWorkDefinitionEmployee) => {
         data.idToolWorkDefinitionEmployee = entity.idToolWorkDefinitionEmployee;
+        data.idEmployee = idEmployee!;
         editEntity.mutate(data);
         return;
     };
@@ -63,43 +74,43 @@ const EditToolWorkDefinitionEmployee = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
-                    <label htmlFor="description" className="w-full">
+                    <label htmlFor="idToolWorkDefinition" className="w-full">
                         Herramienta
                     </label>
-                    <InputText
-                        {...register("description")}
-                        id="description"
-                        autoFocus
-                        defaultValue={entity?.description}
-                        className={classNames({
-                            "p-invalid": errors.description,
-                        })}
+                    <GenericDropDown
+                        id="idToolWorkDefinition"
+                        isValid={!!errors.idToolWorkDefinition}
+                        text="name"
+                        useQuery={useToolWorkDefinitionQuery}
+                        setValue={setValue}
+                        watch={watch}
+                        idValueEdit={entity.idToolWorkDefinition}
                     />
-                    {errors.description && (
+                    {errors.idToolWorkDefinition && (
                         <small className="p-invalid text-danger">
-                            {errors.description.message?.toString()}
+                            {errors.idToolWorkDefinition.message?.toString()}
                         </small>
                     )}
                 </div>
-                {/* <div className="field">
-                    <label htmlFor="code" className="w-full">
-                        Código
-                    </label>
-                    <InputText
-                        {...register("code")}
-                        id="code"
+
+                <div className="field">
+                    <label htmlFor="assignationDate">Fecha de Asignación</label>
+                    <Calendar
+                        id="assignationDate"
+                        value={dateToEdit && dateToEdit}
+                        onChange={(e) => setValue("assignationDate", e.value!)}
+                        onFocus={() => setValue("assignationDate", dateToEdit)}
                         autoFocus
-                        defaultValue={entity?.code}
-                        className={classNames({
-                            "p-invalid": errors.code,
-                        })}
+                        showIcon
+                        showButtonBar
                     />
-                    {errors.code && (
-                        <small className="p-invalid text-danger">
-                            {errors.code.message?.toString()}
+                    {errors.assignationDate && (
+                        <small className="p-invalid text-red-500">
+                            {errors.assignationDate.message?.toString()}
                         </small>
                     )}
                 </div>
+
                 <div className="field">
                     <label htmlFor="description" className="w-full">
                         Descripción
@@ -118,7 +129,7 @@ const EditToolWorkDefinitionEmployee = ({
                             {errors.description.message?.toString()}
                         </small>
                     )}
-                </div> */}
+                </div>
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>

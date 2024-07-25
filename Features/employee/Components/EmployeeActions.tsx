@@ -6,6 +6,7 @@ import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import FireEmployee from "./FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
+import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
 
 interface Props {
@@ -66,7 +67,7 @@ const EmployeeActions = ({
                         <Dependant id={employee.idEmployee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.Tools && (
-                        <BankEmployeeHistory id={employee.idEmployee!} />
+                        <ToolWorkDefinitionEmployee id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>
