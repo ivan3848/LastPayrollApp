@@ -41,7 +41,6 @@ const EditPersonInsurance = ({
     // });
 
     const onSubmit = (data: IPersonInsurance) => {
-        data.IdEmployee = id;
         data.StartDate = data!.StartDate!;
         data.EndDate = data!.EndDate!;
         data.Amount = data!.Amount!;
@@ -52,11 +51,12 @@ const EditPersonInsurance = ({
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        // setAddEntityDialog(false);
     };
+
     return (
         <Dialog
-            visible={addEntityDialog}
+            // visible={addEntityDialog}
             header="Agregar seguro al empleado"
             modal
             style={{ width: "40vw" }}

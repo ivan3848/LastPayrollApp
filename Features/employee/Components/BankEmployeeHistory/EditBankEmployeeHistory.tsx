@@ -63,7 +63,6 @@ const EditBankEmployeeHistory = ({
     });
 
     const onSubmit = (data: IBankEmployeeHistory) => {
-        console.log(data);
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
         data.startDate = data!.startDate!;

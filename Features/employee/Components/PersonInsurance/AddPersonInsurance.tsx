@@ -6,6 +6,7 @@ import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
+import useAddPersonInsuranceQuery from "./Hooks/useAddPersonInsuranceQuery";
 
 interface Props {
     id: number;
@@ -31,12 +32,12 @@ const AddPersonInsurance = ({
         formState: { errors },
     } = useForm<IPersonInsurance>({});
 
-    // const addEntity = useAddBankEmployeeHistory({
-    //     toast,
-    //     setAddEntityDialog,
-    //     setSubmitted,
-    //     reset,
-    // });
+    const addEntity = useAddPersonInsuranceQuery({
+        toast,
+        setAddEntityDialog,
+        setSubmitted,
+        reset,
+    });
 
     const onSubmit = (data: IPersonInsurance) => {
         data.IdEmployee = id;
@@ -45,7 +46,7 @@ const AddPersonInsurance = ({
         data.Amount = data!.Amount!;
         data.PercentDiscount = data.PercentDiscount;
 
-        // addEntity.mutate(data);
+        addEntity.mutate(data);
         return;
     };
 
@@ -113,7 +114,6 @@ const AddPersonInsurance = ({
                         </small>
                     )}
                 </div>
-
                 <div className="form-group">
                     <label htmlFor="idStatusAccountType" className="block mb-2">
                         Descuento
@@ -149,7 +149,6 @@ const AddPersonInsurance = ({
                         </small>
                     )}
                 </div>
-
                 <div className="form-group">
                     <label htmlFor="EndDate" className="block mb-2 mt-2">
                         Fecha final
@@ -161,7 +160,6 @@ const AddPersonInsurance = ({
                         </small>
                     )}
                 </div>
-
                 <div className="mt-2">
                     <DialogFooterButtons hideDialog={hideDialog} />
                 </div>
