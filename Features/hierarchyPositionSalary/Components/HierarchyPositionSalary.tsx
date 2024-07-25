@@ -156,7 +156,7 @@ const HierarchyPositionSalary = (
                                 >
                                     Supervisor
                                 </label>
-                                <GenericDropDown
+                                {/* <GenericDropDown
                                     id="idHierarchyPositionManager"
                                     isValid={
                                         !!errors.idHierarchyPositionManager
@@ -176,7 +176,7 @@ const HierarchyPositionSalary = (
                                     <small className="p-invalid text-danger">
                                         {errors.idHierarchyPositionManager.message?.toString()}
                                     </small>
-                                )}
+                                )} */}
                             </div>
                             <div className="field col-12 md:col-3">
                                 <label htmlFor="idStatus" className="w-full">
