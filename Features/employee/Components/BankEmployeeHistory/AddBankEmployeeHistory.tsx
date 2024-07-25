@@ -13,6 +13,7 @@ import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDro
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import BankEmployeeHistoryFormSchema from "./Validation/BankEmployeeHistoryFormSchema";
 import { Calendar } from "primereact/calendar";
+import { start } from "repl";
 
 interface Props {
     id: number;
@@ -129,31 +130,32 @@ const AddBankEmployeeHistory = ({
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="startDate" className="block mb-1">
-                        Fecha de Inicio
-                    </label>
+                    <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        {...register("startDate")}
+                        value={watch("startDate")}
+                        onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
-                        onSelect={() =>
-                            setValue("startDate", watch("startDate"))
-                        }
+                        showButtonBar
                     />
                     {errors.startDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.startDate.message?.toString()}
                         </small>
                     )}
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="endDate" className="block mt-2">
-                        Fecha final
-                    </label>
-                    <Calendar id="endDate" {...register("endDate")} showIcon />
+                    <label htmlFor="startDate">Fecha final</label>
+                    <Calendar
+                        id="endDate"
+                        value={watch("endDate")}
+                        onChange={(e) => setValue("endDate", e.value!)}
+                        showIcon
+                        showButtonBar
+                    />
                     {errors.endDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}
                         </small>
                     )}

@@ -25,12 +25,12 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     onClick={() =>
                         setAction(EmployeeOptionsEnum.BankManagement)
                     }
-                    onSubmit={() => console.log("hola")}
                 />
                 <Button
                     label="Dependientes"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Dependant)}
                 />
                 <Button
                     label="Seguros"

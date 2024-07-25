@@ -32,7 +32,7 @@ function useAddEntityQuery<T>({
             if (setAddEntityDialog) setAddEntityDialog(false);
             if (setSubmitted) setSubmitted(true);
             if (setEntity) setEntity(data);
-            
+
             toast?.current?.show({
                 severity: "success",
                 summary: "Insertado!",
