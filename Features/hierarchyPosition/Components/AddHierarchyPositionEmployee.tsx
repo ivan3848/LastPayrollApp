@@ -58,6 +58,7 @@ const AddHierarchyPositionEmployee = ({
                 "idHierarchyPosition",
                 response?.idHierarchyPosition!
             );
+            
         });
         setAddEntityDialog(false);
         return;

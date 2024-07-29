@@ -14,6 +14,7 @@ import { IInsertEmployee } from "../Types/IInsertEmployee";
 import AddPerson from "./../../person/Components/AddPerson";
 import AddEmployee from "./AddEmployee";
 import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
+import { IEmployee } from "../Types/IEmployee";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);

@@ -6,6 +6,7 @@ import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
 import employeeContactFormSchemas from "../Validations/EmployeeContactFormSchemas";
+import { IEmployee } from "../Types/IEmployee";
 
 interface Props {
     setContactInformation: (
@@ -89,8 +90,8 @@ const EmergencyEmployeeContact = ({
                             {...register("contactNumber")}
                             mask="999-999-9999"
                             id="contactNumber"
-                            type="text"
                             defaultValue={employee?.contactNumber}
+                            key={employee?.contactNumber}
                         />
 
                         {errors.contactNumber && (

@@ -23,6 +23,7 @@ import useEmployeeQuery from "../Hooks/useEmployeeQuery";
 import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
 import { useState } from "react";
 import AddHierarchyPositionEmployee from "@/Features/hierarchyPosition/Components/AddHierarchyPositionEmployee";
+import { IEmployee } from "../Types/IEmployee";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
