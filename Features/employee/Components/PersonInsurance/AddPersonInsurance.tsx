@@ -1,4 +1,4 @@
-import { CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
@@ -7,6 +7,10 @@ import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAddPersonInsuranceQuery from "./Hooks/useAddPersonInsuranceQuery";
+import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { Dropdown } from "primereact/dropdown";
+import { IDependant } from "../Dependant/Types/IDependant";
 
 interface Props {
     id: number;
@@ -23,6 +27,9 @@ const AddPersonInsurance = ({
     setSubmitted,
     toast,
 }: Props) => {
+
+    const [selectedDependant, setSelectedDependant] = React.useState<IDependant>();
+
     const {
         handleSubmit,
         register,
@@ -41,8 +48,11 @@ const AddPersonInsurance = ({
 
     const onSubmit = (data: IPersonInsurance) => {
         data.IdEmployee = id;
+        data.IdPerson = selectedDependant?.idPerson ?? 0;
+        data.IdConcept = data.IdConcept
         data.StartDate = data!.StartDate!;
         data.EndDate = data!.EndDate!;
+        data.IdEmployeeAuthorize = id;
         data.Amount = data!.Amount!;
         data.PercentDiscount = data.PercentDiscount;
 
@@ -53,6 +63,15 @@ const AddPersonInsurance = ({
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
+
+    const { params } = useParamFilter();
+    const listOfDependencies: boolean[] = [];
+    const { data } = useDependanHistoryById(
+        params,
+        listOfDependencies,
+        id
+    );
+
     return (
         <Dialog
             visible={addEntityDialog}
@@ -64,15 +83,15 @@ const AddPersonInsurance = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group mt-2">
-                    <label htmlFor="idBank" className="block mb-2">
+                    <label htmlFor="IdDependant" className="block mb-2">
                         Dependientes
                     </label>
-                    <GenericConceptDropDown
-                        id="idConcept"
-                        isValid={!!errors.IdConcept}
-                        setValue={setValue}
-                        watch={watch}
-                        code={CONCEPT_TYPE_INSURANCE}
+                    <Dropdown
+                        value={selectedDependant}
+                        options={data}
+                        onChange={(e) => setSelectedDependant(e.value)}
+                        optionLabel="firstName"
+                        placeholder="Seleccione un Dependiente"
                     />
                     {errors.IdConcept && (
                         <small className="p-invalid text-danger">
@@ -89,7 +108,7 @@ const AddPersonInsurance = ({
                         isValid={!!errors.IdConcept}
                         setValue={setValue}
                         watch={watch}
-                        code={CONCEPT_TYPE_INSURANCE}
+                        code={CONCEPT_TYPE_BENEFIT}
                     />
                     {errors.IdConcept && (
                         <small className="p-invalid text-danger">

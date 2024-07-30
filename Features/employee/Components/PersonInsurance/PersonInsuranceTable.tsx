@@ -1,35 +1,36 @@
 "use client";
-import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import { IEmployee } from "../../Types/IEmployee";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
+import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import useGetPersonInsuranceQueryByIdEmployee from "./Hooks/useGetPersonInsuranceQueryByIdEmployee";
 
 interface Props {
-    employee: IEmployee;
     submitted: boolean;
-    handleEdit: (entity: IPersonInsurance) => void;
     handleDelete: (entity: IPersonInsurance) => void;
+    handleEdit: (entity: IPersonInsurance) => void;
     handleAdd: () => void;
+    employee: IEmployee;
 }
 
-const PersonInsuranceTable = ({
+const PersonInsuranceTable: React.FC<Props> = ({
     submitted,
     handleDelete,
     handleEdit,
     handleAdd,
     employee,
-}: Props) => {
+}) => {
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    // const { data, isLoading } = useBankEmployeeHistoryByIdEmployee(
-    //     params,
-    //     listOfDependencies,
-    //     employee
-    // );
+
+    const { data } = useGetPersonInsuranceQueryByIdEmployee(
+        params,
+        listOfDependencies,
+        employee.idEmployee!
+    );
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
@@ -47,10 +48,18 @@ const PersonInsuranceTable = ({
         return formattedDate;
     };
 
+    const formatPercentage = (value: number) => {
+        return `${value}%`;
+    };
+
+    const formatMoney = (value: number) => {
+        return `RD$${value}`;
+    };
+
     return (
         <Card className="m-2">
             <DataTable
-                // value={data}
+                value={data}
                 header={header}
                 className="p-datatable-sm"
                 dataKey="idPersonInsurance"
@@ -59,22 +68,58 @@ const PersonInsuranceTable = ({
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
-                <Column field="IdConcept" header="Seguro" />
-                <Column field="PercentDiscount" header="Descuento" />
-                <Column field="Amount" header="Monto" />
+
                 <Column
-                    field="StartDate"
+                    key={"firstName"}
+                    field="firstName"
+                    header="Nombre"
+                    body={(rowData: IPersonInsurance) => rowData.person?.firstName}
+                />
+
+                <Column
+                    key={"idConcept"}
+                    field="idConcept"
+                    header="Seguro"
+                    body={(rowData: IPersonInsurance) => rowData.concept?.conceptCode}
+                />
+
+                <Column
+                    key="percentDiscount"
+                    field="percentDiscount"
+                    header="Descuento"
+                    body={(rowData: IPersonInsurance) => formatPercentage(rowData.percentDiscount)}
+                />
+                <Column
+                    key="amount"
+                    field="amount"
+                    header="Monto"
+                    body={(rowData: IPersonInsurance) => formatMoney(rowData.amount)}
+                />
+                <Column
+                    key="startDate"
+                    field="startDate"
                     header="Fecha de Inicio"
                     body={(rowData: IPersonInsurance) =>
-                        formatDate(rowData.StartDate?.toString()!)
+                        formatDate(rowData.startDate?.toString()!)
                     }
                 />
                 <Column
-                    field="EndDate"
+                    key="endDate"
+                    field="endDate"
                     header="Fecha final"
                     body={(rowData: IPersonInsurance) =>
-                        formatDate(rowData.EndDate.toString())
+                        formatDate(rowData.endDate?.toString()!)
                     }
+                />
+                <Column
+                    header="Acciones"
+                    body={(rowData: IPersonInsurance) => (
+                        <ActionTableTemplate
+                            entity={rowData}
+                            handleEdit={handleEdit}
+                            handleDelete={handleDelete}
+                        />
+                    )}
                 />
             </DataTable>
         </Card>

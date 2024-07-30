@@ -6,8 +6,12 @@ const personInsurance = new ApiService<IPersonInsurance, IPersonInsurance>(
 );
 
 const personInsuranceById = new ApiService<IPersonInsurance, IPersonInsurance>(
-    `employee/personInsurance/Id/`
+    "employee/personInsurance/id/"
+);
+
+const personInsuranceByIdEmployee = new ApiService<IPersonInsurance, IPersonInsurance>(
+    "employee/personInsurance/byIdEmployee/"
 );
 
 export default personInsurance;
-export {  personInsuranceById };
+export {  personInsuranceById, personInsuranceByIdEmployee };
