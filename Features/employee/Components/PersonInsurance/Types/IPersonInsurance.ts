@@ -14,6 +14,7 @@ interface IPersonInsurance {
         secodLastName: string;
     };
     concept?: {
+        name: string;
         conceptCode: string;
     };
 }

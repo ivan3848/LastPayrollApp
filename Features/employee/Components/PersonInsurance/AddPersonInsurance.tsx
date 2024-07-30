@@ -1,4 +1,4 @@
-import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
@@ -47,14 +47,14 @@ const AddPersonInsurance = ({
     });
 
     const onSubmit = (data: IPersonInsurance) => {
-        data.IdEmployee = id;
-        data.IdPerson = selectedDependant?.idPerson ?? 0;
-        data.IdConcept = data.IdConcept
-        data.StartDate = data!.StartDate!;
-        data.EndDate = data!.EndDate!;
-        data.IdEmployeeAuthorize = id;
-        data.Amount = data!.Amount!;
-        data.PercentDiscount = data.PercentDiscount;
+        data.idEmployee = id;
+        data.idPerson = selectedDependant?.idPerson ?? 0;
+        data.idConcept = data.idConcept
+        data.startDate = data!.startDate!;
+        data.endDate = data!.endDate!;
+        data.idEmployeeAuthorize = id;
+        data.amount = data!.amount!;
+        data.percentDiscount = data.percentDiscount;
 
         addEntity.mutate(data);
         return;
@@ -93,9 +93,9 @@ const AddPersonInsurance = ({
                         optionLabel="firstName"
                         placeholder="Seleccione un Dependiente"
                     />
-                    {errors.IdConcept && (
+                    {errors.idConcept && (
                         <small className="p-invalid text-danger">
-                            {errors.IdConcept.message?.toString()}
+                            {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -105,14 +105,14 @@ const AddPersonInsurance = ({
                     </label>
                     <GenericConceptDropDown
                         id="idConcept"
-                        isValid={!!errors.IdConcept}
+                        isValid={!!errors.idConcept}
                         setValue={setValue}
                         watch={watch}
                         code={CONCEPT_TYPE_BENEFIT}
                     />
-                    {errors.IdConcept && (
+                    {errors.idConcept && (
                         <small className="p-invalid text-danger">
-                            {errors.IdConcept.message?.toString()}
+                            {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -121,15 +121,15 @@ const AddPersonInsurance = ({
                         Monto
                     </label>
                     <GenericInputNumber
-                        {...register("Amount")}
+                        {...register("amount")}
                         id="Amount"
-                        isValid={!!errors.Amount}
+                        isValid={!!errors.amount}
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.Amount && (
+                    {errors.amount && (
                         <small className="text-red-600">
-                            {errors.Amount.message?.toString()}
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -138,15 +138,15 @@ const AddPersonInsurance = ({
                         Descuento
                     </label>
                     <GenericInputNumber
-                        {...register("PercentDiscount")}
+                        {...register("percentDiscount")}
                         id="PercentDiscount"
-                        isValid={!!errors.PercentDiscount}
+                        isValid={!!errors.percentDiscount}
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.PercentDiscount && (
+                    {errors.percentDiscount && (
                         <small className="p-invalid text-danger">
-                            {errors.PercentDiscount.message?.toString()}
+                            {errors.percentDiscount.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -156,15 +156,15 @@ const AddPersonInsurance = ({
                     </label>
                     <Calendar
                         id="StartDate"
-                        {...register("StartDate")}
+                        {...register("startDate")}
                         showIcon
                         onSelect={() =>
-                            setValue("StartDate", watch("StartDate"))
+                            setValue("startDate", watch("startDate"))
                         }
                     />
-                    {errors.StartDate && (
+                    {errors.startDate && (
                         <small className="text-red-600">
-                            {errors.StartDate.message?.toString()}
+                            {errors.startDate.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -172,10 +172,10 @@ const AddPersonInsurance = ({
                     <label htmlFor="EndDate" className="block mb-2 mt-2">
                         Fecha final
                     </label>
-                    <Calendar id="endDate" {...register("EndDate")} showIcon />
-                    {errors.EndDate && (
+                    <Calendar id="endDate" {...register("endDate")} showIcon />
+                    {errors.endDate && (
                         <small className="text-red-600">
-                            {errors.EndDate.message?.toString()}
+                            {errors.endDate.message?.toString()}
                         </small>
                     )}
                 </div>

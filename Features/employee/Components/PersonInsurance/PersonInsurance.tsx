@@ -69,15 +69,16 @@ const PersonInsurance = ({ employee }: Props) => {
                         employee={employee}
                     />
                 </Suspense>
-                {/* {editEntityDialog && (
+                {editEntityDialog && (
                     <EditPersonInsurance
-                    // setEditEntityDialog={setEditEntityDialog}
-                    // setSubmitted={setSubmitted}
-                    // toast={toast}
-                    // entity={entity!}
-                    // editEntityDialog={editEntityDialog}
+                        setEditEntityDialog={setEditEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        entity={entity!}
+                        editEntityDialog={editEntityDialog}
+                        id={employee.idEmployee!}
                     />
-                )} */}
+                )}
                 {addEntityDialog && (
                     <AddPersonInsurance
                         addEntityDialog={addEntityDialog}

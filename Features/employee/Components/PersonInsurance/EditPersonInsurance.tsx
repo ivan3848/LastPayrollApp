@@ -1,13 +1,16 @@
-import { CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import { watch } from "fs";
-import { errors } from "jose";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
+import { Dropdown } from "primereact/dropdown";
 import React from "react";
 import { useForm } from "react-hook-form";
+import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
+import useEditPersonInsurance from "./Hooks/useEditPersonInsurance";
 
 interface Props {
     entity: IPersonInsurance;
@@ -15,6 +18,7 @@ interface Props {
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    id: number;
 }
 
 const EditPersonInsurance = ({
@@ -23,41 +27,61 @@ const EditPersonInsurance = ({
     setSubmitted,
     toast,
     editEntityDialog,
+    id,
 }: Props) => {
+    const [selectedDependant, setSelectedDependant]
+        = React.useState<IPersonInsurance>(entity);
+
+    // const { editEntityFormSchema } = dependantFormSchema();
+
+    const { params } = useParamFilter();
+    const listOfDependencies: boolean[] = [true];
+
+    const { data } = useDependanHistoryById(
+        params,
+        listOfDependencies,
+        id
+    );
+
     const {
         handleSubmit,
         register,
         reset,
-        setValue,
         watch,
+        setValue,
         formState: { errors },
     } = useForm<IPersonInsurance>({});
 
-    // const addEntity = useAddBankEmployeeHistory({
-    //     toast,
-    //     setAddEntityDialog,
-    //     setSubmitted,
-    //     reset,
-    // });
+    const editEntity = useEditPersonInsurance({
+        toast,
+        setEditEntityDialog,
+        setSubmitted,
+        reset,
+    });
+
+    console.log(selectedDependant);
 
     const onSubmit = (data: IPersonInsurance) => {
-        data.StartDate = data!.StartDate!;
-        data.EndDate = data!.EndDate!;
-        data.Amount = data!.Amount!;
-        data.PercentDiscount = data.PercentDiscount;
+        data.idEmployee = id;
+        data.idPerson = selectedDependant?.idPerson ?? 0;
+        data.idConcept = data.idConcept
+        data.startDate = data!.startDate!;
+        data.endDate = data!.endDate!;
+        data.idEmployeeAuthorize = id;
+        data.amount = data!.amount!;
+        data.percentDiscount = data.percentDiscount;
 
-        // addEntity.mutate(data);
+        editEntity.mutate(data);
         return;
     };
 
     const hideDialog = () => {
-        // setAddEntityDialog(false);
+        setEditEntityDialog(false);
     };
-
     return (
         <Dialog
-            // visible={addEntityDialog}
-            header="Agregar seguro al empleado"
+            visible={editEntityDialog}
+            header="Editar seguro al dependiente"
             modal
             style={{ width: "40vw" }}
             className="p-fluid"
@@ -65,19 +89,21 @@ const EditPersonInsurance = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group mt-2">
-                    <label htmlFor="idBank" className="block mb-2">
+                    <label htmlFor="IdDependant" className="block mb-2">
                         Dependientes
                     </label>
-                    <GenericConceptDropDown
-                        id="idConcept"
-                        isValid={!!errors.IdConcept}
-                        setValue={setValue}
-                        watch={watch}
-                        code={CONCEPT_TYPE_INSURANCE}
+                    <Dropdown
+                        value={data.find(
+                            (item: any) => item.idPerson === selectedDependant.idPerson
+                        )}
+                        options={data}
+                        onChange={(e) => setSelectedDependant(e.value)}
+                        optionLabel="firstName"
+                        placeholder="Seleccione un Dependiente..."
                     />
-                    {errors.IdConcept && (
+                    {errors.idConcept && (
                         <small className="p-invalid text-danger">
-                            {errors.IdConcept.message?.toString()}
+                            {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -87,14 +113,15 @@ const EditPersonInsurance = ({
                     </label>
                     <GenericConceptDropDown
                         id="idConcept"
-                        isValid={!!errors.IdConcept}
+                        isValid={!!errors.idConcept}
+                        idValueEdit={entity.idConcept}
                         setValue={setValue}
                         watch={watch}
-                        code={CONCEPT_TYPE_INSURANCE}
+                        code={CONCEPT_TYPE_BENEFIT}
                     />
-                    {errors.IdConcept && (
+                    {errors.idConcept && (
                         <small className="p-invalid text-danger">
-                            {errors.IdConcept.message?.toString()}
+                            {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -103,33 +130,34 @@ const EditPersonInsurance = ({
                         Monto
                     </label>
                     <GenericInputNumber
-                        {...register("Amount")}
+                        {...register("amount")}
                         id="Amount"
-                        isValid={!!errors.Amount}
+                        isValid={!!errors.amount}
+                        currentValue={entity.amount}
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.Amount && (
+                    {errors.amount && (
                         <small className="text-red-600">
-                            {errors.Amount.message?.toString()}
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>
-
                 <div className="form-group">
                     <label htmlFor="idStatusAccountType" className="block mb-2">
                         Descuento
                     </label>
                     <GenericInputNumber
-                        {...register("PercentDiscount")}
+                        {...register("percentDiscount")}
                         id="PercentDiscount"
-                        isValid={!!errors.PercentDiscount}
+                        isValid={!!errors.percentDiscount}
+                        currentValue={entity.percentDiscount}
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.PercentDiscount && (
+                    {errors.percentDiscount && (
                         <small className="p-invalid text-danger">
-                            {errors.PercentDiscount.message?.toString()}
+                            {errors.percentDiscount.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -139,31 +167,35 @@ const EditPersonInsurance = ({
                     </label>
                     <Calendar
                         id="StartDate"
-                        {...register("StartDate")}
+                        {...register("startDate")}
+                        value={new Date(entity.startDate)}
                         showIcon
                         onSelect={() =>
-                            setValue("StartDate", watch("StartDate"))
+                            setValue("startDate", watch("startDate"))
                         }
                     />
-                    {errors.StartDate && (
+                    {errors.startDate && (
                         <small className="text-red-600">
-                            {errors.StartDate.message?.toString()}
+                            {errors.startDate.message?.toString()}
                         </small>
                     )}
                 </div>
-
                 <div className="form-group">
                     <label htmlFor="EndDate" className="block mb-2 mt-2">
                         Fecha final
                     </label>
-                    <Calendar id="endDate" {...register("EndDate")} showIcon />
-                    {errors.EndDate && (
+                    <Calendar
+                        id="endDate"
+                        {...register("endDate")}
+                        value={new Date(entity.endDate)}
+                        showIcon
+                    />
+                    {errors.endDate && (
                         <small className="text-red-600">
-                            {errors.EndDate.message?.toString()}
+                            {errors.endDate.message?.toString()}
                         </small>
                     )}
                 </div>
-
                 <div className="mt-2">
                     <DialogFooterButtons hideDialog={hideDialog} />
                 </div>
