@@ -18,9 +18,10 @@ import { IEmployee } from "../Types/IEmployee";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
-// Define an interface for the ref
-interface FormRef {
+interface personFormRef {
     submitPersonForm: () => void;
+}
+interface employeeFormRef {
     submitEmployeeForm: () => void;
 }
 
@@ -36,7 +37,8 @@ const AddEmployeeTabs = () => {
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IHierarchyPosition>();
 
-    const addChildRef = useRef<FormRef>(null);
+    const addPersonRef = useRef<personFormRef>(null);
+    const addEmployeeRef = useRef<employeeFormRef>(null);
 
     const setContactInformation = (
         idStatusRelationship?: number,
@@ -84,9 +86,11 @@ const AddEmployeeTabs = () => {
     };
 
     const validateAddPersonForm = () => {
-        if (addChildRef.current) {
-            addChildRef.current.submitPersonForm();
-            addChildRef.current.submitEmployeeForm();
+        if (addPersonRef.current) {
+            addPersonRef.current.submitPersonForm();
+        }
+        if (addEmployeeRef.current) {
+            addEmployeeRef.current.submitEmployeeForm();
         }
     };
 
@@ -121,7 +125,7 @@ const AddEmployeeTabs = () => {
                         setStep={setStep}
                         setPerson={setPerson}
                         person={person}
-                        ref={addChildRef}
+                        ref={addPersonRef}
                     />
                 </div>
 
@@ -132,7 +136,7 @@ const AddEmployeeTabs = () => {
                         employee={employee}
                         handleAdd={handleAdd}
                         toast={toast}
-                        ref={addChildRef}
+                        ref={addEmployeeRef}
                     />
                 </div>
 
