@@ -9,10 +9,14 @@ import { Suspense } from "react";
 import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
 import AddToolWorkDefinitionEmployee from "./AddToolWorkDefinitionEmployee";
 import EditToolWorkDefinitionEmployee from "./EditToolWorkDefinitionEmployee";
+interface Props {
+    id: number;
+}
+const ToolWorkDefinitionEmployeeTable = dynamic(
+    () => import("./ToolWorkDefinitionEmployeeTable")
+);
 
-const ToolWorkDefinitionEmployeeTable = dynamic(() => import("./ToolWorkDefinitionEmployeeTable"));
-
-const ToolWorkDefinitionEmployee = () => {
+const ToolWorkDefinitionEmployee = ({ id }: Props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -44,7 +48,12 @@ const ToolWorkDefinitionEmployee = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Herramienta De Trabajo","Código", "Descripción", "Acciones"];
+    const entityProperties = [
+        "Herramienta De Trabajo",
+        // "Código",
+        // "Descripción",
+        // "Acciones",
+    ];
 
     return (
         <div className="grid">
@@ -58,6 +67,7 @@ const ToolWorkDefinitionEmployee = () => {
                         }
                     >
                         <ToolWorkDefinitionEmployeeTable
+                            idEmployee={id}
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -71,6 +81,7 @@ const ToolWorkDefinitionEmployee = () => {
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
+                            idEmployee={id}
                         />
                     )}
 
@@ -81,6 +92,7 @@ const ToolWorkDefinitionEmployee = () => {
                             setEditEntityDialog={setEditEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
+                            idEmployee={id}
                         />
                     )}
                     {deleteEntityDialog && (

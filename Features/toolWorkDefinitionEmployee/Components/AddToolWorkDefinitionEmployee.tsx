@@ -8,12 +8,16 @@ import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmploye
 import ToolWorkDefinitionEmployeeFormSchemas from "../Validations/ToolWorkDefinitionEmployeeFormSchemas";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import useAddToolWorkDefinitionEmployeeQuery from "../Hooks/useAddTookWorkDefinitionEmployeeQuery";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useToolWorkDefinitionQuery from "@/Features/toolWorkDefinition/Hooks/useToolWorkDefinitionQuery";
+import { Calendar } from "primereact/calendar";
 
 interface Props {
     addEntityDialog: boolean;
     setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    idEmployee?: number;
 }
 
 const AddToolWorkDefinitionEmployee = ({
@@ -21,6 +25,7 @@ const AddToolWorkDefinitionEmployee = ({
     setAddEntityDialog,
     setSubmitted,
     toast,
+    idEmployee,
 }: Props) => {
     const { addEntityFormSchema } = ToolWorkDefinitionEmployeeFormSchemas();
 
@@ -28,6 +33,8 @@ const AddToolWorkDefinitionEmployee = ({
         handleSubmit,
         register,
         reset,
+        setValue,
+        watch,
         formState: { errors },
     } = useForm<IToolWorkDefinitionEmployee>({
         resolver: zodResolver(addEntityFormSchema),
@@ -41,6 +48,7 @@ const AddToolWorkDefinitionEmployee = ({
     });
 
     const onSubmit = (data: IToolWorkDefinitionEmployee) => {
+        data.idEmployee = idEmployee!;
         addEntity.mutate(data);
         return;
     };
@@ -60,41 +68,42 @@ const AddToolWorkDefinitionEmployee = ({
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
-                    <label htmlFor="description" className="w-full">
+                    <label htmlFor="idToolWorkDefinition" className="w-full">
                         Herramienta
                     </label>
-                    <InputText
-                        {...register("description")}
-                        id="description"
-                        autoFocus
-                        className={classNames({
-                            "p-invalid": errors.description,
-                        })}
+                    <GenericDropDown
+                        id="idToolWorkDefinition"
+                        isValid={!!errors.idToolWorkDefinition}
+                        text="name"
+                        useQuery={useToolWorkDefinitionQuery}
+                        setValue={setValue}
+                        watch={watch}
                     />
-                    {errors.description && (
+                    {errors.idToolWorkDefinition && (
                         <small className="p-invalid text-danger">
-                            {errors.description.message?.toString()}
+                            {errors.idToolWorkDefinition.message?.toString()}
                         </small>
                     )}
                 </div>
-                {/* <div className="field">
-                    <label htmlFor="code" className="w-full">
-                        Código
-                    </label>
-                    <InputText
-                        {...register("code")}
-                        id="code"
+
+                <div className="field">
+                    <label htmlFor="assignationDate">Fecha de asignación</label>
+                    <Calendar
+                        id="assignationDate"
+                        value={watch("assignationDate") ?? new Date()}
+                        onChange={(e) => setValue("assignationDate", e.value!)}
+                        onFocus={() => setValue("assignationDate", new Date())}
                         autoFocus
-                        className={classNames({
-                            "p-invalid": errors.code,
-                        })}
+                        showIcon
+                        showButtonBar
                     />
-                    {errors.code && (
-                        <small className="p-invalid text-danger">
-                            {errors.code.message?.toString()}
+                    {errors.assignationDate && (
+                        <small className="p-invalid text-red-500">
+                            {errors.assignationDate.message?.toString()}
                         </small>
                     )}
                 </div>
+
                 <div className="field">
                     <label htmlFor="description" className="w-full">
                         Descripción
@@ -112,7 +121,7 @@ const AddToolWorkDefinitionEmployee = ({
                             {errors.description.message?.toString()}
                         </small>
                     )}
-                </div> */}
+                </div>
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>

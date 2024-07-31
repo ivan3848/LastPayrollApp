@@ -4,8 +4,8 @@ export interface IBankEmployeeHistory {
     idBank?: number;
     idEmployeeAuthorize?: number;
     accountNumber?: string;
-    startDate?: string;
-    endDate?: string;
+    startDate: Date;
+    endDate: Date;
     bankName?: string;
     idStatusAccountType?: number;
     isDeposit?: boolean;

@@ -5,7 +5,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
-import { Nullable } from "primereact/ts-helpers";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
@@ -63,7 +62,6 @@ const EditBankEmployeeHistory = ({
     });
 
     const onSubmit = (data: IBankEmployeeHistory) => {
-        console.log(data);
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
         data.startDate = data!.startDate!;
@@ -132,26 +130,30 @@ const EditBankEmployeeHistory = ({
                     )}
                 </div>
                 <div className="field col-12 md:col-3">
-                    <label htmlFor="startDate" className="block mb-1">
-                        Fecha de Inicio
-                    </label>
+                    <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        {...register("startDate")}
+                        value={new Date(entity.startDate)}
+                        onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
+                        showButtonBar
                     />
                     {errors.startDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.startDate.message?.toString()}
                         </small>
                     )}
 
-                    <label htmlFor="endDate" className="block mt-2">
-                        Fecha final
-                    </label>
-                    <Calendar id="endDate" {...register("endDate")} showIcon />
+                    <label htmlFor="endDate">Fecha final</label>
+                    <Calendar
+                        id="endDate"
+                        value={new Date(entity.endDate)}
+                        onChange={(e) => setValue("endDate", e.value!)}
+                        showIcon
+                        showButtonBar
+                    />
                     {errors.endDate && (
-                        <small className="text-red-600">
+                        <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}
                         </small>
                     )}

@@ -1,22 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
-import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
-import toolWorkDefinitionEmployeeService from "../Services/toolWorkDefinitionEmployeeService";
+import { addDependantService } from "../Services/dependantService";
+import { IInsertDependant } from "../Types/IInsertDependant";
 
 interface Props {
     toast: React.MutableRefObject<any>;
-    setEditEntityDialog: (value: boolean) => void;
+    setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useEditToolWorkDefinitionEmployeeQuery = ({
+const useAddDependantQuery = ({
     toast,
-    setEditEntityDialog,
+    setAddEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IToolWorkDefinitionEmployee) =>
-            toolWorkDefinitionEmployeeService.put(entity),
+        mutationFn: (entity: IInsertDependant) =>
+            addDependantService.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -26,18 +26,18 @@ const useEditToolWorkDefinitionEmployeeQuery = ({
             });
         },
         onSuccess: () => {
-            if (reset) reset();
-            setEditEntityDialog(false);
+            reset();
+            setAddEntityDialog(false);
             setSubmitted(true);
 
             toast.current?.show({
                 severity: "success",
-                summary: "Editado!",
-                detail: "Registro editado correctamente",
+                summary: "Insertado!",
+                detail: "Registro agregado correctamente",
                 life: 3000,
             });
         },
     });
 };
 
-export default useEditToolWorkDefinitionEmployeeQuery;
+export default useAddDependantQuery;
