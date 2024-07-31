@@ -11,6 +11,7 @@ import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmploye
 import useToolWorkDefinitionEmployeeQuery from "../Hooks/useToolWorkDefinitionEmployeeQuery";
 
 interface Props {
+    idEmployee: number;
     submitted: boolean;
     handleAdd: () => void;
     handleEdit: (entity: IToolWorkDefinitionEmployee) => void;
@@ -22,6 +23,7 @@ const ToolWorkDefinitionEmployeeTable = ({
     handleDelete,
     handleEdit,
     handleAdd,
+    idEmployee,
 }: Props) => {
     const {
         setPage,
@@ -34,8 +36,19 @@ const ToolWorkDefinitionEmployeeTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useToolWorkDefinitionEmployeeQuery(params, listOfDependencies);
+    const { data, isLoading } = useToolWorkDefinitionEmployeeQuery(
+        params,
+        listOfDependencies,
+        idEmployee
+    );
 
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("es-DO", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -82,7 +95,7 @@ const ToolWorkDefinitionEmployeeTable = ({
         <DataTable
             id="ToolWorkDefinitionEmployee-Table"
             dataKey="idToolWorkDefinitionEmployee"
-            value={data?.items}
+            value={data}
             lazy
             paginator
             loading={isLoading}
@@ -91,37 +104,37 @@ const ToolWorkDefinitionEmployeeTable = ({
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
             sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
             sortMode="single"
-            totalRecords={data?.totalCount}
             className="datatable-responsive"
             paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
             emptyMessage="No hay registros para mostrar."
             header={header}
             onPage={onPage}
             rowsPerPageOptions={[5, 10, 25]}
-            rows={data?.pageSize!}
-            first={data.firstRow!}
-            currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+            rows={5}
+            first={1}
+            currentPageReportTemplate={`Mostrando registros del ${data.length} de ${data.length}`}
         >
             <Column
-                field="name"
+                field="toolWorkDefinitionName"
                 header="Herramienta De Trabajo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="name"
+                filterField="toolWorkDefinitionName"
                 filterPlaceholder="Buscar por herramienta"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="code"
-                header="Código"
+                field="assignationDate"
+                header="Fecha de Asignación"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="code"
-                filterPlaceholder="Buscar por código"
+                body={(rowData) => formatDate(rowData.assignationDate)}
+                filterField="assignationDate"
+                filterPlaceholder="Buscar por Fecha de Asignación"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}

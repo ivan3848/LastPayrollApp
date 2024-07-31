@@ -38,6 +38,7 @@ export const CACHE_KEY_BANk_EMPLOYEE_HISTORY = "bankEmployeeHistory";
 export const CACHE_KEY_GROUP_MANAGER = "groupManager";
 export const CACHE_KEY_DISABILITY = "disability";
 export const CACHE_KEY_PAYROLL_AREA = "payrollArea";
+export const CACHE_KEY_TOOLWORK_DEFINITION_EMPLOYEE = "toolWorkDefinitionEmployee";
 export const CACHE_KEY_DEPENDANT = "dependant";
 export const CACHE_KEY_PERSON = "person";
 export const CACHE_KEY_PERSONINSURANCE = "personInsurance";

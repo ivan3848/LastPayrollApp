@@ -34,7 +34,10 @@ const ToolWorkDefinitionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useToolWorkDefinitionQuery(params, listOfDependencies);
+    const { data, isLoading } = useToolWorkDefinitionQuery(
+        params,
+        listOfDependencies
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
