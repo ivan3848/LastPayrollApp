@@ -20,7 +20,9 @@ const employeeHistory = new ApiService<IEmployee, IEmployeeHistory>(
     "employee/employeeHistory"
 );
 
-
+const deleteEmployeeService = new ApiService<IEmployee, IEmployee>(
+    "employee/employee/byidemployee"
+);
 
 export default employeeService;
-export { employeeChangeService, employeeHistory, addEmployeeService };
+export { employeeChangeService, employeeHistory, addEmployeeService, deleteEmployeeService };
