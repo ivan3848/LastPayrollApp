@@ -1,20 +1,20 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InputText } from "primereact/inputtext";
-import { useForm } from "react-hook-form";
-import { IPerson } from "../Types/IPerson";
-import personFormSchemas from "../Validations/PersonFormSchemas";
-import { InputMask } from "primereact/inputmask";
-import { Calendar } from "primereact/calendar";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import useEducationQuery from "@/Features/education/Hooks/useEducationQuery";
+import useNationalityQuery from "@/Features/nationality/Hooks/useNationalityQuery";
 import {
     TABLE_NAME_GENDER,
     TABLE_NAME_MARITAL,
 } from "@/constants/StatusTableName";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import useNationalityQuery from "@/Features/nationality/Hooks/useNationalityQuery";
-import useEducationQuery from "@/Features/education/Hooks/useEducationQuery";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
-import { useEffect } from "react";
+import { Calendar } from "primereact/calendar";
+import { InputMask } from "primereact/inputmask";
+import { InputText } from "primereact/inputtext";
+import { forwardRef, useImperativeHandle } from "react";
+import { useForm } from "react-hook-form";
+import { IPerson } from "../Types/IPerson";
+import personFormSchemas from "../Validations/PersonFormSchemas";
 
 interface Props {
     setPerson: (value: IPerson) => void;
@@ -22,7 +22,8 @@ interface Props {
     person?: IPerson;
 }
 
-const AddPerson = ({ setPerson, setStep, person }: Props) => {
+// eslint-disable-next-line react/display-name
+const AddPerson = forwardRef(({ setPerson, setStep, person }: Props, ref) => {
     const { addEntityFormSchema } = personFormSchemas();
 
     const {
@@ -35,13 +36,9 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    useEffect(() => {
-        if (person) {
-            Object.keys(person).forEach((key) => {
-                setValue(key as keyof IPerson, person[key as keyof IPerson]);
-            });
-        }
-    }, [person, setValue, setStep]);
+    useImperativeHandle(ref, () => ({
+        submitPersonForm: () => handleSubmit(onSubmit)(),
+    }));
 
     const onSubmit = (data: IPerson) => {
         setPerson(data);
@@ -133,7 +130,7 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             onChange={(e) => setValue("birthDate", e.value!)}
                             showIcon
                             showButtonBar
-                            key={person?.birthDate.toString()}
+                            key={person?.birthDate?.toString()}
                         />
                         {errors.birthDate && (
                             <small className="p-invalid text-red-500">
@@ -166,7 +163,6 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             defaultValue={person?.cellphoneNumber}
                             key={person?.cellphoneNumber}
                         />
-
                         {errors.cellphoneNumber && (
                             <small className="p-invalid text-red-500">
                                 {errors.cellphoneNumber.message?.toString()}
@@ -279,6 +275,6 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
             </div>
         </form>
     );
-};
+});
 
 export default AddPerson;
