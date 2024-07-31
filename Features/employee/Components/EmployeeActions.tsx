@@ -8,6 +8,7 @@ import FireEmployee from "./FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
+import PersonInsurance from "./PersonInsurance/PersonInsurance";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -68,6 +69,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Tools && (
                         <ToolWorkDefinitionEmployee id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.PersonInsurance && (
+                        <PersonInsurance employee={employee} />
                     )}
                 </div>
             </Dialog>
