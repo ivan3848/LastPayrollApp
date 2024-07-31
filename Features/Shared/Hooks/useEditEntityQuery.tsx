@@ -8,6 +8,7 @@ interface Props<T> {
     reset?: () => void;
     service: ApiService<T, T>;
 }
+
 function useEditEntityQuery<T>({
     toast,
     setEditEntityDialog,

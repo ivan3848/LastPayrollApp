@@ -14,11 +14,15 @@ import { IInsertEmployee } from "../Types/IInsertEmployee";
 import AddPerson from "./../../person/Components/AddPerson";
 import AddEmployee from "./AddEmployee";
 import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
+import { IEmployee } from "../Types/IEmployee";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
     const [person, setPerson] = useState<IPerson>();
     const [employee, setEmployee] = useState<IEmployee>();
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_POSITION, CACHE_KEY_EMPLOYEE]);
 
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IHierarchyPosition>();
@@ -64,7 +68,7 @@ const AddEmployeeTabs = () => {
             },
         } as IInsertEmployee;
 
-        addEmployee.mutate(employeeToAdd);
+        addEmployee.mutateAsync(employeeToAdd).then(() => expireQuery());
     };
 
     const handleAdd = () => {
@@ -101,7 +105,7 @@ const AddEmployeeTabs = () => {
                         person={person}
                     />
                 )}
-                
+
                 {step === 1 && (
                     <AddEmployee
                         setStep={setStep}

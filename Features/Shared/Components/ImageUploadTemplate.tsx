@@ -7,18 +7,45 @@ import {
 import { ProgressBar } from "primereact/progressbar";
 import { Tag } from "primereact/tag";
 import { Tooltip } from "primereact/tooltip";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, ChangeEvent } from "react"; // Import ChangeEvent from react
 import { Toast } from "primereact/toast";
 import { UseFormSetValue } from "react-hook-form";
 
 interface Props {
     setValue: UseFormSetValue<any>;
+    employeeImage?: string;
+    employeeImageType?: string;
+    employeeImageName?: string;
 }
 
-export default function ImageUploadTemplate({ setValue }: Props) {
+export default function ImageUploadTemplate({
+    setValue,
+    employeeImage,
+    employeeImageName,
+    employeeImageType,
+}: Props) {
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef<FileUpload>(null);
     const toast = useRef<Toast | null>(null);
+
+    useEffect(() => {
+        if (employeeImage && employeeImageName && employeeImageType) {
+            const defaultFile = new File([employeeImage], employeeImageName, {
+                type: employeeImageType,
+            });
+            const fileUpload = fileUploadRef.current;
+
+            if (fileUpload) {
+                const mockEvent = new Event(
+                    "change"
+                ) as unknown as ChangeEvent<HTMLInputElement>;
+                onTemplateSelect({
+                    originalEvent: mockEvent,
+                    files: [defaultFile],
+                });
+            }
+        }
+    }, [employeeImage, employeeImageName, employeeImageType]);
 
     const onTemplateSelect = async (e: FileUploadSelectEvent) => {
         if (!imageValidator(e.files[0].type)) return;
@@ -33,6 +60,8 @@ export default function ImageUploadTemplate({ setValue }: Props) {
         reader.onloadend = function () {
             const base64data = reader.result;
             setValue("employeeImage", base64data?.toString() ?? "");
+            setValue("employeeImageType", e.files[0].type);
+            setValue("employeeImageName", e.files[0].name);
         };
     };
 
@@ -45,7 +74,7 @@ export default function ImageUploadTemplate({ setValue }: Props) {
         ];
 
         const isValid = acceptedImageTypes.includes(type);
-        
+
         if (!isValid) {
             toast.current?.show({
                 severity: "error",

@@ -1,6 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
-import toolWorkDefinitionEmployeeService from "../Services/toolWorkDefinitionEmployeeService";
+import personInsurance from "../Services/personInsuranceService";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -8,15 +7,15 @@ interface Props {
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useEditToolWorkDefinitionEmployeeQuery = ({
+const useEditPersonInsurance = ({
     toast,
     setEditEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IToolWorkDefinitionEmployee) =>
-            toolWorkDefinitionEmployeeService.put(entity),
+        mutationFn: (entity: IPersonInsurance) => personInsurance.put(entity),
+
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -26,7 +25,7 @@ const useEditToolWorkDefinitionEmployeeQuery = ({
             });
         },
         onSuccess: () => {
-            if (reset) reset();
+            reset();
             setEditEntityDialog(false);
             setSubmitted(true);
 
@@ -40,4 +39,4 @@ const useEditToolWorkDefinitionEmployeeQuery = ({
     });
 };
 
-export default useEditToolWorkDefinitionEmployeeQuery;
+export default useEditPersonInsurance;

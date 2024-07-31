@@ -13,6 +13,8 @@ import hierarchyPositionService from "../Services/hierarchyPositionService";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 import hierarchyPositionFormSchemas from "../Validations/HierarchyPositionFormSchemas";
 import { IPosition } from "@/Features/position/Types/IPosition";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
 interface Props {
     addEntityDialog: boolean;
@@ -30,7 +32,7 @@ const AddHierarchyPosition = ({
     position,
 }: Props) => {
     const { addEntityFormSchema } = hierarchyPositionFormSchemas();
-
+    const expireQuery = useExpireSessionQuery(CACHE_KEY_POSITION);
     const {
         handleSubmit,
         register,
@@ -52,7 +54,7 @@ const AddHierarchyPosition = ({
 
     const onSubmit = (data: IHierarchyPosition) => {
         addEntity.mutate(data);
-        return;
+        expireQuery();
     };
 
     const hideDialog = () => {
@@ -108,7 +110,7 @@ const AddHierarchyPosition = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="positionCode" className="w-full">
+                    <label htmlFor="vacancyAmount" className="w-full">
                         Cantidad de vacantes
                     </label>
                     <GenericInputNumber

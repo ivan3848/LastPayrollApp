@@ -74,7 +74,7 @@ const BankEmployeeHistoryTable = ({
                     field="endDate"
                     header="Fecha final"
                     body={(rowData: IBankEmployeeHistory) =>
-                        formatDate(rowData.endDate.toString())
+                        formatDate(rowData.endDate.toDateString()!)
                     }
                 />
                 <Column
