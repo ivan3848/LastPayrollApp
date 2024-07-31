@@ -5,4 +5,5 @@ export enum EmployeeOptionsEnum {
     Dependant = "Dependientes",
     FireEmployee = "Desvincular",
     Tools = "Herramientas",
+    Benefit = "Beneficios",
 }

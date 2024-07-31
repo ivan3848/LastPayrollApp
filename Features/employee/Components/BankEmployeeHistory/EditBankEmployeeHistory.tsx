@@ -133,11 +133,14 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={new Date(entity.startDate)}
+                        value={new Date(entity.startDate?.toString()!)}
                         onChange={(e) => setValue("startDate", e.value!)}
+                        onFocus={() => setValue("startDate", new Date())}
+                        autoFocus
                         showIcon
                         showButtonBar
                     />
+
                     {errors.startDate && (
                         <small className="p-invalid text-red-500">
                             {errors.startDate.message?.toString()}
@@ -147,11 +150,14 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="endDate">Fecha final</label>
                     <Calendar
                         id="endDate"
-                        value={new Date(entity.endDate)}
+                        value={new Date(entity.endDate?.toString()!)}
                         onChange={(e) => setValue("endDate", e.value!)}
+                        onFocus={() => setValue("endDate", new Date())}
+                        autoFocus
                         showIcon
                         showButtonBar
                     />
+
                     {errors.endDate && (
                         <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}

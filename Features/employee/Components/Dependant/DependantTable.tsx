@@ -6,7 +6,7 @@ import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import { IDependant } from "./Types/IDependant";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import useDependanHistoryById from "./Hooks/useDependantByIdEmployee";
+import useDependantByIdEmployee from "./Hooks/useDependantByIdEmployee";
 
 interface Props {
     idEmployee: number;
@@ -25,7 +25,7 @@ const DependantTable = ({
 }: Props) => {
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useDependanHistoryById(
+    const { data, isLoading } = useDependantByIdEmployee(
         params,
         listOfDependencies,
         idEmployee
@@ -36,6 +36,10 @@ const DependantTable = ({
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <Card className="m-2">
