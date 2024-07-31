@@ -2,6 +2,7 @@ interface IPersonInsurance {
     idPersonInsurance?: number;
     idEmployee: number;
     idPerson: number;
+    concept: string;
     idConcept: number;
     idEmployeeAuthorize: number;
     percentDiscount: number;
@@ -13,9 +14,6 @@ interface IPersonInsurance {
         firstLastName: string;
         secodLastName: string;
     };
-    concept?: {
-        name: string;
-        conceptCode: string;
-    };
+
 }
 

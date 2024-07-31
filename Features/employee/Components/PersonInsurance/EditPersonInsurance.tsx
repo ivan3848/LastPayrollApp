@@ -1,4 +1,4 @@
-import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
 import useEditPersonInsurance from "./Hooks/useEditPersonInsurance";
@@ -32,6 +32,9 @@ const EditPersonInsurance = ({
     const [selectedDependant, setSelectedDependant]
         = React.useState<IPersonInsurance>(entity);
 
+    // const [startDate, setStartDate] = useState<Date>(new Date(entity.startDate));
+    // const [endDate, setEndDate] = useState<Date>(new Date(entity.endDate));
+
     // const { editEntityFormSchema } = dependantFormSchema();
 
     const { params } = useParamFilter();
@@ -43,6 +46,22 @@ const EditPersonInsurance = ({
         id
     );
 
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "startDate" || key === "endDate") {
+                    setValue(key as keyof IPersonInsurance,
+                        new Date(entity[key as keyof IPersonInsurance] as Date));
+                    return;
+                }
+                setValue(
+                    key as keyof IPersonInsurance,
+                    entity[key as keyof IPersonInsurance]
+                );
+            });
+        }
+    }, [entity, setEditEntityDialog]);
+
     const {
         handleSubmit,
         register,
@@ -51,7 +70,7 @@ const EditPersonInsurance = ({
         setValue,
         formState: { errors },
     } = useForm<IPersonInsurance>({});
-
+    console.log(entity);
     const editEntity = useEditPersonInsurance({
         toast,
         setEditEntityDialog,
@@ -62,11 +81,12 @@ const EditPersonInsurance = ({
     console.log(selectedDependant);
 
     const onSubmit = (data: IPersonInsurance) => {
+        data.idPersonInsurance = entity.idPersonInsurance;
         data.idEmployee = id;
         data.idPerson = selectedDependant?.idPerson ?? 0;
         data.idConcept = data.idConcept
-        data.startDate = data!.startDate!;
-        data.endDate = data!.endDate!;
+        data.startDate = data.startDate;
+        data.endDate = data.endDate;
         data.idEmployeeAuthorize = id;
         data.amount = data!.amount!;
         data.percentDiscount = data.percentDiscount;
@@ -78,6 +98,7 @@ const EditPersonInsurance = ({
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
+
     return (
         <Dialog
             visible={editEntityDialog}
@@ -114,10 +135,10 @@ const EditPersonInsurance = ({
                     <GenericConceptDropDown
                         id="idConcept"
                         isValid={!!errors.idConcept}
-                        idValueEdit={entity.idConcept}
+                        idValueEdit={entity.idConcept!}
                         setValue={setValue}
                         watch={watch}
-                        code={CONCEPT_TYPE_BENEFIT}
+                        code={CONCEPT_TYPE_INSURANCE}
                     />
                     {errors.idConcept && (
                         <small className="p-invalid text-danger">
@@ -126,12 +147,12 @@ const EditPersonInsurance = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="Amount" className="w-full mt-2">
+                    <label htmlFor="amount" className="w-full mt-2">
                         Monto
                     </label>
                     <GenericInputNumber
                         {...register("amount")}
-                        id="Amount"
+                        id="amount"
                         isValid={!!errors.amount}
                         currentValue={entity.amount}
                         setValue={setValue}
@@ -149,7 +170,7 @@ const EditPersonInsurance = ({
                     </label>
                     <GenericInputNumber
                         {...register("percentDiscount")}
-                        id="PercentDiscount"
+                        id="percentDiscount"
                         isValid={!!errors.percentDiscount}
                         currentValue={entity.percentDiscount}
                         setValue={setValue}
@@ -166,13 +187,12 @@ const EditPersonInsurance = ({
                         Fecha de Inicio
                     </label>
                     <Calendar
-                        id="StartDate"
-                        {...register("startDate")}
-                        value={new Date(entity.startDate)}
+                        id="startDate"
+                        value={watch("startDate") ?? new Date(entity?.startDate!)}
+                        onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
-                        onSelect={() =>
-                            setValue("startDate", watch("startDate"))
-                        }
+                        showButtonBar
+                        key={entity?.startDate.toString()}
                     />
                     {errors.startDate && (
                         <small className="text-red-600">
@@ -181,14 +201,17 @@ const EditPersonInsurance = ({
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="EndDate" className="block mb-2 mt-2">
+                    <label htmlFor="endDate" className="block mb-2 mt-2">
                         Fecha final
                     </label>
                     <Calendar
                         id="endDate"
                         {...register("endDate")}
-                        value={new Date(entity.endDate)}
+                        value={watch("endDate") ?? new Date(entity.endDate)}
+                        onChange={(e) => setValue("endDate", new Date(e.value!))}
                         showIcon
+                        key={entity.endDate.toString()}
+
                     />
                     {errors.endDate && (
                         <small className="text-red-600">
