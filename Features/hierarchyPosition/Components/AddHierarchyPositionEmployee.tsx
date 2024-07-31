@@ -9,6 +9,8 @@ import { useForm, UseFormSetValue } from "react-hook-form";
 import hierarchyPositionService from "../Services/hierarchyPositionService";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 import hierarchyPositionFormSchemas from "../Validations/HierarchyPositionFormSchemas";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
 interface Props {
     addEntityDialog: boolean;
@@ -26,6 +28,7 @@ const AddHierarchyPositionEmployee = ({
     setPositionValue,
 }: Props) => {
     const { addEntityFormSchema } = hierarchyPositionFormSchemas();
+    const expireQuery = useExpireSessionQuery(CACHE_KEY_POSITION);
 
     const {
         handleSubmit,
@@ -58,7 +61,8 @@ const AddHierarchyPositionEmployee = ({
                 "idHierarchyPosition",
                 response?.idHierarchyPosition!
             );
-            
+
+            expireQuery();
         });
         setAddEntityDialog(false);
         return;

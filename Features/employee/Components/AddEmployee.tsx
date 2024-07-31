@@ -21,7 +21,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { useForm } from "react-hook-form";
 import useEmployeeQuery from "../Hooks/useEmployeeQuery";
 import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddHierarchyPositionEmployee from "@/Features/hierarchyPosition/Components/AddHierarchyPositionEmployee";
 import { IEmployee } from "../Types/IEmployee";
 
@@ -54,6 +54,17 @@ const AddEmployee = ({ setEmployee, setStep, employee, toast }: Props) => {
         defaultValues: {},
         resolver: zodResolver(addEntityFormSchema),
     });
+
+    useEffect(() => {
+        if (employee) {
+            Object.keys(employee).forEach((key) => {
+                setValue(
+                    key as keyof IEmployee,
+                    employee[key as keyof IEmployee]
+                );
+            });
+        }
+    }, [employee, setValue, setStep]);
 
     const onDepartmentChange = () => {
         setFilters([{ column: "idDepartment", value: watch("idDepartment") }]);
@@ -408,7 +419,12 @@ const AddEmployee = ({ setEmployee, setStep, employee, toast }: Props) => {
                         </div>
                         <div className="field col-12">
                             <label htmlFor="photo">Imagen Del Empleado</label>
-                            <ImageUploadTemplate setValue={setValue} />
+                            <ImageUploadTemplate
+                                setValue={setValue}
+                                employeeImage={employee?.employeeImage}
+                                employeeImageName={employee?.employeeImageName}
+                                employeeImageType={employee?.employeeImageType}
+                            />
                         </div>
                     </div>
                 </div>

@@ -20,10 +20,9 @@ interface Props {
     setPerson: (value: IPerson) => void;
     setStep: (value: number) => void;
     person?: IPerson;
-    step: number;
 }
 
-const AddPerson = ({ setPerson, setStep, person, step }: Props) => {
+const AddPerson = ({ setPerson, setStep, person }: Props) => {
     const { addEntityFormSchema } = personFormSchemas();
 
     const {
@@ -37,13 +36,12 @@ const AddPerson = ({ setPerson, setStep, person, step }: Props) => {
     });
 
     useEffect(() => {
-        console.log("person", person);
         if (person) {
             Object.keys(person).forEach((key) => {
                 setValue(key as keyof IPerson, person[key as keyof IPerson]);
             });
         }
-    }, [person, setValue, step, setStep]);
+    }, [person, setValue, setStep]);
 
     const onSubmit = (data: IPerson) => {
         setPerson(data);
@@ -61,7 +59,6 @@ const AddPerson = ({ setPerson, setStep, person, step }: Props) => {
                             {...register("identification")}
                             mask="999-9999999-9"
                             id="identification"
-                            autoFocus
                             defaultValue={person?.identification}
                             key={person?.identification}
                         />

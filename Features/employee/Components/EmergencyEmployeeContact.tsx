@@ -7,6 +7,7 @@ import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
 import employeeContactFormSchemas from "../Validations/EmployeeContactFormSchemas";
 import { IEmployee } from "../Types/IEmployee";
+import { useEffect } from "react";
 
 interface Props {
     setContactInformation: (
@@ -34,6 +35,17 @@ const EmergencyEmployeeContact = ({
     } = useForm<IEmployee>({
         resolver: zodResolver(addEntityFormSchema),
     });
+
+    useEffect(() => {
+        if (employee) {
+            Object.keys(employee).forEach((key) => {
+                setValue(
+                    key as keyof IEmployee,
+                    employee[key as keyof IEmployee]
+                );
+            });
+        }
+    }, [employee, setValue]);
 
     const onSubmit = (data: IEmployee) => {
         setContactInformation(

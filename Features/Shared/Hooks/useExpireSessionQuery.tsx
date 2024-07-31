@@ -1,6 +1,6 @@
 import { InvalidateQueryFilters, useQueryClient } from '@tanstack/react-query';
 
-const useExpireSessionQuery = (queryKey: string) => {
+const useExpireSessionQuery = (queryKey: string | string[]) => {
     const queryClient = useQueryClient();
 
     const invalidateQuery = () => {
