@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useRef } from "react";
 import AddHierarchyPosition from "@/Features/hierarchyPosition/Components/AddHierarchyPosition";
 import { IHierarchyPosition } from "@/Features/hierarchyPosition/Types/IHierarchyPosition";
 import { IPerson } from "@/Features/person/Types/IPerson";
@@ -8,7 +9,6 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
-import { useState } from "react";
 import { addEmployeeService } from "../Services/employeeService";
 import { IInsertEmployee } from "../Types/IInsertEmployee";
 import AddPerson from "./../../person/Components/AddPerson";
@@ -18,14 +18,27 @@ import { IEmployee } from "../Types/IEmployee";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
+interface personFormRef {
+    submitPersonForm: () => void;
+}
+interface employeeFormRef {
+    submitEmployeeForm: () => void;
+}
+
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
     const [person, setPerson] = useState<IPerson>();
     const [employee, setEmployee] = useState<IEmployee>();
-    const expireQuery = useExpireSessionQuery([CACHE_KEY_POSITION, CACHE_KEY_EMPLOYEE]);
+    const expireQuery = useExpireSessionQuery([
+        CACHE_KEY_POSITION,
+        CACHE_KEY_EMPLOYEE,
+    ]);
 
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IHierarchyPosition>();
+
+    const addPersonRef = useRef<personFormRef>(null);
+    const addEmployeeRef = useRef<employeeFormRef>(null);
 
     const setContactInformation = (
         idStatusRelationship?: number,
@@ -68,7 +81,17 @@ const AddEmployeeTabs = () => {
             },
         } as IInsertEmployee;
 
+        validateAddPersonForm();
         addEmployee.mutateAsync(employeeToAdd).then(() => expireQuery());
+    };
+
+    const validateAddPersonForm = () => {
+        if (addPersonRef.current) {
+            addPersonRef.current.submitPersonForm();
+        }
+        if (addEmployeeRef.current) {
+            addEmployeeRef.current.submitEmployeeForm();
+        }
     };
 
     const handleAdd = () => {
@@ -80,7 +103,6 @@ const AddEmployeeTabs = () => {
         <div className="col-12">
             <h3>Agregar Empleado</h3>
             <Toast ref={toast} />
-
             {addEntityDialog && (
                 <AddHierarchyPosition
                     addEntityDialog={addEntityDialog}
@@ -98,31 +120,33 @@ const AddEmployeeTabs = () => {
                     readOnly={false}
                     className="mb-6"
                 />
-                {step === 0 && (
+                <div style={{ display: step === 0 ? "block" : "none" }}>
                     <AddPerson
                         setStep={setStep}
                         setPerson={setPerson}
                         person={person}
+                        ref={addPersonRef}
                     />
-                )}
+                </div>
 
-                {step === 1 && (
+                <div style={{ display: step === 1 ? "block" : "none" }}>
                     <AddEmployee
                         setStep={setStep}
                         setEmployee={setEmployee}
                         employee={employee}
                         handleAdd={handleAdd}
                         toast={toast}
+                        ref={addEmployeeRef}
                     />
-                )}
+                </div>
 
-                {step === 2 && (
+                <div style={{ display: step === 2 ? "block" : "none" }}>
                     <EmergencyEmployeeContact
                         employee={employee}
                         setContactInformation={setContactInformation}
                         addEmployeeInformation={AddEmployeeInformation}
                     />
-                )}
+                </div>
             </div>
         </div>
     );
