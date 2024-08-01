@@ -113,7 +113,7 @@ const AddEmployee = forwardRef(
                                     {...register("idEmployee")}
                                     id="idEmployee"
                                     type="number"
-                                    onChange={e => setValue("idEmployee", e.target.value)}
+                                    onChange={e => setValue("idEmployee", +e.target.value)}
                                     defaultValue={employee?.functionDescription}
                                 />
 
