@@ -109,15 +109,12 @@ const AddEmployee = forwardRef(
                                 <label htmlFor="idEmployee">
                                     Código De Empleado
                                 </label>
-                                <GenericInputNumber
+                                <InputText
+                                    {...register("idEmployee")}
                                     id="idEmployee"
-                                    isValid={!!errors.idEmployee}
-                                    setValue={setValue}
-                                    watch={watch}
-                                    minValue={1}
-                                    isFocus={true}
-                                    format={false}
-                                    currentValue={employee?.idEmployee}
+                                    type="number"
+                                    onChange={e => setValue("idEmployee", e.target.value)}
+                                    defaultValue={employee?.functionDescription}
                                 />
 
                                 {errors.idEmployee && (

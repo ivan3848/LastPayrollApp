@@ -20,7 +20,7 @@ const GenericInputNumber = ({
     id,
     currentValue,
     isValid,
-    minValue,
+    minValue = 0,
     maxValue,
     isFocus = false,
     format = true,
