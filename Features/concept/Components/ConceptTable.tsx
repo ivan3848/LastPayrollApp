@@ -195,6 +195,18 @@ const ConceptTable = ({
             ></Column>
 
             <Column
+                field="amount"
+                header="Monto"
+                sortable
+                filter
+                filterField="amount"
+                filterPlaceholder="Buscar por monto de concepto"
+                showFilterMenuOptions={false}
+                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterClear={clearFilters}
+            ></Column>
+
+            <Column
                 field="percentValue"
                 header="Porcentaje"
                 sortable
