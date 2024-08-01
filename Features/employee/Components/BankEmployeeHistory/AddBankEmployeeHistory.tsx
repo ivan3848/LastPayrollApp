@@ -3,7 +3,6 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
@@ -131,7 +130,6 @@ const AddBankEmployeeHistory = ({
                         id="startDate"
                         value={watch("startDate") ?? new Date()}
                         onChange={(e) => setValue("startDate", e.value!)}
-                        onFocus={() => setValue("startDate", new Date())}
                         autoFocus
                         showIcon
                         showButtonBar

@@ -188,7 +188,6 @@ const EditBankEmployeeHistory = ({
                                 text={"Para deposito"}
                                 watch={watch}
                                 setValue={setValue}
-                                currentValue={entity.isDeposit}
                             />
                         </div>
 
