@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import AddHierarchyPosition from "@/Features/hierarchyPosition/Components/AddHierarchyPosition";
 import { IHierarchyPosition } from "@/Features/hierarchyPosition/Types/IHierarchyPosition";
 import { IPerson } from "@/Features/person/Types/IPerson";
@@ -39,6 +40,8 @@ const AddEmployeeTabs = () => {
 
     const addPersonRef = useRef<personFormRef>(null);
     const addEmployeeRef = useRef<employeeFormRef>(null);
+
+    const router = useRouter();
 
     const setContactInformation = (
         idStatusRelationship?: number,
@@ -82,7 +85,10 @@ const AddEmployeeTabs = () => {
         } as IInsertEmployee;
 
         validateAddPersonForm();
-        addEmployee.mutateAsync(employeeToAdd).then(() => expireQuery());
+        addEmployee.mutateAsync(employeeToAdd).then(() => {
+            expireQuery();
+            router.push("/employee");
+        });
     };
 
     const validateAddPersonForm = () => {

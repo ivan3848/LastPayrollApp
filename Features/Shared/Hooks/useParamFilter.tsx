@@ -6,9 +6,9 @@ interface Props {
     tableName: string;
 }
 
-const useParamFilter = () => {
+const useParamFilter = (pageSize: number = 5) => {
     const [params, setParams] = useState<IParamsApi>({
-        filter: { page: 1, pageSize: 5, allData: false, filters: [] },
+        filter: { page: 1, pageSize: pageSize, allData: false, filters: [] },
     });
 
     const setPage = (page: number) =>
@@ -93,7 +93,7 @@ const useParamFilter = () => {
     };
 };
 
-const useParamFilterByTableName = ({ tableName = "" }: Props) => {
+const useParamFilterByTableName = (tableName: string = "", pageSize: number = 5) => {
     const [params, setParams] = useState<IParamsApi>({
         filter: {
             page: 1,

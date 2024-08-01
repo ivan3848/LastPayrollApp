@@ -161,6 +161,7 @@ const EditConcept = ({
                         maxValue={100}
                         setValue={setValue}
                         watch={watch}
+                        prefix="%"
                     />
                     {errors.percentValue && (
                         <small className="p-invalid text-danger">
@@ -181,9 +182,9 @@ const EditConcept = ({
                         watch={watch}
                         currentValue={entity.amount}
                     />
-                    {errors.percentValue && (
+                    {errors.amount && (
                         <small className="p-invalid text-danger">
-                            {errors.percentValue.message?.toString()}
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -216,70 +217,6 @@ const EditConcept = ({
                     <div className="col-12 md:col-4">
                         <div className="field-checkbox">
                             <GenericCheckBox
-                                id="isCommission"
-                                text="Comisión"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isCommission}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isAbsenteeism"
-                                text="Absentismo"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isAbsenteeism}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isLease"
-                                text="Préstamo"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isLease}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isExtraHour"
-                                text="Tipo de hora"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isExtraHour}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isTax"
-                                text="Impuesto"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isTax}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
                                 id="isCompany"
                                 text="Compañía"
                                 watch={watch}
@@ -288,45 +225,9 @@ const EditConcept = ({
                             />
                         </div>
                     </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isInsurance"
-                                text="Seguro"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isInsurance}
-                            />
-                        </div>
-                    </div>
                 </div>
 
                 <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isProfit"
-                                text="Beneficio"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isProfit}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isDeduction"
-                                text="Deducción"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isDeduction}
-                            />
-                        </div>
-                    </div>
-
                     <div className="col-12 md:col-4">
                         <div className="field-checkbox">
                             <GenericCheckBox
@@ -335,6 +236,29 @@ const EditConcept = ({
                                 watch={watch}
                                 setValue={setValue}
                                 currentValue={entity.isOnlySecondPayroll}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isForChargeTaxIsr"
+                                text="Para ISR"
+                                watch={watch}
+                                setValue={setValue}
+                                currentValue={entity.isForChargeTaxIsr}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isForChargeTax"
+                                text="Para TSS"
+                                watch={watch}
+                                setValue={setValue}
+                                currentValue={entity.isForChargeTax}
                             />
                         </div>
                     </div>
@@ -353,32 +277,6 @@ const EditConcept = ({
                         </div>
                     </div>
 
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isForChargeTax"
-                                text="Para TSS"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isForChargeTax}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isForChargeTaxIsr"
-                                text="Para ISR"
-                                watch={watch}
-                                setValue={setValue}
-                                currentValue={entity.isForChargeTaxIsr}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
                     <div className="col-12 md:col-4">
                         <div className="field-checkbox">
                             <GenericCheckBox
