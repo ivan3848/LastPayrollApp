@@ -9,20 +9,22 @@ interface Props {
     isValid: boolean;
     minValue?: number;
     maxValue?: number;
-    setValue: UseFormSetValue<any>;
-    watch: (field: string) => any;
     isFocus?: boolean;
     format?: boolean;
+    prefix?: string;
+    watch: (field: string) => any;
+    setValue: UseFormSetValue<any>;
 }
 
 const GenericInputNumber = ({
     id,
     currentValue,
     isValid,
-    minValue,
+    minValue = 0,
     maxValue,
     isFocus = false,
     format = true,
+    prefix = "RD$",
     setValue,
     watch,
 }: Props) => {
@@ -48,7 +50,7 @@ const GenericInputNumber = ({
             format={format}
             minFractionDigits={2}
             maxFractionDigits={2}
-            prefix="RD$"
+            prefix={prefix}
         />
     );
 };

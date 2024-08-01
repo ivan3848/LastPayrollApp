@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const employeeFormSchemas = () => {
     const editEntityFormSchema = z.object({
-        idEmployee: z.number({ required_error: "El campo es requerido" }),
+        idEmployee: z.string({ required_error: "El campo es requerido" }),
         idHierarchyPosition: z.number().optional(),
         idEmployeeManager: z.number().optional(),
         idWorkScheduler: z.number({ required_error: "El campo es requerido" }),
@@ -26,7 +26,7 @@ const employeeFormSchemas = () => {
     });
 
     const addEntityFormSchema = z.object({
-        idEmployee: z.number({ required_error: "El campo es requerido" }),
+        idEmployee: z.string({ required_error: "El campo es requerido" }),
         idHierarchyPosition: z.number().optional(),
         idEmployeeManager: z.number().optional(),
         idWorkScheduler: z.number({ required_error: "El campo es requerido" }),

@@ -115,7 +115,8 @@ const EditPosition = ({
                         Posición superior
                     </label>
                     <GenericDropDown
-                        id="idPositionManager"
+                        id="idPosition"
+                        idToSet="idPositionManager"
                         idValueEdit={entity.idPositionManager}
                         isValid={!!errors.idPositionManager}
                         text="name"
