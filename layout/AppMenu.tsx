@@ -60,9 +60,15 @@ const AppMenu = () => {
                     visible: false,
                 },
                 {
-                    label: "Cambios masivos",
+                    label: "Cambios Masivos",
                     icon: "pi pi-fw pi-chart-bar",
-                    to: "/employee/employee",
+                    to: "/massiveChange",
+                },
+                {
+                    label: `Cambios Masivos / Aumento Masivo`,
+                    to: "/massiveChange/massiveIncrease",
+                    icon: "pi pi-user-plus",
+                    visible: false,
                 },
             ],
         },

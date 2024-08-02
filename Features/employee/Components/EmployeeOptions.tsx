@@ -12,12 +12,12 @@ const EmployeeOptions = ({ setAction }: Props) => {
     return (
         <div>
             <Fieldset legend="Funciones" toggleable className="mb-5">
-                <Button
+                {/* <Button
                     label="Cubrir Posición"
                     icon="pi pi-search"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.CoverPosition)}
-                />
+                /> */}
                 <Button
                     label="Gestión Bancaria"
                     icon="pi pi-search"

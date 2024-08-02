@@ -52,9 +52,7 @@ const Employee = () => {
                     <Toast ref={toast} />
 
                     <Suspense fallback={skeleton()}>
-                        <EmployeeTable
-                            submitted={submitted}
-                        />
+                        <EmployeeTable submitted={submitted} />
                     </Suspense>
 
                     {deleteEntityDialog && (

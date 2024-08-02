@@ -5,7 +5,6 @@ import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
 import employeeService from "../Services/employeeService";
 import { IEmployee } from "../Types/IEmployee";
-
 import emptyImage from "@/constants/emptyImage";
 import { useRouter } from "next/router";
 import { DataView, DataViewLayoutOptions } from "primereact/dataview";
@@ -29,9 +28,7 @@ const sortOptions = [
     { label: "Departamento", value: "department" },
 ];
 
-export default function EmployeeTable({
-    submitted,
-}: Props) {
+export default function EmployeeTable({ submitted }: Props) {
     const {
         setPage,
         setPageSize,
