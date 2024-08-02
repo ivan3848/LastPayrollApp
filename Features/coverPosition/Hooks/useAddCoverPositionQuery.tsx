@@ -1,5 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import hierarchyPositionService from "../Services/hierarchyPositionService";
+import { ICoverPosition } from "../Types/ICoverPosition";
+import coverPositionService from "../Services/coverPositionService";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -7,15 +8,15 @@ interface Props {
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-
-const useChangePositionSalaryQuery = ({
+const useAddCoverPositionQuery = ({
     toast,
     setAddEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IPositionSalary) => hierarchyPositionService.post(entity),
+        mutationFn: (entity: ICoverPosition) =>
+            coverPositionService.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -39,4 +40,4 @@ const useChangePositionSalaryQuery = ({
     });
 };
 
-export default useChangePositionSalaryQuery;
+export default useAddCoverPositionQuery;

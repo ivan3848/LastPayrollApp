@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const employeeFormSchemas = () => {
     const editEntityFormSchema = z.object({
-        idEmployee: z.number({ required_error: "El campo es requerido" }),
+        idEmployee: z.string({ required_error: "El campo es requerido" }),
         idHierarchyPosition: z.number().optional(),
         idEmployeeManager: z.number().optional(),
         idWorkScheduler: z.number({ required_error: "El campo es requerido" }),
@@ -10,7 +10,7 @@ const employeeFormSchemas = () => {
         startDate: z.date({ required_error: "El campo es requerido" }),
         endWorkDate: z.date().optional(),
         salary: z.number({ required_error: "El campo es requerido" }),
-        email: z.string().email().optional(),
+        email: z.string().optional(),
         employeeImage: z.string().optional(),
         idStatusActionClass: z.number().optional(),
         functionDescription: z.string().optional(),
@@ -26,7 +26,7 @@ const employeeFormSchemas = () => {
     });
 
     const addEntityFormSchema = z.object({
-        idEmployee: z.number({ required_error: "El campo es requerido" }),
+        idEmployee: z.string({ required_error: "El campo es requerido" }),
         idHierarchyPosition: z.number().optional(),
         idEmployeeManager: z.number().optional(),
         idWorkScheduler: z.number({ required_error: "El campo es requerido" }),
@@ -34,7 +34,7 @@ const employeeFormSchemas = () => {
         startDate: z.date({ required_error: "El campo es requerido" }),
         endWorkDate: z.date().optional(),
         salary: z.number({ required_error: "El campo es requerido" }),
-        email: z.string().email().optional(),
+        email: z.string().optional(),
         employeeImage: z.string().optional(),
         idStatusActionClass: z.number().optional(),
         functionDescription: z.string().optional(),

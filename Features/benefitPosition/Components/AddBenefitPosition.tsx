@@ -108,7 +108,6 @@ const AddBenefitPosition = ({
                         Monto
                     </label>
                     <GenericInputNumber
-                        {...register("amount")}
                         id="amount"
                         isValid={!!errors.amount}
                         setValue={setValue}

@@ -1,19 +1,16 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
+import hierarchyPositionService from "../Services/hierarchyPositionService";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 import hierarchyPositionFormSchemas from "../Validations/HierarchyPositionFormSchemas";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
-import hierarchyPositionService from "../Services/hierarchyPositionService";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 
 interface Props {
     entity: IHierarchyPosition;
