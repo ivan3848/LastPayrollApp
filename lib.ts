@@ -27,10 +27,9 @@ export async function decrypt(input: string): Promise<any> {
     return payload;
   } catch (error: any) {
     if (error.code === 'ERR_JWT_EXPIRED') {
-      console.error('Token has expired');
-      return null; // or handle the expiration case as needed
+      return null;
     }
-    throw error; // rethrow other errors
+    throw error;
   }
 }
 
