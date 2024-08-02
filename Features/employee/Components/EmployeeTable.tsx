@@ -7,21 +7,18 @@ import employeeService from "../Services/employeeService";
 import { IEmployee } from "../Types/IEmployee";
 
 import emptyImage from "@/constants/emptyImage";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { DataView, DataViewLayoutOptions } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
 import { ChangeEvent, useState } from "react";
 import EmployeeActions from "./EmployeeActions";
-import Link from "next/link";
 
 interface Props {
     submitted: boolean;
-    handleAdd: () => void;
-    handleEdit: (entity: IEmployee) => void;
-    handleDelete: (entity: IEmployee) => void;
 }
 
 const sortOptions = [
@@ -32,12 +29,7 @@ const sortOptions = [
     { label: "Departamento", value: "department" },
 ];
 
-export default function EmployeeTable({
-    submitted,
-    handleDelete,
-    handleEdit,
-    handleAdd,
-}: Props) {
+export default function EmployeeTable({ submitted }: Props) {
     const {
         setPage,
         setPageSize,
@@ -45,7 +37,7 @@ export default function EmployeeTable({
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter();
+    } = useParamFilter(6);
 
     const [layout, setLayout] = useState<
         "list" | "grid" | (string & Record<string, unknown>)
@@ -89,9 +81,7 @@ export default function EmployeeTable({
                 >
                     <img
                         className="w-7 sm:w-16rem xl:w-7rem shadow-2 block xl:block mx-auto border-circle"
-                        src={`data:image/jpeg;base64,${
-                            employee.employeeImage ?? emptyImage
-                        }`}
+                        src={employee.employeeImage ?? emptyImage}
                         alt={employee.employeeName!}
                     />
                     <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
@@ -131,7 +121,7 @@ export default function EmployeeTable({
     const gridItem = (employee: IEmployee) => {
         return (
             <div
-                className="col-12 sm:col-6 xl:col-3 m-1"
+                className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center flex-wrap gap-4"
                 key={employee.idEmployee}
             >
                 <div className="p-3 border-1 surface-border border-round">
@@ -150,9 +140,7 @@ export default function EmployeeTable({
                     <div className="flex flex-column align-items-center gap-1 py-2">
                         <img
                             className="w-5 shadow-2 border-circle"
-                            src={`data:image/jpeg;base64,${
-                                employee.employeeImage ?? emptyImage
-                            }`}
+                            src={employee.employeeImage ?? emptyImage}
                             alt={employee.employeeName!}
                         />
                         <div className="text-2xl font-bold">
@@ -253,49 +241,55 @@ export default function EmployeeTable({
         </div>
     );
 
-    return (
-        <>
-            <EmployeeActions
-                showEmployeeActions={showEmployeeActions}
-                setShowEmployeeActions={setShowEmployeeActions}
-                employee={employee!}
-            />
+   return (
+       <>
+           <EmployeeActions
+               showEmployeeActions={showEmployeeActions}
+               setShowEmployeeActions={setShowEmployeeActions}
+               employee={employee!}
+           />
 
-            <div className="grid">
-                <div className="col-12">
-                    <div className="flex justify-content-between mb-5">
-                        <h3>Empleados</h3>
+           <div className="grid">
+               <div className="col-12">
+                   <div className="flex justify-content-between mb-5">
+                       <h3>Empleados</h3>
 
-                        <Link href="/employee/addEmployee">
-                            <Button
-                                label="Agregar Empleado"
-                                icon="pi pi-user-plus"
-                            />
-                        </Link>
-                    </div>
+                       <Link href="/employee/addEmployee">
+                           <Button
+                               label="Agregar Empleado"
+                               icon="pi pi-user-plus"
+                           />
+                       </Link>
+                   </div>
 
-                    <DataView
-                        value={data.items}
-                        itemTemplate={itemTemplate}
-                        layout={layout}
-                        header={header}
-                        loading={isLoading}
-                        lazy
-                        paginator
-                        sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                        sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                        totalRecords={data?.totalCount}
-                        className="dataview-responsive"
-                        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                        emptyMessage="No hay registros para mostrar."
-                        onPage={onPage}
-                        rowsPerPageOptions={[5, 10, 25]}
-                        rows={data?.pageSize!}
-                        first={data.firstRow!}
-                        currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
-                    />
-                </div>
-            </div>
-        </>
-    );
+                   {isLoading ? (
+                       <div className="flex justify-content-center align-items-center">
+                           <ProgressSpinner />
+                       </div>
+                   ) : (
+                       <DataView
+                           value={data.items}
+                           itemTemplate={itemTemplate}
+                           layout={layout}
+                           header={header}
+                           loading={isLoading}
+                           lazy
+                           paginator
+                           sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                           sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
+                           totalRecords={data?.totalCount}
+                           className="dataview-responsive"
+                           paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                           emptyMessage="No hay registros para mostrar."
+                           onPage={onPage}
+                           rowsPerPageOptions={[5, 10, 25]}
+                           rows={data?.pageSize!}
+                           first={data.firstRow!}
+                           currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                       />
+                   )}
+               </div>
+           </div>
+       </>
+   );
 }

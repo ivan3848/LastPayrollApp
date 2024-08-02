@@ -5,6 +5,11 @@ import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
 import FireEmployee from "./FireEmployee";
+import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
+import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
+import Dependant from "./Dependant/Dependant";
+import PersonInsurance from "./PersonInsurance/PersonInsurance";
+import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -44,7 +49,7 @@ const EmployeeActions = ({
                 resizable
                 header={headerTitle}
                 focusOnShow
-                style={{ width: "850px" }}
+                style={{ width: "80vw" }}
             >
                 <div className="mb-5">
                     <EmployeeProfile employee={employee} />
@@ -56,6 +61,21 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.FireEmployee && (
                         <FireEmployee employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.BankManagement && (
+                        <BankEmployeeHistory id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Dependant && (
+                        <Dependant id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Tools && (
+                        <ToolWorkDefinitionEmployee id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.PersonInsurance && (
+                        <PersonInsurance employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.CoverPosition && (
+                        <CoverPosition employee={employee} />
                     )}
                 </div>
             </Dialog>

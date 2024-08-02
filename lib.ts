@@ -20,10 +20,17 @@ export async function encrypt(payload: any) {
 }
 
 export async function decrypt(input: string): Promise<any> {
-  const { payload } = await jwtVerify(input, key, {
-    algorithms: ["HS256"],
-  });
-  return payload;
+  try {
+    const { payload } = await jwtVerify(input, key, {
+      algorithms: ["HS256"],
+    });
+    return payload;
+  } catch (error: any) {
+    if (error.code === 'ERR_JWT_EXPIRED') {
+      return null;
+    }
+    throw error;
+  }
 }
 
 export function haveAccess(rolModule: string, user: IUser | undefined): IPermission {
@@ -58,7 +65,7 @@ export async function updateSession(request: NextRequest) {
 
   // Refresh the session so it doesn't expire
   const parsed = await decrypt(session);
-  parsed.expires = new Date(Date.now() + 10000 * 1000);
+  parsed.expires = new Date(Date.now() + 1000 * 1000);
   const res = NextResponse.next();
   res.cookies.set({
     name: "session",

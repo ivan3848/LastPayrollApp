@@ -1,24 +1,27 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
+import hierarchyPositionService from "../Services/hierarchyPositionService";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 import hierarchyPositionFormSchemas from "../Validations/HierarchyPositionFormSchemas";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import hierarchyPositionService from "../Services/hierarchyPositionService";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import { IPosition } from "@/Features/position/Types/IPosition";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 
 interface Props {
     addEntityDialog: boolean;
     setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    position?: IPosition;
 }
 
 const AddHierarchyPosition = ({
@@ -26,9 +29,10 @@ const AddHierarchyPosition = ({
     setAddEntityDialog,
     setSubmitted,
     toast,
+    position,
 }: Props) => {
     const { addEntityFormSchema } = hierarchyPositionFormSchemas();
-
+    const expireQuery = useExpireSessionQuery(CACHE_KEY_POSITION);
     const {
         handleSubmit,
         register,
@@ -50,7 +54,7 @@ const AddHierarchyPosition = ({
 
     const onSubmit = (data: IHierarchyPosition) => {
         addEntity.mutate(data);
-        return;
+        expireQuery();
     };
 
     const hideDialog = () => {
@@ -79,6 +83,7 @@ const AddHierarchyPosition = ({
                         setValue={setValue}
                         watch={watch}
                         onChange={(e) => setValue("name", e.value.name)}
+                        idValueEdit={position?.idPosition}
                     />
                     {errors.idPosition && (
                         <small className="p-invalid text-danger">
@@ -93,8 +98,7 @@ const AddHierarchyPosition = ({
                     <InputText
                         {...register("name")}
                         id="name"
-                        autoFocus
-                        defaultValue={watch("name")}
+                        defaultValue={position?.name ?? watch("name")}
                         className={classNames({
                             "p-invalid": errors.name,
                         })}
@@ -106,7 +110,7 @@ const AddHierarchyPosition = ({
                     )}
                 </div>
                 <div className="field">
-                    <label htmlFor="positionCode" className="w-full">
+                    <label htmlFor="vacancyAmount" className="w-full">
                         Cantidad de vacantes
                     </label>
                     <GenericInputNumber
@@ -117,6 +121,7 @@ const AddHierarchyPosition = ({
                         watch={watch}
                         minValue={1}
                         currentValue={1}
+                        format={false}
                     />
                     {errors.vacancyAmount && (
                         <small className="p-invalid text-danger">

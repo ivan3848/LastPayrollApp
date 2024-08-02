@@ -1,5 +1,4 @@
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
-import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { classNames } from "primereact/utils";
 import { useEffect } from "react";
@@ -12,6 +11,7 @@ interface Props<T> {
     code: string;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
+    setData?: (data: any) => void;
 }
 
 function GenericConceptDropDown<T>({
@@ -21,6 +21,7 @@ function GenericConceptDropDown<T>({
     code,
     setValue,
     watch,
+    setData,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -36,7 +37,10 @@ function GenericConceptDropDown<T>({
                 value={data.find(
                     (item: any) => item[id] === (watch(id) ?? idValueEdit)
                 )}
-                onChange={(e: DropdownChangeEvent) => setValue(id, e.value.idConcept)}
+                onChange={(e: DropdownChangeEvent) => {
+                    setData && setData(e.value);
+                    setValue(id, e.value.idConcept)
+                }}
                 options={data}
                 optionLabel="name"
                 placeholder="Seleccione una opción..."

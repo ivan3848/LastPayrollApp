@@ -104,6 +104,7 @@ const EditWorkSchedulerDetail = ({ entity, toast, setSubmitted }: Props) => {
                         min={1}
                         max={5}
                         showButtons
+                        format={false}
                     />
                     {errors.week && (
                         <small className="p-invalid text-danger">

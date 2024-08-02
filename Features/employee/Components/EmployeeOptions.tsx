@@ -5,6 +5,7 @@ import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 
 interface Props {
     setAction: (action: EmployeeOptionsEnum) => void;
+    onSubmit?: () => void;
 }
 
 const EmployeeOptions = ({ setAction }: Props) => {
@@ -12,30 +13,36 @@ const EmployeeOptions = ({ setAction }: Props) => {
         <div>
             <Fieldset legend="Funciones" toggleable className="mb-5">
                 <Button
-                    label="Cubrir Posición"
-                    icon="pi pi-search"
-                    className="m-2"
-                    onClick={() => setAction(EmployeeOptionsEnum.CoverPosition)}
-                />
-                <Button
                     label="Gestión Bancaria"
-                    icon="pi pi-search"
+                    icon="pi pi-building-columns"
                     className="m-2"
+                    onClick={() =>
+                        setAction(EmployeeOptionsEnum.BankManagement)
+                    }
                 />
                 <Button
                     label="Dependientes"
+                    icon="pi pi-users"
+                    className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Dependant)}
+                />
+                <Button
+                    label="Seguros"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() =>
+                        setAction(EmployeeOptionsEnum.PersonInsurance)
+                    }
                 />
-                <Button label="Seguros" icon="pi pi-search" className="m-2" />
                 <Button
                     label="Herramientas"
-                    icon="pi pi-search"
+                    icon="pi pi-briefcase"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Tools)}
                 />
                 <Button
                     label="Desvincular"
-                    icon="pi pi-search"
+                    icon="pi pi-user-minus"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.FireEmployee)}
                 />

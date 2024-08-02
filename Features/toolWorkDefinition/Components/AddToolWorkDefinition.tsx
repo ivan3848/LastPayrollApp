@@ -66,7 +66,7 @@ const AddToolWorkDefinition = ({
                     <InputText
                         {...register("name")}
                         id="name"
-                        autoFocus
+                        autoFocus 
                         className={classNames({
                             "p-invalid": errors.name,
                         })}

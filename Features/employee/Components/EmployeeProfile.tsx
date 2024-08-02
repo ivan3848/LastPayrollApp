@@ -1,17 +1,20 @@
-import React from "react";
-import { IEmployee } from "../Types/IEmployee";
-import { Card } from "primereact/card";
-import { Tag } from "primereact/tag";
 import emptyImage from "@/constants/emptyImage";
-import { classNames } from "primereact/utils";
 import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";
+import { Tag } from "primereact/tag";
+import { classNames } from "primereact/utils";
+import { IEmployee } from "../Types/IEmployee";
+import DeleteEmployee from "./DeleteEmployee/Components/DeleteEmploye";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 
 interface Props {
     employee: IEmployee;
 }
 
 const EmployeeProfile = ({ employee }: Props) => {
+    const { setDeleteEntityDialog, deleteEntityDialog, setSubmitted, toast } =
+        useCrudModals<IEmployee>();
+
     const getSeverity = (employee: IEmployee) => {
         switch (employee.isActive) {
             case false:
@@ -33,9 +36,7 @@ const EmployeeProfile = ({ employee }: Props) => {
                     <div className="flex-row">
                         <img
                             className="sm:w-16rem xl:w-9rem shadow-2 xl:block mx-auto border-circle mb-2"
-                            src={`data:image/jpeg;base64,${
-                                employee.employeeImage ?? emptyImage
-                            }`}
+                            src={`${employee.employeeImage ?? emptyImage}`}
                             alt={employee.employeeName!}
                         />
                         <div className="text-2xl font-bold text-900 text-center">
@@ -79,6 +80,17 @@ const EmployeeProfile = ({ employee }: Props) => {
                                     employee.isActive ? "Inactivar" : "Activar"
                                 }
                             />
+                            {employee.isActive && (
+                                <DeleteEmployee
+                                    idEmployee={employee.idEmployee!}
+                                    deleteEntityDialog={deleteEntityDialog}
+                                    setDeleteEntityDialog={
+                                        setDeleteEntityDialog
+                                    }
+                                    setSubmitted={setSubmitted}
+                                    toast={toast}
+                                />
+                            )}
                         </div>
                     </div>
                 </div>

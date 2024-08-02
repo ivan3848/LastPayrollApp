@@ -26,6 +26,9 @@ const CancelationReasonStatus = dynamic(
 const WorkScheduler = dynamic(
     () => import("../../workScheduler/Components/WorkScheduler")
 );
+const GroupManager = dynamic(
+    () => import("../../groupManager/Components/GroupManager")
+);
 const EmployeeTabs = () => {
     return (
         <div className="grid crud-demo">
@@ -37,6 +40,11 @@ const EmployeeTabs = () => {
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <WorkScheduler />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel header="Grupos" leftIcon="pi pi-sitemap mr-2">
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <GroupManager />
                         </Suspense>
                     </TabPanel>
                     <TabPanel

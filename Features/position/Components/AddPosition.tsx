@@ -107,7 +107,8 @@ const AddPosition = ({
                         Posición superior
                     </label>
                     <GenericDropDown
-                        id="idPositionManager"
+                        id="idPosition"
+                        idToSet="idPositionManager"
                         isValid={!!errors.idPositionManager}
                         text="name"
                         useQuery={usePositionQuery}

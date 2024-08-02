@@ -5,9 +5,10 @@ import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditCountryQuery from "../Hooks/useEditCountryQuery";
 import { ICountry } from "../Types/ICountry";
 import countryFormSchemas from "../Validations/CountryFormSchemas";
+import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
+import countryService from "../Services/countryService";
 
 interface Props {
     entity: ICountry;
@@ -35,11 +36,12 @@ const EditCountry = ({
         resolver: zodResolver(editEntityFormSchema),
     });
 
-    const editEntity = useEditCountryQuery({
+    const editEntity = useEditEntityQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
+        service: countryService
     });
 
     const onSubmit = (data: ICountry) => {

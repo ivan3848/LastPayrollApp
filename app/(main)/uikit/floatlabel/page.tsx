@@ -138,8 +138,8 @@ const FloatLabelDemo = () => {
                         <InputMask
                             id="inputmask"
                             mask="99/99/9999"
-                            value={value7}
-                            onChange={(e) => setValue7(e.value ?? "")}
+                            // value={value7}
+                            // onChange={(e) => setValue7(e.value ?? "")}
                         ></InputMask>
                         <label htmlFor="inputmask">InputMask</label>
                     </span>
