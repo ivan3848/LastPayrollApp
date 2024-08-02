@@ -1,4 +1,4 @@
-import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
@@ -7,28 +7,41 @@ import { Dialog } from "primereact/dialog";
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAddPersonInsuranceQuery from "./Hooks/useAddPersonInsuranceQuery";
-import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Dropdown } from "primereact/dropdown";
-import { IDependant } from "../Dependant/Types/IDependant";
+import { zodResolver } from "@hookform/resolvers/zod";
+import PersonInsuranceFormSchema from "./Validation/PersonInsuranceFormSchema";
+import { IConcept } from "@/Features/concept/Types/IConcept";
+import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
+import { IEmployee } from "../../Types/IEmployee";
+
 
 interface Props {
-    id: number;
+    employee: IEmployee;
     addEntityDialog: boolean;
     setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
+export interface IDependantPerson {
+    idPerson: number;
+    fullName: string;
+}
+
 const AddPersonInsurance = ({
-    id,
+    employee,
     addEntityDialog,
     setAddEntityDialog,
     setSubmitted,
     toast,
 }: Props) => {
 
-    const [selectedDependant, setSelectedDependant] = React.useState<IDependant>();
+    const [listDependats, setListDependats] = React.useState<IDependantPerson[]>([]);
+    const [selectDependant, setSelectDependant] = React.useState<IDependantPerson>();
+    const [conceptField, setConceptField] = React.useState<IConcept>();
+
+    const { addEntityFormSchema } = PersonInsuranceFormSchema();
 
     const {
         handleSubmit,
@@ -37,7 +50,9 @@ const AddPersonInsurance = ({
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IPersonInsurance>({});
+    } = useForm<IAddPersonInsurance>({
+        resolver: zodResolver(addEntityFormSchema),
+    });
 
     const addEntity = useAddPersonInsuranceQuery({
         toast,
@@ -46,15 +61,30 @@ const AddPersonInsurance = ({
         reset,
     });
 
-    const onSubmit = (data: IPersonInsurance) => {
-        data.idEmployee = id;
-        data.idPerson = selectedDependant?.idPerson ?? 0;
+    const test = () => {
+        const tes = [];
+        tes.push({
+            idPerson: +employee.idPerson!,
+            fullName: employee.employeeName!,
+        });
+        for (let i = 0; i < data.length; i++) {
+            tes.push({
+                idPerson: +data[i].idPerson!,
+                fullName: data[i].fullName!,
+            });
+        }
+        setListDependats(tes);
+    }
+
+    const onSubmit = (data: IAddPersonInsurance) => {
+        data.idEmployee = employee.idEmployee;
+        data.idPerson = selectDependant?.idPerson ?? employee.idPerson!;
         data.idConcept = data.idConcept
         data.startDate = data!.startDate!;
         data.endDate = data!.endDate!;
-        data.idEmployeeAuthorize = id;
-        data.amount = data!.amount!;
-        data.percentDiscount = data.percentDiscount;
+        data.idEmployeeAuthorize = employee.idEmployee;
+        data.amount = conceptField?.amount!;
+        data.percentDiscount = conceptField?.percentValue!;
 
         addEntity.mutate(data);
         return;
@@ -66,10 +96,11 @@ const AddPersonInsurance = ({
 
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [];
+
     const { data } = useDependanHistoryById(
         params,
         listOfDependencies,
-        id
+        employee.idEmployee!
     );
 
     return (
@@ -80,27 +111,29 @@ const AddPersonInsurance = ({
             style={{ width: "40vw" }}
             className="p-fluid"
             onHide={hideDialog}
+            onShow={test}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group mt-2">
-                    <label htmlFor="IdDependant" className="block mb-2">
-                        Dependientes
+                    <label htmlFor="idPerson" className="block mb-2">
+                        Asegurado
                     </label>
                     <Dropdown
-                        value={selectedDependant}
-                        options={data}
-                        onChange={(e) => setSelectedDependant(e.value)}
-                        optionLabel="firstName"
-                        placeholder="Seleccione un Dependiente"
+                        value={selectDependant}
+                        options={listDependats}
+                        onChange={(e) => setSelectDependant(e.value)}
+                        optionLabel="fullName"
+                        defaultValue={employee?.idPerson}
+                        placeholder="Seleccione un Asegurado..."
                     />
                     {errors.idConcept && (
-                        <small className="p-invalid text-danger">
+                        <small className="text-red-600">
                             {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
                 <div className="form-group mt-2">
-                    <label htmlFor="idBank" className="block mb-2">
+                    <label htmlFor="idConcept" className="block mb-2">
                         Seguros
                     </label>
                     <GenericConceptDropDown
@@ -108,24 +141,44 @@ const AddPersonInsurance = ({
                         isValid={!!errors.idConcept}
                         setValue={setValue}
                         watch={watch}
-                        code={CONCEPT_TYPE_BENEFIT}
+                        code={CONCEPT_TYPE_INSURANCE}
+                        setData={setConceptField}
                     />
                     {errors.idConcept && (
-                        <small className="p-invalid text-danger">
+                        <small className="text-red-600">
                             {errors.idConcept.message?.toString()}
                         </small>
                     )}
                 </div>
+                <div className="form-group mt-2">
+                    <label htmlFor="percentDiscount" className="block mb-2">
+                        Descuento
+                    </label>
+                    <GenericInputNumber
+                        id="percentDiscount"
+                        isValid={!!errors.percentDiscount}
+                        setValue={setValue}
+                        watch={watch}
+                        isReadOnly={true}
+                        currentValue={conceptField?.percentValue}
+                    />
+                    {errors.percentDiscount && (
+                        <small className="text-red-600">
+                            {errors.percentDiscount.message?.toString()}
+                        </small>
+                    )}
+                </div>
                 <div className="field">
-                    <label htmlFor="Amount" className="w-full mt-2">
+                    <label htmlFor="amount" className="w-full mt-2">
                         Monto
                     </label>
                     <GenericInputNumber
-                        {...register("amount")}
-                        id="Amount"
+                        currentValue={(conceptField?.amount || 0) * (watch("percentDiscount") / 100)}
+                        id="amount"
                         isValid={!!errors.amount}
                         setValue={setValue}
                         watch={watch}
+                        isReadOnly={true}
                     />
                     {errors.amount && (
                         <small className="text-red-600">
@@ -134,28 +187,11 @@ const AddPersonInsurance = ({
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="idStatusAccountType" className="block mb-2">
-                        Descuento
-                    </label>
-                    <GenericInputNumber
-                        {...register("percentDiscount")}
-                        id="PercentDiscount"
-                        isValid={!!errors.percentDiscount}
-                        setValue={setValue}
-                        watch={watch}
-                    />
-                    {errors.percentDiscount && (
-                        <small className="p-invalid text-danger">
-                            {errors.percentDiscount.message?.toString()}
-                        </small>
-                    )}
-                </div>
-                <div className="form-group">
                     <label htmlFor="startDate" className="block mb-2 mt-2">
                         Fecha de Inicio
                     </label>
                     <Calendar
-                        id="StartDate"
+                        id="startDate"
                         {...register("startDate")}
                         showIcon
                         onSelect={() =>
@@ -169,7 +205,7 @@ const AddPersonInsurance = ({
                     )}
                 </div>
                 <div className="form-group">
-                    <label htmlFor="EndDate" className="block mb-2 mt-2">
+                    <label htmlFor="endDate" className="block mb-2 mt-2">
                         Fecha final
                     </label>
                     <Calendar id="endDate" {...register("endDate")} showIcon />

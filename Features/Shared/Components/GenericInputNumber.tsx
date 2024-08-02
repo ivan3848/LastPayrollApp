@@ -11,6 +11,7 @@ interface Props {
     maxValue?: number;
     isFocus?: boolean;
     format?: boolean;
+    isReadOnly?: boolean;
     prefix?: string;
     watch: (field: string) => any;
     setValue: UseFormSetValue<any>;
@@ -27,6 +28,7 @@ const GenericInputNumber = ({
     prefix = "RD$",
     setValue,
     watch,
+    isReadOnly,
 }: Props) => {
     useEffect(() => {
         if (currentValue) {
@@ -38,6 +40,7 @@ const GenericInputNumber = ({
         <InputNumber
             value={watch(id)}
             onChange={(e) => setValue(id, e.value!)}
+            disabled={isReadOnly}
             id={id}
             className={classNames({
                 "p-invalid": isValid,

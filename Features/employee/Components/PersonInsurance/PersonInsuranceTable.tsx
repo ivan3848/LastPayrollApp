@@ -73,7 +73,9 @@ const PersonInsuranceTable: React.FC<Props> = ({
                     key={"firstName"}
                     field="firstName"
                     header="Nombre"
-                    body={(rowData: IPersonInsurance) => rowData.person?.firstName}
+                    body={(rowData: IPersonInsurance) => {
+                        return `${rowData.person?.firstName} ${rowData.person?.firstLastName}`;
+                    }}
                 />
 
                 <Column
