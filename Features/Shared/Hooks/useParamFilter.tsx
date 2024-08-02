@@ -4,6 +4,7 @@ import IParamsApi from "@/types/IParamApi";
 
 interface Props {
     tableName: string;
+    pageSize?: number;
 }
 
 const useParamFilter = () => {
@@ -93,7 +94,7 @@ const useParamFilter = () => {
     };
 };
 
-const useParamFilterByTableName = ({ tableName = "" }: Props) => {
+const useParamFilterByTableName = ({tableName = "", pageSize = 5}: Props) => {
     const [params, setParams] = useState<IParamsApi>({
         filter: {
             page: 1,
