@@ -13,6 +13,7 @@ interface Props {
     watch: (field: string) => any;
     isFocus?: boolean;
     format?: boolean;
+    isReadOnly?: boolean;
 }
 
 const GenericInputNumber = ({
@@ -25,6 +26,7 @@ const GenericInputNumber = ({
     format = true,
     setValue,
     watch,
+    isReadOnly,
 }: Props) => {
     useEffect(() => {
         if (currentValue) {
@@ -36,6 +38,7 @@ const GenericInputNumber = ({
         <InputNumber
             value={watch(id)}
             onChange={(e) => setValue(id, e.value!)}
+            disabled={isReadOnly}
             id={id}
             className={classNames({
                 "p-invalid": isValid,

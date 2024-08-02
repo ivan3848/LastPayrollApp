@@ -62,8 +62,6 @@ const EditBankEmployeeHistory = ({
         reset,
     });
 
-    console.log(entity);
-
     const onSubmit = (data: IDependant) => {
         data.idEmployee = id;
         data.idPerson = entity.idPerson;

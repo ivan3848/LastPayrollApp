@@ -34,4 +34,5 @@ export interface IEmployee {
     department?: string | null;
     position?: string | null;
     identification?: string | null;
+    idPerson?: number;
 }
