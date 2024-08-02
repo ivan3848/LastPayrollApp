@@ -13,7 +13,9 @@ import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
 import { useEffect, useRef, useState } from "react";
-import employeeService, { addEmployeeService } from "../../Services/employeeService";
+import employeeService, {
+    addEmployeeService,
+} from "../../Services/employeeService";
 import { IEmployee } from "../../Types/IEmployee";
 import { IInsertEmployee } from "../../Types/IInsertEmployee";
 import AddEmployee from "./EditEmployee";
@@ -54,28 +56,12 @@ const EditEmployeeTabs = () => {
         }
     }, [id]);
 
-    const setContactInformation = (
-        idStatusRelationship?: number,
-        contactName?: string,
-        contactNumber?: string
-    ) => {
-        setEmployee((prevEmployee) => ({
-            ...prevEmployee!,
-            idStatusRelationship,
-            contactName,
-            contactNumber,
-        }));
-    };
-
     const items: MenuItem[] = [
         {
             label: "Información Personal",
         },
         {
             label: "Información Del Empleado",
-        },
-        {
-            label: "Contacto De Emergencias",
         },
     ];
 
@@ -109,11 +95,6 @@ const EditEmployeeTabs = () => {
         }
     };
 
-    const handleAdd = () => {
-        setSubmitted(false);
-        setAddEntityDialog(true);
-    };
-
     return (
         <div className="col-12">
             <h3>Editar Empleado</h3>
@@ -136,25 +117,11 @@ const EditEmployeeTabs = () => {
                     className="mb-6"
                 />
                 <div style={{ display: step === 0 ? "block" : "none" }}>
-                    <EditPerson
-                        person={employee?.person}
-                        toast={toast}
-                    />
+                    <EditPerson person={employee?.person} toast={toast} />
                 </div>
 
                 <div style={{ display: step === 1 ? "block" : "none" }}>
-                    <EditEmployee
-                        employee={employee}
-                        toast={toast}
-                    />
-                </div>
-
-                <div style={{ display: step === 2 ? "block" : "none" }}>
-                    <EmergencyEmployeeContact
-                        employee={employee}
-                        setContactInformation={setContactInformation}
-                        addEmployeeInformation={AddEmployeeInformation}
-                    />
+                    <EditEmployee employee={employee} toast={toast} />
                 </div>
             </div>
         </div>

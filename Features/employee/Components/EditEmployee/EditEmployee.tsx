@@ -1,4 +1,7 @@
-import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
+import {
+    TABLE_NAME_CONTRACT,
+    TABLE_NAME_RELATIONSHIP,
+} from "@/constants/StatusTableName";
 import useContractTypeQuery from "@/Features/contractType/Hooks/useContractTypeQuery";
 import useDepartmentQuery from "@/Features/departments/Hooks/useDepartmentQuery";
 import useDisabilityQuery from "@/Features/disability/Hooks/useDisabilityQuery";
@@ -25,6 +28,7 @@ import { IEmployee } from "../../Types/IEmployee";
 import employeeFormSchemas from "../../Validations/EmployeeFormSchemas";
 import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
 import employeeService from "../../Services/employeeService";
+import { InputMask } from "primereact/inputmask";
 
 interface Props {
     employee?: IEmployee;
@@ -32,7 +36,7 @@ interface Props {
 }
 
 const EditEmployee = ({ employee, toast }: Props) => {
-    const { addEntityFormSchema } = employeeFormSchemas();
+    const { editEntityFormSchema } = employeeFormSchemas();
     const { setFilters, params, setAllData } = useParamFilter();
     const {
         setFilters: setFiltersManager,
@@ -50,7 +54,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
         formState: { errors },
     } = useForm<IEmployee>({
         defaultValues: {},
-        resolver: zodResolver(addEntityFormSchema),
+        resolver: zodResolver(editEntityFormSchema),
     });
 
     useEffect(() => {
@@ -119,6 +123,13 @@ const EditEmployee = ({ employee, toast }: Props) => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="col-12">
                     <div className="p-fluid formgrid grid">
+                        <div className="field col-12">
+                            <label htmlFor="photo">Imagen Del Empleado</label>
+                            <ImageUploadTemplate
+                                setValue={setValue}
+                                employeeImage={employee?.employeeImage}
+                            />
+                        </div>
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="idEmployee">
                                 Código De Empleado
@@ -153,7 +164,6 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 onChange={onDepartmentChange}
                                 idValueEdit={employee?.idDepartment}
                             />
-                            {console.log(employee)}
                             {errors.idDepartment && (
                                 <small className="p-invalid text-red-500">
                                     {errors.idDepartment.message?.toString()}
@@ -174,6 +184,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 onChange={OnPositionChange}
                                 idValueEdit={employee?.idPosition}
                             />
+
                             {errors.idPosition && (
                                 <small className="p-invalid text-red-500">
                                     {errors.idPosition.message?.toString()}
@@ -429,14 +440,65 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 />
                             </div>
                         </div>
-                        <div className="field col-12">
-                            <label htmlFor="photo">Imagen Del Empleado</label>
-                            <ImageUploadTemplate
-                                setValue={setValue}
-                                employeeImage={employee?.employeeImage}
-                                employeeImageName={employee?.employeeImageName}
-                                employeeImageType={employee?.employeeImageType}
-                            />
+                        <div className="card my-5">
+                            <h3>Contacto De Emergencia</h3>
+                            <hr />
+                            <div className="grid mt-5">
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="idStatusRelationShip">
+                                        Tipo de relación
+                                    </label>
+                                    <GenericStatusDropDown
+                                        id="idStatusRelationship"
+                                        isValid={!!errors.idStatusRelationship}
+                                        tableName={TABLE_NAME_RELATIONSHIP}
+                                        setValue={setValue}
+                                        watch={watch}
+                                        isFocus={true}
+                                        idValueEdit={
+                                            employee?.idStatusRelationship
+                                        }
+                                    />
+                                    {errors.idStatusRelationship && (
+                                        <small className="p-invalid text-red-500">
+                                            {errors.idStatusRelationship.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="contactName">
+                                        Nombre Completo
+                                    </label>
+                                    <InputText
+                                        id="contactName"
+                                        type="text"
+                                        {...register("contactName")}
+                                        defaultValue={employee?.contactName}
+                                    />
+                                    {errors.contactName && (
+                                        <small className="p-invalid text-red-500">
+                                            {errors.contactName.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="contactNumber">
+                                        Número de contacto
+                                    </label>
+                                    <InputMask
+                                        {...register("contactNumber")}
+                                        mask="999-999-9999"
+                                        id="contactNumber"
+                                        defaultValue={employee?.contactNumber}
+                                        key={employee?.contactNumber}
+                                    />
+                                    {errors.contactNumber && (
+                                        <small className="p-invalid text-red-500">
+                                            {errors.contactNumber.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
