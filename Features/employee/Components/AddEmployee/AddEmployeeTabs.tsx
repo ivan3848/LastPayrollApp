@@ -10,14 +10,14 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
-import { addEmployeeService } from "../Services/employeeService";
-import { IInsertEmployee } from "../Types/IInsertEmployee";
-import AddPerson from "./../../person/Components/AddPerson";
+import { addEmployeeService } from "../../Services/employeeService";
+import { IInsertEmployee } from "../../Types/IInsertEmployee";
+import AddPerson from "../../../person/Components/AddPerson";
 import AddEmployee from "./AddEmployee";
-import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
-import { IEmployee } from "../Types/IEmployee";
+import { IEmployee } from "../../Types/IEmployee";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
+import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 
 interface personFormRef {
     submitPersonForm: () => void;

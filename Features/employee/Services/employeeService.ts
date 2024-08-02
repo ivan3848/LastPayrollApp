@@ -5,7 +5,7 @@ import { IEmployeeHistory } from "../Types/IEmployeeHistory";
 import { IInsertEmployee } from "../Types/IInsertEmployee";
 
 const employeeService = new ApiService<IEmployee, IEmployee>(
-    "employee/employee"
+    "employee/employee/"
 );
 
 const addEmployeeService = new ApiService<IInsertEmployee, IInsertEmployee>(

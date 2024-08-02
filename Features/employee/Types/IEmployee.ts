@@ -1,3 +1,5 @@
+import { IPerson } from "@/Features/person/Types/IPerson";
+
 export interface IEmployee {
     idEmployee: number;
     idPerson?: number;
@@ -47,4 +49,5 @@ export interface IEmployee {
     identification?: string;
     employeeImageName?: string;
     employeeImageType?: string;
+    person?: IPerson;
 }

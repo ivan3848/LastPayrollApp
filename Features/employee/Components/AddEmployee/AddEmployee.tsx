@@ -20,9 +20,9 @@ import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
-import useEmployeeQuery from "../Hooks/useEmployeeQuery";
-import { IEmployee } from "../Types/IEmployee";
-import employeeFormSchemas from "../Validations/EmployeeFormSchemas";
+import useEmployeeQuery from "../../Hooks/useEmployeeQuery";
+import { IEmployee } from "../../Types/IEmployee";
+import employeeFormSchemas from "../../Validations/EmployeeFormSchemas";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;

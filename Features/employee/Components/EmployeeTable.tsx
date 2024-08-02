@@ -179,13 +179,20 @@ export default function EmployeeTable({ submitted }: Props) {
     const actionButtons = (employeeSelected: IEmployee) => {
         return (
             <>
-                <Button
-                    size="small"
-                    className="min-w-min"
-                    label="Editar"
-                    icon="pi pi-pencil"
-                    disabled
-                />
+                <Link
+                    href={{
+                        pathname: "/employee/editEmployee",
+                        query: { id: employeeSelected.idEmployee },
+                    }}
+                >
+                    {" "}
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label="Editar"
+                        icon="pi pi-pencil"
+                    />
+                </Link>
                 <Button
                     size="small"
                     label="Historial"
@@ -241,55 +248,57 @@ export default function EmployeeTable({ submitted }: Props) {
         </div>
     );
 
-   return (
-       <>
-           <EmployeeActions
-               showEmployeeActions={showEmployeeActions}
-               setShowEmployeeActions={setShowEmployeeActions}
-               employee={employee!}
-           />
+    return (
+        <>
+            <EmployeeActions
+                showEmployeeActions={showEmployeeActions}
+                setShowEmployeeActions={setShowEmployeeActions}
+                employee={employee!}
+            />
 
-           <div className="grid">
-               <div className="col-12">
-                   <div className="flex justify-content-between mb-5">
-                       <h3>Empleados</h3>
+            <div className="grid">
+                <div className="col-12">
+                    <div className="flex justify-content-between mb-5">
+                        <h3>Empleados</h3>
 
-                       <Link href="/employee/addEmployee">
-                           <Button
-                               label="Agregar Empleado"
-                               icon="pi pi-user-plus"
-                           />
-                       </Link>
-                   </div>
+                        <Link href="/employee/addEmployee">
+                            <Button
+                                label="Agregar Empleado"
+                                icon="pi pi-user-plus"
+                            />
+                        </Link>
+                    </div>
 
-                   {isLoading ? (
-                       <div className="flex justify-content-center align-items-center">
-                           <ProgressSpinner />
-                       </div>
-                   ) : (
-                       <DataView
-                           value={data.items}
-                           itemTemplate={itemTemplate}
-                           layout={layout}
-                           header={header}
-                           loading={isLoading}
-                           lazy
-                           paginator
-                           sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                           sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                           totalRecords={data?.totalCount}
-                           className="dataview-responsive"
-                           paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                           emptyMessage="No hay registros para mostrar."
-                           onPage={onPage}
-                           rowsPerPageOptions={[5, 10, 25]}
-                           rows={data?.pageSize!}
-                           first={data.firstRow!}
-                           currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
-                       />
-                   )}
-               </div>
-           </div>
-       </>
-   );
+                    {isLoading ? (
+                        <div className="flex justify-content-center align-items-center">
+                            <ProgressSpinner />
+                        </div>
+                    ) : (
+                        <DataView
+                            value={data.items}
+                            itemTemplate={itemTemplate}
+                            layout={layout}
+                            header={header}
+                            loading={isLoading}
+                            lazy
+                            paginator
+                            sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                            sortOrder={
+                                params.filter?.sorts?.[0]?.isAsc ? 1 : -1
+                            }
+                            totalRecords={data?.totalCount}
+                            className="dataview-responsive"
+                            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                            emptyMessage="No hay registros para mostrar."
+                            onPage={onPage}
+                            rowsPerPageOptions={[5, 10, 25]}
+                            rows={data?.pageSize!}
+                            first={data.firstRow!}
+                            currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                        />
+                    )}
+                </div>
+            </div>
+        </>
+    );
 }
