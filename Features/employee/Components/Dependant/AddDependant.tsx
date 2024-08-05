@@ -158,13 +158,14 @@ const AddDependant = ({
                             </label>
                             <Calendar
                                 id="birthDate"
-                                value={
-                                    watch("birthDate") ??
-                                    new Date().toDateString()
-                                }
+                                value={watch("birthDate") ?? new Date()}
                                 onChange={(e) =>
                                     setValue("birthDate", e.value!)
                                 }
+                                onFocus={() =>
+                                    setValue("birthDate", new Date())
+                                }
+                                autoFocus
                                 showIcon
                                 showButtonBar
                             />
