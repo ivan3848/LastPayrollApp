@@ -5,5 +5,4 @@ export interface IprofitInsert {
     idEmployee?: number;
     start: Date;
     end: Date;
-    isPaid: boolean;
 }
