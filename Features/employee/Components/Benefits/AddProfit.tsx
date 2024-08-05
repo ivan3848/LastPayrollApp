@@ -8,7 +8,7 @@ import { IProfit } from "./Types/IProfit";
 import addProfitService from "./Services/profitService";
 import ProfitFormSchema from "./Validation/ProfitFormSchema";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
-import { IprofitInsert } from "./Types/IProfitInsert";
+import { IProfitInsert } from "./Types/IProfitInsert";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
@@ -37,7 +37,7 @@ const AddProfit = ({
         reset,
         setValue,
         formState: { errors },
-    } = useForm<IprofitInsert>({
+    } = useForm<IProfitInsert>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
@@ -50,7 +50,6 @@ const AddProfit = ({
     });
 
     const onSubmit = (data: IProfit) => {
-        console.log(data);
         data.idEmployee = id;
         data.idConcept = data.idConcept;
         addEntity.mutate(data);

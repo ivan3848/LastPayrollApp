@@ -6,14 +6,14 @@ import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import { IPerson } from "@/Features/person/Types/IPerson";
 import ProfitFormSchema from "./Validation/ProfitFormSchema";
-import { IprofitInsert } from "./Types/IProfitInsert";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import useEditProfit from "./Hooks/useEditProfit";
+import { IProfitInsert } from "./Types/IProfitInsert";
 
 interface Props {
-    entity: IprofitInsert;
+    entity: IProfitInsert;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
@@ -38,7 +38,7 @@ const EditBankEmployeeHistory = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IprofitInsert>({
+    } = useForm<IProfitInsert>({
         resolver: zodResolver(editEntityFormSchema),
         defaultValues: entity,
     });
@@ -55,21 +55,20 @@ const EditBankEmployeeHistory = ({
             Object.keys(entity).forEach((key) => {
                 if (key === "start" || key === "end") {
                     setValue(
-                        key as keyof IprofitInsert,
-                        new Date(entity[key as keyof IprofitInsert] as Date)
+                        key as keyof IProfitInsert,
+                        new Date(entity[key as keyof IProfitInsert] as Date)
                     );
                     return;
                 }
                 setValue(
-                    key as keyof IprofitInsert,
-                    entity[key as keyof IprofitInsert]
+                    key as keyof IProfitInsert,
+                    entity[key as keyof IProfitInsert]
                 );
             });
         }
     }, [entity, setEditEntityDialog]);
 
-    const onSubmit = (data: IprofitInsert) => {
-        console.log(data);
+    const onSubmit = (data: IProfitInsert) => {
         data.idProfit = entity.idProfit;
         data.idEmployee = id;
         data.idConcept = data.idConcept;

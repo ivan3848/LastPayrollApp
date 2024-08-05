@@ -2,7 +2,7 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableSortEvent } from "primereact/datatable";
 import useBankEmployeeHistoryByIdEmployee from "./Hooks/useBankEmployeeHistoryByIdEmployee";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import { Card } from "primereact/card";
@@ -22,9 +22,11 @@ const BankEmployeeHistoryTable = ({
     handleDelete,
     handleEdit,
     handleAdd,
+
     idEmployee,
 }: Props) => {
-    const { params } = useParamFilter();
+    const { params, setFilters, setSorts, clearSorts, clearFilters } =
+        useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useBankEmployeeHistoryByIdEmployee(
         params,
@@ -32,6 +34,28 @@ const BankEmployeeHistoryTable = ({
         idEmployee
     );
 
+    const onSort = (event: DataTableSortEvent) => {
+        switch (event.sortOrder) {
+            case 1:
+                setSorts([{ sortBy: event.sortField, isAsc: true }]);
+                break;
+            case -1:
+                setSorts([{ sortBy: event.sortField, isAsc: false }]);
+                break;
+            default:
+                clearSorts();
+                break;
+        }
+    };
+
+    const onFilter = (event: any) => {
+        setFilters([
+            {
+                column: event.field,
+                value: event.constraints.constraints?.[0].value,
+            },
+        ]);
+    };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Historial Bancario</h3>
@@ -57,12 +81,47 @@ const BankEmployeeHistoryTable = ({
                 dataKey="idBankEmployeeHistory"
                 paginator
                 rows={5}
+                onSort={onSort}
+                removableSort
+                sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
+                sortMode="single"
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
-                <Column field="bankName" header="Banco" />
-                <Column field="paymentMethod" header="Método de pago" />
-                <Column field="accountNumber" header="Número de Cuenta" />
+                <Column
+                    field="bankName"
+                    header="Banco"
+                    sortable
+                    filter
+                    filterField="bankName"
+                    filterPlaceholder="Buscar por Banco"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
+                <Column
+                    field="paymentMethod"
+                    header="Método de pago"
+                    sortable
+                    filter
+                    filterField="bankName"
+                    filterPlaceholder="Buscar por Banco"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
+                <Column
+                    field="accountNumber"
+                    header="Número de Cuenta"
+                    sortable
+                    filter
+                    filterField="bankName"
+                    filterPlaceholder="Buscar por Numero de Cuenta"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
                 <Column
                     field="startDate"
                     header="Fecha de Inicio"

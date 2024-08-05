@@ -88,11 +88,26 @@ const BenefitTable = ({
                 className="p-datatable-sm"
                 dataKey="idProfit"
                 paginator
+                onSort={onSort}
+                removableSort
+                sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
+                sortMode="single"
                 rows={5}
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
-                <Column field="conceptName" header="Concepto" />
+                <Column
+                    field="conceptName"
+                    header="Concepto"
+                    sortable
+                    filter
+                    filterField="conceptName"
+                    filterPlaceholder="Buscar por Concepto"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
                 <Column
                     field="amount"
                     header="Monto"

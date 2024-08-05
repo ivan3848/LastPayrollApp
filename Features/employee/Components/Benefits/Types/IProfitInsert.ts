@@ -1,4 +1,4 @@
-export interface IprofitInsert {
+export interface IProfitInsert {
     idProfit?: number;
     amount: number;
     idConcept: number;
