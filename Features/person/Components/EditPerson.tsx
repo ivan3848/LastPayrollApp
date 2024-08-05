@@ -11,20 +11,20 @@ import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
-import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
 import { IPerson } from "../Types/IPerson";
 import personFormSchemas from "../Validations/PersonFormSchemas";
+import personService from "../Services/personService";
+import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
+import { useEffect } from "react";
 
 interface Props {
-    setPerson: (value: IPerson) => void;
-    setStep: (value: number) => void;
     person?: IPerson;
+    toast: React.MutableRefObject<any>;
 }
 
-// eslint-disable-next-line react/display-name
-const AddPerson = forwardRef(({ setPerson, setStep, person }: Props, ref) => {
-    const { addEntityFormSchema } = personFormSchemas();
+const EditPerson = ({ person, toast }: Props) => {
+    const { editEntityFormSchema } = personFormSchemas();
 
     const {
         handleSubmit,
@@ -33,16 +33,38 @@ const AddPerson = forwardRef(({ setPerson, setStep, person }: Props, ref) => {
         setValue,
         formState: { errors },
     } = useForm<IPerson>({
-        resolver: zodResolver(addEntityFormSchema),
+        resolver: zodResolver(editEntityFormSchema),
+        defaultValues: person,
     });
 
-    useImperativeHandle(ref, () => ({
-        submitPersonForm: () => handleSubmit(onSubmit)(),
-    }));
+    useEffect(() => {
+        if (person) {
+            Object.keys(person).forEach((key) => {
+                if (key === "birthDate") {
+                    person[key as keyof IPerson] &&
+                        setValue(
+                            key,
+                            new Date(person[key as keyof IPerson] as Date)
+                        );
+                } else {
+                    person[key as keyof IPerson] &&
+                        setValue(
+                            key as keyof IPerson,
+                            person[key as keyof IPerson]
+                        );
+                }
+            });
+        }
+    }, [person, setValue]);
+
+    const editEntity = useEditEntityQuery({
+        toast,
+        service: personService,
+    });
 
     const onSubmit = (data: IPerson) => {
-        setPerson(data);
-        setStep(1);
+        data.idPerson = person?.idPerson;
+        editEntity.mutate(data);
         return;
     };
 
@@ -267,14 +289,13 @@ const AddPerson = forwardRef(({ setPerson, setStep, person }: Props, ref) => {
             </div>
             <div className="flex justify-content-end">
                 <Button
-                    icon="pi pi-arrow-right"
-                    iconPos="right"
-                    // label="Siguiente"
+                    icon="pi pi-save"
+                    label="Guardar"
                     className="p-button-primary"
                 />
             </div>
         </form>
     );
-});
+};
 
-export default AddPerson;
+export default EditPerson;

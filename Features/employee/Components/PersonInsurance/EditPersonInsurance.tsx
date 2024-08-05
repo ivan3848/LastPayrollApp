@@ -1,4 +1,4 @@
-import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_INSURANCE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
@@ -7,10 +7,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
 import useEditPersonInsurance from "./Hooks/useEditPersonInsurance";
+import PersonInsuranceFormSchema from "./Validation/PersonInsuranceFormSchema";
+import { IDependantPerson } from "./AddPersonInsurance";
+import { IConcept } from "@/Features/concept/Types/IConcept";
+import { IEmployee } from "../../Types/IEmployee";
 
 interface Props {
     entity: IPersonInsurance;
@@ -18,7 +22,7 @@ interface Props {
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
-    id: number;
+    employee: IEmployee;
 }
 
 const EditPersonInsurance = ({
@@ -27,23 +31,20 @@ const EditPersonInsurance = ({
     setSubmitted,
     toast,
     editEntityDialog,
-    id,
+    employee,
 }: Props) => {
-    const [selectedDependant, setSelectedDependant]
-        = React.useState<IPersonInsurance>(entity);
-
-    // const [startDate, setStartDate] = useState<Date>(new Date(entity.startDate));
-    // const [endDate, setEndDate] = useState<Date>(new Date(entity.endDate));
-
-    // const { editEntityFormSchema } = dependantFormSchema();
-
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [true];
+    const { editEntityFormSchema } = PersonInsuranceFormSchema();
+
+    const [listDependats, setListDependats] = React.useState<IDependantPerson[]>([]);
+    const [selectDependant, setSelectDependant] = React.useState<IDependantPerson>();
+    const [conceptField, setConceptField] = React.useState<IConcept>();
 
     const { data } = useDependanHistoryById(
         params,
         listOfDependencies,
-        id
+        employee.idEmployee!
     );
 
     useEffect(() => {
@@ -69,8 +70,10 @@ const EditPersonInsurance = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IPersonInsurance>({});
-    console.log(entity);
+    } = useForm<IPersonInsurance>({
+        resolver: zodResolver(editEntityFormSchema),
+    });
+
     const editEntity = useEditPersonInsurance({
         toast,
         setEditEntityDialog,
@@ -78,22 +81,34 @@ const EditPersonInsurance = ({
         reset,
     });
 
-    console.log(selectedDependant);
-
     const onSubmit = (data: IPersonInsurance) => {
-        data.idPersonInsurance = entity.idPersonInsurance;
-        data.idEmployee = id;
-        data.idPerson = selectedDependant?.idPerson ?? 0;
+        data.idEmployee = entity.idEmployee;
+        data.idPerson = selectDependant?.idPerson ?? entity.idPerson!;
         data.idConcept = data.idConcept
-        data.startDate = data.startDate;
-        data.endDate = data.endDate;
-        data.idEmployeeAuthorize = id;
-        data.amount = data!.amount!;
-        data.percentDiscount = data.percentDiscount;
+        data.startDate = data!.startDate!;
+        data.endDate = data!.endDate!;
+        data.idEmployeeAuthorize = employee.idEmployee;
+        data.amount = data?.amount!;
+        data.percentDiscount = conceptField?.percentValue! ?? entity.percentDiscount;
 
         editEntity.mutate(data);
         return;
     };
+
+    const dependantList = () => {
+        const tes = [];
+        tes.push({
+            idPerson: +employee.idPerson!,
+            fullName: employee.employeeName!,
+        });
+        for (let i = 0; i < data.length; i++) {
+            tes.push({
+                idPerson: +data[i].idPerson!,
+                fullName: data[i].fullName!,
+            });
+        }
+        setListDependats(tes);
+    }
 
     const hideDialog = () => {
         setEditEntityDialog(false);
@@ -107,23 +122,24 @@ const EditPersonInsurance = ({
             style={{ width: "40vw" }}
             className="p-fluid"
             onHide={hideDialog}
+            onShow={dependantList}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="form-group mt-2">
-                    <label htmlFor="IdDependant" className="block mb-2">
-                        Dependientes
+                    <label htmlFor="idPerson" className="block mb-2">
+                        Asegurado
                     </label>
                     <Dropdown
-                        value={data.find(
-                            (item: any) => item.idPerson === selectedDependant.idPerson
-                        )}
-                        options={data}
-                        onChange={(e) => setSelectedDependant(e.value)}
-                        optionLabel="firstName"
-                        placeholder="Seleccione un Dependiente..."
+                        value={listDependats.find(
+                            (item) => item.idPerson === (watch("idPerson") ?? entity.idPerson))
+                        }
+                        options={listDependats}
+                        onChange={(e) => setSelectDependant(e.value)}
+                        optionLabel="fullName"
+                        placeholder="Seleccione un Asegurado..."
                     />
                     {errors.idConcept && (
-                        <small className="p-invalid text-danger">
+                        <small className="text-red-600">
                             {errors.idConcept.message?.toString()}
                         </small>
                     )}
@@ -139,10 +155,29 @@ const EditPersonInsurance = ({
                         setValue={setValue}
                         watch={watch}
                         code={CONCEPT_TYPE_INSURANCE}
+                        setData={setConceptField}
                     />
                     {errors.idConcept && (
-                        <small className="p-invalid text-danger">
+                        <small className="text-red-600">
                             {errors.idConcept.message?.toString()}
+                        </small>
+                    )}
+                </div>
+                <div className="form-group">
+                    <label htmlFor="percentDiscount" className="block mb-2">
+                        Descuento
+                    </label>
+                    <GenericInputNumber
+                        id="percentDiscount"
+                        isValid={!!errors.percentDiscount}
+                        currentValue={conceptField?.percentValue ?? entity.percentDiscount}
+                        setValue={setValue}
+                        watch={watch}
+                        isReadOnly={true}
+                    />
+                    {errors.percentDiscount && (
+                        <small className="text-red-600">
+                            {errors.percentDiscount.message?.toString()}
                         </small>
                     )}
                 </div>
@@ -151,34 +186,16 @@ const EditPersonInsurance = ({
                         Monto
                     </label>
                     <GenericInputNumber
-                        {...register("amount")}
                         id="amount"
                         isValid={!!errors.amount}
-                        currentValue={entity.amount}
+                        currentValue={(conceptField?.amount || 0) * (watch("percentDiscount") / 100)}
                         setValue={setValue}
                         watch={watch}
+                        isReadOnly={true}
                     />
                     {errors.amount && (
                         <small className="text-red-600">
                             {errors.amount.message?.toString()}
-                        </small>
-                    )}
-                </div>
-                <div className="form-group">
-                    <label htmlFor="idStatusAccountType" className="block mb-2">
-                        Descuento
-                    </label>
-                    <GenericInputNumber
-                        {...register("percentDiscount")}
-                        id="percentDiscount"
-                        isValid={!!errors.percentDiscount}
-                        currentValue={entity.percentDiscount}
-                        setValue={setValue}
-                        watch={watch}
-                    />
-                    {errors.percentDiscount && (
-                        <small className="p-invalid text-danger">
-                            {errors.percentDiscount.message?.toString()}
                         </small>
                     )}
                 </div>

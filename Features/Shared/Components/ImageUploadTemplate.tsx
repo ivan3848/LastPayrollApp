@@ -10,42 +10,20 @@ import { Tooltip } from "primereact/tooltip";
 import { useRef, useState, useEffect, ChangeEvent } from "react"; // Import ChangeEvent from react
 import { Toast } from "primereact/toast";
 import { UseFormSetValue } from "react-hook-form";
+import emptyImage from "@/constants/emptyImage";
 
 interface Props {
     setValue: UseFormSetValue<any>;
     employeeImage?: string;
-    employeeImageType?: string;
-    employeeImageName?: string;
 }
 
 export default function ImageUploadTemplate({
     setValue,
     employeeImage,
-    employeeImageName,
-    employeeImageType,
 }: Props) {
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef<FileUpload>(null);
     const toast = useRef<Toast | null>(null);
-
-    useEffect(() => {
-        if (employeeImage && employeeImageName && employeeImageType) {
-            const defaultFile = new File([employeeImage], employeeImageName, {
-                type: employeeImageType,
-            });
-            const fileUpload = fileUploadRef.current;
-
-            if (fileUpload) {
-                const mockEvent = new Event(
-                    "change"
-                ) as unknown as ChangeEvent<HTMLInputElement>;
-                onTemplateSelect({
-                    originalEvent: mockEvent,
-                    files: [defaultFile],
-                });
-            }
-        }
-    }, [employeeImage, employeeImageName, employeeImageType]);
 
     const onTemplateSelect = async (e: FileUploadSelectEvent) => {
         if (!imageValidator(e.files[0].type)) return;
@@ -150,7 +128,7 @@ export default function ImageUploadTemplate({
     const emptyTemplate = () => {
         return (
             <div className="flex align-items-center flex-column">
-                <i
+                {/* <i
                     className="pi pi-image mt-3 p-5"
                     style={{
                         fontSize: "5em",
@@ -158,7 +136,12 @@ export default function ImageUploadTemplate({
                         backgroundColor: "var(--surface-b)",
                         color: "var(--surface-d)",
                     }}
-                ></i>
+                ></i> */}
+                <img
+                    className="w-2 shadow-2 border-circle"
+                    src={employeeImage ?? emptyImage}
+                    alt="Imagen de empleado"
+                />
                 <span
                     style={{
                         fontSize: "1.2em",

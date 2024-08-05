@@ -1,19 +1,19 @@
-import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
-import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Dialog } from "primereact/dialog";
+import { useForm } from "react-hook-form";
+import conceptFormSchemas from "../Validations/ConceptFormSchemas";
+import { IConcept } from "../Types/IConcept";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import React from "react";
-import { useForm } from "react-hook-form";
-import useAddConceptQuery from "../Hooks/useAddConceptQuery";
-import { IConcept } from "../Types/IConcept";
-import conceptFormSchemas from "../Validations/ConceptFormSchemas";
+import { Dialog } from "primereact/dialog";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import { TABLE_NAME_CONCEPT_TYPE } from "@/constants/StatusTableName";
+import useAccountingAccountQuery from "@/Features/accountingAccount/Hooks/useAccountingAccountQuery";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import conceptService from "../Services/conceptService";
+import { InputNumber } from "primereact/inputnumber";
 
 interface Props {
     addEntityDialog: boolean;
@@ -41,11 +41,13 @@ const AddConcept = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
-    const addEntity = useAddConceptQuery({
+
+    const addEntity = useAddEntityQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
         reset,
+        service: conceptService,
     });
 
     const onSubmit = (data: IConcept) => {
@@ -154,6 +156,8 @@ const AddConcept = ({
                         maxValue={100}
                         setValue={setValue}
                         watch={watch}
+                        prefix=""
+                        suffix="%"
                     />
                     {errors.percentValue && (
                         <small className="p-invalid text-danger">
@@ -173,211 +177,13 @@ const AddConcept = ({
                         setValue={setValue}
                         watch={watch}
                     />
-                    {errors.percentValue && (
+                    {errors.amount && (
                         <small className="p-invalid text-danger">
-                            {errors.percentValue.message?.toString()}
+                            {errors.amount.message?.toString()}
                         </small>
                     )}
                 </div>
 
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isSpecial"
-                                text="Especial"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isBonification"
-                                text="Bonificación"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isCommission"
-                                text="Comisión"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isAbsenteeism"
-                                text="Absentismo"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isLease"
-                                text="Préstamo"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isExtraHour"
-                                text="Tipo de hora"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isTax"
-                                text="Impuesto"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isCompany"
-                                text="Compañía"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isInsurance"
-                                text="Seguro"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="IsProfit"
-                                text="Beneficio"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isDeduction"
-                                text="Deducción"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="isOnlySecondPayroll"
-                                text="Último pago de mes"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="BeforeIsr"
-                                text="Excluir de ISR"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="IsForChargeTax"
-                                text="Para TSS"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="IsForChargeTaxIsr"
-                                text="Para ISR"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="grid">
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="toProjectTax"
-                                text="Proyectar TSS"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-
-                    <div className="col-12 md:col-4">
-                        <div className="field-checkbox">
-                            <GenericCheckBox
-                                id="toProjectIsr"
-                                text="Proyectar ISR"
-                                watch={watch}
-                                setValue={setValue}
-                            />
-                        </div>
-                    </div>
-                </div>
                 <DialogFooterButtons hideDialog={hideDialog} />
             </form>
         </Dialog>

@@ -11,8 +11,7 @@ const useCoverPositionQuery = (
 ) => {
     return useQuery<ICoverPosition[], Error>({
         queryKey: [CACHE_KEY_COVER_POSITION, params, dependencies, idEmployee],
-        queryFn: () =>
-            coverPositionByIdEmployee.getById(idEmployee),
+        queryFn: () => coverPositionByIdEmployee.getEntitiesById(idEmployee),
         initialData: [],
     });
 };

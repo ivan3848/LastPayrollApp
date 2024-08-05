@@ -17,7 +17,7 @@ const useAddPersonInsuranceQuery = ({
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IPersonInsurance) => personInsurance.post(entity),
+        mutationFn: (entity: IAddPersonInsurance) => personInsurance.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",

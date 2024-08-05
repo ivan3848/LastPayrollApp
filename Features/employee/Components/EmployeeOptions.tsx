@@ -12,15 +12,9 @@ const EmployeeOptions = ({ setAction }: Props) => {
     return (
         <div>
             <Fieldset legend="Funciones" toggleable className="mb-5">
-                {/* <Button
-                    label="Cubrir Posición"
-                    icon="pi pi-search"
-                    className="m-2"
-                    onClick={() => setAction(EmployeeOptionsEnum.CoverPosition)}
-                /> */}
                 <Button
                     label="Gestión Bancaria"
-                    icon="pi pi-search"
+                    icon="pi pi-building-columns"
                     className="m-2"
                     onClick={() =>
                         setAction(EmployeeOptionsEnum.BankManagement)
@@ -28,7 +22,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 />
                 <Button
                     label="Dependientes"
-                    icon="pi pi-search"
+                    icon="pi pi-users"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Dependant)}
                 />
@@ -42,13 +36,13 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 />
                 <Button
                     label="Herramientas"
-                    icon="pi pi-search"
+                    icon="pi pi-briefcase"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Tools)}
                 />
                 <Button
                     label="Desvincular"
-                    icon="pi pi-search"
+                    icon="pi pi-user-minus"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.FireEmployee)}
                 />

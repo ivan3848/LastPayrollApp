@@ -6,12 +6,14 @@ import { classNames } from "primereact/utils";
 import { IEmployee } from "../Types/IEmployee";
 import DeleteEmployee from "./DeleteEmployee/Components/DeleteEmploye";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import { Toast } from "primereact/toast";
 
 interface Props {
     employee: IEmployee;
+    setShowEmployeeActions: (value: boolean) => void;
 }
 
-const EmployeeProfile = ({ employee }: Props) => {
+const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
     const { setDeleteEntityDialog, deleteEntityDialog, setSubmitted, toast } =
         useCrudModals<IEmployee>();
 
@@ -80,8 +82,13 @@ const EmployeeProfile = ({ employee }: Props) => {
                                     employee.isActive ? "Inactivar" : "Activar"
                                 }
                             />
+                            <Toast ref={toast} />
+
                             {employee.isActive && (
                                 <DeleteEmployee
+                                    setShowEmployeeActions={
+                                        setShowEmployeeActions
+                                    }
                                     idEmployee={employee.idEmployee!}
                                     deleteEntityDialog={deleteEntityDialog}
                                     setDeleteEntityDialog={

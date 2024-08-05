@@ -17,7 +17,7 @@ const useToolWorkDefinitionEmployeeQuery = (
             idEmployee,
         ],
         queryFn: () =>
-            toolWorkDefinitionEmployeeByIdEmployee.getById(idEmployee),
+            toolWorkDefinitionEmployeeByIdEmployee.getEntitiesById(idEmployee),
         initialData: [],
     });
 };

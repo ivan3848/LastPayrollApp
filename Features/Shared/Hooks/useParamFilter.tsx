@@ -4,11 +4,12 @@ import IParamsApi from "@/types/IParamApi";
 
 interface Props {
     tableName: string;
+    pageSize?: number;
 }
 
-const useParamFilter = () => {
+const useParamFilter = (pageSize: number = 5) => {
     const [params, setParams] = useState<IParamsApi>({
-        filter: { page: 1, pageSize: 5, allData: false, filters: [] },
+        filter: { page: 1, pageSize: pageSize, allData: false, filters: [] },
     });
 
     const setPage = (page: number) =>
@@ -93,11 +94,11 @@ const useParamFilter = () => {
     };
 };
 
-const useParamFilterByTableName = ({ tableName = "" }: Props) => {
+const useParamFilterByTableName = ({ tableName = "", pageSize = 5 }: Props) => {
     const [params, setParams] = useState<IParamsApi>({
         filter: {
             page: 1,
-            pageSize: 5,
+            pageSize: pageSize,
             filters: [{ column: "tableName", value: tableName! }],
         },
     });
@@ -159,7 +160,7 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
         setParams({
             filter: {
                 page: 1,
-                pageSize: 5,
+                pageSize: pageSize,
                 allData: false,
                 filters: [{ column: "tableName", value: tableName! }],
             },
@@ -174,7 +175,6 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
     };
 
     return {
-        setPage,
         setPageSize,
         setGlobalFilter,
         setFilters,
@@ -182,6 +182,7 @@ const useParamFilterByTableName = ({ tableName = "" }: Props) => {
         clearFilters,
         clearSorts,
         setSorts,
+        setPage,
         params,
     };
 };

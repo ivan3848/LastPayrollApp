@@ -1,44 +1,42 @@
 "use client";
 
+import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
 import AddHierarchyPosition from "@/Features/hierarchyPosition/Components/AddHierarchyPosition";
 import { IHierarchyPosition } from "@/Features/hierarchyPosition/Types/IHierarchyPosition";
 import { IPerson } from "@/Features/person/Types/IPerson";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { useRouter } from "next/navigation";
 import { MenuItem } from "primereact/menuitem";
 import { Steps } from "primereact/steps";
 import { Toast } from "primereact/toast";
-import { useState } from "react";
-import { addEmployeeService } from "../Services/employeeService";
-import { IInsertEmployee } from "../Types/IInsertEmployee";
-import AddPerson from "./../../person/Components/AddPerson";
+import { useRef, useState } from "react";
+import AddPerson from "../../../person/Components/AddPerson";
+import { addEmployeeService } from "../../Services/employeeService";
+import { IEmployee } from "../../Types/IEmployee";
+import { IInsertEmployee } from "../../Types/IInsertEmployee";
 import AddEmployee from "./AddEmployee";
-import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
-import { IEmployee } from "../Types/IEmployee";
-import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
-import { CACHE_KEY_EMPLOYEE, CACHE_KEY_POSITION } from "@/constants/cacheKeys";
+
+interface personFormRef {
+    submitPersonForm: () => void;
+}
 
 const AddEmployeeTabs = () => {
     const [step, setStep] = useState<number>(0);
     const [person, setPerson] = useState<IPerson>();
     const [employee, setEmployee] = useState<IEmployee>();
-    const expireQuery = useExpireSessionQuery([CACHE_KEY_POSITION, CACHE_KEY_EMPLOYEE]);
+    const expireQuery = useExpireSessionQuery([
+        CACHE_KEY_POSITION,
+        CACHE_KEY_EMPLOYEE,
+    ]);
 
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IHierarchyPosition>();
 
-    const setContactInformation = (
-        idStatusRelationship?: number,
-        contactName?: string,
-        contactNumber?: string
-    ) => {
-        setEmployee((prevEmployee) => ({
-            ...prevEmployee!,
-            idStatusRelationship,
-            contactName,
-            contactNumber,
-        }));
-    };
+    const addPersonRef = useRef<personFormRef>(null);
+
+    const router = useRouter();
 
     const items: MenuItem[] = [
         {
@@ -48,10 +46,6 @@ const AddEmployeeTabs = () => {
             label: "Información Del Empleado",
             disabled: !!!person?.identification,
         },
-        {
-            label: "Contacto De Emergencias",
-            disabled: !!!employee?.idEmployee,
-        },
     ];
 
     const addEmployee = useAddEntityQuery<IInsertEmployee>({
@@ -60,15 +54,25 @@ const AddEmployeeTabs = () => {
         setEntity: setEmployee,
     });
 
-    const AddEmployeeInformation = () => {
+    const addEmployeeInformation = (updatedEmployee: IEmployee) => {
         const employeeToAdd = {
-            ...employee!,
+            ...updatedEmployee,
             person: {
                 ...person!,
             },
         } as IInsertEmployee;
 
-        addEmployee.mutateAsync(employeeToAdd).then(() => expireQuery());
+        validateAddDataForm();
+        addEmployee.mutateAsync(employeeToAdd).then(() => {
+            expireQuery();
+            router.push("/employee");
+        });
+    };
+
+    const validateAddDataForm = () => {
+        if (addPersonRef.current) {
+            addPersonRef.current.submitPersonForm();
+        }
     };
 
     const handleAdd = () => {
@@ -80,7 +84,6 @@ const AddEmployeeTabs = () => {
         <div className="col-12">
             <h3>Agregar Empleado</h3>
             <Toast ref={toast} />
-
             {addEntityDialog && (
                 <AddHierarchyPosition
                     addEntityDialog={addEntityDialog}
@@ -98,31 +101,23 @@ const AddEmployeeTabs = () => {
                     readOnly={false}
                     className="mb-6"
                 />
-                {step === 0 && (
+                <div style={{ display: step === 0 ? "block" : "none" }}>
                     <AddPerson
                         setStep={setStep}
                         setPerson={setPerson}
                         person={person}
+                        ref={addPersonRef}
                     />
-                )}
+                </div>
 
-                {step === 1 && (
+                <div style={{ display: step === 1 ? "block" : "none" }}>
                     <AddEmployee
-                        setStep={setStep}
-                        setEmployee={setEmployee}
                         employee={employee}
                         handleAdd={handleAdd}
                         toast={toast}
+                        addEmployeeInformation={addEmployeeInformation}
                     />
-                )}
-
-                {step === 2 && (
-                    <EmergencyEmployeeContact
-                        employee={employee}
-                        setContactInformation={setContactInformation}
-                        addEmployeeInformation={AddEmployeeInformation}
-                    />
-                )}
+                </div>
             </div>
         </div>
     );

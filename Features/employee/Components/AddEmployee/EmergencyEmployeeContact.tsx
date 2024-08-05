@@ -5,9 +5,9 @@ import { Button } from "primereact/button";
 import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
-import employeeContactFormSchemas from "../Validations/EmployeeContactFormSchemas";
-import { IEmployee } from "../Types/IEmployee";
 import { useEffect } from "react";
+import { IEmployee } from "../../Types/IEmployee";
+import employeeContactFormSchemas from "../../Validations/EmployeeContactFormSchemas";
 
 interface Props {
     setContactInformation: (

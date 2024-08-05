@@ -76,7 +76,7 @@ const PersonInsurance = ({ employee }: Props) => {
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={editEntityDialog}
-                        id={employee.idEmployee!}
+                        employee={employee}
                     />
                 )}
                 {addEntityDialog && (
@@ -85,7 +85,7 @@ const PersonInsurance = ({ employee }: Props) => {
                         setAddEntityDialog={setAddEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
-                        id={employee.idEmployee ?? 0}
+                        employee={employee}
                     />
                 )}
 
