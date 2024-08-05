@@ -32,6 +32,7 @@ import { InputMask } from "primereact/inputmask";
 import { Dialog } from "primereact/dialog";
 import { Nullable } from "primereact/ts-helpers";
 import { InputTextarea } from "primereact/inputtextarea";
+import { IEditEmployee } from "../../Types/IEditEmployee";
 
 interface Props {
     employee?: IEmployee;
@@ -51,7 +52,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
     const [confirmChanges, setConfirmChanges] = useState(false);
     const [dateChange, setDateChange] = useState<Nullable<Date>>(new Date());
     const [changeDescription, setChangeDescription] = useState<string>("");
-    const [employeeData, setEmployeeData] = useState<IEmployee>(employee!);
+    const [employeeData, setEmployeeData] = useState<IEditEmployee>(employee!);
 
     const [position, setPosition] = useState<IPosition>();
     const {
@@ -123,6 +124,8 @@ const EditEmployee = ({ employee, toast }: Props) => {
                         dateChange: dateChange!,
                         description: changeDescription,
                     }));
+                    console.log(dateChange);
+                    console.log(employeeData);
                     editEntity.mutate(employeeData);
                     setConfirmChanges(false);
                 }}
@@ -136,7 +139,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
         service: employeeService,
     });
 
-    const onSubmit = (data: IEmployee) => {
+    const onSubmit = (data: IEditEmployee) => {
         if (watch("idHierarchyPosition")) {
             data.idEmployee = employee?.idEmployee!;
             setConfirmChanges(true);
