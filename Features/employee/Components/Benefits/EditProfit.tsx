@@ -3,17 +3,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Dialog } from "primereact/dialog";
 import { IPerson } from "@/Features/person/Types/IPerson";
-import { IProfit } from "./Types/IProfit";
 import ProfitFormSchema from "./Validation/ProfitFormSchema";
 import { IprofitInsert } from "./Types/IProfitInsert";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import useEditProfit from "./Hooks/useEditProfit";
-import { Nullable } from "primereact/ts-helpers";
 
 interface Props {
     entity: IprofitInsert;
@@ -31,11 +28,9 @@ const EditBankEmployeeHistory = ({
     setSubmitted,
     toast,
     editEntityDialog,
-    person,
     id,
 }: Props) => {
     const { editEntityFormSchema } = ProfitFormSchema();
-    const { params } = useParamFilter();
 
     const {
         handleSubmit,
@@ -48,17 +43,30 @@ const EditBankEmployeeHistory = ({
         defaultValues: entity,
     });
 
-    console.log(entity);
-    // Use watch to see all the fields
-    const allFields = watch();
-    console.log(allFields);
-
     const editEntity = useEditProfit({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
     });
+
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "start" || key === "end") {
+                    setValue(
+                        key as keyof IprofitInsert,
+                        new Date(entity[key as keyof IprofitInsert] as Date)
+                    );
+                    return;
+                }
+                setValue(
+                    key as keyof IprofitInsert,
+                    entity[key as keyof IprofitInsert]
+                );
+            });
+        }
+    }, [entity, setEditEntityDialog]);
 
     const onSubmit = (data: IprofitInsert) => {
         console.log(data);

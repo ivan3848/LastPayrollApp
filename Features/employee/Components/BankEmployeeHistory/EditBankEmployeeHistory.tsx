@@ -1,7 +1,7 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
@@ -60,6 +60,25 @@ const EditBankEmployeeHistory = ({
         setSubmitted,
         reset,
     });
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "startDate" || key === "endDate") {
+                    setValue(
+                        key as keyof IBankEmployeeHistory,
+                        new Date(
+                            entity[key as keyof IBankEmployeeHistory] as Date
+                        )
+                    );
+                    return;
+                }
+                setValue(
+                    key as keyof IBankEmployeeHistory,
+                    entity[key as keyof IBankEmployeeHistory]
+                );
+            });
+        }
+    }, [entity, setEditEntityDialog]);
 
     const onSubmit = (data: IBankEmployeeHistory) => {
         data.idBank = data.idBank;
@@ -83,7 +102,7 @@ const EditBankEmployeeHistory = ({
             header="Editar Banco al empleado"
             modal
             style={{
-                width: "45vw",
+                width: "50vw",
                 overflow: "hidden",
                 maxHeight: "80vh",
                 position: "relative",
@@ -133,12 +152,11 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={new Date(entity.startDate?.toString()!)}
+                        value={watch("startDate") || entity.startDate}
                         onChange={(e) => setValue("startDate", e.value!)}
-                        onFocus={() => setValue("startDate", new Date())}
-                        autoFocus
                         showIcon
                         showButtonBar
+                        key={entity?.startDate?.toString()}
                     />
 
                     {errors.startDate && (
@@ -152,8 +170,6 @@ const EditBankEmployeeHistory = ({
                         id="endDate"
                         value={new Date(entity.endDate?.toString()!)}
                         onChange={(e) => setValue("endDate", e.value!)}
-                        onFocus={() => setValue("endDate", new Date())}
-                        autoFocus
                         showIcon
                         showButtonBar
                     />
