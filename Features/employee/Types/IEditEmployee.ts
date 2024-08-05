@@ -1,6 +1,5 @@
-import { IPerson } from "@/Features/person/Types/IPerson";
 
-export interface IEmployee {
+export interface IEditEmployee {
     idEmployee: number;
     idPerson?: number;
     startDate: Date;
@@ -20,16 +19,11 @@ export interface IEmployee {
     isOpen?: boolean;
     lockBy?: number;
     idDisability?: number;
-    employeeCustomerId?: string;
     isDependantExist?: boolean;
-    idCompany?: number;
     idDepartment?: number;
-    department?: string;
     idPosition?: number;
-    position?: string;
     isActive: boolean;
     idHierarchyPosition?: number;
-    employeeManagerName?: string;
     idPayrollArea?: number;
     idWorkScheduler?: number;
     endWorkDate?: Date;
@@ -44,10 +38,4 @@ export interface IEmployee {
     groupManagerAuthorize?: string;
     dateChange?: Date;
     description?: string;
-    employeeName?: string;
-    workSchedulerName?: string;
-    identification?: string;
-    employeeImageName?: string;
-    employeeImageType?: string;
-    person?: IPerson;
 }

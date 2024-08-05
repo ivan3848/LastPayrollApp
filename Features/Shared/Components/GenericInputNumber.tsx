@@ -13,6 +13,8 @@ interface Props {
     format?: boolean;
     isReadOnly?: boolean;
     prefix?: string;
+    suffix?: string;
+    disabled?: boolean;
     watch: (field: string) => any;
     setValue: UseFormSetValue<any>;
 }
@@ -26,6 +28,8 @@ const GenericInputNumber = ({
     isFocus = false,
     format = true,
     prefix = "RD$",
+    suffix = "",
+    disabled = false,
     setValue,
     watch,
     isReadOnly,
@@ -54,6 +58,8 @@ const GenericInputNumber = ({
             minFractionDigits={2}
             maxFractionDigits={2}
             prefix={prefix}
+            suffix={suffix}
+            disabled={disabled}
         />
     );
 };

@@ -60,6 +60,12 @@ const AppMenu = () => {
                     visible: false,
                 },
                 {
+                    label: "Editar Empleado",
+                    to: "/employee/editEmployee",
+                    icon: "pi pi-user-edit",
+                    visible: false,
+                },
+                {
                     label: "Cambios masivos",
                     icon: "pi pi-fw pi-chart-bar",
                     to: "/employee/employee",
