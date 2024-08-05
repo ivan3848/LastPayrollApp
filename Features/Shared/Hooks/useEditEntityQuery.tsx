@@ -4,10 +4,11 @@ import { useMutation } from "@tanstack/react-query";
 interface Props<T> {
     toast: React.MutableRefObject<any>;
     setEditEntityDialog?: (value: boolean) => void;
-    setSubmitted: (value: boolean) => void;
+    setSubmitted?: (value: boolean) => void;
     reset?: () => void;
     service: ApiService<T, T>;
 }
+
 function useEditEntityQuery<T>({
     toast,
     setEditEntityDialog,
@@ -28,11 +29,9 @@ function useEditEntityQuery<T>({
             }
         },
         onSuccess: () => {
-            if (reset) reset();
-
-            if (setEditEntityDialog) setEditEntityDialog(false);
-
-            setSubmitted(true);
+            reset && reset();
+            setEditEntityDialog && setEditEntityDialog(false);
+            setSubmitted && setSubmitted(true);
 
             if (toast.current) {
                 toast.current.show({

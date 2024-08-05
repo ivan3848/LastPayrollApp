@@ -9,6 +9,9 @@ import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
 import Profit from "./Benefits/Profit";
+import PersonInsurance from "./PersonInsurance/PersonInsurance";
+import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
+import { Toast } from "primereact/toast";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -51,7 +54,10 @@ const EmployeeActions = ({
                 style={{ width: "80vw" }}
             >
                 <div className="mb-5">
-                    <EmployeeProfile employee={employee} />
+                    <EmployeeProfile
+                        setShowEmployeeActions={setShowEmployeeActions}
+                        employee={employee}
+                    />
                 </div>
 
                 <div>
@@ -72,6 +78,12 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Benefit && (
                         <Profit id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.PersonInsurance && (
+                        <PersonInsurance employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.CoverPosition && (
+                        <CoverPosition employee={employee} />
                     )}
                 </div>
             </Dialog>

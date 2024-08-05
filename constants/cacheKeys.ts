@@ -42,3 +42,6 @@ export const CACHE_KEY_TOOLWORK_DEFINITION_EMPLOYEE =
     "toolWorkDefinitionEmployee";
 export const CACHE_KEY_DEPENDANT = "dependant";
 export const CACHE_KEY_PROFIT = "profit";
+export const CACHE_KEY_PERSON = "person";
+export const CACHE_KEY_PERSONINSURANCE = "personInsurance";
+export const CACHE_KEY_COVER_POSITION = "coverPosition";

@@ -9,22 +9,28 @@ interface Props {
     isValid: boolean;
     minValue?: number;
     maxValue?: number;
-    setValue: UseFormSetValue<any>;
-    watch: (field: string) => any;
     isFocus?: boolean;
     format?: boolean;
+    isReadOnly?: boolean;
+    prefix?: string;
+    suffix?: string;
+    watch: (field: string) => any;
+    setValue: UseFormSetValue<any>;
 }
 
 const GenericInputNumber = ({
     id,
     currentValue,
     isValid,
-    minValue,
+    minValue = 0,
     maxValue,
     isFocus = false,
     format = true,
+    prefix = "RD$",
+    suffix = "",
     setValue,
     watch,
+    isReadOnly,
 }: Props) => {
     useEffect(() => {
         if (currentValue) {
@@ -36,6 +42,7 @@ const GenericInputNumber = ({
         <InputNumber
             value={watch(id)}
             onChange={(e) => setValue(id, e.value!)}
+            disabled={isReadOnly}
             id={id}
             className={classNames({
                 "p-invalid": isValid,
@@ -48,7 +55,8 @@ const GenericInputNumber = ({
             format={format}
             minFractionDigits={2}
             maxFractionDigits={2}
-            prefix="RD$"
+            prefix={prefix}
+            suffix={suffix}
         />
     );
 };

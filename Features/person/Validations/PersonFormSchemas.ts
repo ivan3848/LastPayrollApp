@@ -40,7 +40,7 @@ const personFormSchemas = () => {
         idGender: z.number({ required_error: "El campo es requerido" }),
         idEducation: z.number({ required_error: "El campo es requerido" }),
         address: z.string().optional(),
-        email: z.string().email({ message: "El campo es requerido" }).optional(),
+        email: z.string().optional(),
         phoneNumber: z.string().optional(),
         cellphoneNumber: z.string({ message: "El campo es requerido" }),
     });
@@ -83,7 +83,7 @@ const personFormSchemas = () => {
         idGender: z.number({ required_error: "El campo es requerido" }),
         idEducation: z.number({ required_error: "El campo es requerido" }),
         address: z.string().optional(),
-        email: z.string().email({ message: "El campo es requerido" }).optional(),
+        email: z.string().optional(),
         phoneNumber: z.string().optional(),
         cellphoneNumber: z.string({ message: "El campo es requerido" }),
     });

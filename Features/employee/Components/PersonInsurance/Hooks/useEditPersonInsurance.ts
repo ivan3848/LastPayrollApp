@@ -1,21 +1,21 @@
 import { useMutation } from "@tanstack/react-query";
-import hierarchyPositionService from "../Services/hierarchyPositionService";
+import personInsurance from "../Services/personInsuranceService";
 
 interface Props {
     toast: React.MutableRefObject<any>;
-    setAddEntityDialog: (value: boolean) => void;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-
-const useChangePositionSalaryQuery = ({
+const useEditPersonInsurance = ({
     toast,
-    setAddEntityDialog,
+    setEditEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IPositionSalary) => hierarchyPositionService.post(entity),
+        mutationFn: (entity: IPersonInsurance) => personInsurance.put(entity),
+
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -26,17 +26,17 @@ const useChangePositionSalaryQuery = ({
         },
         onSuccess: () => {
             reset();
-            setAddEntityDialog(false);
+            setEditEntityDialog(false);
             setSubmitted(true);
 
             toast.current?.show({
                 severity: "success",
-                summary: "Insertado!",
-                detail: "Registro agregado correctamente",
+                summary: "Editado!",
+                detail: "Registro editado correctamente",
                 life: 3000,
             });
         },
     });
 };
 
-export default useChangePositionSalaryQuery;
+export default useEditPersonInsurance;

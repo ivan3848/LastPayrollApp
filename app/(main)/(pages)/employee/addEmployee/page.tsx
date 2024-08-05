@@ -1,4 +1,4 @@
-import AddEmployeeTabs from "@/Features/employee/Components/AddEmployeeTabs";
+import AddEmployeeTabs from "@/Features/employee/Components/AddEmployee/AddEmployeeTabs";
 import React from "react";
 
 export default function AddEmployee() {

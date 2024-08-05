@@ -5,7 +5,9 @@ import { Button } from "primereact/button";
 import { InputMask } from "primereact/inputmask";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
-import employeeContactFormSchemas from "../Validations/EmployeeContactFormSchemas";
+import { useEffect } from "react";
+import { IEmployee } from "../../Types/IEmployee";
+import employeeContactFormSchemas from "../../Validations/EmployeeContactFormSchemas";
 
 interface Props {
     setContactInformation: (
@@ -33,6 +35,17 @@ const EmergencyEmployeeContact = ({
     } = useForm<IEmployee>({
         resolver: zodResolver(addEntityFormSchema),
     });
+
+    useEffect(() => {
+        if (employee) {
+            Object.keys(employee).forEach((key) => {
+                setValue(
+                    key as keyof IEmployee,
+                    employee[key as keyof IEmployee]
+                );
+            });
+        }
+    }, [employee, setValue]);
 
     const onSubmit = (data: IEmployee) => {
         setContactInformation(
@@ -89,8 +102,8 @@ const EmergencyEmployeeContact = ({
                             {...register("contactNumber")}
                             mask="999-999-9999"
                             id="contactNumber"
-                            type="text"
                             defaultValue={employee?.contactNumber}
+                            key={employee?.contactNumber}
                         />
 
                         {errors.contactNumber && (

@@ -1,39 +1,41 @@
-interface IEmployee {
+
+export interface IEditEmployee {
     idEmployee: number;
     idPerson?: number;
-    idStatusActionClass?: number;
-    idWorkScheduler?: number;
-    idHierarchyPosition?: number;
-    startDate?: Date;
+    startDate: Date;
     salary: number;
     email?: string;
     idEmployeeManager: number;
-    sindicate?: boolean;
-    extraHours?: boolean;
-    temporal?: boolean;
-    idPayrollArea?: number;
     workRelation?: boolean;
-    endWorkDate?: Date;
     haveKids?: boolean;
     numberOfKid?: number;
     functionDescription?: string;
     idGroupManager?: number;
     idContractType?: number;
     zipCode?: string;
-    contactName?: string;
     contactNumber?: string;
-    idStatusRelationship?: number;
     employeeImage?: string;
-    groupManagerAuthorize?: string;
     isPaid?: boolean;
     isOpen?: boolean;
     lockBy?: number;
     idDisability?: number;
-    employeeCustomerId?: string;
     isDependantExist?: boolean;
-    idCompany?: number;
     idDepartment?: number;
-    department?: string;
     idPosition?: number;
-    position?: string;
+    isActive: boolean;
+    idHierarchyPosition?: number;
+    idPayrollArea?: number;
+    idWorkScheduler?: number;
+    endWorkDate?: Date;
+    haveKid?: boolean;
+    idStatusActionClass?: number;
+    isGroupManager?: boolean;
+    sindicate?: boolean;
+    extraHours?: boolean;
+    temporal?: boolean;
+    contactName?: string;
+    idStatusRelationship?: number;
+    groupManagerAuthorize?: string;
+    dateChange?: Date;
+    description?: string;
 }

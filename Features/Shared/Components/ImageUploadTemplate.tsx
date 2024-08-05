@@ -7,15 +7,20 @@ import {
 import { ProgressBar } from "primereact/progressbar";
 import { Tag } from "primereact/tag";
 import { Tooltip } from "primereact/tooltip";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect, ChangeEvent } from "react"; // Import ChangeEvent from react
 import { Toast } from "primereact/toast";
 import { UseFormSetValue } from "react-hook-form";
+import emptyImage from "@/constants/emptyImage";
 
 interface Props {
     setValue: UseFormSetValue<any>;
+    employeeImage?: string;
 }
 
-export default function ImageUploadTemplate({ setValue }: Props) {
+export default function ImageUploadTemplate({
+    setValue,
+    employeeImage,
+}: Props) {
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef<FileUpload>(null);
     const toast = useRef<Toast | null>(null);
@@ -33,6 +38,8 @@ export default function ImageUploadTemplate({ setValue }: Props) {
         reader.onloadend = function () {
             const base64data = reader.result;
             setValue("employeeImage", base64data?.toString() ?? "");
+            setValue("employeeImageType", e.files[0].type);
+            setValue("employeeImageName", e.files[0].name);
         };
     };
 
@@ -45,7 +52,7 @@ export default function ImageUploadTemplate({ setValue }: Props) {
         ];
 
         const isValid = acceptedImageTypes.includes(type);
-        
+
         if (!isValid) {
             toast.current?.show({
                 severity: "error",
@@ -121,7 +128,7 @@ export default function ImageUploadTemplate({ setValue }: Props) {
     const emptyTemplate = () => {
         return (
             <div className="flex align-items-center flex-column">
-                <i
+                {/* <i
                     className="pi pi-image mt-3 p-5"
                     style={{
                         fontSize: "5em",
@@ -129,7 +136,12 @@ export default function ImageUploadTemplate({ setValue }: Props) {
                         backgroundColor: "var(--surface-b)",
                         color: "var(--surface-d)",
                     }}
-                ></i>
+                ></i> */}
+                <img
+                    className="w-2 shadow-2 border-circle"
+                    src={employeeImage ?? emptyImage}
+                    alt="Imagen de empleado"
+                />
                 <span
                     style={{
                         fontSize: "1.2em",
