@@ -10,6 +10,7 @@ import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Co
 import Dependant from "./Dependant/Dependant";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
+import { Toast } from "primereact/toast";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -52,7 +53,10 @@ const EmployeeActions = ({
                 style={{ width: "80vw" }}
             >
                 <div className="mb-5">
-                    <EmployeeProfile employee={employee} />
+                    <EmployeeProfile
+                        setShowEmployeeActions={setShowEmployeeActions}
+                        employee={employee}
+                    />
                 </div>
 
                 <div>

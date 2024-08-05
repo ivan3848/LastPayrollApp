@@ -133,7 +133,7 @@ const AddPerson = ({ setPerson, setStep, person }: Props) => {
                             onChange={(e) => setValue("birthDate", e.value!)}
                             showIcon
                             showButtonBar
-                            key={person?.birthDate.toString()}
+                            key={person?.birthDate?.toString()}
                         />
                         {errors.birthDate && (
                             <small className="p-invalid text-red-500">

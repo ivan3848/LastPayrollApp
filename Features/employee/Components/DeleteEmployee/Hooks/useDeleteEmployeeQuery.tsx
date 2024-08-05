@@ -1,25 +1,23 @@
+import { CACHE_KEY_EMPLOYEE } from "@/constants/cacheKeys";
 import { deleteEmployeeService } from "@/Features/employee/Services/employeeService";
-import { useMutation } from "@tanstack/react-query";
-import { Button } from "primereact/button";
-import { Dialog } from "primereact/dialog";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import React from "react";
 
 interface Props {
     idEmployee: number;
     deleteEntityDialog: boolean;
     setDeleteEntityDialog: (value: boolean) => void;
-    setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
 const useDeleteEmployeeQuery = ({
-    idEmployee,
-    deleteEntityDialog,
     setDeleteEntityDialog,
-    setSubmitted,
     toast,
 }: Props) => {
-    const deleteRegister = useMutation({
+    const expireQuery = useExpireSessionQuery(CACHE_KEY_EMPLOYEE);
+
+    return useMutation({
         mutationFn: (idEmployee: number) =>
             deleteEmployeeService.delete(idEmployee),
         onError: (error: any) => {
@@ -34,7 +32,7 @@ const useDeleteEmployeeQuery = ({
         },
         onSuccess: () => {
             setDeleteEntityDialog(false);
-            setSubmitted(true);
+            expireQuery();
 
             toast.current?.show({
                 severity: "success",
@@ -44,50 +42,6 @@ const useDeleteEmployeeQuery = ({
             });
         },
     });
-    const handleDelete = () => {
-        deleteRegister.mutate(idEmployee);
-    };
-
-    const hideDeleteEntityDialog = () => {
-        setDeleteEntityDialog(false);
-    };
-
-    const deleteProductDialogFooter = (
-        <>
-            <Button
-                label="Cancelar"
-                icon="pi pi-times"
-                text
-                onClick={hideDeleteEntityDialog}
-            />
-            <Button
-                label="Confirmar"
-                icon="pi pi-check"
-                text
-                onClick={handleDelete}
-            />
-        </>
-    );
-    return (
-        <Dialog
-            visible={deleteEntityDialog}
-            style={{ width: "450px" }}
-            header="Eliminar Registro"
-            modal
-            footer={deleteProductDialogFooter}
-            onHide={hideDeleteEntityDialog}
-        >
-            <div className="flex align-items-center justify-content-center">
-                <i
-                    className="pi pi-exclamation-triangle mr-3"
-                    style={{ fontSize: "2rem" }}
-                />
-                {idEmployee && (
-                    <span>¿Está seguro de eliminar el registro?</span>
-                )}
-            </div>
-        </Dialog>
-    );
 };
 
 export default useDeleteEmployeeQuery;

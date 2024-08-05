@@ -5,9 +5,8 @@ import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
 import employeeService from "../Services/employeeService";
 import { IEmployee } from "../Types/IEmployee";
-
 import emptyImage from "@/constants/emptyImage";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { DataView, DataViewLayoutOptions } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
@@ -15,10 +14,11 @@ import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
 import { ChangeEvent, useState } from "react";
 import EmployeeActions from "./EmployeeActions";
-import Link from "next/link";
+import { Toast } from "primereact/toast";
 
 interface Props {
     submitted: boolean;
+    toast: React.MutableRefObject<any>;
 }
 
 const sortOptions = [
@@ -29,9 +29,7 @@ const sortOptions = [
     { label: "Departamento", value: "department" },
 ];
 
-export default function EmployeeTable({
-    submitted,
-}: Props) {
+export default function EmployeeTable({ submitted, toast }: Props) {
     const {
         setPage,
         setPageSize,
@@ -126,6 +124,8 @@ export default function EmployeeTable({
                 className="col-12 sm:col-6 xl:col-3 m-1"
                 key={employee.idEmployee}
             >
+                <Toast ref={toast} />
+
                 <div className="p-3 border-1 surface-border border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
