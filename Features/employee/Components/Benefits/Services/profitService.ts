@@ -5,7 +5,7 @@ const profitService = new ApiService<IProfit, IProfit>("employee/profit");
 
 const addProfitService = new ApiService<IProfit, IProfit>("employee/profit");
 
-const profitByIdEmployeeService = new ApiService<IProfit, IProfit>(
+const profitByIdEmployeeService = new ApiService<IProfit[], IProfit>(
     `employee/profit/byIdEmployee/`
 );
 

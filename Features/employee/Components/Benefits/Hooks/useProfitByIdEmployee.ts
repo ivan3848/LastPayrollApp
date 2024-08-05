@@ -11,7 +11,7 @@ const useProfitByIdEmployee = (
 ) => {
     return useQuery<IProfit[], Error>({
         queryKey: [CACHE_KEY_PROFIT, params, dependencies, idEmployee],
-        queryFn: () => profitByIdEmployeeService.getById(idEmployee),
+        queryFn: () => profitByIdEmployeeService.getEntitiesById(idEmployee),
         initialData: [],
     });
 };

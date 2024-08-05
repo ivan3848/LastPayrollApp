@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { IprofitInsert } from "../Types/IProfitInsert";
 import profitService from "../Services/profitService";
+import { IProfitInsert } from "../Types/IProfitInsert";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -15,7 +15,7 @@ const useEditProfit = ({
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IprofitInsert) => profitService.put(entity),
+        mutationFn: (entity: IProfitInsert) => profitService.put(entity),
 
         onError: (error: any) => {
             toast.current?.show({
