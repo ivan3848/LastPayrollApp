@@ -29,6 +29,9 @@ import employeeFormSchemas from "../../Validations/EmployeeFormSchemas";
 import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
 import employeeService from "../../Services/employeeService";
 import { InputMask } from "primereact/inputmask";
+import { Dialog } from "primereact/dialog";
+import { Nullable } from "primereact/ts-helpers";
+import { InputTextarea } from "primereact/inputtextarea";
 
 interface Props {
     employee?: IEmployee;
@@ -45,6 +48,11 @@ const EditEmployee = ({ employee, toast }: Props) => {
     } = useParamFilter();
 
     const [addHierarchyPosition, setAddHierarchyPosition] = useState(false);
+    const [confirmChanges, setConfirmChanges] = useState(false);
+    const [dateChange, setDateChange] = useState<Nullable<Date>>(new Date());
+    const [changeDescription, setChangeDescription] = useState<string>("");
+    const [employeeData, setEmployeeData] = useState<IEmployee>(employee!);
+
     const [position, setPosition] = useState<IPosition>();
     const {
         handleSubmit,
@@ -61,15 +69,17 @@ const EditEmployee = ({ employee, toast }: Props) => {
         if (employee) {
             Object.keys(employee).forEach((key) => {
                 if (key === "startDate" || key === "endWorkDate") {
-                    setValue(
-                        key,
-                        new Date(employee[key as keyof IEmployee] as Date)
-                    );
+                    employee[key as keyof IEmployee] &&
+                        setValue(
+                            key,
+                            new Date(employee[key as keyof IEmployee] as Date)
+                        );
                 } else {
-                    setValue(
-                        key as keyof IEmployee,
-                        employee[key as keyof IEmployee]
-                    );
+                    employee[key as keyof IEmployee] &&
+                        setValue(
+                            key as keyof IEmployee,
+                            employee[key as keyof IEmployee]
+                        );
                 }
             });
         }
@@ -96,6 +106,31 @@ const EditEmployee = ({ employee, toast }: Props) => {
         setAllDataManager(true);
     };
 
+    const footerContent = (
+        <div>
+            <Button
+                label="Cancelar"
+                icon="pi pi-times"
+                onClick={() => setConfirmChanges(false)}
+                className="p-button-text"
+            />
+            <Button
+                label="Guardar Cambios"
+                icon="pi pi-check"
+                onClick={() => {
+                    setEmployeeData((prevData) => ({
+                        ...prevData,
+                        dateChange: dateChange!,
+                        description: changeDescription,
+                    }));
+                    editEntity.mutate(employeeData);
+                    setConfirmChanges(false);
+                }}
+                autoFocus
+            />
+        </div>
+    );
+
     const editEntity = useEditEntityQuery({
         toast,
         service: employeeService,
@@ -104,7 +139,8 @@ const EditEmployee = ({ employee, toast }: Props) => {
     const onSubmit = (data: IEmployee) => {
         if (watch("idHierarchyPosition")) {
             data.idEmployee = employee?.idEmployee!;
-            editEntity.mutate(data);
+            setConfirmChanges(true);
+            setEmployeeData(data);
         } else {
             setValue("idPosition", undefined);
         }
@@ -120,29 +156,66 @@ const EditEmployee = ({ employee, toast }: Props) => {
                 toast={toast}
                 setPositionValue={setValue}
             />
+            <Dialog
+                header="Confirmar cambios"
+                visible={confirmChanges}
+                style={{ width: "30vw" }}
+                onHide={() => {
+                    if (!confirmChanges) return;
+                    setConfirmChanges(false);
+                }}
+                footer={footerContent}
+            >
+                <div className="p-fluid grid">
+                    <div className="field col-12">
+                        <label htmlFor="dateChange">Fecha De Cambio</label>
+
+                        <Calendar
+                            id="dateChange"
+                            value={dateChange ?? new Date()}
+                            onChange={(e) => setDateChange(e.value)}
+                            showIcon
+                            showButtonBar
+                            clearButtonClassName="hidden"
+                        />
+                    </div>
+
+                    <div className="field col-12">
+                        <label htmlFor="changeDescription">Descripción</label>
+
+                        <InputTextarea
+                            id="changeDescription"
+                            value={changeDescription}
+                            onChange={(
+                                e: React.ChangeEvent<HTMLTextAreaElement>
+                            ) => setChangeDescription(e.target.value)}
+                            rows={5}
+                        />
+                    </div>
+                </div>
+            </Dialog>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="col-12">
-                    <div className="p-fluid formgrid grid">
-                        <div className="field col-12">
+                    <div className="p-fluid grid">
+                        <div className="field col-4 mb-3">
                             <label htmlFor="photo">Imagen Del Empleado</label>
                             <ImageUploadTemplate
                                 setValue={setValue}
                                 employeeImage={employee?.employeeImage}
                             />
                         </div>
+
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="idEmployee">
                                 Código De Empleado
                             </label>
-                            <GenericInputNumber
+                            <InputText
+                                onChange={(e) =>
+                                    setValue("idEmployee", +e.target.value)
+                                }
                                 id="idEmployee"
-                                isValid={!!errors.idEmployee}
-                                setValue={setValue}
-                                watch={watch}
-                                minValue={1}
-                                isFocus={true}
-                                format={false}
-                                currentValue={employee?.idEmployee}
+                                type="number"
+                                defaultValue={employee?.idEmployee}
                                 disabled={true}
                             />
 
@@ -407,7 +480,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 </small>
                             )}
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field col-12 md:col-6 lg:col-2 mt-6">
                             <div className="field-checkbox">
                                 <GenericCheckBox
                                     id="workRelation"
@@ -418,7 +491,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 />
                             </div>
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field col-12 md:col-6 lg:col-2 mt-6">
                             <div className="field-checkbox">
                                 <GenericCheckBox
                                     id="sindicate"
@@ -429,7 +502,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 />
                             </div>
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-3">
+                        <div className="field col-12 md:col-6 lg:col-2 mt-6">
                             <div className="field-checkbox">
                                 <GenericCheckBox
                                     id="extraHours"
@@ -440,10 +513,10 @@ const EditEmployee = ({ employee, toast }: Props) => {
                                 />
                             </div>
                         </div>
-                        <div className="card my-5">
+
+                        <div className="card col-12 my-5 py-4">
                             <h3>Contacto De Emergencia</h3>
-                            <hr />
-                            <div className="grid mt-5">
+                            <div className="p-fluid formgrid grid mt-5">
                                 <div className="field col-12 md:col-6 lg:col-4">
                                     <label htmlFor="idStatusRelationShip">
                                         Tipo de relación

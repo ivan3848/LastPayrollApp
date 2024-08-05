@@ -1,11 +1,11 @@
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { useParamAllData } from "../Hooks/useParamFilter";
+import { classNames } from "primereact/utils";
+import { useEffect } from "react";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import { DefinedUseQueryResult } from "@tanstack/react-query";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
-import { classNames } from "primereact/utils";
-import { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { useParamAllData } from "../Hooks/useParamFilter";
 
 interface Props<T> {
     isValid: boolean;
@@ -23,7 +23,6 @@ interface Props<T> {
         dependencies: boolean[]
     ) => DefinedUseQueryResult<IResponse<T>, Error>;
 }
-
 function GenericDropDown<T>({
     isValid,
     text,
@@ -49,11 +48,14 @@ function GenericDropDown<T>({
     return (
         <>
             <Dropdown
-                value={data.items.find(
-                    (item: any) => item[id] === (watch(idToSet) ?? idValueEdit)
-                )}
+                value={
+                    data.items.find(
+                        (item: any) =>
+                            item[id] === (watch(idToSet) ?? idValueEdit)
+                    ) || null
+                }
                 onChange={(e: DropdownChangeEvent) => {
-                    setValue(idToSet, e.value[id]);
+                    setValue(idToSet, e.value ? e.value[id] : null);
                     onChange && onChange(e);
                 }}
                 options={data.items}

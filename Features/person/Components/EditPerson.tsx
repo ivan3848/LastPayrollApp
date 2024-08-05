@@ -41,15 +41,17 @@ const EditPerson = ({ person, toast }: Props) => {
         if (person) {
             Object.keys(person).forEach((key) => {
                 if (key === "birthDate") {
-                    setValue(
-                        key,
-                        new Date(person[key as keyof IPerson] as Date)
-                    );
+                    person[key as keyof IPerson] &&
+                        setValue(
+                            key,
+                            new Date(person[key as keyof IPerson] as Date)
+                        );
                 } else {
-                    setValue(
-                        key as keyof IPerson,
-                        person[key as keyof IPerson]
-                    );
+                    person[key as keyof IPerson] &&
+                        setValue(
+                            key as keyof IPerson,
+                            person[key as keyof IPerson]
+                        );
                 }
             });
         }
