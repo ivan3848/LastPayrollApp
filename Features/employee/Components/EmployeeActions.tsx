@@ -8,6 +8,7 @@ import FireEmployee from "./FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
+import Profit from "./Benefits/Profit";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
 import { Toast } from "primereact/toast";
@@ -74,6 +75,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Tools && (
                         <ToolWorkDefinitionEmployee id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Benefit && (
+                        <Profit id={employee.idEmployee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.PersonInsurance && (
                         <PersonInsurance employee={employee} />

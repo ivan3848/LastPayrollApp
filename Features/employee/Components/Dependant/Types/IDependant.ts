@@ -12,6 +12,6 @@ export interface IDependant {
     lastName?: string;
     secondLastName?: string;
     fullName?: string;
-    birthDate: Date;
+    birthDate?: Date;
     person?: IPerson;
 }

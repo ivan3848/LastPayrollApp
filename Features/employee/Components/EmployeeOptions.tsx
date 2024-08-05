@@ -53,6 +53,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Beneficios"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Benefit)}
                 />
                 <Button
                     label="Deducciones"

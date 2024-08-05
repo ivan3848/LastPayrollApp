@@ -5,16 +5,16 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IDependant } from "./Types/IDependant";
-import DependantTable from "./DependantTable";
-import AddDependant from "./AddDependant";
-import EditDependant from "./EditDependant";
+import { IProfit } from "./Types/IProfit";
+import ProfitTable from "./ProfitTable";
+import EditProfit from "./EditProfit";
+import AddProfit from "./AddProfit";
 
 interface props {
     id: number;
 }
 
-const Dependant = ({ id }: props) => {
+const Profit = ({ id }: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -27,26 +27,26 @@ const Dependant = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IDependant>();
+    } = useCrudModals<IProfit>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IDependant) => {
+    const handleEdit = (entity: IProfit) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IDependant) => {
+    const handleDelete = (entity: IProfit) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Nombre", "Relación", "Acciónes"];
+    const entityProperties = ["Concepto", "Monto", "Inicio", "Final"];
 
     return (
         <div className="grid">
@@ -58,7 +58,7 @@ const Dependant = ({ id }: props) => {
                         <TableSkeletonTemplate items={entityProperties} />
                     }
                 >
-                    <DependantTable
+                    <ProfitTable
                         submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
@@ -68,7 +68,7 @@ const Dependant = ({ id }: props) => {
                 </Suspense>
 
                 {editEntityDialog && (
-                    <EditDependant
+                    <EditProfit
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
@@ -79,7 +79,7 @@ const Dependant = ({ id }: props) => {
                 )}
 
                 {addEntityDialog && (
-                    <AddDependant
+                    <AddProfit
                         id={id}
                         addEntityDialog={addEntityDialog}
                         setAddEntityDialog={setAddEntityDialog}
@@ -91,8 +91,8 @@ const Dependant = ({ id }: props) => {
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idDependant ?? 0}
-                        endpoint="employee/dependant"
+                        id={entity?.idProfit ?? 0}
+                        endpoint="employee/profit"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
@@ -104,4 +104,4 @@ const Dependant = ({ id }: props) => {
     );
 };
 
-export default Dependant;
+export default Profit;
