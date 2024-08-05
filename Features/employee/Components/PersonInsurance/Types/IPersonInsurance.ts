@@ -1,10 +1,10 @@
 interface IPersonInsurance {
     idPersonInsurance?: number;
-    idEmployee: number;
+    idEmployee?: number;
     idPerson: number;
-    concept: string;
     idConcept: number;
-    idEmployeeAuthorize: number;
+    concept: string;
+    idEmployeeAuthorize?: number;
     percentDiscount: number;
     amount: number;
     startDate: Date;
@@ -12,8 +12,22 @@ interface IPersonInsurance {
     person?: {
         firstName: string;
         firstLastName: string;
-        secodLastName: string;
+        secondLastName: string;
     };
-
 }
-
+interface IAddPersonInsurance { 
+    idEmployee?: number;
+    idPerson: number;
+    idConcept: number;
+    concept: string;
+    idEmployeeAuthorize?: number;
+    percentDiscount: number;
+    amount: number;
+    startDate: Date;
+    endDate: Date;
+    person?: {
+        firstName: string;
+        firstLastName: string;
+        secondLastName: string;
+    };
+}

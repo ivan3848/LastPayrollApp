@@ -10,6 +10,7 @@ import Link from "next/link";
 import { DataView, DataViewLayoutOptions } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
 import { ChangeEvent, useState } from "react";
@@ -29,7 +30,9 @@ const sortOptions = [
     { label: "Departamento", value: "department" },
 ];
 
-export default function EmployeeTable({ submitted, toast }: Props) {
+export default function EmployeeTable({
+    submitted,
+}: Props) {
     const {
         setPage,
         setPageSize,
@@ -37,7 +40,7 @@ export default function EmployeeTable({ submitted, toast }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter();
+    } = useParamFilter(6);
 
     const [layout, setLayout] = useState<
         "list" | "grid" | (string & Record<string, unknown>)
@@ -121,7 +124,7 @@ export default function EmployeeTable({ submitted, toast }: Props) {
     const gridItem = (employee: IEmployee) => {
         return (
             <div
-                className="col-12 sm:col-6 xl:col-3 m-1"
+                className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center flex-wrap gap-4"
                 key={employee.idEmployee}
             >
                 <Toast ref={toast} />
@@ -181,13 +184,20 @@ export default function EmployeeTable({ submitted, toast }: Props) {
     const actionButtons = (employeeSelected: IEmployee) => {
         return (
             <>
-                <Button
-                    size="small"
-                    className="min-w-min"
-                    label="Editar"
-                    icon="pi pi-pencil"
-                    disabled
-                />
+                <Link
+                    href={{
+                        pathname: "/employee/editEmployee",
+                        query: { id: employeeSelected.idEmployee },
+                    }}
+                >
+                    {" "}
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label="Editar"
+                        icon="pi pi-pencil"
+                    />
+                </Link>
                 <Button
                     size="small"
                     label="Historial"
@@ -264,26 +274,34 @@ export default function EmployeeTable({ submitted, toast }: Props) {
                         </Link>
                     </div>
 
-                    <DataView
-                        value={data.items}
-                        itemTemplate={itemTemplate}
-                        layout={layout}
-                        header={header}
-                        loading={isLoading}
-                        lazy
-                        paginator
-                        sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                        sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                        totalRecords={data?.totalCount}
-                        className="dataview-responsive"
-                        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                        emptyMessage="No hay registros para mostrar."
-                        onPage={onPage}
-                        rowsPerPageOptions={[5, 10, 25]}
-                        rows={data?.pageSize!}
-                        first={data.firstRow!}
-                        currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
-                    />
+                    {isLoading ? (
+                        <div className="flex justify-content-center align-items-center">
+                            <ProgressSpinner />
+                        </div>
+                    ) : (
+                        <DataView
+                            value={data.items}
+                            itemTemplate={itemTemplate}
+                            layout={layout}
+                            header={header}
+                            loading={isLoading}
+                            lazy
+                            paginator
+                            sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                            sortOrder={
+                                params.filter?.sorts?.[0]?.isAsc ? 1 : -1
+                            }
+                            totalRecords={data?.totalCount}
+                            className="dataview-responsive"
+                            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                            emptyMessage="No hay registros para mostrar."
+                            onPage={onPage}
+                            rowsPerPageOptions={[5, 10, 25]}
+                            rows={data?.pageSize!}
+                            first={data.firstRow!}
+                            currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                        />
+                    )}
                 </div>
             </div>
         </>
