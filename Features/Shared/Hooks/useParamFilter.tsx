@@ -4,6 +4,7 @@ import IParamsApi from "@/types/IParamApi";
 
 interface Props {
     tableName: string;
+    pageSize?: number;
 }
 
 const useParamFilter = (pageSize: number = 5) => {
@@ -93,11 +94,11 @@ const useParamFilter = (pageSize: number = 5) => {
     };
 };
 
-const useParamFilterByTableName = (tableName: string = "", pageSize: number = 5) => {
+const useParamFilterByTableName = ({ tableName = "", pageSize = 5 }: Props) => {
     const [params, setParams] = useState<IParamsApi>({
         filter: {
             page: 1,
-            pageSize: 5,
+            pageSize: pageSize,
             filters: [{ column: "tableName", value: tableName! }],
         },
     });
@@ -159,7 +160,7 @@ const useParamFilterByTableName = (tableName: string = "", pageSize: number = 5)
         setParams({
             filter: {
                 page: 1,
-                pageSize: 5,
+                pageSize: pageSize,
                 allData: false,
                 filters: [{ column: "tableName", value: tableName! }],
             },
@@ -174,7 +175,6 @@ const useParamFilterByTableName = (tableName: string = "", pageSize: number = 5)
     };
 
     return {
-        setPage,
         setPageSize,
         setGlobalFilter,
         setFilters,
@@ -182,6 +182,7 @@ const useParamFilterByTableName = (tableName: string = "", pageSize: number = 5)
         clearFilters,
         clearSorts,
         setSorts,
+        setPage,
         params,
     };
 };

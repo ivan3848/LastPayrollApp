@@ -1,13 +1,12 @@
 "use client";
 
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
-import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
+import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IEmployee } from "../Types/IEmployee";
-import { Skeleton } from "primereact/skeleton";
 
 const EmployeeTable = dynamic(() => import("./EmployeeTable"));
 
@@ -52,9 +51,7 @@ const Employee = () => {
                     <Toast ref={toast} />
 
                     <Suspense fallback={skeleton()}>
-                        <EmployeeTable
-                            submitted={submitted}
-                        />
+                        <EmployeeTable toast={toast} submitted={submitted} />
                     </Suspense>
 
                     {deleteEntityDialog && (

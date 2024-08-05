@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "primereact/button";
-import { deleteEmployeeService } from "@/Features/employee/Services/employeeService";
 import { Dialog } from "primereact/dialog";
-import { useMutation } from "@tanstack/react-query";
+import useDeleteEmployeeQuery from "../Hooks/useDeleteEmployeeQuery";
+import { Toast } from "primereact/toast";
 
 interface Props {
     idEmployee: number;
@@ -10,46 +10,33 @@ interface Props {
     setDeleteEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    setShowEmployeeActions: (value: boolean) => void;
 }
 
 const DeleteEmployee = ({
     idEmployee,
     deleteEntityDialog,
     setDeleteEntityDialog,
-    setSubmitted,
     toast,
+    setShowEmployeeActions,
 }: Props) => {
     const handleSubmit = () => {
         setDeleteEntityDialog(true);
     };
 
-    const deleteRegister = useMutation({
-        mutationFn: (idEmployee: number) =>
-            deleteEmployeeService.delete(idEmployee),
-        onError: (error: any) => {
-            setDeleteEntityDialog(false);
-
-            toast.current?.show({
-                severity: "warn",
-                summary: "Error",
-                detail: error.response.data,
-                life: 3000,
-            });
-        },
-        onSuccess: () => {
-            setDeleteEntityDialog(false);
-            setSubmitted(true);
-
-            toast.current?.show({
-                severity: "success",
-                summary: "Eliminado!",
-                detail: "Registro eliminado correctamente",
-                life: 3000,
-            });
-        },
+    const deleteEmployeeEntity = useDeleteEmployeeQuery({
+        idEmployee,
+        toast,
+        deleteEntityDialog,
+        setDeleteEntityDialog,
     });
-    const handleDelete = () => {
-        deleteRegister.mutate(idEmployee);
+
+    const handleDelete = async () => {
+        await deleteEmployeeEntity
+            .mutateAsync(idEmployee)
+            .then(() => setShowEmployeeActions(false));
+
+        return;
     };
 
     const hideDeleteEntityDialog = () => {
@@ -74,11 +61,8 @@ const DeleteEmployee = ({
     );
     return (
         <>
-            <Button
-                onClick={() => handleSubmit()}
-                severity="danger"
-                label="Eliminar"
-            />
+            <Toast ref={toast} />
+            <Button onClick={handleSubmit} severity="danger" label="Eliminar" />
             <Dialog
                 visible={deleteEntityDialog}
                 style={{ width: "450px" }}
@@ -99,19 +83,6 @@ const DeleteEmployee = ({
             </Dialog>
         </>
     );
-    // const entityProperties = ["Nombre", "Relación", "Acción"];
-
-    // return (
-    //     <div>
-    //         <Toast ref={toast} />
-
-    //         <Suspense
-    //             fallback={<TableSkeletonTemplate items={entityProperties} />}
-    //         >
-
-    //         </Suspense>
-    //     </div>
-    // );
 };
 
 export default DeleteEmployee;

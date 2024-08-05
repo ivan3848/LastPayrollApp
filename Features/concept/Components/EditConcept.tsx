@@ -161,7 +161,8 @@ const EditConcept = ({
                         maxValue={100}
                         setValue={setValue}
                         watch={watch}
-                        prefix="%"
+                        prefix=""
+                        suffix="%"
                     />
                     {errors.percentValue && (
                         <small className="p-invalid text-danger">

@@ -5,6 +5,7 @@ import { DataTable } from "primereact/datatable";
 import { Card } from "primereact/card";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useEmployeeQuery from "@/Features/employee/Hooks/useEmployeeQuery";
+import { IEmployee } from "@/Features/employee/Types/IEmployee";
 interface Props {
     idEmployee: number;
     submitted: boolean;

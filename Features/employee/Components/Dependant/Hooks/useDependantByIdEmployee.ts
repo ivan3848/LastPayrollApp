@@ -11,7 +11,7 @@ const useDependanHistoryById = (
 ) => {
     return useQuery<IDependant[], Error>({
         queryKey: [CACHE_KEY_DEPENDANT, params, dependencies, idEmployee],
-        queryFn: () => dependantByIdEmployeeService.getById(idEmployee),
+        queryFn: () => dependantByIdEmployeeService.getEntitiesById(idEmployee),
         initialData: [],
     });
 };
