@@ -7,8 +7,8 @@ import { bankEmployeeHistoryByIdEmployee } from "../Services/bankEmpleeHistorySe
 const useBankEmployeeHistoryByIdEmployee = (params: IParamsApi, dependencies: boolean[], idEmployee: number) => {
     return useQuery<IBankEmployeeHistory[], Error>({
         queryKey: [CACHE_KEY_BANk_EMPLOYEE_HISTORY, params, dependencies, idEmployee],
-        queryFn: () => bankEmployeeHistoryByIdEmployee.getById(idEmployee),
-        initialData:  []
+        queryFn: () => bankEmployeeHistoryByIdEmployee.getEntitiesById(idEmployee),
+        initialData: []
     });
 };
 

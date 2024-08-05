@@ -10,7 +10,7 @@ const usePersonInsuranceById = (
 ) => {
     return useQuery<IPersonInsurance[], Error>({
         queryKey: [CACHE_KEY_DEPENDANT, params, dependencies, idEmployee],
-        queryFn: () => personInsuranceById.getById(idEmployee),
+        queryFn: () => personInsuranceById.getEntitiesById(idEmployee),
         initialData: [],
     });
 };

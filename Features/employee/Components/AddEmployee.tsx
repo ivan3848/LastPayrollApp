@@ -113,7 +113,9 @@ const AddEmployee = forwardRef(
                                     {...register("idEmployee")}
                                     id="idEmployee"
                                     type="number"
-                                    onChange={e => setValue("idEmployee", +e.target.value)}
+                                    onChange={(e) =>
+                                        setValue("idEmployee", +e.target.value)
+                                    }
                                     defaultValue={employee?.functionDescription}
                                 />
 
@@ -426,12 +428,6 @@ const AddEmployee = forwardRef(
                                 <ImageUploadTemplate
                                     setValue={setValue}
                                     employeeImage={employee?.employeeImage}
-                                    employeeImageName={
-                                        employee?.employeeImageName
-                                    }
-                                    employeeImageType={
-                                        employee?.employeeImageType
-                                    }
                                 />
                             </div>
                         </div>

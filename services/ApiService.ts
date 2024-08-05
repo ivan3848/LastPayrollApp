@@ -97,6 +97,13 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
+    async getEntitiesById(id: number): Promise<R[]> {
+        const finalEndpoint = concatEndpoint(this.endpoint, `${id}`);
+        return await axiosInstance
+            .get<R[]>(finalEndpoint, {})
+            .then((res) => res.data);
+    }
+
     async delete(id: number, missEndpoint?: string): Promise<string> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {

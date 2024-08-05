@@ -30,9 +30,7 @@ const sortOptions = [
     { label: "Departamento", value: "department" },
 ];
 
-export default function EmployeeTable({
-    submitted,
-}: Props) {
+export default function EmployeeTable({ submitted }: Props) {
     const {
         setPage,
         setPageSize,
@@ -127,8 +125,6 @@ export default function EmployeeTable({
                 className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center flex-wrap gap-4"
                 key={employee.idEmployee}
             >
-                <Toast ref={toast} />
-
                 <div className="p-3 border-1 surface-border border-round">
                     <div className="flex flex-wrap align-items-center justify-content-between gap-2">
                         <div className="flex align-items-center gap-2">
