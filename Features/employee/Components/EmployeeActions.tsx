@@ -8,10 +8,11 @@ import FireEmployee from "./FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
-import Profit from "./Benefits/Profit";
+import Profit from "./Benefit/Profit";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
 import { Toast } from "primereact/toast";
+import Deduction from "./Deduction/Deduction";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -84,6 +85,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.CoverPosition && (
                         <CoverPosition employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Deduction && (
+                        <Deduction id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>
