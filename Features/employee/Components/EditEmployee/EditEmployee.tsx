@@ -120,16 +120,17 @@ const EditEmployee = ({ employee, toast }: Props) => {
             <Button
                 label="Guardar Cambios"
                 icon="pi pi-check"
-                onClick={() => {
+                onClick={async () => {
                     const updatedData = {
                         ...employeeData,
                         dateChange: dateChange!,
                         description: changeDescription,
                     };
                     setEmployeeData(updatedData);
-                    editEntity.mutate(updatedData);
-                    setConfirmChanges(false);
-                    router.push("/employee");
+                    editEntity.mutateAsync(updatedData).then(() => {
+                        setConfirmChanges(false);
+                        router.push("/employee");
+                    });
                 }}
                 autoFocus
             />
