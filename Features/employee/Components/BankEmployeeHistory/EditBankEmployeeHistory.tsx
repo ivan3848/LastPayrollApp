@@ -40,10 +40,6 @@ const EditBankEmployeeHistory = ({
         listOfDependencies
     );
 
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
-
     const {
         handleSubmit,
         register,
@@ -60,6 +56,7 @@ const EditBankEmployeeHistory = ({
         setSubmitted,
         reset,
     });
+
     useEffect(() => {
         if (entity) {
             Object.keys(entity).forEach((key) => {
@@ -80,6 +77,10 @@ const EditBankEmployeeHistory = ({
         }
     }, [entity, setEditEntityDialog]);
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     const onSubmit = (data: IBankEmployeeHistory) => {
         data.idBank = data.idBank;
         data.accountNumber = data.accountNumber;
@@ -87,7 +88,7 @@ const EditBankEmployeeHistory = ({
         data.endDate = data!.endDate!;
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
-        data.isDeposit;
+        data.isDeposit = data.isDeposit;
         editEntity.mutate(data);
         return;
     };
@@ -131,7 +132,7 @@ const EditBankEmployeeHistory = ({
                             {errors.idBank.message?.toString()}
                         </small>
                     )}
-                    <label htmlFor="idStatus" className="block mb-1">
+                    <label htmlFor="idStatusAccountType" className="block mb-1">
                         Método de pago
                     </label>
                     <GenericStatusDropDown

@@ -53,7 +53,6 @@ const AddBankEmployeeHistory = ({
         data.startDate = data!.startDate!;
         data.endDate = data!.endDate!;
         data.idStatusAccountType = data!.idStatusAccountType!;
-        data.isActive = true;
 
         addEntity.mutate(data);
         return;
@@ -128,9 +127,7 @@ const AddBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={watch("startDate") ?? new Date()}
                         onChange={(e) => setValue("startDate", e.value!)}
-                        autoFocus
                         showIcon
                         showButtonBar
                     />
@@ -146,10 +143,7 @@ const AddBankEmployeeHistory = ({
 
                     <Calendar
                         id="endDate"
-                        value={watch("endDate") ?? new Date()}
                         onChange={(e) => setValue("endDate", e.value!)}
-                        onFocus={() => setValue("endDate", new Date())}
-                        autoFocus
                         showIcon
                         showButtonBar
                     />

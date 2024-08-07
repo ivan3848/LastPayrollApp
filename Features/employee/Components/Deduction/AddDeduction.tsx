@@ -51,6 +51,9 @@ const AddDeduction = ({
     const onSubmit = (data: IDeduction) => {
         data.idEmployee = id;
         data.idConcept = data.idConcept;
+        data.start = data.start;
+        data.end = data.end;
+        data.amount = data.amount;
         addEntity.mutate(data);
     };
 
