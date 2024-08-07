@@ -72,6 +72,10 @@ const BankEmployeeHistoryTable = ({
         return formattedDate;
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Card className="m-2">
             <DataTable

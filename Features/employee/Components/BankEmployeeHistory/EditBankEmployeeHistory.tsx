@@ -3,18 +3,16 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import editBankEmployeeHistory from "./Validation/BankEmployeeHistoryFormSchema";
-import useBankEmployeeHistoryQuery from "./Hooks/useBankEmployeeHistoryQuery";
 import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 import { Dialog } from "primereact/dialog";
+import useEditBankEmployeeHistoryQuery from "./Hooks/useEditBankEmployeeHistoryQuery";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -32,13 +30,6 @@ const EditBankEmployeeHistory = ({
     editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = editBankEmployeeHistory();
-    const { params } = useParamFilter();
-
-    const listOfDependencies: boolean[] = [true];
-    const { data, isLoading } = useBankEmployeeHistoryQuery(
-        params,
-        listOfDependencies
-    );
 
     const {
         handleSubmit,
@@ -50,13 +41,13 @@ const EditBankEmployeeHistory = ({
     } = useForm<IBankEmployeeHistory>({
         resolver: zodResolver(editEntityFormSchema),
     });
-    const editEntity = useEditEmployeeQuery({
+
+    const editEntity = useEditBankEmployeeHistoryQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
     });
-
     useEffect(() => {
         if (entity) {
             Object.keys(entity).forEach((key) => {
@@ -75,11 +66,7 @@ const EditBankEmployeeHistory = ({
                 );
             });
         }
-    }, [entity, setEditEntityDialog, setValue]);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+    }, [setValue]);
 
     const onSubmit = (data: IBankEmployeeHistory) => {
         data.idBank = data.idBank;
