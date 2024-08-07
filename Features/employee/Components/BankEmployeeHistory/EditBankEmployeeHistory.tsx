@@ -75,7 +75,7 @@ const EditBankEmployeeHistory = ({
                 );
             });
         }
-    }, [entity, setEditEntityDialog]);
+    }, [entity, setEditEntityDialog, setValue]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -89,6 +89,7 @@ const EditBankEmployeeHistory = ({
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
         data.isDeposit = data.isDeposit;
+        data.idStatusAccountType = data.idStatusAccountType;
         editEntity.mutate(data);
         return;
     };
