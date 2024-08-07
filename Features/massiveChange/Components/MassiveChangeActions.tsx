@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { MassiveChangeOptionsEnum } from "../Enums/MassiveChangeOptionsEnum";
 import MassiveChangeOptions from "./MassiveChangeOptions";
-import MassiveIncrease from "./MassiveIncrease/MassiveIncrease";
+import MassiveIncrease from "./MassiveIncrease/Components/MassiveIncrease";
 
 const MassiveChangeAction = ({}) => {
     const [openAction, setOpenAction] = useState<MassiveChangeOptionsEnum>(

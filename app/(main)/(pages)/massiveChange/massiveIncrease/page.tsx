@@ -1,5 +1,5 @@
 "use client";
-import MassiveIncrease from "@/Features/massiveChange/Components/MassiveIncrease/MassiveIncrease";
+import MassiveIncrease from "@/Features/massiveChange/Components/MassiveIncrease/Components/MassiveIncrease";
 
 export default function MassiveIncreaseTab() {
     return (

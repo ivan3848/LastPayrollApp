@@ -1,5 +1,7 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "primereact/button";
+import ExcelTable from "../../ExcelTable";
 
 const MassiveIncrease = () => {
     return (
@@ -13,10 +15,11 @@ const MassiveIncrease = () => {
                     <i className="cursor-pointer pi pi-arrow-left"></i>
                 </Link>
 
-                <span className="font-bold white-space-nowrap text-2xl">
+                <h2 className="font-bold white-space-nowrap text-2xl">
                     Aumento Masivo
-                </span>
+                </h2>
             </div>
+            <ExcelTable />
         </>
     );
 };

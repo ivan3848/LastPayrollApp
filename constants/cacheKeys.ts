@@ -43,3 +43,4 @@ export const CACHE_KEY_DEPENDANT = "dependant";
 export const CACHE_KEY_PERSON = "person";
 export const CACHE_KEY_PERSONINSURANCE = "personInsurance";
 export const CACHE_KEY_COVER_POSITION = "coverPosition";
+export const CACHE_KEY_EXCEL_TABLE = "excelTable";
