@@ -1,38 +1,51 @@
 "use client";
-import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import { DataTable, DataTableSortEvent } from "primereact/datatable";
-import useBankEmployeeHistoryByIdEmployee from "./Hooks/useBankEmployeeHistoryByIdEmployee";
-import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
+import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import { IDeduction } from "./Types/IDeduction";
+import useDeductionByIdEmployee from "./Hooks/useDeductionByIdEmployee";
 
 interface Props {
     idEmployee: number;
     submitted: boolean;
-    handleEdit: (entity: IBankEmployeeHistory) => void;
-    handleDelete: (entity: IBankEmployeeHistory) => void;
+    handleEdit: (entity: IDeduction) => void;
+    handleDelete: (entity: IDeduction) => void;
     handleAdd: () => void;
 }
 
-const BankEmployeeHistoryTable = ({
+const DeductionTable = ({
     submitted,
     handleDelete,
     handleEdit,
     handleAdd,
-
     idEmployee,
 }: Props) => {
-    const { params, setFilters, setSorts, clearSorts, clearFilters } =
-        useParamFilter();
+    const {
+        setPage,
+        setPageSize,
+        setFilters,
+        setSorts,
+        clearSorts,
+        clearFilters,
+        params,
+    } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useBankEmployeeHistoryByIdEmployee(
+    const { data, isLoading } = useDeductionByIdEmployee(
         params,
         listOfDependencies,
         idEmployee
     );
+
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("es-DO", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
 
     const onSort = (event: DataTableSortEvent) => {
         switch (event.sortOrder) {
@@ -58,19 +71,10 @@ const BankEmployeeHistoryTable = ({
     };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Historial Bancario</h3>
+            <h3 className="m-0">Deducción </h3>
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
-
-    const formatDate = (date: string) => {
-        const formattedDate = new Date(date).toLocaleDateString("es-Es", {
-            month: "2-digit",
-            day: "2-digit",
-            year: "2-digit",
-        });
-        return formattedDate;
-    };
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -82,75 +86,56 @@ const BankEmployeeHistoryTable = ({
                 value={data}
                 header={header}
                 className="p-datatable-sm"
-                dataKey="idBankEmployeeHistory"
+                dataKey="idDeduction"
                 paginator
-                rows={5}
                 onSort={onSort}
                 removableSort
                 sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
                 sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
                 sortMode="single"
+                rows={5}
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
                 <Column
-                    field="bankName"
-                    header="Banco"
+                    field="conceptName"
+                    header="Concepto"
                     sortable
                     filter
-                    filterField="bankName"
-                    filterPlaceholder="Buscar por Banco"
+                    filterField="conceptName"
+                    filterPlaceholder="Buscar por Concepto"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 />
                 <Column
-                    field="paymentMethod"
-                    header="Método de pago"
+                    field="amount"
+                    header="Monto"
                     sortable
                     filter
-                    filterField="bankName"
-                    filterPlaceholder="Buscar por Banco"
+                    filterField="amount"
+                    filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
-                />
+                ></Column>
                 <Column
-                    field="accountNumber"
-                    header="Número de Cuenta"
-                    sortable
-                    filter
-                    filterField="bankName"
-                    filterPlaceholder="Buscar por Numero de Cuenta"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                />
-                <Column
-                    field="startDate"
-                    header="Fecha de Inicio"
-                    body={(rowData: IBankEmployeeHistory) =>
-                        formatDate(rowData.startDate?.toString()!)
+                    field="start"
+                    header="Fecha Inicio"
+                    body={(rowData: IDeduction) =>
+                        formatDate(rowData.start?.toString()!)
                     }
                 />
                 <Column
-                    field="endDate"
-                    header="Fecha final"
-                    body={(rowData: IBankEmployeeHistory) =>
-                        formatDate(rowData.endDate.toString()!)
+                    field="end"
+                    header="Fecha Final"
+                    body={(rowData: IDeduction) =>
+                        formatDate(rowData.end?.toString()!)
                     }
-                />
-                <Column
-                    field="isDeposit"
-                    header="Para deposito"
-                    dataType="boolean"
-                    bodyClassName="text-center"
-                    style={{ minWidth: "8rem" }}
-                    body={(e) => <GenericTableCheck isChecked={e.isDeposit} />}
                 />
                 <Column
                     header="Acciones"
-                    body={(rowData: IBankEmployeeHistory) => (
+                    body={(rowData: IDeduction) => (
                         <ActionTableTemplate
                             entity={rowData}
                             handleEdit={handleEdit}
@@ -163,4 +148,4 @@ const BankEmployeeHistoryTable = ({
     );
 };
 
-export default BankEmployeeHistoryTable;
+export default DeductionTable;

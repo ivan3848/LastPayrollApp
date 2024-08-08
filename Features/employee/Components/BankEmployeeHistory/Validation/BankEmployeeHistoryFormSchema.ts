@@ -7,7 +7,6 @@ const BankEmployeeHistoryFormSchema = () => {
             accountNumber: z.string().min(4, {
                 message: "El campo debe tener al menos 4 caracteres",
             }),
-            paymentMethod: z.string().optional(),
             idStatusAccountType: z.number(),
             isDeposit: z.boolean().optional(),
             startDate: z.date({ message: "La fecha de inicio es requerida" }),

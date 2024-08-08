@@ -4,22 +4,20 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
-import { IPerson } from "@/Features/person/Types/IPerson";
-import ProfitFormSchema from "./Validation/ProfitFormSchema";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import useEditProfit from "./Hooks/useEditProfit";
-import { IProfitInsert } from "./Types/IProfitInsert";
+import { IDeductionInsert } from "./Types/IDeductionInsert";
+import DeductionFormSchema from "./Validation/DeductionFormSchema";
+import useEditDeduction from "./Hooks/useEditDeduction";
 
 interface Props {
-    entity: IProfitInsert;
+    entity: IDeductionInsert;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
     id: number;
-    person?: IPerson;
 }
 
 const EditBankEmployeeHistory = ({
@@ -30,7 +28,7 @@ const EditBankEmployeeHistory = ({
     editEntityDialog,
     id,
 }: Props) => {
-    const { editEntityFormSchema } = ProfitFormSchema();
+    const { editEntityFormSchema } = DeductionFormSchema();
 
     const {
         handleSubmit,
@@ -38,12 +36,12 @@ const EditBankEmployeeHistory = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IProfitInsert>({
+    } = useForm<IDeductionInsert>({
         resolver: zodResolver(editEntityFormSchema),
         defaultValues: entity,
     });
 
-    const editEntity = useEditProfit({
+    const editEntity = useEditDeduction({
         toast,
         setEditEntityDialog,
         setSubmitted,
@@ -55,21 +53,21 @@ const EditBankEmployeeHistory = ({
             Object.keys(entity).forEach((key) => {
                 if (key === "start" || key === "end") {
                     setValue(
-                        key as keyof IProfitInsert,
-                        new Date(entity[key as keyof IProfitInsert] as Date)
+                        key as keyof IDeductionInsert,
+                        new Date(entity[key as keyof IDeductionInsert] as Date)
                     );
                     return;
                 }
                 setValue(
-                    key as keyof IProfitInsert,
-                    entity[key as keyof IProfitInsert]
+                    key as keyof IDeductionInsert,
+                    entity[key as keyof IDeductionInsert]
                 );
             });
         }
     }, [entity, setEditEntityDialog]);
 
-    const onSubmit = (data: IProfitInsert) => {
-        data.idProfit = entity.idProfit;
+    const onSubmit = (data: IDeductionInsert) => {
+        data.idDeduction = entity.idDeduction;
         data.idEmployee = id;
         data.idConcept = data.idConcept;
         data.amount = data.amount;
@@ -87,7 +85,7 @@ const EditBankEmployeeHistory = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Editar Beneficio"
+            header="Editar Deducción"
             modal
             className="p-fluid"
             onHide={hideDialog}
