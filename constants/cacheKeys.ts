@@ -45,4 +45,5 @@ export const CACHE_KEY_PROFIT = "profit";
 export const CACHE_KEY_PERSON = "person";
 export const CACHE_KEY_PERSONINSURANCE = "personInsurance";
 export const CACHE_KEY_COVER_POSITION = "coverPosition";
+export const CACHE_KEY_DEDUCTION = "deduction";
 export const CACHE_KEY_COVER_LICENSES = "license";

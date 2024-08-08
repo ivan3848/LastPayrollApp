@@ -9,7 +9,7 @@ const addDependantService = new ApiService<IDependant, IDependant>(
     "employee/dependant"
 );
 
-const dependantByIdEmployeeService = new ApiService<IDependant, IDependant>(
+const dependantByIdEmployeeService = new ApiService<IDependant[], IDependant>(
     `employee/dependant/byIdEmployee/`
 );
 

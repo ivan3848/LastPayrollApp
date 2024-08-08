@@ -4,7 +4,7 @@ import { CACHE_KEY_DEPENDANT } from "@/constants/cacheKeys";
 import { IDependant } from "../Types/IDependant";
 import { dependantByIdEmployeeService } from "../Services/dependantService";
 
-const useDependanHistoryById = (
+const useDependantHistoryById = (
     params: IParamsApi,
     dependencies: boolean[],
     idEmployee: number
@@ -16,4 +16,4 @@ const useDependanHistoryById = (
     });
 };
 
-export default useDependanHistoryById;
+export default useDependantHistoryById;
