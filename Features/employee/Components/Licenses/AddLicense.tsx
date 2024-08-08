@@ -86,7 +86,7 @@ const AddLicense = ({
                             <label htmlFor="idConcept">Concepto</label>
                             <GenericConceptDropDown
                                 id={"idConcept"}
-                                code={CONCEPT_TYPE_BENEFIT}
+                                code={CONCEPT_TYPE_LICENSE}
                                 isValid={!!errors.idConcept}
                                 watch={watch}
                                 setValue={setValue}

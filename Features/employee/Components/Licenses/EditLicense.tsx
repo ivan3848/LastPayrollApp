@@ -108,7 +108,7 @@ const EditLicense = ({
                                 idValueEdit={entity.idConcept!}
                                 setValue={setValue}
                                 watch={watch}
-                                code={CONCEPT_TYPE_BENEFIT}
+                                code={CONCEPT_TYPE_LICENSE}
                                 setData={setConceptField}
                             />
                             {errors.idConcept && (
