@@ -12,6 +12,7 @@ import Profit from "./Benefits/Profit";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
 import { Toast } from "primereact/toast";
+import License from "./Licenses/License";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -84,6 +85,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.CoverPosition && (
                         <CoverPosition employee={employee} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.License && (
+                        <License id={employee.idEmployee} />
                     )}
                 </div>
             </Dialog>

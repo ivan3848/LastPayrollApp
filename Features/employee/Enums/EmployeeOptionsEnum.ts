@@ -7,4 +7,5 @@ export enum EmployeeOptionsEnum {
     Tools = "Herramientas",
     PersonInsurance = "Seguros",
     Benefit = "Beneficios",
+    License = "Licencias",
 }
