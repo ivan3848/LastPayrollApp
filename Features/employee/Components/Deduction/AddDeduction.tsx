@@ -60,6 +60,7 @@ const AddDeduction = ({
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
+
     return (
         <Dialog
             visible={addEntityDialog}
