@@ -13,6 +13,7 @@ import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
 import { Toast } from "primereact/toast";
 import Deduction from "./Deduction/Deduction";
+import ISRInFavor from "./ISRInFavor/ISRInFavor";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -88,6 +89,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Deduction && (
                         <Deduction id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.ISRInFavor && (
+                        <ISRInFavor id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>

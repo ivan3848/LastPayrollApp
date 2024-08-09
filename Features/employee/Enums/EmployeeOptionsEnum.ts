@@ -8,4 +8,5 @@ export enum EmployeeOptionsEnum {
     PersonInsurance = "Seguros",
     Benefit = "Beneficios",
     Deduction = "Deducciones",
+    ISRInFavor = "ISR A Favor",
 }
