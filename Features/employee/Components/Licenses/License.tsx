@@ -5,15 +5,15 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IISRInFavor } from "./Types/ISRInFavor";
-import ISRInFavorTable from "./ISRInFavorTable";
-import AddISRInFavor from "./AddISRInFavor";
+import EditLicense from "./EditLicense";
+import AddLicense from "./AddLicense";
+import LicenseTable from "./LicenseTable";
 
 interface props {
     id: number;
 }
 
-const ISRInFavor = ({ id }: props) => {
+const License = ({ id }: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -26,19 +26,20 @@ const ISRInFavor = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IISRInFavor>();
+    } = useCrudModals<ILicenses>();
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IISRInFavor) => {
+    const handleEdit = (entity: ILicenses) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IISRInFavor) => {
+    const handleDelete = (entity: ILicenses) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -46,42 +47,43 @@ const ISRInFavor = ({ id }: props) => {
 
     const entityProperties = [
         "Concepto",
-        "Monto original",
-        "Monto restante",
-        "Acciones",
+        "Doctor",
+        "Doctor Exequatur",
+        "Descripción",
+        "Fecha Inicio",
+        "Fecha Final"
     ];
 
     return (
         <div className="grid">
             <div className="w-full">
                 <Toast ref={toast} />
-
                 <Suspense
                     fallback={
                         <TableSkeletonTemplate items={entityProperties} />
                     }
                 >
-                    <ISRInFavorTable
+                    <LicenseTable
                         submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        idEmployee={id}
                     />
                 </Suspense>
 
-                {/* {editEntityDialog && (
-                    <EditDependant
+                {editEntityDialog && (
+                    <EditLicense
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={editEntityDialog}
-                        id={id}
                     />
-                )} */}
+                )}
 
                 {addEntityDialog && (
-                    <AddISRInFavor
+                    <AddLicense
                         id={id}
                         addEntityDialog={addEntityDialog}
                         setAddEntityDialog={setAddEntityDialog}
@@ -93,8 +95,8 @@ const ISRInFavor = ({ id }: props) => {
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idIsrInFavor ?? 0}
-                        endpoint="employee/isrInfavor"
+                        id={entity?.idLicences ?? 0}
+                        endpoint="employee/license"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
@@ -106,4 +108,4 @@ const ISRInFavor = ({ id }: props) => {
     );
 };
 
-export default ISRInFavor;
+export default License;

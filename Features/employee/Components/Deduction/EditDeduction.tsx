@@ -5,7 +5,10 @@ import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
+import {
+    CONCEPT_TYPE_BENEFIT,
+    CONCEPT_TYPE_DEDUCTION,
+} from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { IDeductionInsert } from "./Types/IDeductionInsert";
 import DeductionFormSchema from "./Validation/DeductionFormSchema";
@@ -73,7 +76,6 @@ const EditBankEmployeeHistory = ({
         data.amount = data.amount;
         data.end = data.end;
         data.start = data.start;
-
         editEntity.mutate(data);
     };
 
@@ -97,7 +99,7 @@ const EditBankEmployeeHistory = ({
                             <label htmlFor="idConcept">Concepto</label>
                             <GenericConceptDropDown
                                 id={"idConcept"}
-                                code={CONCEPT_TYPE_BENEFIT}
+                                code={CONCEPT_TYPE_DEDUCTION}
                                 isValid={!!errors.idConcept}
                                 idValueEdit={entity.idConcept}
                                 watch={watch}
