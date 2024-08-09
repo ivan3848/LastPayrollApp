@@ -94,19 +94,17 @@ const ISRInFavorTable = ({
     const rowExpansionTemplate = (data: IISRInFavor) => {
         return (
             <div className="p-3 animate__animated animate__fadeIn">
-                <h5>Turnos de: {data.idEmployee}</h5>
+                <h5> Header generico Thinking</h5>
                 <DataTable value={data.isrInFavorDetail}>
                     <Column
-                        field="date"
-                        body={cleanStartDate}
-                        header=""
+                        field="originalAmount"
+                        header="Monto original"
                     ></Column>
                     <Column
                         field="end"
                         body={cleanEndDate}
-                        header="Hora de salida"
+                        header="Fecha"
                     ></Column>
-                    <Column field="week" header="Turno"></Column>
                 </DataTable>
             </div>
         );
@@ -114,7 +112,7 @@ const ISRInFavorTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Horarios</h3>
+            <h3 className="m-0">ISR a favor</h3>
 
             <Button
                 label="Agregar"
@@ -157,12 +155,12 @@ const ISRInFavorTable = ({
             <Column expander={allowExpansion} style={{ width: "5px" }} />
 
             <Column
-                field="idConcept"
+                field="conceptName"
                 header="Concepto"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="idConcept"
+                filterField="conceptName"
                 filterPlaceholder="Buscar por Concepto"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}

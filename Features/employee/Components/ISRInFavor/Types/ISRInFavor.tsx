@@ -9,4 +9,6 @@ export interface IISRInFavor {
     idComplementaryData?: number;
     idConcept: number;
     isrInFavorDetail: IISRInFavorDetail[];
+    conceptName?: string;
+    action?: React.ReactNode;
 }

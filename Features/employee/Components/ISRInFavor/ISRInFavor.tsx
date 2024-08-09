@@ -27,8 +27,6 @@ const ISRInFavor = ({ id }: props) => {
         setSubmitted,
         toast,
     } = useCrudModals<IISRInFavor>();
-
-    console.log(id);
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
@@ -46,7 +44,12 @@ const ISRInFavor = ({ id }: props) => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Nombre", "Relación", "Acciónes"];
+    const entityProperties = [
+        "Concepto",
+        "Monto original",
+        "Monto restante",
+        "Acciones",
+    ];
 
     return (
         <div className="grid">
