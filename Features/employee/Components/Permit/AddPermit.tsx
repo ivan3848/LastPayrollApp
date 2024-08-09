@@ -1,15 +1,14 @@
-import { CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_PERMIT } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
-import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
-import { addLicenseService } from "./Services/licenseService";
-import LicensesFormSchema from "./Validation/LicensesProfitSchema";
+import { addPermitService } from "./Services/PermitService";
+import PermitFormSchema from "./Validation/PermitFormSchema";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -20,14 +19,14 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddLicense = ({
+const AddPermit = ({
     setAddEntityDialog,
     addEntityDialog,
     id,
     toast,
     setSubmitted,
 }: Props) => {
-    const { addEntityFormSchema } = LicensesFormSchema();
+    const { addEntityFormSchema } = PermitFormSchema();
 
     const {
         handleSubmit,
@@ -36,7 +35,7 @@ const AddLicense = ({
         reset,
         setValue,
         formState: { errors },
-    } = useForm<ILicenses>({
+    } = useForm<IPermit>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
@@ -45,17 +44,19 @@ const AddLicense = ({
         setAddEntityDialog,
         setSubmitted,
         reset,
-        service: addLicenseService,
+        service: addPermitService,
     });
 
-    const onSubmit = (data: ILicenses) => {
+    const onSubmit = (data: IPermit) => {
         data.idEmployee = id;
         data.idConcept = data.idConcept;
-        data.doctorName = data.doctorName;
-        data.doctorexequatur = data.doctorexequatur;
-        data.description = data.description;
-        data.start = data.start;
-        data.end = data.end;
+        data.idEmployeeAuthorize = id;
+        data.idEmployeeRegister = id;
+        data.hourAmount = data.hourAmount;
+        data.amount = data.amount;
+        data.startDateTime = data.startDateTime;
+        data.endDateTime = data.endDateTime;
+        data.isPaid = data.isPaid;
         data.isToPay = data.isToPay;
 
         addEntity.mutate(data);
@@ -84,7 +85,7 @@ const AddLicense = ({
                             <label htmlFor="idConcept">Concepto</label>
                             <GenericConceptDropDown
                                 id={"idConcept"}
-                                code={CONCEPT_TYPE_LICENSE}
+                                code={CONCEPT_TYPE_PERMIT}
                                 isValid={!!errors.idConcept}
                                 watch={watch}
                                 setValue={setValue}
@@ -96,57 +97,31 @@ const AddLicense = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="doctorName">Doctor</label>
-                            <InputText
-                                id="doctorName"
-                                type="text"
-                                {...register("doctorName")}
-                            />
-                            {errors.doctorName && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.doctorName.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="doctorexequatur">Doctor Exequantur</label>
-                            <InputText
-                                id="doctorexequatur"
-                                type="text"
-                                {...register("doctorexequatur")}
-                            />
-                            {errors.doctorexequatur && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.doctorexequatur.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="start">Fecha De incio</label>
+                            <label htmlFor="startDateTime">Fecha De incio</label>
                             <Calendar
-                                id="start"
-                                onChange={(e) => setValue("start", e.value!)}
+                                id="startDateTime"
+                                onChange={(e) => setValue("startDateTime", e.value!)}
                                 showIcon
                                 showButtonBar
                             />
-                            {errors.start && (
+                            {errors.startDateTime && (
                                 <small className="p-invalid text-red-500">
-                                    {errors.start.message?.toString()}
+                                    {errors.startDateTime.message?.toString()}
                                 </small>
                             )}
                         </div>
 
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="start">Fecha Final</label>
+                            <label htmlFor="endDateTime">Fecha Final</label>
                             <Calendar
-                                id="end"
-                                onChange={(e) => setValue("end", e.value!)}
+                                id="endDateTime"
+                                onChange={(e) => setValue("endDateTime", e.value!)}
                                 showIcon
                                 showButtonBar
                             />
-                            {errors.end && (
+                            {errors.endDateTime && (
                                 <small className="p-invalid text-red-500">
-                                    {errors.end.message?.toString()}
+                                    {errors.endDateTime.message?.toString()}
                                 </small>
                             )}
                         </div>
@@ -163,18 +138,18 @@ const AddLicense = ({
                                 />
                             </div>
                         </div>
-                        <div className="field col-12 md:col-12 lg:4">
-                            <label htmlFor="description">Descripción</label>
-                            <InputText
-                                id="description"
-                                type="text"
-                                {...register("description")}
-                            />
-                            {errors.description && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.description.message?.toString()}
-                                </small>
-                            )}
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="isToPay">Para pago</label>
+                            <div>
+                                <SelectButton
+                                    {...register("isToPay")}
+                                    value={watch("isToPay") ? "Si" : "No"}
+                                    onChange={(e) => {
+                                        setValue("isToPay", e.value === "Si" ? true : false);
+                                    }}
+                                    options={isToPay}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -184,4 +159,4 @@ const AddLicense = ({
     );
 };
 
-export default AddLicense;
+export default AddPermit;
