@@ -1,7 +1,18 @@
 import ApiService from "@/services/ApiService";
 import { IISRInFavor } from "../Types/ISRInFavor";
 
-const isrInFavorService = new ApiService<IISRInFavor, IISRInFavor>(
-    "employee/isrInFavor"
+const ISRInFavorService = new ApiService<IISRInFavor, IISRInFavor>(
+    "employee/isrinfavor"
 );
-export default isrInFavorService;
+
+const addISRInFavorService = new ApiService<IISRInFavor, IISRInFavor>(
+    "employee/isrinfavor"
+);
+
+const ISRInFavorByIdEmployeeService = new ApiService<
+    IISRInFavor[],
+    IISRInFavor
+>(`employee/isrInFavor/byIdEmployee/`);
+
+export default ISRInFavorService;
+export { ISRInFavorByIdEmployeeService, addISRInFavorService };

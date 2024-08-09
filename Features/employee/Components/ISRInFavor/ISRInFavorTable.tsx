@@ -14,8 +14,7 @@ import {
 import { useState } from "react";
 import "animate.css";
 import { IISRInFavor } from "./Types/ISRInFavor";
-import isrInFavorService from "./Service/isrInFavorService";
-import { IISRInFavorDetail } from "../ISRInFavorDetail/Types/IISRInFavorDetail";
+import ISRInFavorService from "./Service/isrInFavorService";
 
 interface Props {
     submitted: boolean;
@@ -49,7 +48,7 @@ const ISRInFavorTable = ({
         params,
         listOfDependencies,
         CACHE_KEY_ISR_IN_FAVOR,
-        isrInFavorService
+        ISRInFavorService
     );
 
     const onPage = (event: DataTablePageEvent) => {
@@ -101,6 +100,7 @@ const ISRInFavorTable = ({
             <div className="p-3 animate__animated animate__fadeIn">
                 <DataTable value={data.isrInFavorDetail}>
                     <Column field="amount" header="Monto"></Column>
+
                     <Column field="amount" header="Nómina"></Column>
 
                     <Column field="amount" header="Monto"></Column>

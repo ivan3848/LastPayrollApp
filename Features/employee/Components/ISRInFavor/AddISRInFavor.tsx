@@ -7,7 +7,7 @@ import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { IISRInFavor } from "./Types/ISRInFavor";
 import ISRInFavorFormSchema from "./Validations/ISRInFavorFormSchema";
-import addISRInFavorService from "./Service/addISRInFavorService";
+import { addISRInFavorService } from "./Service/isrInFavorService";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
