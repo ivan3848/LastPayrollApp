@@ -6,16 +6,15 @@ interface Props {
     toast: React.MutableRefObject<any>;
     setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
-    reset: () => void;
 }
 const useAddMassiveIncreaseQuery = ({
     toast,
     setAddEntityDialog,
     setSubmitted,
-    reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IMassiveIncrease) => massiveIncreaseService.post(entity),
+        mutationFn: (entity: IMassiveIncrease) =>
+            massiveIncreaseService.post(entity),
         onError: (error: any) => {
             toast.current?.show({
                 severity: "warn",
@@ -25,7 +24,6 @@ const useAddMassiveIncreaseQuery = ({
             });
         },
         onSuccess: () => {
-            reset();
             setAddEntityDialog(false);
             setSubmitted(true);
 

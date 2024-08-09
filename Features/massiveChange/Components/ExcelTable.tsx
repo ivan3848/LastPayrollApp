@@ -20,11 +20,14 @@ type Props = {
 export default function ExcelTable({ type, handleUpload }: Props) {
     const { setPage, setPageSize, setSorts, clearSorts, params } =
         useParamFilter();
+
     const { headers, excelData, onSelect, clearData, file } = useExcelTable();
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
     };
+
     const onSort = (event: DataTableSortEvent) => {
         switch (event.sortOrder) {
             case 1:
@@ -40,8 +43,6 @@ export default function ExcelTable({ type, handleUpload }: Props) {
     };
 
     const fileUploadRef = useRef(null);
-
-
 
     // const uploadHandler = () => {
     //     excelData;

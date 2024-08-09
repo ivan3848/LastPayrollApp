@@ -8,6 +8,7 @@ import {
     massiveIncreaseSchema,
 } from "../Types/IMassiveIncrease";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import massiveIncreaseService from "../Services/massiveIncreaseService";
 import useAddMassiveIncreaseQuery from "../Hooks/useAddMassiveIncreaseQuery";
 
@@ -17,8 +18,7 @@ const MassiveIncrease = () => {
     const [massiveIncreaseSchemaValue, setMassiveIncreaseSchema] = useState<
         string[]
     >(Object.keys(massiveIncreaseSchema));
-
-    const { setDeleteEntityDialog, setSubmitted } =
+    const { setDeleteEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IMassiveIncrease>();
 
     const handleDelete = () => {
@@ -26,12 +26,42 @@ const MassiveIncrease = () => {
         setDeleteEntityDialog(true);
     };
 
-    // const addEntity = useAddMassiveIncreaseQuery({
-    //     service: massiveIncreaseService,
-    // });
+    const addEntity = useAddMassiveIncreaseQuery({
+        toast,
+        setAddEntityDialog,
+        setSubmitted,
+    });
 
     const handleUpload = () => {
-        alert("Subir clicked");
+        const data = {
+            name: "PEPE",
+            chargeDate: "2021-09-09",
+            employees: [
+                {
+                    idEmployee: 2,
+                    salary: 25000,
+                    dateChange: "2021-09-09",
+                    reason: "Queria un aumento 2",
+                },
+                {
+                    idEmployee: 1,
+                    salary: 35000,
+                    dateChange: "2021-09-09",
+                    reason: "Queria un aumento 2",
+                },
+                {
+                    idEmployee: 4313,
+                    salary: 50000,
+                    dateChange: "2021-09-09",
+                    reason: "Queria un aumento 2",
+                },
+            ],
+            isPaid: false,
+            idPayrollPay: undefined,
+        } as IMassiveIncrease;
+
+        console.log(data);
+        addEntity.mutate(data);
     };
 
     return (
