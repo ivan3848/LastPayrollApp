@@ -3,7 +3,7 @@ import React from "react";
 
 interface Props<T> {
     entity: T;
-    handleEdit: (entity: T) => void;
+    handleEdit?: (entity: T) => void;
     handleDelete: (entity: T) => void;
 }
 
@@ -14,19 +14,23 @@ function ActionTableTemplate<T>({
 }: Props<T>) {
     return (
         <>
-            <Button
-                icon="pi pi-pencil"
-                className="mr-2"
-                rounded
-                severity="info"
-                onClick={() => handleEdit(entity)}
-            />
-            <Button
-                icon="pi pi-trash"
-                rounded
-                severity="secondary"
-                onClick={() => handleDelete(entity)}
-            />
+            {handleEdit && (
+                <Button
+                    icon="pi pi-pencil"
+                    className="mr-2"
+                    rounded
+                    severity="info"
+                    onClick={() => handleEdit(entity)}
+                />
+            )}
+            {handleDelete && (
+                <Button
+                    icon="pi pi-trash"
+                    rounded
+                    severity="secondary"
+                    onClick={() => handleDelete(entity)}
+                />
+            )}
         </>
     );
 }

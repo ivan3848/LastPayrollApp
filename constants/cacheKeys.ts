@@ -44,3 +44,4 @@ export const CACHE_KEY_PERSON = "person";
 export const CACHE_KEY_PERSONINSURANCE = "personInsurance";
 export const CACHE_KEY_COVER_POSITION = "coverPosition";
 export const CACHE_KEY_EXCEL_TABLE = "excelTable";
+export const CACHE_KEY_MASSIVE_INCREASE = "massiveIncrease";

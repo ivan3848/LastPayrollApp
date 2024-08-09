@@ -3,10 +3,15 @@ import { useState } from "react";
 
 const useExcelTable = () => {
     const [excelData, setExcelData] = useState<any[]>([]);
-    const [firstElement, setFirstElement] = useState<any[]>([]);
+    const [headers, setHeaders] = useState<string[]>([]);
+    const [file, setFile] = useState<any | null>(null);
+    const clearData = () => {
+        setExcelData([]);
+    };
 
-    const onSelect = (e: any) => {
+    const onSelect = (e: any, variables: string[]) => {
         const file = e.files[0];
+        setFile(file);
         const reader = new FileReader();
 
         reader.onload = async (event: any) => {
@@ -24,28 +29,31 @@ const useExcelTable = () => {
                 json.push(value);
             });
 
-            const firstElement = json
-                .shift()
-                .filter(
-                    (element: any[], index: number) =>
-                        element.at(index) !== undefined
-                ) as string[];
+            const headers = json.shift() as string[];
 
-            setFirstElement(firstElement);
+            setHeaders(headers);
 
-            firstElement.forEach((value, index) => {
+            variables.forEach((value, index) => {
                 dynamicVariables[value] = index;
             });
 
             const processResult = async () => {
                 const result = json.map((element) => {
                     const dynamicObject: { [key: string]: any } = {};
-                    firstElement.forEach((key) => {
+                    variables.forEach((key) => {
                         let value = key.toLowerCase();
                         dynamicObject[value] = element[dynamicVariables[key]];
                     });
                     return dynamicObject;
                 });
+                // const data = {
+                //     name: file.name,
+                //     chargeDate: file.lastModifiedDate,
+                //     //isPaid: true,
+                //     employees: result,
+                // };
+                // console.log(data);
+
                 setExcelData(result);
             };
 
@@ -54,7 +62,7 @@ const useExcelTable = () => {
 
         reader.readAsArrayBuffer(file);
     };
-    return { firstElement, excelData, onSelect };
+    return { headers, excelData, onSelect, clearData, file };
 };
 
 export default useExcelTable;
