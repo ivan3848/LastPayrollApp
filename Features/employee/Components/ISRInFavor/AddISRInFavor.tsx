@@ -46,8 +46,6 @@ const AddISRInFavor = ({
     });
 
     const onSubmit = (data: IISRInFavor) => {
-        console.log("id isr ", id);
-
         data.idEmployee = id;
         data.originalAmount = data.originalAmount;
         data.date = data.date;

@@ -88,23 +88,30 @@ const ISRInFavorTable = ({
         return new Date(rowData.date).toLocaleTimeString();
     };
 
-    const cleanEndDate = (rowData: IISRInFavorDetail) => {
-        return new Date(rowData.end).toLocaleTimeString();
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("es-DO", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
     };
+
     const rowExpansionTemplate = (data: IISRInFavor) => {
         return (
             <div className="p-3 animate__animated animate__fadeIn">
-                <h5> Header generico Thinking</h5>
                 <DataTable value={data.isrInFavorDetail}>
+                    <Column field="amount" header="Monto"></Column>
+                    <Column field="amount" header="Nómina"></Column>
+
+                    <Column field="amount" header="Monto"></Column>
+
                     <Column
-                        field="originalAmount"
-                        header="Monto original"
-                    ></Column>
-                    <Column
-                        field="end"
-                        body={cleanEndDate}
+                        field="date"
                         header="Fecha"
-                    ></Column>
+                        body={(rowData: IISRInFavor) =>
+                            formatDate(rowData.date?.toString()!)
+                        }
+                    />
                 </DataTable>
             </div>
         );
