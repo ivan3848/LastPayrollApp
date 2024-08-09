@@ -66,7 +66,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="ISR A Favor"
                     icon="pi pi-sparkles"
                     className="m-2"
-                    onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
+                    // onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
                 />
                 <Button
                     label="Comisiones"
