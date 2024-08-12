@@ -28,7 +28,6 @@ const EditPermit = ({
     editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = PermitFormSchema();
-    const [conceptField, setConceptField] = React.useState<IConcept>();
 
     const {
         handleSubmit,
@@ -85,9 +84,6 @@ const EditPermit = ({
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
-
-    let isToPay: string[] = ["Si", "No"];
-    let isPaid: string[] = ["Si", "No"];
 
     return (
         <Dialog
@@ -176,48 +172,6 @@ const EditPermit = ({
                                     {errors.hourAmount.message?.toString()}
                                 </small>
                             )}
-                        </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="amount" className="block mb-2">
-                                Monto
-                            </label>
-                            <GenericInputNumber
-                                id="amount"
-                                isValid={!!errors.amount}
-                                setValue={setValue}
-                                watch={watch}
-                            />
-                            {errors.amount && (
-                                <small className="text-red-600">
-                                    {errors.amount.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="isPaid">Pago</label>
-                            <div>
-                                <SelectButton
-                                    {...register("isPaid")}
-                                    value={watch("isPaid") ? "Si" : "No"}
-                                    onChange={(e) => {
-                                        setValue("isPaid", e.value === "Si" ? true : false);
-                                    }}
-                                    options={isPaid}
-                                />
-                            </div>
-                        </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="isToPay">Para pago</label>
-                            <div>
-                                <SelectButton
-                                    {...register("isToPay")}
-                                    value={(watch("isToPay") ? "Si" : "No")}
-                                    onChange={(e) => {
-                                        setValue("isToPay", e.value === "Si" ? true : false);
-                                    }}
-                                    options={isToPay}
-                                />
-                            </div>
                         </div>
                     </div>
                 </div>

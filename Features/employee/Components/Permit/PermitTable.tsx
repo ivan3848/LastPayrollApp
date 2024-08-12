@@ -168,47 +168,6 @@ const PermitTable = ({
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="amount"
-                    header="Monto"
-                    sortable
-                    filter
-                    filterField="amount"
-                    filterPlaceholder="Buscar por monto"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="isPaid"
-                    header="Pago"
-                    dataType="boolean"
-                    bodyClassName="text-center"
-                    style={{ minWidth: "8rem" }}
-                    body={(e) => <GenericTableCheck isChecked={e.isPaid} />}
-                    filter
-                    showAddButton={false}
-                    showApplyButton={false}
-                    showClearButton={false}
-                    showFilterMatchModes={false}
-                    showFilterMenuOptions={false}
-                    filterElement={verifiedFilterTemplate}
-                />
-                <Column
-                    field="isToPay"
-                    header="Pagar"
-                    dataType="boolean"
-                    bodyClassName="text-center"
-                    style={{ minWidth: "8rem" }}
-                    body={(e) => <GenericTableCheck isChecked={e.isToPay} />}
-                    filter
-                    showAddButton={false}
-                    showApplyButton={false}
-                    showClearButton={false}
-                    showFilterMatchModes={false}
-                    showFilterMenuOptions={false}
-                    filterElement={verifiedFilterTemplate}
-                />
-                <Column
                     header="Acciones"
                     body={(rowData: IPermit) => (
                         <ActionTableTemplate
