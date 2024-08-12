@@ -1,17 +1,15 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Dialog } from "primereact/dialog";
+import { CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import { Calendar } from "primereact/calendar";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import LicensesFormSchema from "./Validation/LicensesProfitSchema";
-import { addLicenseService } from "./Services/licenseService";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Calendar } from "primereact/calendar";
+import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { InputSwitch } from "primereact/inputswitch";
-import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 import { SelectButton } from "primereact/selectbutton";
+import { useForm } from "react-hook-form";
+import { addLicenseService } from "./Services/licenseService";
+import LicensesFormSchema from "./Validation/LicensesProfitSchema";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;

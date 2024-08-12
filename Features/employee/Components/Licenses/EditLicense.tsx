@@ -7,10 +7,9 @@ import { Dialog } from "primereact/dialog";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import LicensesFormSchema from "./Validation/LicensesProfitSchema";
 import useEditLicense from "./Hooks/useEditLicense";
-import { CONCEPT_TYPE_BENEFIT, CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
 import { InputText } from "primereact/inputtext";
 import { IConcept } from "@/Features/concept/Types/IConcept";
-import { InputSwitch } from "primereact/inputswitch";
 import { SelectButton } from "primereact/selectbutton";
 
 interface Props {
@@ -29,7 +28,6 @@ const EditLicense = ({
     editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = LicensesFormSchema();
-    const [conceptField, setConceptField] = React.useState<IConcept>();
 
     const {
         handleSubmit,
@@ -109,7 +107,6 @@ const EditLicense = ({
                                 setValue={setValue}
                                 watch={watch}
                                 code={CONCEPT_TYPE_LICENSE}
-                                setData={setConceptField}
                             />
                             {errors.idConcept && (
                                 <small className="p-invalid text-danger">

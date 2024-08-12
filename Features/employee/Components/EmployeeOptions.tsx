@@ -66,7 +66,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="ISR A Favor"
                     icon="pi pi-sparkles"
                     className="m-2"
-                    // onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
+                // onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
                 />
                 <Button
                     label="Comisiones"
@@ -78,29 +78,34 @@ const EmployeeOptions = ({ setAction }: Props) => {
             <Fieldset legend="Absentismos" toggleable className="mb-5">
                 <Button
                     label="Licencias"
-                    icon="pi pi-receipt"
+                    icon="pi pi-file-edit"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.License)}
                 />
-                <Button label="Permisos" icon="pi pi-search" className="m-2" />
+                <Button
+                    label="Permisos"
+                    icon="pi pi-sign-out"
+                    className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Permit)}
+                />
                 <Button
                     label="Horas Extras"
-                    icon="pi pi-search"
+                    icon="pi pi-hourglass"
                     className="m-2"
                 />
                 <Button
                     label="Plan De Horario"
-                    icon="pi pi-search"
+                    icon="pi pi-calendar-times"
                     className="m-2"
                 />
                 <Button
                     label="Vacaciones"
-                    icon="pi pi-search"
+                    icon="pi pi-sun"
                     className="m-2"
                 />
                 <Button
                     label="Suplencias"
-                    icon="pi pi-search"
+                    icon="pi pi-arrow-right-arrow-left"
                     className="m-2"
                 />
             </Fieldset>

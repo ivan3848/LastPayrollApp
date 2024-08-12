@@ -10,4 +10,5 @@ export enum EmployeeOptionsEnum {
     Deduction = "Deducciones",
     License = "Licencias",
     ISRInFavor = "ISR A Favor",
+    Permit = "Permisos",
 }

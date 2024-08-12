@@ -14,6 +14,7 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import conceptService from "../Services/conceptService";
 import { InputNumber } from "primereact/inputnumber";
+import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 
 interface Props {
     addEntityDialog: boolean;
@@ -182,6 +183,109 @@ const AddConcept = ({
                             {errors.amount.message?.toString()}
                         </small>
                     )}
+                </div>
+                <div className="grid">
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isSpecial"
+                                text="Especial"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isBonification"
+                                text="Bonificación"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isCompany"
+                                text="Compañía"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid">
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isOnlySecondPayroll"
+                                text="Último pago de mes"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isForChargeTaxIsr"
+                                text="Para ISR"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isForChargeTax"
+                                text="Para TSS"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className="grid">
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="beforeIsr"
+                                text="Excluir de ISR"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="toProjectTax"
+                                text="Proyectar TSS"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="toProjectIsr"
+                                text="Proyectar ISR"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <DialogFooterButtons hideDialog={hideDialog} />
