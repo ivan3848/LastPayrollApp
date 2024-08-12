@@ -1,15 +1,13 @@
-import React from "react";
-import { IMassiveIncrease } from "../Types/IMassiveIncrease";
+import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { Column } from "primereact/column";
 import useMassiveIncreaseQuery from "../Hooks/useMassiveIncreaseQuery";
-import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import { Button } from "primereact/button";
+import { IMassiveIncrease } from "../Types/IMassiveIncrease";
 interface Props {
     submitted: boolean;
     handleRevert: (entity: IMassiveIncrease) => void;
@@ -127,11 +125,10 @@ const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <Button
-                        icon="pi pi-undo"
-                        rounded
-                        severity="info"
-                        onClick={() => handleRevert(rowData)}
+                    <ActionTableTemplate<IMassiveIncrease>
+                        isCustomDelete={true}
+                        entity={rowData}
+                        handleDelete={handleRevert}
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

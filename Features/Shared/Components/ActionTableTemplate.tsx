@@ -5,12 +5,14 @@ interface Props<T> {
     entity: T;
     handleEdit?: (entity: T) => void;
     handleDelete: (entity: T) => void;
+    isCustomDelete?: boolean;
 }
 
 function ActionTableTemplate<T>({
     entity,
     handleEdit,
     handleDelete,
+    isCustomDelete,
 }: Props<T>) {
     return (
         <>
@@ -24,12 +26,23 @@ function ActionTableTemplate<T>({
                 />
             )}
             {handleDelete && (
-                <Button
-                    icon="pi pi-trash"
-                    rounded
-                    severity="secondary"
-                    onClick={() => handleDelete(entity)}
-                />
+                <>
+                    {isCustomDelete ? (
+                        <Button
+                            icon="pi pi-undo"
+                            rounded
+                            severity="secondary"
+                            onClick={() => handleDelete(entity)}
+                        />
+                    ) : (
+                        <Button
+                            icon="pi pi-trash"
+                            rounded
+                            severity="secondary"
+                            onClick={() => handleDelete(entity)}
+                        />
+                    )}
+                </>
             )}
         </>
     );

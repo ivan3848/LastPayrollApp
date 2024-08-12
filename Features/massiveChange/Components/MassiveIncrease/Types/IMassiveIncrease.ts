@@ -1,5 +1,5 @@
 export interface IMassiveIncrease {
-    IdMassiveIncrease?: number;
+    idMassiveIncrease: number;
     name: string;
     chargeDate: string;
     employees: Employee[]

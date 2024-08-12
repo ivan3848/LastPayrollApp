@@ -10,6 +10,7 @@ import {
     massiveIncreaseSchema,
 } from "../Types/IMassiveIncrease";
 import MassiveIncreaseTable from "./MassiveIncreaseTable";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 
 const MassiveIncrease = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
@@ -17,11 +18,20 @@ const MassiveIncrease = () => {
     const [massiveIncreaseSchemaValue, setMassiveIncreaseSchema] = useState<
         string[]
     >(Object.keys(massiveIncreaseSchema));
-    const { setDeleteEntityDialog, setAddEntityDialog, setSubmitted, toast } =
-        useCrudModals<IMassiveIncrease>();
+    const {
+        setDeleteEntityDialog,
+        setAddEntityDialog,
+        setSubmitted,
+        toast,
+        entity,
+        deleteEntityDialog,
+        setEntity,
+    } = useCrudModals<IMassiveIncrease>();
 
-    const handleRevert = (e: IMassiveIncrease) => {
-        console.log(e);
+    const handleRevert = (entity: IMassiveIncrease) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setDeleteEntityDialog(true);
     };
 
     const addEntity = useAddMassiveIncreaseQuery({
@@ -113,6 +123,16 @@ const MassiveIncrease = () => {
                             handleRevert={handleRevert}
                         />
                     </div>
+                    {deleteEntityDialog && (
+                        <DeleteEntity
+                            id={entity?.idMassiveIncrease ?? 0}
+                            endpoint="employee/massiveIncrease"
+                            deleteEntityDialog={deleteEntityDialog}
+                            setDeleteEntityDialog={setDeleteEntityDialog}
+                            setSubmitted={setSubmitted}
+                            toast={toast}
+                        />
+                    )}
                 </div>
             )}
         </>
