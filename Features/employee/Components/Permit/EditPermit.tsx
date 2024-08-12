@@ -1,58 +1,77 @@
-import { CONCEPT_TYPE_PERMIT } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
+import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import { IConcept } from "@/Features/concept/Types/IConcept";
 import { SelectButton } from "primereact/selectbutton";
-import { useForm } from "react-hook-form";
-import { addPermitService } from "./Services/PermitService";
 import PermitFormSchema from "./Validation/PermitFormSchema";
+import useEditPermit from "./Hooks/useEditPermit";
+import { CONCEPT_TYPE_PERMIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
-    setAddEntityDialog: (value: boolean) => void;
-    addEntityDialog: boolean;
-    id: number;
-    handleAdd: () => void;
+    entity: IPermit;
+    editEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const AddPermit = ({
-    setAddEntityDialog,
-    addEntityDialog,
-    id,
-    toast,
+const EditPermit = ({
+    entity,
+    setEditEntityDialog,
     setSubmitted,
+    toast,
+    editEntityDialog,
 }: Props) => {
-    const { addEntityFormSchema } = PermitFormSchema();
+    const { editEntityFormSchema } = PermitFormSchema();
+    const [conceptField, setConceptField] = React.useState<IConcept>();
 
     const {
         handleSubmit,
-        watch,
         register,
         reset,
+        watch,
         setValue,
         formState: { errors },
     } = useForm<IPermit>({
-        resolver: zodResolver(addEntityFormSchema),
+        resolver: zodResolver(editEntityFormSchema),
+        defaultValues: entity,
     });
 
-    const addEntity = useAddEntityQuery({
+    const editEntity = useEditPermit({
         toast,
-        setAddEntityDialog,
+        setEditEntityDialog,
         setSubmitted,
         reset,
-        service: addPermitService,
     });
 
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "startDateTime" || key === "endDateTime") {
+                    setValue(
+                        key as keyof IPermit,
+                        new Date(entity[key as keyof IPermit] as Date)
+                    );
+                    return;
+                }
+                setValue(
+                    key as keyof IPermit,
+                    entity[key as keyof IPermit]
+                );
+            });
+        }
+    }, [entity, setEditEntityDialog]);
+
     const onSubmit = (data: IPermit) => {
-        data.idEmployee = id;
+        data.idEmployee = entity.idEmployee;
         data.idConcept = data.idConcept;
-        data.idEmployeeAuthorize = id;
-        data.idEmployeeRegister = id;
+        data.idEmployeeAuthorize = entity.idEmployeeAuthorize;
+        data.idEmployeeRegister = entity.idEmployeeRegister;
         data.hourAmount = data.hourAmount;
         data.amount = data.amount;
         data.startDateTime = data.startDateTime;
@@ -60,11 +79,11 @@ const AddPermit = ({
         data.isPaid = data.isPaid ?? false;
         data.isToPay = data.isToPay ?? false;
 
-        addEntity.mutate(data);
+        editEntity.mutate(data);
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
     };
 
     let isToPay: string[] = ["Si", "No"];
@@ -72,9 +91,9 @@ const AddPermit = ({
 
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Agregar Permisos"
+            header="Editar Permisos"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -86,6 +105,7 @@ const AddPermit = ({
                             <label htmlFor="idConcept">Concepto</label>
                             <GenericConceptDropDown
                                 id={"idConcept"}
+                                idValueEdit={entity.idConcept}
                                 code={CONCEPT_TYPE_PERMIT}
                                 isValid={!!errors.idConcept}
                                 watch={watch}
@@ -101,9 +121,11 @@ const AddPermit = ({
                             <label htmlFor="startDateTime">Fecha De incio</label>
                             <Calendar
                                 id="startDateTime"
-                                onChange={(e) => setValue("startDateTime", e.value!)}
+                                {...register("startDateTime")}
+                                value={watch("startDateTime") ?? new Date(entity.startDateTime)}
+                                onChange={(e) => setValue("startDateTime", new Date(e.value!))}
+                                key={entity.startDateTime.toString()}
                                 showIcon
-                                showButtonBar
                                 showTime
                                 hourFormat="12"
                             />
@@ -118,9 +140,11 @@ const AddPermit = ({
                             <label htmlFor="endDateTime">Fecha Final</label>
                             <Calendar
                                 id="endDateTime"
-                                onChange={(e) => setValue("endDateTime", e.value!)}
+                                {...register("endDateTime")}
+                                value={watch("endDateTime") ?? new Date(entity.endDateTime)}
+                                onChange={(e) => setValue("endDateTime", new Date(e.value!))}
+                                key={entity.endDateTime.toString()}
                                 showIcon
-                                showButtonBar
                                 showTime
                                 hourFormat="12"
                             />
@@ -203,4 +227,4 @@ const AddPermit = ({
     );
 };
 
-export default AddPermit;
+export default EditPermit;

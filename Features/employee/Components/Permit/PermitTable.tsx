@@ -5,19 +5,19 @@ import { DataTable, DataTableSortEvent } from "primereact/datatable";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import useGetLicenseByIdEmployee from "./Hooks/useGetLicenseByIdEmployee";
 import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import useGetPermitByIdEmployee from "./Hooks/useGetPermitByIdEmployee";
 
 interface Props {
     idEmployee: number;
     submitted: boolean;
-    handleEdit: (entity: ILicenses) => void;
-    handleDelete: (entity: ILicenses) => void;
+    handleEdit: (entity: IPermit) => void;
+    handleDelete: (entity: IPermit) => void;
     handleAdd: () => void;
 }
 
-const LicenseTable = ({
+const PermitTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -34,7 +34,7 @@ const LicenseTable = ({
         params,
     } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useGetLicenseByIdEmployee(
+    const { data, isLoading } = useGetPermitByIdEmployee(
         params,
         listOfDependencies,
         idEmployee
@@ -72,7 +72,7 @@ const LicenseTable = ({
     };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Licencia</h3>
+            <h3 className="m-0">Permisos</h3>
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
@@ -131,7 +131,7 @@ const LicenseTable = ({
                 value={data}
                 header={header}
                 className="p-datatable-sm"
-                dataKey="idLicences"
+                dataKey="idPermit"
                 paginator
                 onSort={onSort}
                 removableSort
@@ -143,40 +143,55 @@ const LicenseTable = ({
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
                 <Column
-                    field="doctorName"
-                    header="Doctor"
+                    field="startDateTime"
+                    header="Fecha Inicio"
+                    body={(rowData: IPermit) =>
+                        formatDate(rowData.startDateTime?.toString()!)
+                    }
+                />
+                <Column
+                    field="endDateTime"
+                    header="Fecha Final"
+                    body={(rowData: IPermit) =>
+                        formatDate(rowData.endDateTime?.toString()!)
+                    }
+                />
+                <Column
+                    field="hourAmount"
+                    header="Cantidad de horas"
                     sortable
                     filter
-                    filterField="doctorName"
-                    filterPlaceholder="Buscar por nombre"
+                    filterField="amount"
+                    filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="doctorexequatur"
-                    header="Doctor Exequatur"
+                    field="amount"
+                    header="Monto"
                     sortable
                     filter
-                    filterField="doctorName"
-                    filterPlaceholder="Buscar por nombre"
+                    filterField="amount"
+                    filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
-                />
+                ></Column>
                 <Column
-                    field="start"
-                    header="Fecha Inicio"
-                    body={(rowData: ILicenses) =>
-                        formatDate(rowData.start?.toString()!)
-                    }
-                />
-                <Column
-                    field="end"
-                    header="Fecha Final"
-                    body={(rowData: ILicenses) =>
-                        formatDate(rowData.end?.toString()!)
-                    }
+                    field="isPaid"
+                    header="Pago"
+                    dataType="boolean"
+                    bodyClassName="text-center"
+                    style={{ minWidth: "8rem" }}
+                    body={(e) => <GenericTableCheck isChecked={e.isPaid} />}
+                    filter
+                    showAddButton={false}
+                    showApplyButton={false}
+                    showClearButton={false}
+                    showFilterMatchModes={false}
+                    showFilterMenuOptions={false}
+                    filterElement={verifiedFilterTemplate}
                 />
                 <Column
                     field="isToPay"
@@ -194,19 +209,8 @@ const LicenseTable = ({
                     filterElement={verifiedFilterTemplate}
                 />
                 <Column
-                    field="description"
-                    header="Descripción"
-                    sortable
-                    filter
-                    filterField="description"
-                    filterPlaceholder="Buscar por nombre"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                />
-                <Column
                     header="Acciones"
-                    body={(rowData: ILicenses) => (
+                    body={(rowData: IPermit) => (
                         <ActionTableTemplate
                             entity={rowData}
                             handleEdit={handleEdit}
@@ -219,4 +223,4 @@ const LicenseTable = ({
     );
 };
 
-export default LicenseTable;
+export default PermitTable;

@@ -15,6 +15,7 @@ import { Toast } from "primereact/toast";
 import Deduction from "./Deduction/Deduction";
 import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
+import Permit from "./Permit/Permit";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -96,6 +97,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.ISRInFavor && (
                         <ISRInFavor id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Permit && (
+                        <Permit id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>

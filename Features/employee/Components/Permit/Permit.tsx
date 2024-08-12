@@ -4,15 +4,15 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import EditLicense from "./EditLicense";
-import AddLicense from "./AddLicense";
-import LicenseTable from "./LicenseTable";
+import AddPermit from "./AddPermit";
+import PermitTable from "./PermitTable";
+import EditPermit from "./EditPermit";
 
 interface props {
     id: number;
 }
 
-const License = ({ id }: props) => {
+const Permit = ({ id }: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,20 +25,20 @@ const License = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<ILicenses>();
+    } = useCrudModals<IPermit>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: ILicenses) => {
+    const handleEdit = (entity: IPermit) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: ILicenses) => {
+    const handleDelete = (entity: IPermit) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -46,11 +46,12 @@ const License = ({ id }: props) => {
 
     const entityProperties = [
         "Concepto",
-        "Doctor",
-        "Doctor Exequatur",
-        "Descripción",
         "Fecha Inicio",
-        "Fecha Final"
+        "Fecha Final",
+        "Cantidad de horas",
+        "Monto",
+        "Pago",
+        "Es para pago",
     ];
 
     return (
@@ -62,7 +63,7 @@ const License = ({ id }: props) => {
                         <TableSkeletonTemplate items={entityProperties} />
                     }
                 >
-                    <LicenseTable
+                    <PermitTable
                         submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
@@ -72,7 +73,7 @@ const License = ({ id }: props) => {
                 </Suspense>
 
                 {editEntityDialog && (
-                    <EditLicense
+                    <EditPermit
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
@@ -82,7 +83,7 @@ const License = ({ id }: props) => {
                 )}
 
                 {addEntityDialog && (
-                    <AddLicense
+                    <AddPermit
                         id={id}
                         addEntityDialog={addEntityDialog}
                         setAddEntityDialog={setAddEntityDialog}
@@ -94,8 +95,8 @@ const License = ({ id }: props) => {
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idLicences ?? 0}
-                        endpoint="employee/license"
+                        id={entity?.idPermit ?? 0}
+                        endpoint="employee/permit"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
@@ -107,4 +108,4 @@ const License = ({ id }: props) => {
     );
 };
 
-export default License;
+export default Permit;
