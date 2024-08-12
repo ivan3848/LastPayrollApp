@@ -4,7 +4,7 @@ import { CACHE_KEY_ISR_IN_FAVOR } from "@/constants/cacheKeys";
 import { IISRInFavor } from "../Types/ISRInFavor";
 import { ISRInFavorByIdEmployeeService } from "../Service/isrInFavorService";
 
-const useBankEmployeeHistoryByIdEmployee = (
+const useISRInFavorByIdEmployee = (
     params: IParamsApi,
     dependencies: boolean[],
     idEmployee: number
@@ -17,4 +17,4 @@ const useBankEmployeeHistoryByIdEmployee = (
     });
 };
 
-export default useBankEmployeeHistoryByIdEmployee;
+export default useISRInFavorByIdEmployee;
