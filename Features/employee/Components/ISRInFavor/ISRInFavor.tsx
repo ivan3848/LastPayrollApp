@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { IISRInFavor } from "./Types/ISRInFavor";
 import ISRInFavorTable from "./ISRInFavorTable";
 import AddISRInFavor from "./AddISRInFavor";
+import EditISRInFavor from "./EditISRInFavor";
 
 interface props {
     id: number;
@@ -62,6 +63,7 @@ const ISRInFavor = ({ id }: props) => {
                     }
                 >
                     <ISRInFavorTable
+                        id={id}
                         submitted={submitted}
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
@@ -69,8 +71,8 @@ const ISRInFavor = ({ id }: props) => {
                     />
                 </Suspense>
 
-                {/* {editEntityDialog && (
-                    <EditDependant
+                {editEntityDialog && (
+                    <EditISRInFavor
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
@@ -78,7 +80,7 @@ const ISRInFavor = ({ id }: props) => {
                         editEntityDialog={editEntityDialog}
                         id={id}
                     />
-                )} */}
+                )}
 
                 {addEntityDialog && (
                     <AddISRInFavor
