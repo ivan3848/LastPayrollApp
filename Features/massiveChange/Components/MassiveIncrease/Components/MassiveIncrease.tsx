@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import Link from "next/link";
 import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
+import { useState } from "react";
 import ExcelTable from "../../ExcelTable";
-import MassiveIncreaseTable from "./MassiveIncreaseTable";
+import useAddMassiveIncreaseQuery from "../Hooks/useAddMassiveIncreaseQuery";
 import {
     IMassiveIncrease,
     massiveIncreaseSchema,
 } from "../Types/IMassiveIncrease";
-import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import massiveIncreaseService from "../Services/massiveIncreaseService";
-import useAddMassiveIncreaseQuery from "../Hooks/useAddMassiveIncreaseQuery";
+import MassiveIncreaseTable from "./MassiveIncreaseTable";
 
 const MassiveIncrease = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
@@ -21,9 +20,8 @@ const MassiveIncrease = () => {
     const { setDeleteEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IMassiveIncrease>();
 
-    const handleDelete = () => {
-        setSubmitted(false);
-        setDeleteEntityDialog(true);
+    const handleRevert = (e: IMassiveIncrease) => {
+        console.log(e);
     };
 
     const addEntity = useAddMassiveIncreaseQuery({
@@ -32,40 +30,25 @@ const MassiveIncrease = () => {
         setSubmitted,
     });
 
-    const handleUpload = () => {
-        const data = {
-            name: "PEPE",
-            chargeDate: "2021-09-09",
-            employees: [
-                {
-                    idEmployee: 2,
-                    salary: 25000,
-                    dateChange: "2021-09-09",
-                    reason: "Queria un aumento 2",
-                },
-                {
-                    idEmployee: 1,
-                    salary: 35000,
-                    dateChange: "2021-09-09",
-                    reason: "Queria un aumento 2",
-                },
-                {
-                    idEmployee: 4313,
-                    salary: 50000,
-                    dateChange: "2021-09-09",
-                    reason: "Queria un aumento 2",
-                },
-            ],
+    const handleUpload = (
+        data: any[],
+        name: string,
+        date: string,
+        clear: () => void
+    ) => {
+        const massiveIncrease = {
+            name: `${name} - ${date}`,
+            chargeDate: date,
             isPaid: false,
-            idPayrollPay: undefined,
+            employees: data,
         } as IMassiveIncrease;
-
-        console.log(data);
-        addEntity.mutate(data);
+        addEntity.mutate(massiveIncrease);
+        clear();
     };
 
     return (
         <>
+            <Toast ref={toast} />
             {isVisible ? (
                 <div className="inline-flex align-items-center justify-content-center gap-5">
                     <Link
@@ -127,7 +110,7 @@ const MassiveIncrease = () => {
                     <div className="m-2">
                         <MassiveIncreaseTable
                             submitted={false}
-                            handleDelete={handleDelete}
+                            handleRevert={handleRevert}
                         />
                     </div>
                 </div>

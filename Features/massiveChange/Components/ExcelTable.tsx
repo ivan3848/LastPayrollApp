@@ -1,4 +1,3 @@
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
@@ -9,20 +8,23 @@ import {
 import { FileUpload } from "primereact/fileupload";
 import { useRef } from "react";
 import useExcelTable from "../Hooks/useExcelTable";
-import massiveIncreaseService from "./MassiveIncrease/Services/massiveIncreaseService";
 import { getTableColumnName } from "../Types/ColumnTranslations";
 
 type Props = {
     type: string[];
-    handleUpload: () => void;
+    handleUpload: (
+        data: any[],
+        name: string,
+        date: string,
+        clear: () => void
+    ) => void;
 };
 
 export default function ExcelTable({ type, handleUpload }: Props) {
     const { setPage, setPageSize, setSorts, clearSorts, params } =
         useParamFilter();
 
-    const { headers, excelData, onSelect, clearData, file } = useExcelTable();
-
+    const { excelData, onSelect, clearData, file } = useExcelTable();
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -41,14 +43,12 @@ export default function ExcelTable({ type, handleUpload }: Props) {
                 break;
         }
     };
+    const formatDate = (dateWithoutFormat: any): string => {
+        const date = new Date(dateWithoutFormat);
+        return date.toISOString().slice(0, 10);
+    };
+    const fileUploadRef = useRef<FileUpload>(null);
 
-    const fileUploadRef = useRef(null);
-
-    // const uploadHandler = () => {
-    //     excelData;
-    //     //addEntity.mutate(excelData);
-    // };
-    console.log(file);
     return (
         <>
             <div className="m-1">
@@ -57,7 +57,14 @@ export default function ExcelTable({ type, handleUpload }: Props) {
                         ref={fileUploadRef}
                         name="demo[]"
                         customUpload
-                        uploadHandler={handleUpload}
+                        uploadHandler={() =>
+                            handleUpload(
+                                excelData,
+                                file.name,
+                                formatDate(file.lastModifiedDate),
+                                () => fileUploadRef?.current?.clear()
+                            )
+                        }
                         onSelect={(e) => onSelect(e, type)}
                         onClear={clearData}
                         accept=".xls,.xlsx"

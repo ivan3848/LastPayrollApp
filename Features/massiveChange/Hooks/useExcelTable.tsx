@@ -5,6 +5,7 @@ const useExcelTable = () => {
     const [excelData, setExcelData] = useState<any[]>([]);
     const [headers, setHeaders] = useState<string[]>([]);
     const [file, setFile] = useState<any | null>(null);
+
     const clearData = () => {
         setExcelData([]);
     };
@@ -13,7 +14,6 @@ const useExcelTable = () => {
         const file = e.files[0];
         setFile(file);
         const reader = new FileReader();
-
         reader.onload = async (event: any) => {
             const workbook = new ExcelJS.Workbook();
             await workbook.xlsx.load(event.target.result);
@@ -42,17 +42,17 @@ const useExcelTable = () => {
                     const dynamicObject: { [key: string]: any } = {};
                     variables.forEach((key) => {
                         let value = key.toLowerCase();
-                        dynamicObject[value] = element[dynamicVariables[key]];
+                        let cellValue = element[dynamicVariables[key]];
+                        if (cellValue.toString().includes("/")) {
+                            cellValue = cellValue
+                                .split("/")
+                                .reverse()
+                                .join("-");
+                        }
+                        dynamicObject[value] = cellValue;
                     });
                     return dynamicObject;
                 });
-                // const data = {
-                //     name: file.name,
-                //     chargeDate: file.lastModifiedDate,
-                //     //isPaid: true,
-                //     employees: result,
-                // };
-                // console.log(data);
 
                 setExcelData(result);
             };

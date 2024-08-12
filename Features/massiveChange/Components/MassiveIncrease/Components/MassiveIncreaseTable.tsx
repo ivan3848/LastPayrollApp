@@ -9,12 +9,13 @@ import {
 import { Column } from "primereact/column";
 import useMassiveIncreaseQuery from "../Hooks/useMassiveIncreaseQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import { Button } from "primereact/button";
 interface Props {
     submitted: boolean;
-    handleDelete: (entity: IMassiveIncrease) => void;
+    handleRevert: (entity: IMassiveIncrease) => void;
 }
 
-const MassiveIncreaseTable = ({ submitted, handleDelete }: Props) => {
+const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
     const {
         setPage,
         setPageSize,
@@ -126,9 +127,11 @@ const MassiveIncreaseTable = ({ submitted, handleDelete }: Props) => {
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IMassiveIncrease>
-                        entity={rowData}
-                        handleDelete={handleDelete}
+                    <Button
+                        icon="pi pi-undo"
+                        rounded
+                        severity="info"
+                        onClick={() => handleRevert(rowData)}
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
