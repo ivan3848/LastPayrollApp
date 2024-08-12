@@ -66,7 +66,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="ISR A Favor"
                     icon="pi pi-sparkles"
                     className="m-2"
-                // onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
+                    onClick={() => setAction(EmployeeOptionsEnum.ISRInFavor)}
                 />
                 <Button
                     label="Comisiones"
@@ -82,27 +82,24 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.License)}
                 />
+                <Button label="Permisos" icon="pi pi-search" className="m-2" />
                 <Button
-                    label="Permisos"
-                    icon="pi pi-sign-out"
+                    label="Horas Extras"
+                    icon="pi pi-search"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Permit)}
                 />
                 <Button
-                    label="Horas Extras"
-                    icon="pi pi-hourglass"
-                    className="m-2"
-                />
-                <Button
                     label="Plan De Horario"
-                    icon="pi pi-calendar-times"
+                    icon="pi pi-search"
                     className="m-2"
                 />
                 <Button
                     label="Vacaciones"
-                    icon="pi pi-sun"
+                    icon="pi pi-search"
                     className="m-2"
                 />
+                <Button label="Vacaciones" icon="pi pi-sun" className="m-2" />
                 <Button
                     label="Suplencias"
                     icon="pi pi-arrow-right-arrow-left"

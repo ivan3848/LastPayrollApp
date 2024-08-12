@@ -6,3 +6,4 @@ export const CONCEPT_TYPE_PAYROLL = "PAYC";
 export const CONCEPT_TYPE_LEASE = "LEAC";
 export const CONCEPT_TYPE_LICENSE = "LICC";
 export const CONCEPT_TYPE_PERMIT = "PERC";
+export const CONCEPT_TYPE_ISRINFAVOR = "ISRF";
