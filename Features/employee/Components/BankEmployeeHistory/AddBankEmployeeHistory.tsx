@@ -3,7 +3,6 @@ import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
-import { classNames } from "primereact/utils";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
@@ -13,7 +12,6 @@ import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDro
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import BankEmployeeHistoryFormSchema from "./Validation/BankEmployeeHistoryFormSchema";
 import { Calendar } from "primereact/calendar";
-import { start } from "repl";
 
 interface Props {
     id: number;
@@ -56,7 +54,6 @@ const AddBankEmployeeHistory = ({
         data.endDate = data!.endDate!;
         data.idStatusAccountType = data!.idStatusAccountType!;
         data.isActive = true;
-
         addEntity.mutate(data);
         return;
     };
@@ -101,9 +98,6 @@ const AddBankEmployeeHistory = ({
                         {...register("accountNumber")}
                         id="accountNumber"
                         autoFocus
-                        className={classNames({
-                            "p-invalid": errors.accountNumber,
-                        })}
                     />
                     {errors.accountNumber && (
                         <small className="text-red-600">
@@ -133,7 +127,6 @@ const AddBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={watch("startDate")}
                         onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
                         showButtonBar
@@ -146,14 +139,15 @@ const AddBankEmployeeHistory = ({
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="startDate">Fecha final</label>
+                    <label htmlFor="endDate">Fecha final</label>
+
                     <Calendar
                         id="endDate"
-                        value={watch("endDate")}
                         onChange={(e) => setValue("endDate", e.value!)}
                         showIcon
                         showButtonBar
                     />
+
                     {errors.endDate && (
                         <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}

@@ -2,7 +2,6 @@ import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButton
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
-import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { InputText } from "primereact/inputtext";
@@ -13,7 +12,6 @@ import { IDependant } from "./Types/IDependant";
 import dependantFormSchema from "./Validation/DependantFormSchema";
 import useDependant from "./Hooks/useDependant";
 import { IInsertDependant } from "./Types/IInsertDependant";
-import { InputMask } from "primereact/inputmask";
 import useEditDependant from "./Hooks/useEditDependant";
 import { IPerson } from "@/Features/person/Types/IPerson";
 
@@ -67,6 +65,8 @@ const EditBankEmployeeHistory = ({
         data.idPerson = entity.idPerson;
         data.idDependant = entity.idDependant;
         data.person = { ...data };
+        data.birthDate = data.birthDate;
+        console.log(data);
         editEntity.mutate(data);
         return;
     };
@@ -139,6 +139,7 @@ const EditBankEmployeeHistory = ({
                                 type="text"
                                 {...register("firstLastName")}
                                 defaultValue={entity?.lastName}
+                                autoFocus
                             />
                             {errors.firstLastName && (
                                 <small className="p-invalid text-red-500">
@@ -169,10 +170,14 @@ const EditBankEmployeeHistory = ({
                             </label>
                             <Calendar
                                 id="birthDate"
-                                value={new Date(entity.birthDate)}
+                                value={new Date(entity.birthDate?.toString()!)}
                                 onChange={(e) =>
                                     setValue("birthDate", e.value!)
                                 }
+                                onFocus={() =>
+                                    setValue("birthDate", new Date())
+                                }
+                                autoFocus
                                 showIcon
                                 showButtonBar
                             />

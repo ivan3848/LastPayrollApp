@@ -33,6 +33,7 @@ import { Dialog } from "primereact/dialog";
 import { Nullable } from "primereact/ts-helpers";
 import { InputTextarea } from "primereact/inputtextarea";
 import { IEditEmployee } from "../../Types/IEditEmployee";
+import { useRouter } from "next/navigation";
 
 interface Props {
     employee?: IEmployee;
@@ -65,6 +66,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
         defaultValues: {},
         resolver: zodResolver(editEntityFormSchema),
     });
+    const router = useRouter();
 
     useEffect(() => {
         if (employee) {
@@ -118,16 +120,17 @@ const EditEmployee = ({ employee, toast }: Props) => {
             <Button
                 label="Guardar Cambios"
                 icon="pi pi-check"
-                onClick={() => {
-                    setEmployeeData((prevData) => ({
-                        ...prevData,
+                onClick={async () => {
+                    const updatedData = {
+                        ...employeeData,
                         dateChange: dateChange!,
                         description: changeDescription,
-                    }));
-                    console.log(dateChange);
-                    console.log(employeeData);
-                    editEntity.mutate(employeeData);
-                    setConfirmChanges(false);
+                    };
+                    setEmployeeData(updatedData);
+                    editEntity.mutateAsync(updatedData).then(() => {
+                        setConfirmChanges(false);
+                        router.push("/employee");
+                    });
                 }}
                 autoFocus
             />

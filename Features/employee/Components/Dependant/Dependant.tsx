@@ -46,7 +46,7 @@ const Dependant = ({ id }: props) => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Nombre", "Relación", "Acción"];
+    const entityProperties = ["Nombre", "Relación", "Acciónes"];
 
     return (
         <div className="grid">

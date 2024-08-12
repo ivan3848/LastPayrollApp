@@ -1,20 +1,18 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import useEditEmployeeQuery from "@/Features/employee/Hooks/useEditEmployeeQuery";
 import { Calendar } from "primereact/calendar";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { IBankEmployeeHistory } from "./types/IBankEmployeeHistory";
 import editBankEmployeeHistory from "./Validation/BankEmployeeHistoryFormSchema";
-import useBankEmployeeHistoryQuery from "./Hooks/useBankEmployeeHistoryQuery";
 import { InputText } from "primereact/inputtext";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import GenericCheckBox from "@/Features/Shared/Components/GenericCheckBox";
 import { Dialog } from "primereact/dialog";
+import useEditBankEmployeeHistoryQuery from "./Hooks/useEditBankEmployeeHistoryQuery";
 
 interface Props {
     entity: IBankEmployeeHistory;
@@ -32,17 +30,6 @@ const EditBankEmployeeHistory = ({
     editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = editBankEmployeeHistory();
-    const { params } = useParamFilter();
-
-    const listOfDependencies: boolean[] = [true];
-    const { data, isLoading } = useBankEmployeeHistoryQuery(
-        params,
-        listOfDependencies
-    );
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     const {
         handleSubmit,
@@ -54,12 +41,32 @@ const EditBankEmployeeHistory = ({
     } = useForm<IBankEmployeeHistory>({
         resolver: zodResolver(editEntityFormSchema),
     });
-    const editEntity = useEditEmployeeQuery({
+
+    const editEntity = useEditBankEmployeeHistoryQuery({
         toast,
         setEditEntityDialog,
         setSubmitted,
         reset,
     });
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "startDate" || key === "endDate") {
+                    setValue(
+                        key as keyof IBankEmployeeHistory,
+                        new Date(
+                            entity[key as keyof IBankEmployeeHistory] as Date
+                        )
+                    );
+                    return;
+                }
+                setValue(
+                    key as keyof IBankEmployeeHistory,
+                    entity[key as keyof IBankEmployeeHistory]
+                );
+            });
+        }
+    }, [setValue]);
 
     const onSubmit = (data: IBankEmployeeHistory) => {
         data.idBank = data.idBank;
@@ -68,7 +75,8 @@ const EditBankEmployeeHistory = ({
         data.endDate = data!.endDate!;
         data.idEmployee = entity.idEmployee;
         data.idBankEmployeeHistory = entity.idBankEmployeeHistory;
-        data.isDeposit;
+        data.isDeposit = data.isDeposit;
+        data.idStatusAccountType = data.idStatusAccountType;
         editEntity.mutate(data);
         return;
     };
@@ -83,7 +91,7 @@ const EditBankEmployeeHistory = ({
             header="Editar Banco al empleado"
             modal
             style={{
-                width: "45vw",
+                width: "50vw",
                 overflow: "hidden",
                 maxHeight: "80vh",
                 position: "relative",
@@ -112,7 +120,7 @@ const EditBankEmployeeHistory = ({
                             {errors.idBank.message?.toString()}
                         </small>
                     )}
-                    <label htmlFor="idStatus" className="block mb-1">
+                    <label htmlFor="idStatusAccountType" className="block mb-1">
                         Método de pago
                     </label>
                     <GenericStatusDropDown
@@ -133,11 +141,13 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="startDate">Fecha De Inicio</label>
                     <Calendar
                         id="startDate"
-                        value={new Date(entity.startDate)}
+                        value={watch("startDate") || entity.startDate}
                         onChange={(e) => setValue("startDate", e.value!)}
                         showIcon
                         showButtonBar
+                        key={entity?.startDate?.toString()}
                     />
+
                     {errors.startDate && (
                         <small className="p-invalid text-red-500">
                             {errors.startDate.message?.toString()}
@@ -147,11 +157,12 @@ const EditBankEmployeeHistory = ({
                     <label htmlFor="endDate">Fecha final</label>
                     <Calendar
                         id="endDate"
-                        value={new Date(entity.endDate)}
+                        value={new Date(entity.endDate?.toString()!)}
                         onChange={(e) => setValue("endDate", e.value!)}
                         showIcon
                         showButtonBar
                     />
+
                     {errors.endDate && (
                         <small className="p-invalid text-red-500">
                             {errors.endDate.message?.toString()}
@@ -182,7 +193,6 @@ const EditBankEmployeeHistory = ({
                                 text={"Para deposito"}
                                 watch={watch}
                                 setValue={setValue}
-                                currentValue={entity.isDeposit}
                             />
                         </div>
 
