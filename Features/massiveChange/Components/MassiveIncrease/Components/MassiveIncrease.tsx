@@ -29,6 +29,11 @@ const MassiveIncrease = () => {
         setEntity,
     } = useCrudModals<IMassiveIncrease>();
 
+    const [notExistedEmployeeData, setNotExistedEmployeeData] = useState<
+        IMassiveIncrease[]
+    >([]);
+    const [isExistEmployee, setIsExistEmployee] = useState(false);
+
     const handleRevert = (entity: IMassiveIncrease) => {
         setEntity(entity);
         setSubmitted(false);
@@ -39,6 +44,8 @@ const MassiveIncrease = () => {
         toast,
         setAddEntityDialog,
         setSubmitted,
+        setNotExistedEmployeeData,
+        setIsExistEmployee,
     });
 
     const handleUpload = (
@@ -69,6 +76,7 @@ const MassiveIncrease = () => {
                         onClick={() => {
                             setIsToSendFile(false);
                             setIsVisible(false);
+                            setNotExistedEmployeeData([]);
                         }}
                     >
                         <i className="cursor-pointer pi pi-arrow-left"></i>
@@ -88,6 +96,7 @@ const MassiveIncrease = () => {
                             onClick={() => {
                                 setIsToSendFile(false);
                                 setIsVisible(true);
+                                setNotExistedEmployeeData([]);
                             }}
                         >
                             <i className="cursor-pointer pi pi-arrow-left"></i>
@@ -103,6 +112,10 @@ const MassiveIncrease = () => {
                 <ExcelTable
                     handleUpload={handleUpload}
                     type={massiveIncreaseSchemaValue}
+                    notExistedEmployeeData={notExistedEmployeeData}
+                    setIsExistEmployee={setIsExistEmployee}
+                    isExistEmployee={isExistEmployee}
+                    setNotExistedEmployeeData={setNotExistedEmployeeData}
                 />
             ) : (
                 <div className="m-2">
