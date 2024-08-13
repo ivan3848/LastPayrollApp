@@ -25,6 +25,7 @@ const MassiveIncrease = () => {
         toast,
         entity,
         deleteEntityDialog,
+        submitted,
         setEntity,
     } = useCrudModals<IMassiveIncrease>();
 
@@ -119,7 +120,7 @@ const MassiveIncrease = () => {
                     />
                     <div className="m-2">
                         <MassiveIncreaseTable
-                            submitted={false}
+                            submitted={submitted}
                             handleRevert={handleRevert}
                         />
                     </div>
