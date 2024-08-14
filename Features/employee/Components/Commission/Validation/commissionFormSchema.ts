@@ -14,6 +14,7 @@ const commissionFormSchema = () => {
     const addEntityFormSchema = z.object({
         payDate: z.date({ message: "This is required" }),
         idConcept: z.number().optional(),
+        amount: z.number().optional(),
     });
     return { editEntityFormSchema, addEntityFormSchema };
 };

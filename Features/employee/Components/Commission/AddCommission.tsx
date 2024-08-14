@@ -54,7 +54,6 @@ const AddCommission = ({
 
     const onSubmit = (data: ICommission) => {
         data.idEmployee = id;
-        data.amount = data.amount ?? 0;
         data.commissionDetail = { ...data };
         addEntity.mutate(data);
     };
