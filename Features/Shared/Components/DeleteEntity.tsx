@@ -22,7 +22,6 @@ const DeleteEntity = ({
     toast,
 }: Props) => {
     const apiService = new ApiService(endpoint);
-
     const deleteRegister = useMutation({
         mutationFn: (id: number) => apiService.delete(id),
         onError: (error: any) => {

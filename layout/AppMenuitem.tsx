@@ -187,7 +187,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
             })}
         >
             {props.root && item?.visible !== false && (
-                <div className="layout-menuitem-root-text">{item?.label}</div>
+                <div className="layout-menuitem-root-text">{item?.label}</div> 
             )}
             {(!item?.to || item?.items) && item?.visible !== false ? (
                 <>
