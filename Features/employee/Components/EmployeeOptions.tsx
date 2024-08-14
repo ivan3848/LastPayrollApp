@@ -72,6 +72,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Comisiones"
                     icon="pi pi-search"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Commission)}
                 />
             </Fieldset>
 
@@ -98,11 +99,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     icon="pi pi-calendar-times"
                     className="m-2"
                 />
-                <Button
-                    label="Vacaciones"
-                    icon="pi pi-sun"
-                    className="m-2"
-                />
+                <Button label="Vacaciones" icon="pi pi-sun" className="m-2" />
                 <Button
                     label="Suplencias"
                     icon="pi pi-arrow-right-arrow-left"

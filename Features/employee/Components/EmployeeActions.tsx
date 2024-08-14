@@ -11,11 +11,11 @@ import Dependant from "./Dependant/Dependant";
 import Profit from "./Benefit/Profit";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
-import { Toast } from "primereact/toast";
 import Deduction from "./Deduction/Deduction";
 import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
 import Permit from "./Permit/Permit";
+import Commission from "./Commission/Commission";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -100,6 +100,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Permit && (
                         <Permit id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Commission && (
+                        <Commission id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>

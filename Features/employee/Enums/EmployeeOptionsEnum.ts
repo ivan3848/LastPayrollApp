@@ -1,3 +1,4 @@
+import Commission from "../Components/Commission/Commission";
 export enum EmployeeOptionsEnum {
     NoOption = "Seleccione una opción",
     CoverPosition = "Cubrir Posición",
@@ -11,4 +12,5 @@ export enum EmployeeOptionsEnum {
     License = "Licencias",
     ISRInFavor = "ISR A Favor",
     Permit = "Permisos",
+    Commission = "Comisiones",
 }
