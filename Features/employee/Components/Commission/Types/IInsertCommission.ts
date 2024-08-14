@@ -1,12 +1,19 @@
 import { ICommissionDetail } from "./ICommissionDetail";
 
 export interface IInsertCommission {
+    idEmployee: number;
+    idCommissionDetail: number;
     idCommission: number;
-    idPayrollPay?: number;
-    description: string;
+    idConcept: number;
+    amount: number;
+    tax: number;
     chargeDate: Date;
+    date: Date;
     payDate: Date;
-    isExecuted: boolean;
-    dateExecuted: Date;
+    isFromFile: boolean;
+    isPaid: boolean;
+    isTaxes: boolean;
+    idPayrollPay?: number;
+    idCompany: number;
     commissionDetail: ICommissionDetail;
 }

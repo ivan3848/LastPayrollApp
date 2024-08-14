@@ -7,6 +7,7 @@ import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { ICommission } from "./Types/ICommission";
 import CommissionTable from "./CommissionTable";
+import AddCommission from "./AddCommission";
 
 interface props {
     id: number;
@@ -70,8 +71,7 @@ const Commission = ({ id }: props) => {
                         idEmployee={id}
                     />
                 </Suspense>
-                {/*
-                {editEntityDialog && (
+                {/* {editEntityDialog && (
                     <EditCommission
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
@@ -80,7 +80,7 @@ const Commission = ({ id }: props) => {
                         editEntityDialog={editEntityDialog}
                         id={id}
                     />
-                )}
+                )} */}
 
                 {addEntityDialog && (
                     <AddCommission
@@ -91,11 +91,11 @@ const Commission = ({ id }: props) => {
                         toast={toast}
                         setSubmitted={setSubmitted}
                     />
-                )} */}
+                )}
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.id ?? 0}
+                        id={entity?.idCommission ?? 0}
                         endpoint="employee/commission"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
