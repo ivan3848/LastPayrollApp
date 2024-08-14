@@ -15,6 +15,7 @@ import Deduction from "./Deduction/Deduction";
 import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
 import Permit from "./Permit/Permit";
+import Vacation from "./Vacation/Vacation";
 import Commission from "./Commission/Commission";
 
 interface Props {
@@ -100,6 +101,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Permit && (
                         <Permit id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Vacation && (
+                        <Vacation employeeEntity={employee} />
                     )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />

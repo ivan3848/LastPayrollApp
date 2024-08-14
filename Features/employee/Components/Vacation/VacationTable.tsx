@@ -6,17 +6,17 @@ import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
-import useGetPermitByIdEmployee from "./Hooks/useGetPermitByIdEmployee";
+import useGetVacationByIdEmployee from "./Hooks/useGetVacationByIdEmployee";
 
 interface Props {
     idEmployee: number;
     submitted: boolean;
-    handleEdit: (entity: IPermit) => void;
-    handleDelete: (entity: IPermit) => void;
+    handleEdit: (entity: IVacation) => void;
+    handleDelete: (entity: IVacation) => void;
     handleAdd: () => void;
 }
 
-const PermitTable = ({
+const VacationTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -33,7 +33,7 @@ const PermitTable = ({
         params,
     } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useGetPermitByIdEmployee(
+    const { data, isLoading } = useGetVacationByIdEmployee(
         params,
         listOfDependencies,
         idEmployee
@@ -130,7 +130,7 @@ const PermitTable = ({
                 value={data}
                 header={header}
                 className="p-datatable-sm"
-                dataKey="idPermit"
+                dataKey="idVacation"
                 paginator
                 onSort={onSort}
                 removableSort
@@ -142,25 +142,47 @@ const PermitTable = ({
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
                 <Column
-                    field="startDateTime"
+                    field="start"
                     header="Fecha Inicio"
-                    body={(rowData: IPermit) =>
-                        formatDate(rowData.startDateTime?.toString()!)
+                    body={(rowData: IVacation) =>
+                        formatDate(rowData.start?.toString()!)
                     }
                 />
                 <Column
-                    field="endDateTime"
+                    field="end"
                     header="Fecha Final"
-                    body={(rowData: IPermit) =>
-                        formatDate(rowData.endDateTime?.toString()!)
+                    body={(rowData: IVacation) =>
+                        formatDate(rowData.end?.toString()!)
                     }
                 />
                 <Column
-                    field="hourAmount"
-                    header="Cantidad de horas"
+                    field="absenteeism"
+                    header="Dias de absentismo"
                     sortable
                     filter
-                    filterField="amount"
+                    filterField="absenteeism"
+                    filterPlaceholder="Buscar por monto"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="enjoymentDay"
+                    header="Dias de disfrute"
+                    sortable
+                    filter
+                    filterField="enjoymentDay"
+                    filterPlaceholder="Buscar por monto"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="dayPay"
+                    header="Dias a pagar"
+                    sortable
+                    filter
+                    filterField="dayPay"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
@@ -168,7 +190,7 @@ const PermitTable = ({
                 ></Column>
                 <Column
                     header="Acciones"
-                    body={(rowData: IPermit) => (
+                    body={(rowData: IVacation) => (
                         <ActionTableTemplate
                             entity={rowData}
                             handleEdit={handleEdit}
@@ -181,4 +203,4 @@ const PermitTable = ({
     );
 };
 
-export default PermitTable;
+export default VacationTable;
