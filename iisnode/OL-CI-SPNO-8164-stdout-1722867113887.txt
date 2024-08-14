@@ -1,0 +1,43 @@
+> Ready on http://localhost:\\.\pipe\cd4b0aa4-7fab-49d0-8309-975d82a7248d
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 508ms (228 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.6s (1406 modules)
+ GET / 200 in 5110ms
+ POST / 200 in 135ms
+ POST / 200 in 31ms
+ POST / 200 in 4044ms
+ GET / 200 in 44ms
+ ✓ Compiled /favicon.ico in 491ms (881 modules)
+ GET /favicon.ico 200 in 758ms
+ POST / 200 in 797ms
+ POST / 200 in 13ms
+ POST / 200 in 17ms
+ POST / 200 in 14ms
+ POST / 200 in 17ms
+ POST / 200 in 14ms
+ GET / 200 in 243ms
+ GET /favicon.ico 200 in 36ms
+ POST / 200 in 40ms
+ POST / 200 in 50ms
+ POST / 200 in 146ms
+ GET / 200 in 59ms
+ GET /favicon.ico 200 in 27ms
+ POST / 200 in 43ms
+ POST / 200 in 20ms
+ POST / 200 in 16ms
+ POST / 200 in 20ms
+ POST / 200 in 25ms
+ POST / 200 in 29ms
+ GET / 200 in 63ms
+ GET /favicon.ico 200 in 17ms
+ POST / 200 in 31ms
+ POST / 200 in 37ms
+ POST / 200 in 18ms
+ POST / 200 in 18ms
+ POST / 200 in 23ms
+ POST / 200 in 24ms
+ ○ Compiling /employee/editEmployee ...
+ ✓ Compiled /employee/editEmployee in 1796ms (1481 modules)
+ ○ Compiling /employee ...
+ ✓ Compiled /employee in 887ms (1486 modules)
