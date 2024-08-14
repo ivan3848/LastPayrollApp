@@ -5,7 +5,6 @@ import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
-import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
 import { addPermitService } from "./Services/PermitService";
 import PermitFormSchema from "./Validation/PermitFormSchema";

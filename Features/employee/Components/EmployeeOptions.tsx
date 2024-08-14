@@ -102,6 +102,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Vacaciones"
                     icon="pi pi-sun"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.Vacation)}
                 />
                 <Button
                     label="Suplencias"

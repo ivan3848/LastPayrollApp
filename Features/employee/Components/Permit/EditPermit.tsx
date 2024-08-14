@@ -5,8 +5,6 @@ import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import { IConcept } from "@/Features/concept/Types/IConcept";
-import { SelectButton } from "primereact/selectbutton";
 import PermitFormSchema from "./Validation/PermitFormSchema";
 import useEditPermit from "./Hooks/useEditPermit";
 import { CONCEPT_TYPE_PERMIT } from "@/constants/conceptTypes";
