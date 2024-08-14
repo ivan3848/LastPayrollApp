@@ -49,3 +49,6 @@ export const CACHE_KEY_DEDUCTION = "deduction";
 export const CACHE_KEY_COVER_LICENSES = "license";
 export const CACHE_KEY_ISR_IN_FAVOR = "isrInFavor";
 export const CACHE_KEY_COVER_PERMIT = "permit";
+
+export const CACHE_KEY_EXCEL_TABLE = "excelTable";
+export const CACHE_KEY_MASSIVE_INCREASE = "massiveIncrease";

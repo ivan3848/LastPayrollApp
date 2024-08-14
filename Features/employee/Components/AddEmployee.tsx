@@ -268,6 +268,7 @@ const AddEmployee = forwardRef(
                                     onChange={(e) =>
                                         setValue("startDate", e.value!)
                                     }
+                                    maxDate={new Date("2099-12-31")}
                                     showIcon
                                     showButtonBar
                                 />
@@ -290,6 +291,7 @@ const AddEmployee = forwardRef(
                                     onChange={(e) =>
                                         setValue("endWorkDate", e.value!)
                                     }
+                                    maxDate={new Date("2099-12-31")}
                                     showIcon
                                     showButtonBar
                                 />
