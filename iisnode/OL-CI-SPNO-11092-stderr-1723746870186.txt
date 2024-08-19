@@ -1,0 +1,70 @@
+(node:11092) [DEP0005] DeprecationWarning: Buffer() is deprecated due to security and usability issues. Please use the Buffer.alloc(), Buffer.allocUnsafe(), or Buffer.from() methods instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⨯ services\ApiService.ts (67:35) @ data
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at ApiService.loginPost (./services/ApiService.ts:49:35)
+    at async login (auth/services/AuthService.ts:32:22)
+    at async SignIn (auth/login/LoginServerActions.ts:17:30)
+digest: "4202315363"
+[0m [90m 65 |[39m             [36mreturn[39m response[33m.[39mdata[33m;[39m[0m
+[0m [90m 66 |[39m         } [36mcatch[39m (error[33m:[39m any) {[0m
+[0m[31m[1m>[22m[39m[90m 67 |[39m             [36mreturn[39m error[33m.[39mresponse[33m.[39mdata[33m;[39m[0m
+[0m [90m    |[39m                                   [31m[1m^[22m[39m[0m
+[0m [90m 68 |[39m         }[0m
+[0m [90m 69 |[39m     }[0m
+[0m [90m 70 |[39m[0m
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⨯ services\ApiService.ts (67:35) @ data
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at ApiService.loginPost (./services/ApiService.ts:49:35)
+    at async login (auth/services/AuthService.ts:32:22)
+    at async SignIn (auth/login/LoginServerActions.ts:17:30)
+digest: "4202315363"
+[0m [90m 65 |[39m             [36mreturn[39m response[33m.[39mdata[33m;[39m[0m
+[0m [90m 66 |[39m         } [36mcatch[39m (error[33m:[39m any) {[0m
+[0m[31m[1m>[22m[39m[90m 67 |[39m             [36mreturn[39m error[33m.[39mresponse[33m.[39mdata[33m;[39m[0m
+[0m [90m    |[39m                                   [31m[1m^[22m[39m[0m
+[0m [90m 68 |[39m         }[0m
+[0m [90m 69 |[39m     }[0m
+[0m [90m 70 |[39m[0m
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⨯ services\ApiService.ts (67:35) @ data
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at ApiService.loginPost (./services/ApiService.ts:49:35)
+    at async login (auth/services/AuthService.ts:32:22)
+    at async SignIn (auth/login/LoginServerActions.ts:17:30)
+digest: "4202315363"
+[0m [90m 65 |[39m             [36mreturn[39m response[33m.[39mdata[33m;[39m[0m
+[0m [90m 66 |[39m         } [36mcatch[39m (error[33m:[39m any) {[0m
+[0m[31m[1m>[22m[39m[90m 67 |[39m             [36mreturn[39m error[33m.[39mresponse[33m.[39mdata[33m;[39m[0m
+[0m [90m    |[39m                                   [31m[1m^[22m[39m[0m
+[0m [90m 68 |[39m         }[0m
+[0m [90m 69 |[39m     }[0m
+[0m [90m 70 |[39m[0m
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
+ ⨯ services\ApiService.ts (67:35) @ data
+ ⨯ TypeError: Cannot read properties of undefined (reading 'data')
+    at ApiService.loginPost (./services/ApiService.ts:49:35)
+    at async login (auth/services/AuthService.ts:32:22)
+    at async SignIn (auth/login/LoginServerActions.ts:17:30)
+digest: "4202315363"
+[0m [90m 65 |[39m             [36mreturn[39m response[33m.[39mdata[33m;[39m[0m
+[0m [90m 66 |[39m         } [36mcatch[39m (error[33m:[39m any) {[0m
+[0m[31m[1m>[22m[39m[90m 67 |[39m             [36mreturn[39m error[33m.[39mresponse[33m.[39mdata[33m;[39m[0m
+[0m [90m    |[39m                                   [31m[1m^[22m[39m[0m
+[0m [90m 68 |[39m         }[0m
+[0m [90m 69 |[39m     }[0m
+[0m [90m 70 |[39m[0m
+ ⚠ Unsupported metadata viewport is configured in metadata export in /. Please move it to viewport export instead.
+Read more: https://nextjs.org/docs/app/api-reference/functions/generate-viewport
