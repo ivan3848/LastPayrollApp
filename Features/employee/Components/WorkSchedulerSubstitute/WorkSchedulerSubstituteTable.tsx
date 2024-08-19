@@ -1,12 +1,10 @@
 "use client";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
-import { DataTable, DataTableSortEvent } from "primereact/datatable";
-import { Card } from "primereact/card";
-import AddButton from "../../../Shared/Components/AddButton";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
-import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { Card } from "primereact/card";
+import { Column } from "primereact/column";
+import { DataTable, DataTableSortEvent } from "primereact/datatable";
+import AddButton from "../../../Shared/Components/AddButton";
 import useGetWorkSchedulerSubstituteByIdEmployee from "./Hooks/useGetWorkSchedulerSubstituteByIdEmployee";
 
 interface Props {
@@ -72,7 +70,7 @@ const WorkSchedulerSubstituteTable = ({
     };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Licencia</h3>
+            <h3 className="m-0">Suplencias</h3>
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
@@ -98,6 +96,17 @@ const WorkSchedulerSubstituteTable = ({
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
+                <Column
+                    field="workScheduler"
+                    header="Horario"
+                    sortable
+                    filter
+                    filterField="Name"
+                    filterPlaceholder="Buscar por nombre"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
                 <Column
                     field="startDate"
                     header="Fecha Inicio"

@@ -6,6 +6,7 @@ interface IWorkSchedulerSubstitute {
     startDate: Date;
     endDate: Date;
     description: string;
+    workScheduler?: string;
 }
 
 interface IWorkSchedulerSubstituteInsert {

@@ -1,6 +1,6 @@
 import IParamsApi from "@/types/IParamApi";
 import { useQuery } from "@tanstack/react-query";
-import workSchedulerSubstituteService from "../Services/workSchedulerSubstituteService";
+import { workSchedulerSubstituteByIdEmployeeService } from "../Services/workSchedulerSubstituteService";
 import { CACHE_KEY_WORKSCHEDULERSUBSTITUTE } from "@/constants/cacheKeys";
 
 const useGetWorkSchedulerSubstituteByIdEmployee = (
@@ -10,7 +10,7 @@ const useGetWorkSchedulerSubstituteByIdEmployee = (
 ) => {
     return useQuery<IWorkSchedulerSubstitute[], Error>({
         queryKey: [CACHE_KEY_WORKSCHEDULERSUBSTITUTE, params, dependencies, idEmployee],
-        queryFn: () => workSchedulerSubstituteService.getEntitiesById(idEmployee),
+        queryFn: () => workSchedulerSubstituteByIdEmployeeService.getEntitiesById(idEmployee),
         initialData: [],
     });
 };
