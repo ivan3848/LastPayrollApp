@@ -11,28 +11,10 @@ const LicensesFormSchema = () => {
             startDate: z.date({ message: "El campo debe de tener una fecha." }),
             endDate: z.date({ message: "El campo debe de tener una fecha." }),
         })
-        .refine(
-            (data) => {
-                const startDateIsValid =
-                    data.startDate && !isNaN(Date.parse(data.startDate.toISOString()));
-                const endDateIsValid =
-                    data.endDate && !isNaN(Date.parse(data.endDate.toDateString()));
-
-                if (startDateIsValid && endDateIsValid) {
-                    const start = new Date(data!.startDate!);
-                    const end = new Date(data!.endDate!);
-                    const comparison = start < end;
-                    return comparison;
-                }
-
-                return true;
-            },
-            {
-                message:
-                    "La fecha de inicio debe ser anterior a la fecha final",
-                path: ["end"],
-            }
-        );
+        .refine(data => data.startDate <= data.endDate, {
+            message: "La fecha de inicio debe ser anterior a la fecha final",
+            path: ["endDate"],
+        });
 
     const addEntityFormSchema = z.object({
         idEmployee: z.number().optional(),
@@ -41,6 +23,10 @@ const LicensesFormSchema = () => {
         description: z.string().optional(),
         startDate: z.date({ message: "El campo debe de tener una fecha." }),
         endDate: z.date({ message: "El campo debe de tener una fecha." }),
+    })
+    .refine(data => data.startDate <= data.endDate, {
+        message: "La fecha de inicio debe ser anterior a la fecha final",
+        path: ["endDate"],
     });
     return { editEntityFormSchema, addEntityFormSchema };
 };
