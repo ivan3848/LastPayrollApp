@@ -5,12 +5,11 @@ import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import LicensesFormSchema from "./Validation/LicensesProfitSchema";
 import useEditLicense from "./Hooks/useEditLicense";
 import { CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
 import { InputText } from "primereact/inputtext";
-import { IConcept } from "@/Features/concept/Types/IConcept";
 import { SelectButton } from "primereact/selectbutton";
+import LicensesFormSchema from "./Validation/LicensesFormSchema";
 
 interface Props {
     entity: ILicenses;
