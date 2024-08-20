@@ -61,7 +61,7 @@ const AddVacation = ({
             if (data.excepcion != null) {
                 toast.current.show({
                     severity: "warn",
-                    summary: "Advertencia",
+                    summary: "Advertencia!",
                     detail: data.excepcion,
                 });
                 return;
@@ -69,8 +69,8 @@ const AddVacation = ({
             setVacationData(data);
         } catch (error: any) {
             toast.current.show({
-                severity: "error",
-                summary: "Error",
+                severity: "warn",
+                summary: "Advertencia!",
                 detail: "Error al calcular los dias de vacaciones. Por favor intente nuevamente.",
             });
         }

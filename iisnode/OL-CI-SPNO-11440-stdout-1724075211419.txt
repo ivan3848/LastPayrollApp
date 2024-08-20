@@ -1,0 +1,11 @@
+> Ready on http://localhost:\\.\pipe\e2791b75-6241-4f65-ae4b-0850d119508a
+ ✓ Compiled /middleware in 495ms (228 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 4.1s (1493 modules)
+ GET / 200 in 4838ms
+ POST / 200 in 93ms
+ POST / 200 in 14ms
+ GET / 200 in 54ms
+ POST / 200 in 192ms
+ POST / 200 in 58ms
+ POST / 500 in 21293ms

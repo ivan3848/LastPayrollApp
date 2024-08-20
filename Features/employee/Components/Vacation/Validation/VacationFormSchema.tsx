@@ -9,8 +9,6 @@ const VacationFormSchema = () => {
         paid: z.boolean().optional(),
         totalRemain: z.number().optional(),
         enjoymentDay: z.number().optional(),
-        // reEntryDate: z.date().optional(),
-        // payrollPayDate: z.date().optional(),
         absenteeism: z.number().optional(),
         dayPay: z.number().optional(),
     })
@@ -36,6 +34,7 @@ const VacationFormSchema = () => {
             message: "La fecha de inicio debe ser anterior a la fecha final",
             path: ["end"],
         });
+
     return { editEntityFormSchema, addEntityFormSchema };
 };
 

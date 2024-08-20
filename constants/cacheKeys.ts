@@ -50,8 +50,8 @@ export const CACHE_KEY_COVER_LICENSES = "license";
 export const CACHE_KEY_ISR_IN_FAVOR = "isrInFavor";
 export const CACHE_KEY_COVER_PERMIT = "permit";
 export const CACHE_KEY_COVER_VACATION = "vacation";
-
 export const CACHE_KEY_EXCEL_TABLE = "excelTable";
 export const CACHE_KEY_MASSIVE_INCREASE = "massiveIncrease";
+export const CACHE_KEY_WORKSCHEDULERSUBSTITUTE = "workSchedulerSubstitue";
 export const CACHE_KEY_COMMISSION = "commission";
 export const CACHE_KEY_COMMISSION_Detail = "commissionDetail";

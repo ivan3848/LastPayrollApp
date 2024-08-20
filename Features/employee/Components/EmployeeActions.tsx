@@ -16,6 +16,7 @@ import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
 import Permit from "./Permit/Permit";
 import Vacation from "./Vacation/Vacation";
+import WorkSchedulerSubstitute from "./WorkSchedulerSubstitute/WorkSchedulerSubstitute";
 import Commission from "./Commission/Commission";
 
 interface Props {
@@ -104,6 +105,10 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Vacation && (
                         <Vacation employeeEntity={employee} />
+                    )}
+                    {openAction ===
+                        EmployeeOptionsEnum.WorkSchedulerSubstitute && (
+                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />

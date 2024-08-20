@@ -109,6 +109,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Suplencias"
                     icon="pi pi-arrow-right-arrow-left"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.WorkSchedulerSubstitute)}
                 />
             </Fieldset>
         </div>

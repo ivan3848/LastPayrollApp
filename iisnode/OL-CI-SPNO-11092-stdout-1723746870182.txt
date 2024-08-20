@@ -1,0 +1,47 @@
+> Ready on http://localhost:\\.\pipe\ba8bac94-22db-4a7a-8f79-c91edc350d4a
+ ✓ Compiled /middleware in 436ms (228 modules)
+ ○ Compiling / ...
+ ✓ Compiled / in 3s (1493 modules)
+ GET / 200 in 3433ms
+ ✓ Compiled /favicon.ico in 387ms (923 modules)
+ GET /favicon.ico 200 in 643ms
+ POST / 200 in 665ms
+ POST / 200 in 18ms
+ POST / 500 in 21345ms
+ GET / 200 in 216ms
+ POST / 200 in 20ms
+ POST / 200 in 22ms
+ POST / 200 in 120ms
+ POST / 200 in 84ms
+ POST / 200 in 1168ms
+ GET / 200 in 45ms
+ GET /favicon.ico 200 in 11ms
+ POST / 200 in 14ms
+ POST / 200 in 14ms
+ POST / 200 in 71ms
+ GET / 200 in 40ms
+ GET /favicon.ico 200 in 16ms
+ POST / 200 in 14ms
+ POST / 200 in 13ms
+ GET / 200 in 42ms
+ GET /favicon.ico 200 in 15ms
+ POST / 200 in 15ms
+ POST / 200 in 21ms
+ POST / 500 in 21294ms
+ GET / 200 in 41ms
+ GET /favicon.ico 200 in 28ms
+ POST / 200 in 18ms
+ POST / 200 in 22ms
+ POST / 500 in 21292ms
+ GET / 200 in 38ms
+ GET /favicon.ico 200 in 15ms
+ POST / 200 in 14ms
+ POST / 200 in 17ms
+ POST / 500 in 21304ms
+ GET / 200 in 42ms
+ GET /favicon.ico 200 in 15ms
+ POST / 200 in 17ms
+ POST / 200 in 15ms
+ POST / 200 in 165ms
+ POST / 200 in 58ms
+ POST / 200 in 56ms
