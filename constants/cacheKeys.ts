@@ -54,3 +54,4 @@ export const CACHE_KEY_COVER_VACATION = "vacation";
 export const CACHE_KEY_EXCEL_TABLE = "excelTable";
 export const CACHE_KEY_MASSIVE_INCREASE = "massiveIncrease";
 export const CACHE_KEY_COMMISSION = "commission";
+export const CACHE_KEY_COMMISSION_Detail = "commissionDetail";

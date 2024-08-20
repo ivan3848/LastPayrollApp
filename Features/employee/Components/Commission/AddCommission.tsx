@@ -4,7 +4,6 @@ import { Dialog } from "primereact/dialog";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { Calendar } from "primereact/calendar";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import { ICommissionDetail } from "./Types/ICommissionDetail";
 import commissionFormSchema from "./Validation/commissionFormSchema";
 import { IInsertCommission } from "./Types/IInsertCommission";
 import commissionService from "./Services/commissionService";
@@ -12,12 +11,12 @@ import { ICommission } from "./Types/ICommission";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_DEDUCTION } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import { SelectButton } from "primereact/selectbutton";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
     addEntityDialog: boolean;
     id: number;
-    commissionDetail?: ICommissionDetail;
     handleAdd: () => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
@@ -29,9 +28,9 @@ const AddCommission = ({
     id,
     toast,
     setSubmitted,
-    commissionDetail,
 }: Props) => {
     const { addEntityFormSchema } = commissionFormSchema();
+    let isCommissionPayroll: string[] = ["Si", "No"];
 
     const {
         handleSubmit,
@@ -54,6 +53,8 @@ const AddCommission = ({
 
     const onSubmit = (data: ICommission) => {
         data.idEmployee = id;
+        data.idPayrollPay = 8;
+        data.isExcecuted = false;
         data.commissionDetail = { ...data };
         addEntity.mutate(data);
     };
@@ -65,7 +66,7 @@ const AddCommission = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "50vw" }}
-            header="Agregar Concepto"
+            header="Agregar Comisión"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -91,7 +92,6 @@ const AddCommission = ({
                             <label htmlFor="birthDate">Fecha de pago</label>
                             <Calendar
                                 id="payDate"
-                                value={watch("payDate") ?? new Date()}
                                 onChange={(e) => setValue("payDate", e.value!)}
                                 showIcon
                                 showButtonBar
@@ -101,6 +101,29 @@ const AddCommission = ({
                                     {errors.payDate.message?.toString()}
                                 </small>
                             )}
+                        </div>
+
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="isCommissionPayroll">
+                                Por Nomina de Comisiones
+                            </label>
+                            <div>
+                                <SelectButton
+                                    {...register("isCommissionPayroll")}
+                                    value={
+                                        watch("isCommissionPayroll")
+                                            ? "Si"
+                                            : "No"
+                                    }
+                                    onChange={(e) => {
+                                        setValue(
+                                            "isCommissionPayroll",
+                                            e.value === "Si" ? true : false
+                                        );
+                                    }}
+                                    options={isCommissionPayroll}
+                                />
+                            </div>
                         </div>
 
                         <div className="field col-12 md:col-6 lg:col-4">

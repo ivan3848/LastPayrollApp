@@ -5,18 +5,19 @@ import { DataTable } from "primereact/datatable";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import { ICommission } from "./Types/ICommission";
-import useCommissionByIdEmployee from "./Hooks/useCommissionByIdEmployee";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import useCommissionDetailByIdEmployee from "../CommissionDetail/Hooks/useCommissionDetailByIdEmployee";
+import { ICommissionDetail } from "./Types/ICommissionDetail";
 
 interface Props {
     idEmployee: number;
     submitted: boolean;
-    handleEdit: (entity: ICommission) => void;
-    handleDelete: (entity: ICommission) => void;
+    handleEdit: (entity: ICommissionDetail) => void;
+    handleDelete: (entity: ICommissionDetail) => void;
     handleAdd: () => void;
 }
 
-const DependantTable = ({
+const CommissionTable = ({
     submitted,
     handleDelete,
     handleEdit,
@@ -25,11 +26,19 @@ const DependantTable = ({
 }: Props) => {
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCommissionByIdEmployee(
+    const { data, isLoading } = useCommissionDetailByIdEmployee(
         params,
         listOfDependencies,
         idEmployee
     );
+
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("es-DO", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+        });
+    };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Comisión </h3>
@@ -47,17 +56,29 @@ const DependantTable = ({
                 value={data}
                 header={header}
                 className="p-datatable-md"
-                dataKey="idCommission"
                 rows={5}
             >
-                <Column field="fullName" header="Concepto" />
-                <Column field="relationship" header="Cantidad" />
-                <Column field="relationship" header="Fecha De pago" />
-                <Column field="relationship" header="Fecha Realizado" />
+                <Column field="concept" header="Concepto" />
+                <Column field="amount" header="Cantidad" />
+                <Column
+                    field="date"
+                    key={"date"}
+                    header="Fecha Final"
+                    body={(rowData: ICommission) =>
+                        formatDate(rowData.date?.toString()!)
+                    }
+                />
+                <Column
+                    field="isPaid"
+                    header="Pago Realizado"
+                    body={(rowData: ICommission) =>
+                        rowData.isPaid ? "Si" : "No"
+                    }
+                />
 
                 <Column
                     header="Acciones"
-                    body={(rowData: ICommission) => (
+                    body={(rowData: ICommissionDetail) => (
                         <ActionTableTemplate
                             entity={rowData}
                             handleEdit={handleEdit}
@@ -70,4 +91,4 @@ const DependantTable = ({
     );
 };
 
-export default DependantTable;
+export default CommissionTable;

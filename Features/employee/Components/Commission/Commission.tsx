@@ -5,9 +5,9 @@ import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTem
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { ICommission } from "./Types/ICommission";
 import CommissionTable from "./CommissionTable";
 import AddCommission from "./AddCommission";
+import { ICommissionDetail } from "./Types/ICommissionDetail";
 
 interface props {
     id: number;
@@ -26,20 +26,20 @@ const Commission = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<ICommission>();
+    } = useCrudModals<ICommissionDetail>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: ICommission) => {
+    const handleEdit = (entity: ICommissionDetail) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: ICommission) => {
+    const handleDelete = (entity: ICommissionDetail) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -95,7 +95,7 @@ const Commission = ({ id }: props) => {
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idCommission ?? 0}
+                        id={entity?.idCommission!}
                         endpoint="employee/commission"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}

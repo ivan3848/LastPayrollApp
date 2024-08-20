@@ -12,9 +12,11 @@ const commissionFormSchema = () => {
     });
 
     const addEntityFormSchema = z.object({
-        payDate: z.date({ message: "This is required" }),
-        idConcept: z.number().optional(),
+        payDate: z.date({ message: "El campo de tener una fecha" }),
+        idConcept: z.number({ message: "El campo de tener un valor" }),
         amount: z.number().optional(),
+        isCommissionPayroll: z.boolean().optional(),
+        idEmployee: z.number().optional(),
     });
     return { editEntityFormSchema, addEntityFormSchema };
 };
