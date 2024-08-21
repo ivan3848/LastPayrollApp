@@ -46,19 +46,18 @@ const CommissionArchive = () => {
         date: string,
         clear: () => void
     ) => {
-        console.log(date);
-        const massiveIncrease = {
-            idEmployee: 1,
-            idPayrollPay: 8,
-            idConcept: 1,
-            isExcecuted: false,
-            isFromFile: true,
-            isCommissionPayroll: false,
-            chargeDate: new Date(date),
-            payDate: new Date(date),
-            commissionDetail: data,
+        const commissionArchive = {
+            // idEmployee: 1,
+            // idPayrollPay: 8,
+            // idConcept: 1,
+            // isExcecuted: false,
+            // isFromFile: true,
+            // isCommissionPayroll: false,
+            // chargeDate: new Date(date),
+            // payDate: new Date(date),
+            // commissionDetail: data,
         } as ICommission;
-        addEntity.mutate(massiveIncrease);
+        addEntity.mutate(commissionArchive);
         clear!();
     };
     return (
