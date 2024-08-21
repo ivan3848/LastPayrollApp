@@ -1,5 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
-import { ICommission } from "../../Commission/Types/ICommission";
+import {
+    ICommission,
+    ICommissionArchive,
+} from "../../Commission/Types/ICommission";
 import { addCommissionArchiveService } from "../../Commission/Services/commissionService";
 
 interface Props {
@@ -13,7 +16,7 @@ const useAddCommissionDetailArchiveQuery = ({
     setSubmitted,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: ICommission) =>
+        mutationFn: (entity: ICommissionArchive) =>
             addCommissionArchiveService.post(entity),
         onError: (error: any) => {
             toast.current?.show({

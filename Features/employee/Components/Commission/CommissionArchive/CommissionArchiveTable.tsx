@@ -6,11 +6,11 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { ICommission } from "../Types/ICommission";
+import { ICommission, ICommissionArchive } from "../Types/ICommission";
 import useCommissionArchiveQuery from "../Hooks/useCommissionArchiveQuery";
 interface Props {
     submitted: boolean;
-    handleRevert: (entity: ICommission) => void;
+    handleRevert: (entity: ICommissionArchive) => void;
 }
 
 const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
@@ -125,7 +125,7 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<ICommission>
+                    <ActionTableTemplate<ICommissionArchive>
                         isCustomDelete={true}
                         entity={rowData}
                         handleDelete={handleRevert}

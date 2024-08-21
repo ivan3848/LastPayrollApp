@@ -4,7 +4,11 @@ import Link from "next/link";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import React, { useState } from "react";
-import { commissionArchiveSchema, ICommission } from "../Types/ICommission";
+import {
+    commissionArchiveSchema,
+    ICommission,
+    ICommissionArchive,
+} from "../Types/ICommission";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import CommissionArchiveTable from "./CommissionArchiveTable";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
@@ -26,9 +30,9 @@ const CommissionArchive = () => {
         deleteEntityDialog,
         submitted,
         setEntity,
-    } = useCrudModals<ICommission>();
+    } = useCrudModals<ICommissionArchive>();
 
-    const handleRevert = (entity: ICommission) => {
+    const handleRevert = (entity: ICommissionArchive) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -47,16 +51,8 @@ const CommissionArchive = () => {
         clear: () => void
     ) => {
         const commissionArchive = {
-            // idEmployee: 1,
-            // idPayrollPay: 8,
-            // idConcept: 1,
-            // isExcecuted: false,
-            // isFromFile: true,
-            // isCommissionPayroll: false,
-            // chargeDate: new Date(date),
-            // payDate: new Date(date),
-            // commissionDetail: data,
-        } as ICommission;
+            idEmployee: 1,
+        } as ICommissionArchive;
         addEntity.mutate(commissionArchive);
         clear!();
     };

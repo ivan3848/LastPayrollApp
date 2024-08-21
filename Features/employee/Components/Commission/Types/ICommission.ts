@@ -30,3 +30,25 @@ export const commissionArchiveSchema: Object = {
     concept: 0,
     chargeDate: "",
 };
+
+export interface ICommissionArchive {
+    idEmployee: number;
+    idCommissionDetail: number;
+    payDate: Date;
+    idCommission: number;
+    idConcept: number;
+    amount: number;
+    tax: number;
+    chargeDate: Date;
+    date: Date;
+    isFromFile: boolean;
+    isPaid: boolean;
+    isTaxes: boolean;
+    idPayrollPay?: number;
+    idCompany: number;
+    isCommissionPayroll: boolean;
+    isExcecuted: boolean;
+    concept: number;
+
+    commissionDetail: ICommissionDetail[];
+}
