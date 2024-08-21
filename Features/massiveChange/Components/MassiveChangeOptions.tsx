@@ -23,6 +23,18 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                         }
                     />
                 </Link>
+                <Link href="/massiveChange/archiveCommission">
+                    <Button
+                        label="Commision archivo"
+                        icon="pi pi-search"
+                        className="m-2"
+                        onClick={() =>
+                            setAction(
+                                MassiveChangeOptionsEnum.ArchiveCommission
+                            )
+                        }
+                    />
+                </Link>
             </Fieldset>
         </div>
     );

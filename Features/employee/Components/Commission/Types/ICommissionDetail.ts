@@ -5,4 +5,5 @@ export interface ICommissionDetail {
     isPaid: boolean;
     idCommissionDetail?: number;
     idCommission: number;
+    description?: string;
 }

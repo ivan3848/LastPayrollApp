@@ -51,7 +51,7 @@ const AddCommission = ({
         service: commissionService,
     });
 
-    const onSubmit = (data: ICommission) => {
+    const onSubmit = (data: IInsertCommission) => {
         data.idEmployee = id;
         data.idPayrollPay = 8;
         data.isExcecuted = false;

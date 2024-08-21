@@ -19,5 +19,14 @@ export interface ICommission {
     isExcecuted: boolean;
     concept: number;
 
-    commissionDetail: ICommissionDetail;
+    commissionDetail: ICommissionDetail[];
 }
+
+export const commissionArchiveSchema: Object = {
+    idEmployee: 0,
+    amount: 0,
+    idPayrollPay: 0,
+    date: "",
+    concept: 0,
+    chargeDate: "",
+};

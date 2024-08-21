@@ -66,7 +66,6 @@ const AppMenu = () => {
                 },
                 {
                     label: `Cambios Masivos / Aumento Masivo`,
-                    to: "/massiveChange/massiveIncrease",
                     icon: "pi pi-user-plus",
                     visible: false,
                 },

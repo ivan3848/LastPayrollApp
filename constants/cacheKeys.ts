@@ -55,3 +55,4 @@ export const CACHE_KEY_MASSIVE_INCREASE = "massiveIncrease";
 export const CACHE_KEY_WORKSCHEDULERSUBSTITUTE = "workSchedulerSubstitue";
 export const CACHE_KEY_COMMISSION = "commission";
 export const CACHE_KEY_COMMISSION_Detail = "commissionDetail";
+export const CACHE_KEY_ARCHIVE_COMMISSION = "archiveCommission";
