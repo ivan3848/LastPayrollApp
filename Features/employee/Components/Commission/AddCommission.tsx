@@ -6,7 +6,9 @@ import { Calendar } from "primereact/calendar";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import commissionFormSchema from "./Validation/commissionFormSchema";
 import { IInsertCommission } from "./Types/IInsertCommission";
-import commissionService from "./Services/commissionService";
+import commissionService, {
+    commissionServiceToInsert,
+} from "./Services/commissionService";
 import { ICommission } from "./Types/ICommission";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_DEDUCTION } from "@/constants/conceptTypes";
@@ -48,10 +50,10 @@ const AddCommission = ({
         setAddEntityDialog,
         setSubmitted,
         reset,
-        service: commissionService,
+        service: commissionServiceToInsert,
     });
 
-    const onSubmit = (data: IInsertCommission) => {
+    const onSubmit = (data: ICommission) => {
         data.idEmployee = id;
         data.idPayrollPay = 8;
         data.isExcecuted = false;

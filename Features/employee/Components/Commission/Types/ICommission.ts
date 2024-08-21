@@ -19,7 +19,7 @@ export interface ICommission {
     isExcecuted: boolean;
     concept: number;
 
-    commissionDetail: ICommissionDetail[];
+    commissionDetail: ICommissionDetail;
 }
 
 export const commissionArchiveSchema: Object = {
