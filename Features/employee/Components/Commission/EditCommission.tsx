@@ -12,9 +12,10 @@ import commissionFormSchema from "./Validation/commissionFormSchema";
 import { ICommission } from "./Types/ICommission";
 import useEditCommission from "./Hooks/useEditCommission";
 import { SelectButton } from "primereact/selectbutton";
+import { ICommissionDetail } from "./Types/ICommissionDetail";
 
 interface Props {
-    entity: IInsertCommission;
+    entity: ICommissionDetail;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
@@ -39,7 +40,7 @@ const EditBankEmployeeHistory = ({
         setValue,
         register,
         formState: { errors },
-    } = useForm<ICommission>({
+    } = useForm<ICommissionDetail>({
         resolver: zodResolver(editEntityFormSchema),
         defaultValues: entity,
     });
@@ -57,25 +58,26 @@ const EditBankEmployeeHistory = ({
             Object.keys(entity).forEach((key) => {
                 if (key === "date") {
                     setValue(
-                        key as keyof ICommission,
-                        new Date(entity[key as keyof ICommission] as Date)
+                        key as keyof ICommissionDetail,
+                        new Date(entity[key as keyof ICommissionDetail] as Date)
                     );
                     return;
                 }
                 setValue(
-                    key as keyof ICommission,
-                    entity[key as keyof ICommission]
+                    key as keyof ICommissionDetail,
+                    entity[key as keyof ICommissionDetail]
                 );
             });
         }
     }, [entity, setEditEntityDialog]);
 
-    const onSubmit = (data: ICommission) => {
-        data.idCommission = entity.idCommission;
+    const onSubmit = (data: ICommissionDetail) => {
+        data = { ...entity };
+        data.amount = data.amount;
         data.idEmployee = id;
         data.idConcept = data.idConcept;
-        data.amount = data.amount;
         data.date = data.date;
+
         editEntity.mutate(data);
     };
 
@@ -112,9 +114,9 @@ const EditBankEmployeeHistory = ({
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="birthDate">Fecha de pago</label>
                             <Calendar
-                                id="payDate"
-                                value={watch("payDate") ?? new Date()}
-                                onChange={(e) => setValue("payDate", e.value!)}
+                                id="date"
+                                value={watch("date") ?? new Date()}
+                                onChange={(e) => setValue("date", e.value!)}
                                 showIcon
                                 showButtonBar
                             />

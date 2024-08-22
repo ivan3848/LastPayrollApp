@@ -6,7 +6,6 @@ import { Toast } from "primereact/toast";
 import React, { useState } from "react";
 import {
     commissionArchiveSchema,
-    ICommission,
     ICommissionArchive,
 } from "../Types/ICommission";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
@@ -17,6 +16,11 @@ import useAddCommissionDetailArchiveQuery from "../../CommissionDetail/Hooks/use
 const CommissionArchive = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [notExistedEmployeeData, setNotExistedEmployeeData] = useState<
+        ICommissionArchive[]
+    >([]);
+    const [isExistEmployee, setIsExistEmployee] = useState(false);
+
     const [commissionArchiveSchemaValue, setCommissionArchiveSchema] = useState<
         string[]
     >(Object.keys(commissionArchiveSchema));
@@ -70,7 +74,7 @@ const CommissionArchive = () => {
             {isVisible ? (
                 <div className="inline-flex align-items-center justify-content-center gap-5">
                     <Link
-                        href="/archiveCommission"
+                        href="/massiveChange"
                         className="text-inherit"
                         style={{ textDecoration: "none", color: "inherit" }}
                         onClick={() => {
@@ -110,6 +114,10 @@ const CommissionArchive = () => {
                 <ExcelTable
                     handleUpload={handleUpload}
                     type={commissionArchiveSchemaValue}
+                    notExistedEmployeeData={notExistedEmployeeData}
+                    setIsExistEmployee={setIsExistEmployee}
+                    isExistEmployee={isExistEmployee}
+                    setNotExistedEmployeeData={setNotExistedEmployeeData}
                 />
             ) : (
                 <div className="m-2">

@@ -1,6 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import { IInsertCommission } from "../Types/IInsertCommission";
 import commissionService from "../Services/commissionService";
+import { ICommissionDetail } from "../Types/ICommissionDetail";
+import commissionDetailService from "../../CommissionDetail/Services/commissionDetailService";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -15,8 +17,8 @@ const useEditCommission = ({
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IInsertCommission) =>
-            commissionService.put(entity),
+        mutationFn: (entity: ICommissionDetail) =>
+            commissionDetailService.put(entity),
 
         onError: (error: any) => {
             toast.current?.show({

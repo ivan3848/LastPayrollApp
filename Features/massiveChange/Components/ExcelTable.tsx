@@ -7,10 +7,9 @@ import {
     DataTableSortEvent,
 } from "primereact/datatable";
 import { FileUpload } from "primereact/fileupload";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import useExcelTable from "../Hooks/useExcelTable";
 import { getTableColumnName } from "../Types/ColumnTranslations";
-import { IMassiveIncrease } from "./MassiveIncrease/Types/IMassiveIncrease";
 import { Button } from "primereact/button";
 
 type Props = {
@@ -21,10 +20,10 @@ type Props = {
         date: string,
         clear: () => void
     ) => void;
-    notExistedEmployeeData: IMassiveIncrease[];
+    notExistedEmployeeData: any[];
     isExistEmployee: boolean;
     setIsExistEmployee: (value: boolean) => void;
-    setNotExistedEmployeeData: (value: IMassiveIncrease[]) => void;
+    setNotExistedEmployeeData: (value: any[]) => void;
 };
 
 export default function ExcelTable({

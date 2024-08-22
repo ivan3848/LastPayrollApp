@@ -24,11 +24,11 @@ export interface ICommission {
 
 export const commissionArchiveSchema: Object = {
     idEmployee: 0,
-    amount: 0,
-    idPayrollPay: 0,
-    date: "",
-    idConcept: 0,
-    chargeDate: "",
+    Amount: 0,
+    IdPayrollPay: 0,
+    Date: "",
+    IdConcept: 0,
+    ChargeDate: "",
 };
 
 export interface ICommissionArchive {

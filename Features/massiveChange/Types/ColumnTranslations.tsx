@@ -8,6 +8,11 @@ const columnTranslations: { [key: string]: string } = {
     Salary: "Salario",
     DateChange: "Fecha de cambio",
     Reason: "Razón",
+    ChargeDate: "Fecha de cargo",
+    Amount: "Cantidad",
+    IdPayrollPay: "Código de nómina",
+    Date: "Fecha",
+    IdConcept: "Código Concepto",
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;
