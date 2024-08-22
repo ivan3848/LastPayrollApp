@@ -18,5 +18,5 @@ export interface IInsertCommission {
     isCommissionPayroll: boolean;
     isExcecuted: boolean;
     concept: number;
-    commissionDetail: ICommissionDetail;
+    commissionDetail: ICommissionDetail[];
 }

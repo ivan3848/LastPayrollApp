@@ -23,9 +23,9 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                         }
                     />
                 </Link>
-                {/* <Link href="/massiveChange/archiveCommission">
+                <Link href="/massiveChange/archiveCommission">
                     <Button
-                        label="Commision archivo"
+                        label="Comision archivo"
                         icon="pi pi-search"
                         className="m-2"
                         onClick={() =>
@@ -34,7 +34,7 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                             )
                         }
                     />
-                </Link> */}
+                </Link>
             </Fieldset>
         </div>
     );

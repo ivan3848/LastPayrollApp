@@ -1,8 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import {
-    ICommission,
-    ICommissionArchive,
-} from "../../Commission/Types/ICommission";
+import { ICommissionArchive } from "../../Commission/Types/ICommission";
 import { addCommissionArchiveService } from "../../Commission/Services/commissionService";
 
 interface Props {

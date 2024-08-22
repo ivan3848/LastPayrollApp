@@ -12,8 +12,8 @@ import { ICommissionDetail } from "./Types/ICommissionDetail";
 interface Props {
     idEmployee: number;
     submitted: boolean;
-    handleEdit: (entity: ICommissionDetail) => void;
-    handleDelete: (entity: ICommissionDetail) => void;
+    handleEdit: (entity: ICommission) => void;
+    handleDelete: (entity: ICommission) => void;
     handleAdd: () => void;
 }
 
@@ -78,7 +78,7 @@ const CommissionTable = ({
 
                 <Column
                     header="Acciones"
-                    body={(rowData: ICommissionDetail) => (
+                    body={(rowData: ICommission) => (
                         <ActionTableTemplate
                             entity={rowData}
                             handleEdit={handleEdit}

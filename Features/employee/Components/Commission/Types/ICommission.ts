@@ -19,7 +19,7 @@ export interface ICommission {
     isExcecuted: boolean;
     concept: number;
 
-    commissionDetail: ICommissionDetail;
+    commissionDetail: ICommissionDetail[];
 }
 
 export const commissionArchiveSchema: Object = {
@@ -27,7 +27,7 @@ export const commissionArchiveSchema: Object = {
     amount: 0,
     idPayrollPay: 0,
     date: "",
-    concept: 0,
+    idConcept: 0,
     chargeDate: "",
 };
 
@@ -48,6 +48,8 @@ export interface ICommissionArchive {
     idCompany: number;
     isCommissionPayroll: boolean;
     isExcecuted: boolean;
+    dateExcecuted: Date;
+    description: string;
     concept: number;
 
     commissionDetail: ICommissionDetail[];

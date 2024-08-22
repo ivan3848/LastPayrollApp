@@ -39,10 +39,11 @@ const EditBankEmployeeHistory = ({
         setValue,
         register,
         formState: { errors },
-    } = useForm<IInsertCommission>({
+    } = useForm<ICommission>({
         resolver: zodResolver(editEntityFormSchema),
         defaultValues: entity,
     });
+    console.log(entity);
 
     const editEntity = useEditCommission({
         toast,
@@ -56,14 +57,14 @@ const EditBankEmployeeHistory = ({
             Object.keys(entity).forEach((key) => {
                 if (key === "date") {
                     setValue(
-                        key as keyof IInsertCommission,
-                        new Date(entity[key as keyof IInsertCommission] as Date)
+                        key as keyof ICommission,
+                        new Date(entity[key as keyof ICommission] as Date)
                     );
                     return;
                 }
                 setValue(
-                    key as keyof IInsertCommission,
-                    entity[key as keyof IInsertCommission]
+                    key as keyof ICommission,
+                    entity[key as keyof ICommission]
                 );
             });
         }
@@ -86,7 +87,7 @@ const EditBankEmployeeHistory = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Editar Deducción"
+            header="Editar Commission"
             modal
             className="p-fluid"
             onHide={hideDialog}

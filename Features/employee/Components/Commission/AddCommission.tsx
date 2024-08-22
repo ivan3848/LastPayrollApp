@@ -7,6 +7,7 @@ import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import commissionFormSchema from "./Validation/commissionFormSchema";
 import { IInsertCommission } from "./Types/IInsertCommission";
 import commissionService, {
+    addCommissionService,
     commissionServiceToInsert,
 } from "./Services/commissionService";
 import { ICommission } from "./Types/ICommission";
@@ -14,6 +15,7 @@ import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptD
 import { CONCEPT_TYPE_DEDUCTION } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { SelectButton } from "primereact/selectbutton";
+import List from "../../../../app/(main)/profile/list/page";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -54,10 +56,13 @@ const AddCommission = ({
     });
 
     const onSubmit = (data: ICommission) => {
+        console.log(data);
         data.idEmployee = id;
         data.idPayrollPay = 8;
         data.isExcecuted = false;
-        data.commissionDetail = { ...data };
+        data.commissionDetail = [{ ...data }];
+        data.payDate = data.payDate;
+        data.idConcept = data.idConcept;
         addEntity.mutate(data);
     };
 

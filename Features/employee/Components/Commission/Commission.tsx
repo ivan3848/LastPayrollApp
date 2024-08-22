@@ -7,7 +7,8 @@ import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import CommissionTable from "./CommissionTable";
 import AddCommission from "./AddCommission";
-import { ICommissionDetail } from "./Types/ICommissionDetail";
+import EditCommission from "./EditCommission";
+import { ICommission } from "./Types/ICommission";
 
 interface props {
     id: number;
@@ -26,20 +27,20 @@ const Commission = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<ICommissionDetail>();
+    } = useCrudModals<ICommission>();
 
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: ICommissionDetail) => {
+    const handleEdit = (entity: ICommission) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: ICommissionDetail) => {
+    const handleDelete = (entity: ICommission) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -71,7 +72,7 @@ const Commission = ({ id }: props) => {
                         idEmployee={id}
                     />
                 </Suspense>
-                {/* {editEntityDialog && (
+                {editEntityDialog && (
                     <EditCommission
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
@@ -80,7 +81,7 @@ const Commission = ({ id }: props) => {
                         editEntityDialog={editEntityDialog}
                         id={id}
                     />
-                )} */}
+                )}
 
                 {addEntityDialog && (
                     <AddCommission
@@ -95,8 +96,8 @@ const Commission = ({ id }: props) => {
 
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idCommission!}
-                        endpoint="employee/commission"
+                        id={entity?.idCommissionDetail!}
+                        endpoint="employee/commissiondetail"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
