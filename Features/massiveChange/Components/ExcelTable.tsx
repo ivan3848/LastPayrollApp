@@ -1,3 +1,4 @@
+import NotExistedEmployee from "@/Features/employee/Components/NotExistedEmployee";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
@@ -6,9 +7,11 @@ import {
     DataTableSortEvent,
 } from "primereact/datatable";
 import { FileUpload } from "primereact/fileupload";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import useExcelTable from "../Hooks/useExcelTable";
 import { getTableColumnName } from "../Types/ColumnTranslations";
+import { IMassiveIncrease } from "./MassiveIncrease/Types/IMassiveIncrease";
+import { Button } from "primereact/button";
 
 type Props = {
     type: string[];
@@ -18,13 +21,25 @@ type Props = {
         date: string,
         clear: () => void
     ) => void;
+    notExistedEmployeeData: IMassiveIncrease[];
+    isExistEmployee: boolean;
+    setIsExistEmployee: (value: boolean) => void;
+    setNotExistedEmployeeData: (value: IMassiveIncrease[]) => void;
 };
 
-export default function ExcelTable({ type, handleUpload }: Props) {
+export default function ExcelTable({
+    type,
+    handleUpload,
+    notExistedEmployeeData,
+    isExistEmployee,
+    setIsExistEmployee,
+    setNotExistedEmployeeData,
+}: Props) {
     const { setPage, setPageSize, setSorts, clearSorts, params } =
         useParamFilter();
 
     const { excelData, onSelect, clearData, file } = useExcelTable();
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -43,16 +58,28 @@ export default function ExcelTable({ type, handleUpload }: Props) {
                 break;
         }
     };
+
     const formatDate = (dateWithoutFormat: any): string => {
         const date = new Date(dateWithoutFormat);
         return date.toISOString().slice(0, 10);
     };
+
     const fileUploadRef = useRef<FileUpload>(null);
 
     return (
         <>
             <div className="m-1">
                 <div className="mb-3">
+                    {notExistedEmployeeData.length > 0 && (
+                        <div className="mb-3">
+                            <Button
+                                icon="pi pi-external-link"
+                                className="p-button p-button-rounded p-button-outlined"
+                                label="Ver empleados no existentes"
+                                onClick={() => setIsExistEmployee(true)}
+                            />
+                        </div>
+                    )}
                     <FileUpload
                         ref={fileUploadRef}
                         name="demo[]"
@@ -118,6 +145,16 @@ export default function ExcelTable({ type, handleUpload }: Props) {
                             ></Column>
                         ))}
                 </DataTable>
+
+                {isExistEmployee && (
+                    <>
+                        <NotExistedEmployee
+                            isExistEmployee={isExistEmployee}
+                            setIsExistEmployee={setIsExistEmployee}
+                            notExistedEmployeeData={notExistedEmployeeData}
+                        />
+                    </>
+                )}
             </div>
         </>
     );

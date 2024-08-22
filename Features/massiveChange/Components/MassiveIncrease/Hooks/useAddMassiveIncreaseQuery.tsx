@@ -1,16 +1,22 @@
 import { useMutation } from "@tanstack/react-query";
-import { IMassiveIncrease } from "../Types/IMassiveIncrease";
+import { Employee, IMassiveIncrease } from "../Types/IMassiveIncrease";
 import massiveIncreaseService from "../Services/massiveIncreaseService";
+import MassiveIncrease from "../Components/MassiveIncrease";
 
 interface Props {
     toast: React.MutableRefObject<any>;
     setAddEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
+    setNotExistedEmployeeData: (value: IMassiveIncrease[]) => void;
+    setIsExistEmployee: (value: boolean) => void;
 }
+
 const useAddMassiveIncreaseQuery = ({
     toast,
     setAddEntityDialog,
     setSubmitted,
+    setNotExistedEmployeeData,
+    setIsExistEmployee,
 }: Props) => {
     return useMutation({
         mutationFn: (entity: IMassiveIncrease) =>
@@ -23,10 +29,14 @@ const useAddMassiveIncreaseQuery = ({
                 life: 3000,
             });
         },
-        onSuccess: () => {
+        onSuccess: (e) => {
             setAddEntityDialog(false);
             setSubmitted(true);
-
+            const notExistedEmployeeDataArray = Object.values(
+                e
+            ) as IMassiveIncrease[];
+            setNotExistedEmployeeData(notExistedEmployeeDataArray);
+            setIsExistEmployee(true);
             toast.current?.show({
                 severity: "success",
                 summary: "Insertado!",
