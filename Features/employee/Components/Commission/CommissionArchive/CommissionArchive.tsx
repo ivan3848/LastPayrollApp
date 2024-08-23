@@ -56,13 +56,8 @@ const CommissionArchive = () => {
     ) => {
         const commissionArchive = {
             isFromFile: true,
-            idEmployee: 1,
-            idPayrollPay: 8,
-            idConcept: 1,
             commissionDetail: data,
-            payDate: new Date(date),
-            chargeDate: new Date(date),
-            dateExcecuted: new Date(),
+
             description: name,
         } as ICommissionArchive;
         addEntity.mutate(commissionArchive);
