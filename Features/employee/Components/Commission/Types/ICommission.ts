@@ -13,7 +13,7 @@ export interface ICommission {
     isFromFile: boolean;
     isPaid: boolean;
     isTaxes: boolean;
-    idPayrollPay?: number;
+    idPayrollPay: number;
     idCompany: number;
     isCommissionPayroll: boolean;
     isExcecuted: boolean;

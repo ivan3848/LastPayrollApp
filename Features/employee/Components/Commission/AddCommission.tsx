@@ -39,7 +39,7 @@ const AddCommission = ({
         reset,
         setValue,
         formState: { errors },
-    } = useForm<IInsertCommission>({
+    } = useForm<ICommission>({
         resolver: zodResolver(addEntityFormSchema),
     });
 
