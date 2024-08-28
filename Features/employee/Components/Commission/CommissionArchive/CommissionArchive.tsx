@@ -12,6 +12,11 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import CommissionArchiveTable from "./CommissionArchiveTable";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import useAddCommissionDetailArchiveQuery from "../../CommissionDetail/Hooks/useAddCommissionDetailArchiveQuery";
+import {
+    ICommissionDetail,
+    ICommissionDetailArchive,
+} from "../Types/ICommissionDetail";
+import { number } from "zod";
 
 const CommissionArchive = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
@@ -57,12 +62,42 @@ const CommissionArchive = () => {
         const commissionArchive = {
             isFromFile: true,
             commissionDetail: data,
-
+            payDate: new Date(date),
+            dateExcecuted: new Date(),
             description: name,
         } as ICommissionArchive;
+
+        if (
+            commissionArchive.commissionDetail.some(
+                (x: ICommissionDetailArchive) => isNaN(x.idpayrollpay)
+            )
+        ) {
+            toast.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: "El archivo contiene registros con letras en el campo Código de nómina",
+                life: 3000,
+            });
+            return;
+        }
+        if (
+            commissionArchive.commissionDetail.some(
+                (x: ICommissionDetailArchive) =>
+                    typeof x.conceptcode === "number"
+            )
+        ) {
+            commissionArchive.commissionDetail.forEach(
+                (x: ICommissionDetailArchive) => {
+                    if (typeof x.conceptcode === "number") {
+                        x.conceptcode = x.conceptcode.toString();
+                    }
+                }
+            );
+        }
         addEntity.mutate(commissionArchive);
-        clear!();
+        clear();
     };
+
     return (
         <>
             <Toast ref={toast} />

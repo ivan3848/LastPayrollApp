@@ -7,7 +7,6 @@ import AddButton from "../../../Shared/Components/AddButton";
 import { ICommission } from "./Types/ICommission";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useCommissionDetailByIdEmployee from "../CommissionDetail/Hooks/useCommissionDetailByIdEmployee";
-import { ICommissionDetail } from "./Types/ICommissionDetail";
 
 interface Props {
     idEmployee: number;

@@ -6,7 +6,7 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { ICommission, ICommissionArchive } from "../Types/ICommission";
+import { ICommissionArchive } from "../Types/ICommission";
 import useCommissionArchiveQuery from "../Hooks/useCommissionArchiveQuery";
 interface Props {
     submitted: boolean;

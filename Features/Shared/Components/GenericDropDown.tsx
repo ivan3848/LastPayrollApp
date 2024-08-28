@@ -22,6 +22,7 @@ interface Props<T> {
         params: IParamsApi,
         dependencies: boolean[]
     ) => DefinedUseQueryResult<IResponse<T>, Error>;
+    placeholder?: string;
 }
 function GenericDropDown<T>({
     isValid,
@@ -31,6 +32,7 @@ function GenericDropDown<T>({
     isDisabled,
     param,
     idToSet = id,
+    placeholder,
     setValue,
     watch,
     useQuery,
@@ -60,7 +62,7 @@ function GenericDropDown<T>({
                 }}
                 options={data.items}
                 optionLabel={text}
-                placeholder="Seleccione una opción..."
+                placeholder={placeholder ?? "Seleccione una opción..."}
                 filter
                 emptyMessage="No hay registros"
                 className={classNames(

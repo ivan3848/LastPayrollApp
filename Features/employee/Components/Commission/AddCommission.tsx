@@ -5,13 +5,16 @@ import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButton
 import { Calendar } from "primereact/calendar";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import commissionFormSchema from "./Validation/commissionFormSchema";
-import { IInsertCommission } from "./Types/IInsertCommission";
 import { commissionServiceToInsert } from "./Services/commissionService";
 import { ICommission } from "./Types/ICommission";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { SelectButton } from "primereact/selectbutton";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
+import { InputText } from "primereact/inputtext";
+import { useState } from "react";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -31,7 +34,7 @@ const AddCommission = ({
 }: Props) => {
     const { addEntityFormSchema } = commissionFormSchema();
     let isCommissionPayroll: string[] = ["Si", "No"];
-
+    const commission = useState<ICommission>();
     const {
         handleSubmit,
         register,
@@ -54,11 +57,12 @@ const AddCommission = ({
     const onSubmit = (data: ICommission) => {
         console.log(data);
         data.idEmployee = id;
-        data.idPayrollPay = 8;
-        data.isExcecuted = false;
-        data.commissionDetail = [{ ...data }];
+        data.description = data.description;
+        data.idPayrollPay = data.idPayrollPay;
         data.payDate = data.payDate;
-        data.idConcept = data.idConcept;
+        data.isExcecuted = false;
+        data.conceptCode = data.conceptCode;
+        data.commissionDetail = [{ ...data }];
         addEntity.mutate(data);
     };
 
@@ -127,6 +131,23 @@ const AddCommission = ({
                                     options={isCommissionPayroll}
                                 />
                             </div>
+                        </div>
+
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="Description">Description</label>
+                            <InputText
+                                id="description"
+                                type="text"
+                                {...register("description")}
+                                defaultValue={
+                                    "Dejar vacio si no hay descripcion"
+                                }
+                            />
+                            {errors.description && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.description.message?.toString()}
+                                </small>
+                            )}
                         </div>
 
                         <div className="field col-12 md:col-6 lg:col-4">

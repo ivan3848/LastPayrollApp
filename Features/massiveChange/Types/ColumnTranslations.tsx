@@ -13,6 +13,7 @@ const columnTranslations: { [key: string]: string } = {
     IdPayrollPay: "Código de nómina",
     Date: "Fecha",
     IdConcept: "Código Concepto",
+    ConceptCode: "Codigo Concepto Normal",
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;
