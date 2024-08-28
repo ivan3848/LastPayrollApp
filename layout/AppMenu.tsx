@@ -71,6 +71,32 @@ const AppMenu = () => {
                 },
             ],
         },
+        {
+            label: "GESTION NOMINA",
+            icon: "pi pi-fw pi-users",
+            items: [
+                {
+                    label: "Registro de Nómina",
+                    icon: "pi pi-fw pi-book",
+                    to: "/payrollManagement",
+                },
+                {
+                    label: "Historial de Nómina",
+                    icon: "pi pi-fw pi-book",
+                    to: "",
+                },
+                {
+                    label: "Area de Nómina",
+                    icon: "pi pi-fw pi-book",
+                    to: "",
+                },
+                {
+                    label: "Contabilizacion",
+                    icon: "pi pi-fw pi-calculator",
+                    to: "",
+                },
+            ]
+        }
     ];
 
     return <AppSubMenu model={model} />;
