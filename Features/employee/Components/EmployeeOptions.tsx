@@ -61,7 +61,12 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Deduction)}
                 />
-                <Button label="Prestamos" icon="pi pi-search" className="m-2" />
+                <Button 
+                    label="Prestamos" 
+                    icon="pi pi-search" 
+                    className="m-2" 
+                    onClick={() => setAction(EmployeeOptionsEnum.Lease)}
+                    />
                 <Button
                     label="ISR A Favor"
                     icon="pi pi-sparkles"

@@ -1,9 +1,6 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import {

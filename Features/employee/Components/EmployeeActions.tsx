@@ -16,6 +16,7 @@ import Deduction from "./Deduction/Deduction";
 import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
 import Permit from "./Permit/Permit";
+import Lease from "./Lease/Lease";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -100,6 +101,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Permit && (
                         <Permit id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Lease && (
+                        <Lease id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>
