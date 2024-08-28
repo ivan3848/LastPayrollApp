@@ -71,7 +71,6 @@ const EditBankEmployeeHistory = ({
     }, [entity, setEditEntityDialog]);
 
     const onSubmit = (data: ICommissionDetail) => {
-        console.log(data);
         data.amount = data.amount;
         data.idEmployee = id;
         data.idPayrollPay = data.idPayrollPay;
