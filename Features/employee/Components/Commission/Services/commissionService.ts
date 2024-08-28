@@ -1,6 +1,7 @@
 import ApiService from "@/services/ApiService";
 import { ICommission, ICommissionArchive } from "../Types/ICommission";
 import { IInsertCommission } from "../Types/IInsertCommission";
+import { ICommissionDetailArchive } from "../Types/ICommissionDetail";
 
 const commissionService = new ApiService<IInsertCommission, IInsertCommission>(
     "employee/commission/archive"
@@ -20,8 +21,8 @@ const commissionByIdEmployeeService = new ApiService<
 >(`employee/commission/byIdEmployee/`);
 
 const addCommissionArchiveService = new ApiService<
-    ICommissionArchive,
-    ICommissionArchive
+    ICommissionDetailArchive,
+    ICommissionDetailArchive
 >("employee/commission/archive");
 
 export default commissionService;

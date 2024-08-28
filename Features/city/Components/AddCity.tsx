@@ -89,6 +89,7 @@ const AddCity = ({
                         id="idRegion"
                         isValid={!!errors.idRegion}
                         text="name"
+                        placeholder="Seleccione una región..."
                         useQuery={useRegionQuery}
                         setValue={setValue}
                         watch={watch}

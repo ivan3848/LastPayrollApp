@@ -7,6 +7,7 @@ const commissionFormSchema = () => {
         amount: z.number().optional(),
         isCommissionPayroll: z.boolean().optional(),
         idEmployee: z.number().optional(),
+        idPayrollPay: z.number().optional(),
     });
 
     const addEntityFormSchema = z.object({
@@ -16,6 +17,7 @@ const commissionFormSchema = () => {
         isCommissionPayroll: z.boolean().optional(),
         idEmployee: z.number().optional(),
         idPayrollPay: z.number().optional(),
+        description: z.string().optional(),
     });
     return { editEntityFormSchema, addEntityFormSchema };
 };

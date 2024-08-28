@@ -1,18 +1,18 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
-import { IInsertCommission } from "./Types/IInsertCommission";
 import commissionFormSchema from "./Validation/commissionFormSchema";
-import { ICommission } from "./Types/ICommission";
 import useEditCommission from "./Hooks/useEditCommission";
 import { SelectButton } from "primereact/selectbutton";
 import { ICommissionDetail } from "./Types/ICommissionDetail";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 
 interface Props {
     entity: ICommissionDetail;
@@ -44,7 +44,6 @@ const EditBankEmployeeHistory = ({
         resolver: zodResolver(editEntityFormSchema),
         defaultValues: entity,
     });
-    console.log(entity);
 
     const editEntity = useEditCommission({
         toast,
@@ -72,12 +71,16 @@ const EditBankEmployeeHistory = ({
     }, [entity, setEditEntityDialog]);
 
     const onSubmit = (data: ICommissionDetail) => {
-        data = { ...entity };
+        console.log(data);
         data.amount = data.amount;
         data.idEmployee = id;
+        data.idPayrollPay = data.idPayrollPay;
         data.idConcept = data.idConcept;
         data.date = data.date;
-
+        data.idCommissionDetail = entity.idCommissionDetail;
+        data.isCommissionPayroll = data.isCommissionPayroll;
+        data.chargeDate = entity.chargeDate;
+        data.idCommission = entity.idCommission;
         editEntity.mutate(data);
     };
 
@@ -148,6 +151,26 @@ const EditBankEmployeeHistory = ({
                                     options={isCommissionPayroll}
                                 />
                             </div>
+                        </div>
+
+                        <div className="field">
+                            <label htmlFor="idPayrollPay" className="w-full">
+                                Nomina de Pago
+                            </label>
+                            <GenericDropDown
+                                id="idPayrollPay"
+                                isValid={!!errors.idPayrollPay}
+                                text="payrollName"
+                                placeholder="Si quiere una comisión nueva, deje el campo vacío"
+                                useQuery={usePayrollPayQuery}
+                                setValue={setValue}
+                                watch={watch}
+                            />
+                            {errors.idPayrollPay && (
+                                <small className="p-invalid text-danger">
+                                    {errors.idPayrollPay.message?.toString()}
+                                </small>
+                            )}
                         </div>
 
                         <div className="field col-12 md:col-6 lg:col-4">

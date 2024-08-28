@@ -1,7 +1,11 @@
-import { ICommissionDetail } from "./ICommissionDetail";
+import {
+    ICommissionDetail,
+    ICommissionDetailArchive,
+} from "./ICommissionDetail";
 
 export interface ICommission {
     idEmployee: number;
+    description: string;
     idCommissionDetail: number;
     payDate: Date;
     idCommission: number;
@@ -17,7 +21,8 @@ export interface ICommission {
     idCompany: number;
     isCommissionPayroll: boolean;
     isExcecuted: boolean;
-    concept: number;
+    payrollName: string;
+    conceptCode: number;
 
     commissionDetail: ICommissionDetail[];
 }
@@ -27,8 +32,7 @@ export const commissionArchiveSchema: Object = {
     Amount: 0,
     IdPayrollPay: 0,
     Date: "",
-    IdConcept: 0,
-    ChargeDate: "",
+    conceptCode: 0,
 };
 
 export interface ICommissionArchive {
@@ -44,13 +48,13 @@ export interface ICommissionArchive {
     isFromFile: boolean;
     isPaid: boolean;
     isTaxes: boolean;
-    idPayrollPay?: number;
     idCompany: number;
     isCommissionPayroll: boolean;
     isExcecuted: boolean;
     dateExcecuted: Date;
     description: string;
-    concept: number;
+    conceptcode: string | number;
+    idpayrollpay: number;
 
-    commissionDetail: ICommissionDetail[];
+    commissionDetail: ICommissionDetailArchive[];
 }
