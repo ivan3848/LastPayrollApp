@@ -5,7 +5,6 @@ import { DataTable, DataTableSortEvent } from "primereact/datatable";
 import { Card } from "primereact/card";
 import AddButton from "../../../Shared/Components/AddButton";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useGetPermitByIdEmployee from "./Hooks/useGetPermitByIdEmployee";
 

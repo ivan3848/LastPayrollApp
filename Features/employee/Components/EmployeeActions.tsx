@@ -11,11 +11,13 @@ import Dependant from "./Dependant/Dependant";
 import Profit from "./Benefit/Profit";
 import PersonInsurance from "./PersonInsurance/PersonInsurance";
 import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
-import { Toast } from "primereact/toast";
 import Deduction from "./Deduction/Deduction";
 import License from "./Licenses/License";
 import ISRInFavor from "./ISRInFavor/ISRInFavor";
 import Permit from "./Permit/Permit";
+import Vacation from "./Vacation/Vacation";
+import WorkSchedulerSubstitute from "./WorkSchedulerSubstitute/WorkSchedulerSubstitute";
+import Commission from "./Commission/Commission";
 import Lease from "./Lease/Lease";
 
 interface Props {
@@ -101,6 +103,16 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Permit && (
                         <Permit id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Vacation && (
+                        <Vacation employeeEntity={employee} />
+                    )}
+                    {openAction ===
+                        EmployeeOptionsEnum.WorkSchedulerSubstitute && (
+                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Commission && (
+                        <Commission id={employee.idEmployee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.Lease && (
                         <Lease id={employee.idEmployee!} />

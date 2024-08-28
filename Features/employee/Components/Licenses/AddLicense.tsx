@@ -9,7 +9,7 @@ import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
 import { addLicenseService } from "./Services/licenseService";
-import LicensesFormSchema from "./Validation/LicensesProfitSchema";
+import LicensesFormSchema from "./Validation/LicensesFormSchema";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
