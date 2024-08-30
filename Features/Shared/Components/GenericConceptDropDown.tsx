@@ -39,7 +39,7 @@ function GenericConceptDropDown<T>({
                 )}
                 onChange={(e: DropdownChangeEvent) => {
                     setData && setData(e.value);
-                    setValue(id, e.value.idConcept)
+                    setValue(id, e.value.idConcept);
                 }}
                 options={data}
                 optionLabel="name"

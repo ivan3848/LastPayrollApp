@@ -18,6 +18,7 @@ import Permit from "./Permit/Permit";
 import Vacation from "./Vacation/Vacation";
 import WorkSchedulerSubstitute from "./WorkSchedulerSubstitute/WorkSchedulerSubstitute";
 import Commission from "./Commission/Commission";
+import Lease from "./Lease/Lease";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -112,6 +113,9 @@ const EmployeeActions = ({
                     )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />
+                    )}
+                    {openAction === EmployeeOptionsEnum.Lease && (
+                        <Lease id={employee.idEmployee!} />
                     )}
                 </div>
             </Dialog>

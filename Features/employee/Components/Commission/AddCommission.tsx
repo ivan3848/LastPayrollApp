@@ -11,10 +11,7 @@ import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptD
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { SelectButton } from "primereact/selectbutton";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -34,7 +31,6 @@ const AddCommission = ({
 }: Props) => {
     const { addEntityFormSchema } = commissionFormSchema();
     let isCommissionPayroll: string[] = ["Si", "No"];
-    const commission = useState<ICommission>();
     const {
         handleSubmit,
         register,
@@ -55,7 +51,6 @@ const AddCommission = ({
     });
 
     const onSubmit = (data: ICommission) => {
-        console.log(data);
         data.idEmployee = id;
         data.description = data.description;
         data.idPayrollPay = data.idPayrollPay;

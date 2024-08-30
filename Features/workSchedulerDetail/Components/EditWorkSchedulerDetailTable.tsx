@@ -30,7 +30,6 @@ const EditWorkSchedulerDetailTable = ({
     const [idToDelete, setIdToDelete] = useState<number>(0);
 
     const handleDelete = (entity: IWorkSchedulerDetail) => {
-        console.log(entity);
         setIdToDelete(entity.idWorkSchedulerDetail!);
         setDeleteEntityDialog(true);
     };
