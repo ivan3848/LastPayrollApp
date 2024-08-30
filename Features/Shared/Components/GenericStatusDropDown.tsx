@@ -10,6 +10,7 @@ interface Props<T> {
     idValueEdit?: number;
     tableName: string;
     isFocus?: boolean;
+    isReadOnly?: boolean;
     setValue: UseFormSetValue<any>;
     watch: (field: string) => any;
 }
@@ -22,6 +23,7 @@ function GenericStatusDropDown<T>({
     isFocus = false,
     setValue,
     watch,
+    isReadOnly = false,
 }: Props<T>) {
     useEffect(() => {
         if (idValueEdit) {
@@ -43,6 +45,7 @@ function GenericStatusDropDown<T>({
                 options={data}
                 optionLabel="description"
                 placeholder="Seleccione una opción..."
+                disabled={isReadOnly}
                 filter
                 autoFocus={isFocus}
                 emptyMessage="No hay registros"
