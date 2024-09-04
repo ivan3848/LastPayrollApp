@@ -1,22 +1,23 @@
 "use client";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
-import TabSkeletonTemplate from "@/Features/Shared/Components/TabSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
-import { TabPanel, TabView } from "primereact/tabview";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import LeasePause from "../LeasePause/LeasePause";
-import AddLease from "./AddLease";
-import EditLease from "./EditLease";
-import LeaseTable from "./LeaseTable";
-import Amortization from "../Amortization/Amortization";
+import AddAmortization from "./AddAmortization";
 
 interface props {
     id: number;
+    customAddDialog: boolean;
+    setCustomAddDialog: (customAddDialog: boolean) => void;
+    customEntity: ILease;
 }
 
-const Lease = ({ id }: props) => {
+const Amortization = ({
+    id,
+    customAddDialog,
+    setCustomAddDialog,
+    customEntity,
+}: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -29,29 +30,24 @@ const Lease = ({ id }: props) => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<ILease>();
+    } = useCrudModals<IAmortization>();
 
-    const handleAdd = () => {
+    const handleAdd = (entity?: IAmortization) => {
+        setEntity(entity!);
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: ILease) => {
+    const handleEdit = (entity: IAmortization) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: ILease) => {
+    const handleDelete = (entity: IAmortization) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
-    };
-
-    const handleAmortize = (entity: ILease) => {
-        setEntity(entity);
-        //setSubmitted(false);
-        setAddEntityDialog(true);
     };
 
     const entityProperties = [
@@ -63,45 +59,48 @@ const Lease = ({ id }: props) => {
         "Pago",
         "Es para pago",
     ];
-
+    console.log(customEntity);
     return (
         <div className="grid">
             <div className="w-full">
                 <Toast ref={toast} />
-                <TabView>
-                    <TabPanel
-                        header="Prestamos / Avances"
-                        leftIcon="pi pi-clipboard mr-2"
-                    >
-                        <Suspense
-                            fallback={
-                                <TableSkeletonTemplate
-                                    items={entityProperties}
-                                />
-                            }
-                        >
-                            <LeaseTable
-                                handleAmortize={handleAmortize}
+                <Suspense
+                    fallback={
+                        <TableSkeletonTemplate items={entityProperties} />
+                    }
+                >
+                    <div className="col-12">
+                        {customEntity && (
+                            <AddAmortization
+                                setCustomAddDialog={setCustomAddDialog}
                                 submitted={submitted}
-                                handleAdd={handleAdd}
                                 handleDelete={handleDelete}
                                 handleEdit={handleEdit}
-                                idEmployee={id}
+                                entity={entity!}
+                                id={id}
+                                addEntityDialog={customAddDialog}
+                                setAddEntityDialog={setAddEntityDialog}
+                                handleAdd={handleAdd}
+                                toast={toast}
+                                setSubmitted={setSubmitted}
                             />
-                        </Suspense>
-                    </TabPanel>
-                    <TabPanel
-                        header="Suspensión de pago"
-                        leftIcon="pi pi-user-minus mr-2"
-                    >
-                        <Suspense fallback={<TabSkeletonTemplate />}>
-                            <LeasePause id={id} />
-                        </Suspense>
-                    </TabPanel>
-                </TabView>
+                        )}
+                    </div>
+                </Suspense>
 
-                {editEntityDialog && (
-                    <EditLease
+                {/* {addEntityDialog && (
+                    <AddAmortization
+                        entity={entity!}
+                        id={id}
+                        addEntityDialog={addEntityDialog}
+                        setAddEntityDialog={setAddEntityDialog}
+                        handleAdd={handleAdd}
+                        toast={toast}
+                        setSubmitted={setSubmitted}
+                    />
+                )} */}
+                {/* {editEntityDialog && (
+                    <EditAmortization
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
@@ -109,9 +108,9 @@ const Lease = ({ id }: props) => {
                         editEntityDialog={editEntityDialog}
                     />
                 )}
-
                 {addEntityDialog && (
-                    <AddLease
+                    <AddAmortization
+                        entity={entity!}
                         id={id}
                         addEntityDialog={addEntityDialog}
                         setAddEntityDialog={setAddEntityDialog}
@@ -120,20 +119,19 @@ const Lease = ({ id }: props) => {
                         setSubmitted={setSubmitted}
                     />
                 )}
-
                 {deleteEntityDialog && (
                     <DeleteEntity
-                        id={entity?.idLease ?? 0}
+                        id={entity?.idAmortization ?? 0}
                         endpoint="employee/lease"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
                     />
-                )}
+                )} */}
             </div>
         </div>
     );
 };
 
-export default Lease;
+export default Amortization;

@@ -8,6 +8,7 @@ interface Props<T> {
     reset?: () => void;
     service: ApiService<T, T>;
     setEntity?: (value: any) => void;
+    setCustomAddDialog?: (openAddAmortization: boolean) => void;
 }
 function useAddEntityQuery<T>({
     toast,
@@ -16,6 +17,7 @@ function useAddEntityQuery<T>({
     reset,
     service,
     setEntity,
+    setCustomAddDialog,
 }: Props<T>) {
     return useMutation({
         mutationFn: (entity: T) => service.post(entity),
@@ -30,6 +32,7 @@ function useAddEntityQuery<T>({
         onSuccess: (data: any) => {
             if (reset) reset();
             if (setAddEntityDialog) setAddEntityDialog(false);
+            if (setCustomAddDialog) setCustomAddDialog(false);
             if (setSubmitted) setSubmitted(true);
             if (setEntity) setEntity(data);
 

@@ -11,6 +11,7 @@ const DialogFooterButtons = ({ hideDialog }: Props) => {
                 label="Cancelar"
                 icon="pi pi-times"
                 text
+                raised
                 type="button"
                 onClick={hideDialog}
             />
