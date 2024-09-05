@@ -25,13 +25,12 @@ const PayrollManagement = () => {
     const listOfDependencies: boolean[] = [];
 
     const getPeriodData = payrollManagementByPayrollAreService;
+
     const { data } = useGetPayrollManagementByIdPayrollArea(
         params,
         listOfDependencies,
         1
-    )
-
-    console.log(data);
+    );
 
     const [dropdownItem, setDropdownItem] = useState<DropdownItem | null>(null);
     const [payrollManagementData, setPayrollManagementData] = useState<IPayrollManagement>();
@@ -45,12 +44,11 @@ const PayrollManagement = () => {
         () => [
             { name: "Habilitar Nómina", code: 151 },
             { name: "Editar Nómina", code: 152 },
-        ],
-        []
+        ], []
     );
 
     const options = ['Mensual', 'Quincenal'];
-    const [payrollArea, setPayrollArea] = useState(options[0]);
+    const [payrollArea, setPayrollArea] = useState(data?.idPayrollArea == 1 ? "Mensual" : "Quincenal");
 
     const {
         register,
@@ -61,8 +59,8 @@ const PayrollManagement = () => {
         formState: { errors },
     } = useForm<IPayrollManagement>({
         defaultValues: {
-            payrollNumber: payrollManagementData?.payrollNumber,
-            idPayrollArea: payrollManagementData?.idPayrollArea,
+            payrollNumber: data?.payrollNumber,
+            idPayrollArea: data?.idPayrollArea,
             idStatus: payrollManagementData?.idStatus,
             retroactivePeriodLimit: payrollManagementData?.retroactivePeriodLimit,
             date: payrollManagementData?.date,
@@ -104,7 +102,9 @@ const PayrollManagement = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+            onSubmit={handleSubmit(onSubmit)
+            }>
             <div className="col-12">
                 <div className="card">
                     <div className="field col-12 md:col-5">
@@ -137,6 +137,7 @@ const PayrollManagement = () => {
                                         <Dropdown
                                             id="idStatus"
                                             value={dropdownItem}
+                                            defaultValue={data?.idStatus}
                                             onChange={(e) => setDropdownItem(e.value)}
                                             options={dropdownItems}
                                             optionLabel="name"

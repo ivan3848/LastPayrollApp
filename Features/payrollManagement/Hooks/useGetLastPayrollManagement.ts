@@ -8,10 +8,10 @@ const useGetPayrollManagementByIdPayrollArea = (
     dependencies: boolean[],
     idPayrollArea: number
 ) => {
-    return useQuery<IPayrollManagement[], Error>({
+    return useQuery<IPayrollManagement, Error>({
         queryKey: [CACHE_KEY_LAST_PAYROLL_MANAGEMENT, params, dependencies, idPayrollArea],
-        queryFn: () => lastPayrollManagementService.getEntitiesById(idPayrollArea),
-        initialData: [],
+        queryFn: () => lastPayrollManagementService.getById(idPayrollArea),
+        initialData: undefined,
     });
 };
 
