@@ -59,7 +59,7 @@ const Amortization = ({
         "Pago",
         "Es para pago",
     ];
-    console.log(customEntity);
+
     return (
         <div className="grid">
             <div className="w-full">
@@ -83,6 +83,7 @@ const Amortization = ({
                                 handleAdd={handleAdd}
                                 toast={toast}
                                 setSubmitted={setSubmitted}
+                                idConcept={customEntity.idConcept}
                             />
                         )}
                     </div>

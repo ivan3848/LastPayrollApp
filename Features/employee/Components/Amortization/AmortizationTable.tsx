@@ -71,22 +71,21 @@ const AmortizationTable = ({
             },
         ]);
     };
-    const header = (
-        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0"></h3>
-            <AddButton handleAdd={handleAdd} entity={idLease} />
-        </div>
-    );
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
-
+    const formatCurrency = (value: number) => {
+        if (value == null) return "";
+        return value.toLocaleString("es-DO", {
+            style: "currency",
+            currency: "DOP",
+        });
+    };
     return (
         <Card className="m-2">
             <DataTable
                 value={data}
-                //header={header}
                 className="p-datatable-sm"
                 dataKey="idAmortization"
                 paginator
@@ -125,6 +124,9 @@ const AmortizationTable = ({
                     header="Monto"
                     sortable
                     filter
+                    body={(rowData: IAmortization) =>
+                        formatCurrency(rowData.amount ?? 0)
+                    }
                     filterField="amount"
                     filterPlaceholder="Buscar por cuotas"
                     showFilterMenuOptions={false}

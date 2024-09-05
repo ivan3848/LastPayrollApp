@@ -5,13 +5,12 @@ import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
 import { Card } from "primereact/card";
 import { Column } from "primereact/column";
 import { DataTable, DataTableSortEvent } from "primereact/datatable";
+import { useState } from "react";
 import AddButton from "../../../Shared/Components/AddButton";
+import Amortization from "../Amortization/Amortization";
 import LeasePauseActionTableTemplate from "../LeasePause/Components/LeasePauseActionTableTemplate";
 import LeaseActionTableTemplate from "./Components/LeaseActionTableTemplate";
 import useGetLeaseByIdEmployee from "./Hooks/useGetLeaseByIdEmployee";
-import Amortization from "../Amortization/Amortization";
-import useAmortizationStore from "../Amortization/store/useAmortizationStore";
-import { useState } from "react";
 
 interface Props {
     idEmployee: number;
@@ -133,14 +132,20 @@ const LeaseTable = ({
         setEntity(entity);
         setCustomAddDialog(true);
     };
-
+    const formatCurrency = (value: number) => {
+        if (value == null) return "";
+        return value.toLocaleString("es-DO", {
+            style: "currency",
+            currency: "DOP",
+        });
+    };
     return (
         <>
             <Amortization
                 customAddDialog={customAddDialog}
                 setCustomAddDialog={setCustomAddDialog}
                 customEntity={entity!}
-                id={13}
+                id={entity?.idLease!}
             />
             <Card className="m-2">
                 <DataTable
@@ -158,28 +163,6 @@ const LeaseTable = ({
                     rowsPerPageOptions={[5, 10, 15]}
                     paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                 >
-                    <Column
-                        field="amountFee"
-                        header="Cuotas"
-                        sortable
-                        filter
-                        filterField="amountFee"
-                        filterPlaceholder="Buscar por cuotas"
-                        showFilterMenuOptions={false}
-                        onFilterApplyClick={(e) => onFilter(e)}
-                        onFilterClear={clearFilters}
-                    ></Column>
-                    <Column
-                        field="totalAmount"
-                        header="Total"
-                        sortable
-                        filter
-                        filterField="totalAmount"
-                        filterPlaceholder="Buscar por total"
-                        showFilterMenuOptions={false}
-                        onFilterApplyClick={(e) => onFilter(e)}
-                        onFilterClear={clearFilters}
-                    ></Column>
                     <Column
                         field="entity"
                         header="Banco"
@@ -202,13 +185,40 @@ const LeaseTable = ({
                         onFilterClear={clearFilters}
                     ></Column>
                     <Column
-                        field="leaseNumber"
-                        header="Numero de préstamo"
-                        style={{ width: "11vw" }}
+                        field="totalAmount"
+                        header="Total"
                         sortable
                         filter
-                        filterField="leaseNumber"
-                        filterPlaceholder="Buscar por préstamo"
+                        body={(rowData: ILease) =>
+                            formatCurrency(rowData.totalAmount ?? 0)
+                        }
+                        filterField="totalAmount"
+                        filterPlaceholder="Buscar por total"
+                        showFilterMenuOptions={false}
+                        onFilterApplyClick={(e) => onFilter(e)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="totalDebt"
+                        header="Deuda"
+                        sortable
+                        body={(rowData: ILease) =>
+                            formatCurrency(rowData.totalDebt ?? 0)
+                        }
+                        filter
+                        filterField="totalDebt"
+                        filterPlaceholder="Buscar por total"
+                        showFilterMenuOptions={false}
+                        onFilterApplyClick={(e) => onFilter(e)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="fees"
+                        header="Cuotas"
+                        sortable
+                        filter
+                        filterField="fees"
+                        filterPlaceholder="Buscar por cuotas"
                         showFilterMenuOptions={false}
                         onFilterApplyClick={(e) => onFilter(e)}
                         onFilterClear={clearFilters}

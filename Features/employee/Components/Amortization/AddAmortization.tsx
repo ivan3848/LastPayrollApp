@@ -14,6 +14,8 @@ import { addAmortizationService } from "./Services/AmortizationService";
 import AmortizationFormSchema from "./Validation/AmortizationFormSchema";
 import { useEffect } from "react";
 import AmortizationTable from "./AmortizationTable";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_LEASE } from "@/constants/cacheKeys";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -27,6 +29,7 @@ interface Props {
     handleEdit?: (entity: IAmortization) => void;
     handleDelete?: (entity: IAmortization) => void;
     setCustomAddDialog: (customAddDialog: boolean) => void;
+    idConcept?: number;
 }
 
 const AddAmortization = ({
@@ -41,12 +44,10 @@ const AddAmortization = ({
     handleDelete,
     handleAdd,
     setCustomAddDialog,
+    idConcept,
 }: Props) => {
     const { addEntityFormSchema } = AmortizationFormSchema();
-    const { data: values } = useConceptByStatusCodeQuery(
-        CONCEPT_TYPE_LEASE,
-        []
-    );
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_LEASE]);
 
     const {
         handleSubmit,
@@ -68,10 +69,17 @@ const AddAmortization = ({
     });
 
     const onSubmit = (data: IAmortization) => {
-        console.log(entity);
-        console.log(data);
-        alert("addAmortization");
-        //addEntity.mutate(data);
+        addEntity
+            .mutateAsync({
+                ...data,
+                idLease: id,
+                idConcept: idConcept!,
+                isPaid: true,
+                isToPay: true,
+            })
+            .then(() => {
+                expireQuery();
+            });
     };
 
     const hideDialog = () => {
@@ -111,7 +119,7 @@ const AddAmortization = ({
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6">
                             <label htmlFor="idStatus" className="w-full">
-                                Amortización {id}
+                                Amortización
                             </label>
                             <GenericStatusDropDown
                                 id="idStatus"
