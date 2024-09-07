@@ -66,7 +66,7 @@ const EditBankEmployeeHistory = ({
         data.idDependant = entity.idDependant;
         data.person = { ...data };
         data.birthDate = data.birthDate;
-        console.log(data);
+
         editEntity.mutate(data);
         return;
     };

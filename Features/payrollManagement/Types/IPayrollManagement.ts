@@ -1,13 +1,43 @@
 interface IPayrollManagement {
-    idLicences: number;
-    idEmployee: number;
-    idConcept: number;
-    idEmployeeRegister: number;
-    doctorName: string;
-    doctorexequatur: string;
-    description: string;
-    start: Date;
-    end: Date;
-    isToPay?: boolean;
+    idPayrollManagement: number;
+    idPayrollArea: number;
+    modifiedByEmployeeId?: number;
+    lastModifiedDate: Date;
+    payrollPeriodStart: Date;
+    payrollPeriodEnd: Date;
+    date: Date;
+    retroactivePeriodLimit: Date;
+    idStatus: number;
+    payrollNumber: number;
+    process: number;
+}
 
+interface IPayrollManagementInsert {
+    idPayrollArea: number;
+    modifiedByEmployeeId?: number;
+    lastModifiedDate: Date;
+    payrollPeriodStart: Date;
+    payrollPeriodEnd: Date;
+    date: Date;
+    idStatus: number;
+    payrollNumber: number;
+    process: number;
+}
+
+interface IPayrollManagementUpdate {
+    idPayrollManagement: number;
+    idPayrollArea: number;
+    modifiedByEmployeeId?: number;
+    lastModifiedDate: Date;
+    payrollPeriodStart: Date;
+    payrollPeriodEnd: Date;
+    date: Date;
+    idStatus: number;
+    payrollNumber: number;
+    process: number;
+}
+
+interface IPayrollManagementByPayrollArea {
+    idPayrollArea: number;
+    date: Date;
 }

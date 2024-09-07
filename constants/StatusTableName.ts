@@ -10,3 +10,4 @@ export const TABLE_NAME_SCHEDULER = "Scheduler";
 export const TABLE_NAME_GENDER = "Gender";
 export const TABLE_NAME_RECURRENCY = "Recurrency";
 export const TABLE_NAME_AMORTIZATION = "Amortization";
+export const TABLE_NAME_PAYROLLMANAGEMENT = "PayrollManagement";
