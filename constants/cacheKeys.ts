@@ -59,3 +59,4 @@ export const CACHE_KEY_ARCHIVE_COMMISSION = "archiveCommission";
 export const CACHE_KEY_PAYROLL_PAY = "payrollPay";
 export const CACHE_KEY_LEASE = "lease";
 export const CACHE_KEY_AMORTIZATION = "amortization";
+export const CACHE_KEY_LEASE_DETAIL = "leasedetail";

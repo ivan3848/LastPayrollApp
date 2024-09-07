@@ -7,7 +7,7 @@ interface Props<T> {
     handleEdit?: (entity: T) => void;
     handleDelete: (entity: T) => void;
     isCustomDelete?: boolean;
-    handlePay?: (entity: T) => void;
+    handlePayment?: (entity: T) => void;
     handleAmortize?: (entity: T) => void;
 }
 
@@ -15,7 +15,7 @@ function LeaseActionTableTemplate<T>({
     entity,
     handleEdit,
     handleDelete,
-    handlePay,
+    handlePayment,
     handleAmortize,
 }: Props<T>) {
     var lease = entity as ILease;
@@ -31,14 +31,14 @@ function LeaseActionTableTemplate<T>({
                 />
             )}
 
-            {handlePay && (
+            {handlePayment && (
                 <Button
                     className="mr-2 bg-blue-500 text-white"
                     text
                     label="Pagar"
                     title="Pagar"
                     rounded
-                    onClick={() => handlePay(entity)}
+                    onClick={() => handlePayment(entity)}
                 />
             )}
             {handleAmortize && (
