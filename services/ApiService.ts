@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 const user = Cookies.get("auth") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5038/",
+    baseURL: "http://localhost:7295/",
     //baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",

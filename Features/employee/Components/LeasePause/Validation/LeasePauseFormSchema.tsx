@@ -3,17 +3,21 @@ import { z } from "zod";
 const LeasePauseFormSchema = () => {
     const editEntityFormSchema = z
         .object({
-            idLeasePause: z.number(),
-            idLease: z.number(),
-            idEmployeeModify: z.number(),
-            startPauseDate: z.date({
-                message: "El campo debe de tener una fecha.",
-            }),
-            endPauseDate: z.date({
-                message: "El campo debe de tener una fecha.",
-            }),
-            description: z.string().optional(),
-            isPauseActive: z.number().optional(),
+            idLeasePause: z.any().optional(),
+            idLease: z.any().optional(),
+            idEmployeeModify: z.any().optional(),
+            startPauseDate: z
+                .any({
+                    message: "El campo debe de tener una fecha.",
+                })
+                .optional(),
+            endPauseDate: z
+                .any({
+                    message: "El campo debe de tener una fecha.",
+                })
+                .optional(),
+            description: z.any().optional(),
+            isPauseActive: z.any().optional(),
         })
 
         .refine(

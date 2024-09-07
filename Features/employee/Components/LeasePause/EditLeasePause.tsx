@@ -74,7 +74,7 @@ const EditLeasePause = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "90vw" }}
-            header="Editar préstamo"
+            header="Editar suspension"
             modal
             maximizable
             className="p-fluid"

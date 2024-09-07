@@ -84,6 +84,24 @@ const EditLease = ({
         setEditEntityDialog(false);
     };
 
+    function FeeLease(e?: any) {
+        const recurrency = watch("recurrency");
+        if (e?.innerText) setValue("recurrency", e.innerText);
+
+        const monthly = watch("monthlyFee", 0)!;
+        let result = 0;
+
+        if (recurrency == "Quincenal" && monthly > 0) {
+            result = monthly / 2;
+            setValue("amountFee", result);
+        } else if (recurrency == "Mensual" && monthly > 0) {
+            result = monthly / 1;
+            setValue("amountFee", result);
+        } else {
+            setValue("amountFee", 0);
+        }
+    }
+
     return (
         <Dialog
             visible={editEntityDialog}
@@ -113,6 +131,29 @@ const EditLease = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6">
+                            <label htmlFor="requestDate">
+                                Fecha de aprobación
+                            </label>
+                            <Calendar
+                                id="requestDate"
+                                {...register("requestDate")}
+                                value={
+                                    watch("requestDate") ??
+                                    new Date(entity.requestDate)
+                                }
+                                onChange={(e) =>
+                                    setValue("requestDate", new Date(e.value!))
+                                }
+                                showIcon
+                                key={entity.requestDate.toString()}
+                            />
+                            {errors.requestDate && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.requestDate.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6">
                             <label htmlFor="startDate">
                                 Fecha de inicio de descuento
                             </label>
@@ -136,6 +177,28 @@ const EditLease = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6">
+                            <label htmlFor="endDate">
+                                Fecha de finalización de descuento
+                            </label>
+                            <Calendar
+                                id="endDate"
+                                {...register("endDate")}
+                                value={
+                                    watch("endDate") ?? new Date(entity.endDate)
+                                }
+                                onChange={(e) =>
+                                    setValue("endDate", new Date(e.value!))
+                                }
+                                showIcon
+                                key={entity.endDate.toString()}
+                            />
+                            {errors.endDate && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.endDate.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6">
                             <label htmlFor="idBank" className="block">
                                 Entidad financiera
                             </label>
@@ -150,6 +213,28 @@ const EditLease = ({
                             {errors.idBank && (
                                 <small className="text-red-600">
                                     {errors.idBank.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6">
+                            <label
+                                htmlFor="idRecurrencyStatus"
+                                className="w-full"
+                            >
+                                Recurrencia de pago
+                            </label>
+                            <GenericStatusDropDown
+                                id="idRecurrencyStatus"
+                                isValid={!!errors.idRecurrencyStatus}
+                                setValue={setValue}
+                                watch={watch}
+                                onClick={FeeLease}
+                                isFocus={true}
+                                tableName={TABLE_NAME_RECURRENCY}
+                            />
+                            {errors.idRecurrencyStatus && (
+                                <small className="p-invalid text-danger">
+                                    {errors.idRecurrencyStatus.message?.toString()}
                                 </small>
                             )}
                         </div>
@@ -171,6 +256,27 @@ const EditLease = ({
                             )}
                             <div />
                         </div>
+
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="totalAmount">Monto total</label>
+                            <input
+                                {...register("totalAmount", {
+                                    setValueAs: (value) => parseFloat(value),
+                                })}
+                                id="totalAmount"
+                                type="number"
+                                onKeyUpCapture={FeeLease}
+                                onChangeCapture={FeeLease}
+                                className="p-inputtext p-component"
+                                placeholder="0.00"
+                            />
+                            {errors.totalAmount && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.totalAmount?.message?.toString()}
+                                </small>
+                            )}
+                            <div />
+                        </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="monthlyFee">Cuota mensual</label>
                             <input
@@ -179,12 +285,34 @@ const EditLease = ({
                                 })}
                                 id="monthlyFee"
                                 type="number"
+                                onKeyUpCapture={FeeLease}
+                                onChangeCapture={FeeLease}
                                 className="p-inputtext p-component"
                                 placeholder="0.00"
                             />
                             {errors.monthlyFee && (
                                 <small className="p-invalid text-red-500">
                                     {errors.monthlyFee?.message?.toString()}
+                                </small>
+                            )}
+                            <div />
+                        </div>
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="amountFee">Por cuota</label>
+                            <input
+                                {...register("amountFee", {
+                                    setValueAs: (value) => parseFloat(value),
+                                })}
+                                id="amountFee"
+                                type="number"
+                                onKeyUpCapture={FeeLease}
+                                onChangeCapture={FeeLease}
+                                className="p-inputtext p-component"
+                                placeholder="0.00"
+                            />
+                            {errors.amountFee && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.amountFee?.message?.toString()}
                                 </small>
                             )}
                             <div />
@@ -205,6 +333,24 @@ const EditLease = ({
                                     {errors.leaseNumber.message?.toString()}
                                 </small>
                             )}
+                        </div>
+                        <div className="field col-12 md:col-6">
+                            <label htmlFor="paymentMethod">
+                                Método de pago
+                            </label>
+                            <div>
+                                <SelectButton
+                                    {...register("paymentMethod")}
+                                    value={watch("paymentMethod")}
+                                    onChange={(e) =>
+                                        setValue("paymentMethod", e.value)
+                                    }
+                                    options={[
+                                        { label: "Cheque", value: true },
+                                        { label: "Nomina", value: false },
+                                    ]}
+                                />
+                            </div>
                         </div>
                         <div className="field col-12 md:col-6">
                             <label
@@ -238,126 +384,7 @@ const EditLease = ({
                                 </small>
                             )}
                         </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="requestDate">
-                                Fecha de aprobación
-                            </label>
-                            <Calendar
-                                id="requestDate"
-                                {...register("requestDate")}
-                                value={
-                                    watch("requestDate") ??
-                                    new Date(entity.requestDate)
-                                }
-                                onChange={(e) =>
-                                    setValue("requestDate", new Date(e.value!))
-                                }
-                                showIcon
-                                key={entity.requestDate.toString()}
-                            />
-                            {errors.requestDate && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.requestDate.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="endDate">
-                                Fecha de finalización de descuento
-                            </label>
-                            <Calendar
-                                id="endDate"
-                                {...register("endDate")}
-                                value={
-                                    watch("endDate") ?? new Date(entity.endDate)
-                                }
-                                onChange={(e) =>
-                                    setValue("endDate", new Date(e.value!))
-                                }
-                                showIcon
-                                key={entity.endDate.toString()}
-                            />
-                            {errors.endDate && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.endDate.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label
-                                htmlFor="idRecurrencyStatus"
-                                className="w-full"
-                            >
-                                Recurrencia de pago
-                            </label>
-                            <GenericStatusDropDown
-                                id="idRecurrencyStatus"
-                                isValid={!!errors.idRecurrencyStatus}
-                                setValue={setValue}
-                                watch={watch}
-                                isFocus={true}
-                                tableName={TABLE_NAME_RECURRENCY}
-                            />
-                            {errors.idRecurrencyStatus && (
-                                <small className="p-invalid text-danger">
-                                    {errors.idRecurrencyStatus.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="totalAmount">Monto total</label>
-                            <input
-                                {...register("totalAmount", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
-                                id="totalAmount"
-                                type="number"
-                                className="p-inputtext p-component"
-                                placeholder="0.00"
-                            />
-                            {errors.totalAmount && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.totalAmount?.message?.toString()}
-                                </small>
-                            )}
-                            <div />
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="amountFee">Por cuota</label>
-                            <input
-                                {...register("amountFee", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
-                                id="amountFee"
-                                type="number"
-                                className="p-inputtext p-component"
-                                placeholder="0.00"
-                            />
-                            {errors.amountFee && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.amountFee?.message?.toString()}
-                                </small>
-                            )}
-                            <div />
-                        </div>
-                        <div className="field col-12 md:col-6">
-                            <label htmlFor="paymentMethod">
-                                Por Nomina de Comisiones
-                            </label>
-                            <div>
-                                <SelectButton
-                                    {...register("paymentMethod")}
-                                    value={watch("paymentMethod")}
-                                    onChange={(e) =>
-                                        setValue("paymentMethod", e.value)
-                                    }
-                                    options={[
-                                        { label: "Cheque", value: true },
-                                        { label: "Nomina", value: false },
-                                    ]}
-                                />
-                            </div>
-                        </div>
+
                         <div className="field col-12 md:col-6">
                             <label
                                 htmlFor="idDiscountConcept"

@@ -69,12 +69,23 @@ const AddLease = ({
         setAddEntityDialog(false);
     };
 
-    function FeeLease() {
-        //cuota mensual
-        const monthlyFee = watch("totalAmount", 0);
-        if (!isNaN(monthlyFee) && monthlyFee > 0) 
-            console.log(monthlyFee);
+    function FeeLease(e?: any) {
+        const recurrency = watch("recurrency");
+        if (e?.innerText) setValue("recurrency", e.innerText);
+
+        const monthly = watch("monthlyFee", 0)!;
+        let result = 0;
+        if (recurrency == "Quincenal" && monthly > 0) {
+            result = monthly / 2;
+            setValue("amountFee", result);
+        } else if (recurrency == "Mensual" && monthly > 0) {
+            result = monthly / 1;
+            setValue("amountFee", result);
+        } else {
+            setValue("amountFee", 0);
+        }
     }
+
     return (
         <Dialog
             visible={addEntityDialog}
@@ -101,12 +112,11 @@ const AddLease = ({
                                 setValue={setValue}
                             />
                             {errors.idConcept && (
-                                <small className="p-invalid text-danger">
+                                <small className="p-invalid text-red-500">
                                     {errors.idConcept.message?.toString()}
                                 </small>
                             )}
                         </div>
-
                         <div className="field col-12 md:col-6">
                             <label htmlFor="requestDate">
                                 Fecha de aprobación
@@ -125,7 +135,6 @@ const AddLease = ({
                                 </small>
                             )}
                         </div>
-
                         <div className="field col-12 md:col-6">
                             <label htmlFor="startDate">
                                 Fecha de inicio de descuento
@@ -190,11 +199,12 @@ const AddLease = ({
                                 isValid={!!errors.idRecurrencyStatus}
                                 setValue={setValue}
                                 watch={watch}
+                                onClick={FeeLease}
                                 isFocus={true}
                                 tableName={TABLE_NAME_RECURRENCY}
                             />
                             {errors.idRecurrencyStatus && (
-                                <small className="p-invalid text-danger">
+                                <small className="p-invalid text-red-500">
                                     {errors.idRecurrencyStatus.message?.toString()}
                                 </small>
                             )}
@@ -226,6 +236,7 @@ const AddLease = ({
                                 })}
                                 id="totalAmount"
                                 type="number"
+                                onKeyUpCapture={FeeLease}
                                 onChangeCapture={FeeLease}
                                 className="p-inputtext p-component"
                                 placeholder="0.00"
@@ -245,6 +256,8 @@ const AddLease = ({
                                 })}
                                 id="monthlyFee"
                                 type="number"
+                                onKeyUpCapture={FeeLease}
+                                onChangeCapture={FeeLease}
                                 className="p-inputtext p-component"
                                 placeholder="0.00"
                             />
@@ -261,10 +274,12 @@ const AddLease = ({
                                 {...register("amountFee", {
                                     setValueAs: (value) => parseFloat(value),
                                 })}
+                                onKeyUpCapture={FeeLease}
+                                onChangeCapture={FeeLease}
                                 id="amountFee"
                                 type="number"
                                 className="p-inputtext p-component"
-                                placeholder="0.00"
+                                placeholder="0"
                             />
                             {errors.amountFee && (
                                 <small className="p-invalid text-red-500">
@@ -306,6 +321,11 @@ const AddLease = ({
                                         { label: "Nomina", value: false },
                                     ]}
                                 />
+                                {errors.paymentMethod && (
+                                    <small className="p-invalid text-red-500">
+                                        {errors.paymentMethod.message?.toString()}
+                                    </small>
+                                )}
                             </div>
                         </div>
                         <div className="field col-12 md:col-6">
@@ -335,12 +355,11 @@ const AddLease = ({
                                 emptyMessage="No hay registros"
                             />
                             {errors.idDepositConcept && (
-                                <small className="p-invalid text-danger">
+                                <small className="p-invalid text-red-500">
                                     {errors.idDepositConcept.message?.toString()}
                                 </small>
                             )}
                         </div>
-
                         <div className="field col-12 md:col-6">
                             <label
                                 htmlFor="idDiscountConcept"
@@ -368,7 +387,7 @@ const AddLease = ({
                                 emptyMessage="No hay registros"
                             />
                             {errors.idDiscountConcept && (
-                                <small className="p-invalid text-danger">
+                                <small className="p-invalid text-red-500">
                                     {errors.idDiscountConcept.message?.toString()}
                                 </small>
                             )}
