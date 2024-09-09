@@ -1,5 +1,4 @@
-
-import { IRolModule } from './IRolModule';
+import { IRolModule } from "./IRolModule";
 
 export default interface IUser {
     userId: string;

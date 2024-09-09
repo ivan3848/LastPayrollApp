@@ -3,7 +3,7 @@ import IResponse from "@/types/IResponse";
 import { useQuery } from "@tanstack/react-query";
 import { CACHE_KEY_ARCHIVE_COMMISSION } from "@/constants/cacheKeys";
 import { ICommission } from "../Types/ICommission";
-import { commissionServiceToInsert } from "../Services/commissionService";
+import { addCommissionService } from "../Services/commissionService";
 
 const useCommissionArchiveQuery = (
     params: IParamsApi,
@@ -11,7 +11,7 @@ const useCommissionArchiveQuery = (
 ) => {
     return useQuery<IResponse<ICommission>, Error>({
         queryKey: [CACHE_KEY_ARCHIVE_COMMISSION, params, dependencies],
-        queryFn: () => commissionServiceToInsert.getForTable(params),
+        queryFn: () => addCommissionService.getForTable(params),
         initialData: { items: [] },
     });
 };

@@ -18,8 +18,7 @@ const LocationTabs = () => {
         <div className="grid crud-demo">
             <div className="col-12">
                 <TabView>
-                    <TabPanel header="País" 
-                    leftIcon="pi pi-globe mr-2">
+                    <TabPanel header="País" leftIcon="pi pi-globe mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Country />
                         </Suspense>
