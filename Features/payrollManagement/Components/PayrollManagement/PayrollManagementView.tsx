@@ -6,25 +6,22 @@ import GenericStatusDropDown from '@/Features/Shared/Components/GenericStatusDro
 import { Button } from 'primereact/button'
 import { Calendar } from 'primereact/calendar'
 import { Divider } from 'primereact/divider'
-import { Dropdown } from 'primereact/dropdown'
 import { InputText } from 'primereact/inputtext'
 import { SelectButton } from 'primereact/selectbutton'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { payrollManagementByPayrollAreService } from '../../payrollManagementService'
+import { lastPayrollManagementService, payrollManagementByPayrollAreService } from '../../payrollManagementService'
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter'
 import useGetPayrollManagementByIdPayrollArea from '../../Hooks/useGetLastPayrollManagement'
+import { InputNumber } from 'primereact/inputnumber'
 
-interface DropdownItem {
-    name: string;
-    code: number;
-}
 
 const PayrollManagement = () => {
     const { params } = useParamFilter();
     const listOfDependencies: boolean[] = [];
 
     const getPeriodData = payrollManagementByPayrollAreService;
+    const [configData, setConfigData] = useState<IPayrollManagement | undefined>();
 
     const { data } = useGetPayrollManagementByIdPayrollArea(
         params,
@@ -32,23 +29,34 @@ const PayrollManagement = () => {
         1
     );
 
-    const [dropdownItem, setDropdownItem] = useState<DropdownItem | null>(null);
-    const [payrollManagementData, setPayrollManagementData] = useState<IPayrollManagement>();
+    const getLastPayroll = async (payNumber: number) => {
+        const test = await lastPayrollManagementService.getById(payNumber) as IPayrollManagement;
+        setConfigData(test);
+        getPeriod();
+    }
+
+    useEffect(() => {
+        if (data) {
+            Object.keys(data).forEach((key) => {
+                if (key === "lastModifiedDate" || key === "payrollPeriodStart"
+                    || key === "date" || key === "payrollPeriodEnd") {
+                    setValue(key as keyof IPayrollManagement,
+                        new Date(data[key as keyof IPayrollManagement] as Date));
+                    return;
+                }
+                setValue(
+                    key as keyof IPayrollManagement,
+                    data[key as keyof IPayrollManagement]
+                );
+            });
+        }
+    }, [data, configData]);
 
     const getData = async (period: IPayrollManagementByPayrollArea) => {
         const payrollMangement = await getPeriodData.post(period) as IPayrollManagement;
-        setPayrollManagementData(payrollMangement);
+        console.log(payrollMangement);
+        // payrollMangement && setConfigData(payrollMangement);
     }
-
-    const dropdownItems: DropdownItem[] = useMemo(
-        () => [
-            { name: "Habilitar Nómina", code: 151 },
-            { name: "Editar Nómina", code: 152 },
-        ], []
-    );
-
-    const options = ['Mensual', 'Quincenal'];
-    const [payrollArea, setPayrollArea] = useState(data?.idPayrollArea == 1 ? "Mensual" : "Quincenal");
 
     const {
         register,
@@ -57,24 +65,11 @@ const PayrollManagement = () => {
         reset,
         setValue,
         formState: { errors },
-    } = useForm<IPayrollManagement>({
-        defaultValues: {
-            payrollNumber: data?.payrollNumber,
-            idPayrollArea: data?.idPayrollArea,
-            idStatus: payrollManagementData?.idStatus,
-            retroactivePeriodLimit: payrollManagementData?.retroactivePeriodLimit,
-            date: payrollManagementData?.date,
-            payrollPeriodStart: payrollManagementData?.payrollPeriodStart,
-            payrollPeriodEnd: payrollManagementData?.payrollPeriodEnd,
-            modifiedByEmployeeId: payrollManagementData?.modifiedByEmployeeId,
-            lastModifiedDate: payrollManagementData?.lastModifiedDate,
-            process: payrollManagementData?.process
-        },
-    });
+    } = useForm<IPayrollManagement>();
 
     const onSubmit = (data: IPayrollManagement) => {
-        data.idPayrollArea = payrollArea == "Mensual" ? 2 : 1;
-        data.idStatus = dropdownItem?.code!;
+        data.idPayrollArea = data.idPayrollArea;
+        data.idStatus = data?.idStatus!;
         data.payrollNumber = data.payrollNumber;
         data.date = data.date;
         data.retroactivePeriodLimit = data.payrollPeriodStart;
@@ -85,21 +80,19 @@ const PayrollManagement = () => {
         return;
     }
 
-    const hideDialog = () => {
-        console.log(false);
-    };
-
     const getPeriod = () => {
-        const payrollNumber = watch("payrollNumber");
+        const payArea = watch("payrollNumber");
         const year = new Date(watch("date")).getFullYear();
         const month = new Date(watch("date")).getMonth();
 
         const period: IPayrollManagementByPayrollArea = {
-            idPayrollArea: payrollNumber,
-            date: new Date(year, month, payrollNumber),
+            idPayrollArea: 1,
+            date: new Date(new Date(year, month, payArea)),
         };
         getData(period);
     }
+
+    let options: string[] = ['Mensual', 'Quincenal'];
 
     return (
         <form
@@ -113,11 +106,11 @@ const PayrollManagement = () => {
                         </label>
                         <SelectButton
                             {...register("idPayrollArea")}
-                            value={payrollArea}
-                            options={options}
+                            value={data?.idPayrollArea === (watch("idPayrollArea") ?? 'Mensual')}
                             onChange={(e) => {
-                                setPayrollArea(e.value);
+                                setValue("idPayrollArea", e.value == 'Quincenal' ? 1 : 2);
                             }}
+                            options={options}
                         />
                         {errors.idPayrollArea && (
                             <small className="p-invalid text-danger">
@@ -134,16 +127,15 @@ const PayrollManagement = () => {
                                             <strong>Estado de Nómina</strong>
                                         </label>
                                         <Divider layout="horizontal" className='mt-0' />
-                                        <Dropdown
+                                        <GenericStatusDropDown
                                             id="idStatus"
-                                            value={dropdownItem}
-                                            defaultValue={data?.idStatus}
-                                            onChange={(e) => setDropdownItem(e.value)}
-                                            options={dropdownItems}
-                                            optionLabel="name"
-                                            placeholder="Elija un estado"
-
-                                        ></Dropdown>
+                                            isValid={!!errors.idStatus}
+                                            idValueEdit={data?.idStatus}
+                                            setValue={setValue}
+                                            watch={watch}
+                                            isFocus={true}
+                                            tableName={TABLE_NAME_PAYROLLMANAGEMENT}
+                                        />
                                         {errors.idStatus && (
                                             <small className="p-invalid text-danger">
                                                 {errors.idStatus.message?.toString()}
@@ -161,13 +153,17 @@ const PayrollManagement = () => {
                                         <Divider layout="horizontal" className='mt-0' />
                                         <div className="flex">
                                             <div className="field col-12 md:col-6 lg:col-3">
-                                                <GenericInputNumber
+                                                <InputNumber
                                                     id="payrollNumber"
-                                                    setValue={setValue}
-                                                    isValid={false}
-                                                    watch={watch}
-                                                    prefix=''
+                                                    value={data?.payrollNumber}
+                                                    onChange={(e: any) => {
+                                                        setValue("payrollNumber", e.value);
+                                                        getLastPayroll(e.value);
+                                                    }}
+                                                    min={1}
                                                     format={false}
+                                                    allowEmpty
+                                                    showButtons
                                                 />
                                                 {errors.payrollNumber && (
                                                     <small className="p-invalid text-danger">
@@ -236,7 +232,10 @@ const PayrollManagement = () => {
                                             <i className="pi pi-chart-bar"></i>
                                         </span>
                                         <InputText
+                                            {...register("process")}
                                             placeholder="Proceso..."
+                                            id="process"
+                                            disabled={true}
                                         />
                                         {errors.process && (
                                             <small className="p-invalid text-danger">
@@ -274,6 +273,7 @@ const PayrollManagement = () => {
                             <div className="mt-5 flex">
                                 <div className="field col-12 md:col-6 lg:col-4">
                                     <Calendar
+                                        id='date'
                                         showIcon
                                         showButtonBar
                                         value={watch("date") ?? new Date()}
@@ -286,7 +286,7 @@ const PayrollManagement = () => {
                                         id="payrollPeriodEnd"
                                         showIcon
                                         showButtonBar
-                                        value={new Date}
+                                        value={watch("payrollPeriodEnd") ?? new Date()}
                                         disabled={true}
                                     />
                                     {errors.payrollPeriodEnd && (
@@ -304,10 +304,15 @@ const PayrollManagement = () => {
                             <div className="col-12 md:col-5">
                                 <div className="p-inputgroup">
                                     <Button label="Por" />
-                                    <InputText placeholder="Usuario" />
-                                    {errors.idPayrollArea && (
+                                    <InputText
+                                        {...register("modifiedByEmployeeId")}
+                                        placeholder="ID de empleado"
+                                        id="modifiedByEmployeeId"
+                                        disabled={true}
+                                    />
+                                    {errors.modifiedByEmployeeId && (
                                         <small className="p-invalid text-danger">
-                                            {errors.idPayrollArea.message?.toString()}
+                                            {errors.modifiedByEmployeeId.message?.toString()}
                                         </small>
                                     )}
                                 </div>
@@ -315,10 +320,15 @@ const PayrollManagement = () => {
                             <div className="field col-12 md:col-6 lg:col-3">
                                 <div className="p-inputgroup">
                                     <Button label="El" />
-                                    <InputText placeholder="nombre..." />
-                                    {errors.idPayrollArea && (
+                                    <InputText
+                                        {...register("employee")}
+                                        placeholder="Usuario"
+                                        id="employee"
+                                        disabled={true}
+                                    />
+                                    {errors.employee && (
                                         <small className="p-invalid text-danger">
-                                            {errors.idPayrollArea.message?.toString()}
+                                            {errors.employee.message?.toString()}
                                         </small>
                                     )}
                                 </div>
@@ -326,14 +336,15 @@ const PayrollManagement = () => {
                             <div className="field col-12 md:col-6 lg:col-4">
                                 <Button label="Hora" />
                                 <Calendar
-                                    id="start"
+                                    id='lastModifiedDate'
                                     showIcon
                                     showButtonBar
-                                    value={new Date}
+                                    value={watch("lastModifiedDate")}
+                                    disabled={true}
                                 />
-                                {errors.idPayrollArea && (
+                                {errors.lastModifiedDate && (
                                     <small className="p-invalid text-danger">
-                                        {errors.idPayrollArea.message?.toString()}
+                                        {errors.lastModifiedDate.message?.toString()}
                                     </small>
                                 )}
                             </div>
@@ -344,14 +355,14 @@ const PayrollManagement = () => {
                             </label>
                             <div className="p-inputgroup mt-2">
                                 <GenericStatusDropDown
-                                    id="idStatusAccountType"
+                                    id="idStatus"
                                     isValid={!!errors.idStatus}
+                                    idValueEdit={data?.idStatus}
                                     setValue={setValue}
-                                    idValueEdit={dropdownItem?.code}
                                     watch={watch}
                                     isFocus={true}
-                                    isReadOnly={true}
                                     tableName={TABLE_NAME_PAYROLLMANAGEMENT}
+                                    isReadOnly={true}
                                 />
                                 {errors.idStatus && (
                                     <small className="p-invalid text-danger">
@@ -361,7 +372,7 @@ const PayrollManagement = () => {
                             </div>
                         </div>
                     </div>
-                    <DialogFooterButtons hideDialog={hideDialog} />
+                    <DialogFooterButtons hideDialog={() => { }} />
                 </div>
             </div>
         </form>

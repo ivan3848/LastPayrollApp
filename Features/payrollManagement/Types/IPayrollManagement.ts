@@ -10,6 +10,7 @@ interface IPayrollManagement {
     idStatus: number;
     payrollNumber: number;
     process: number;
+    employee?: string;
 }
 
 interface IPayrollManagementInsert {

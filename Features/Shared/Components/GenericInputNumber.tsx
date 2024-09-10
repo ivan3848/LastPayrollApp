@@ -41,7 +41,8 @@ const GenericInputNumber = ({
     return (
         <InputNumber
             value={watch(id)}
-            onChange={(e) => setValue(id, e.value!)}
+            onChange={(e) => setValue(id, e.value!)
+            }
             disabled={isReadOnly}
             id={id}
             className={classNames({
