@@ -7,31 +7,22 @@ import GenericStatusDropDown from '@/Features/Shared/Components/GenericStatusDro
 import { Button } from 'primereact/button'
 import { Calendar } from 'primereact/calendar'
 import { Divider } from 'primereact/divider'
+import { InputNumber } from 'primereact/inputnumber'
 import { InputText } from 'primereact/inputtext'
 import { SelectButton } from 'primereact/selectbutton'
-import React, { useEffect, useState } from 'react'
-import { payrollManagementByPayrollAreService, payrollManagementByPayrollNumberService } from '../../payrollManagementService'
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter'
-import useGetPayrollManagementByIdPayrollArea from '../../Hooks/useGetLastPayrollManagement'
-import { InputNumber } from 'primereact/inputnumber'
-import { useForm } from 'react-hook-form';
-import useAddPayrollManagement from '../../Hooks/useAddPayrollManagement'
-import useCrudModals from '@/Features/Shared/Hooks/useCrudModals'
+import { useEffect, useRef } from 'react'
+import { useForm } from 'react-hook-form'
+import {
+    payrollManagementByPayrollAreService,
+    payrollManagementByPayrollNumberService
+} from '../../payrollManagementService'
 
+interface Props {
+    entity: IPayrollManagement | null;
+    setEntity: (entity: IPayrollManagement) => void;
+}
 
-
-const PayrollManagement = () => {
-    const {
-        setEditEntityDialog,
-        setSubmitted,
-        toast,
-    } = useCrudModals<IPayrollManagement>();
-
-    const { params } = useParamFilter();
-    const { data } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
-
-    const [configData, setConfigData] = useState<IPayrollManagement | undefined>();
-
+const PayrollManagement = ({ entity, setEntity }: Props) => {
     const {
         register,
         handleSubmit,
@@ -45,56 +36,54 @@ const PayrollManagement = () => {
         },
     });
 
-    const addEntity = useAddPayrollManagement({
-        toast,
-        setEditEntityDialog,
-        setSubmitted,
-        reset,
-    });
+    const initialPayrollNumber = useRef<number | null>(null);
+
+    // const addEntity = useAddPayrollManagement({
+    //     toast,
+    //     setEditEntityDialog,
+    //     setSubmitted,
+    //     reset,
+    // });
 
     const getLastPayroll = async (payNumber: number) => {
-        const payrollNumber = watch("idPayrollArea");
+        const payrollArea = watch("idPayrollArea");
         const date = watch("date");
-
-        console.log(date);
-
-        if (!payrollNumber || !date) return;
 
         const period: IPayrollManagementByPayrollNumber = {
             payrollNumber: payNumber,
-            idPayrollArea: 1,
-            date: new Date(date.getFullYear(), date.getMonth(), payrollNumber),
+            idPayrollArea: payrollArea ?? 1,
+            PayrollYear: new Date(date.getFullYear(), date.getMonth(), payNumber),
         };
-
-        console.log(period);
-        // const payrollData = await payrollManagementByPayrollNumberService.post(period) as IPayrollManagement;
-        // console.log(payrollData);
+        const payrollData = await payrollManagementByPayrollNumberService.post(period) as IPayrollManagement;
+        setEntity(payrollData);
     };
 
     const getData = async (period: IPayrollManagementByPayrollArea) => {
         try {
             const payrollManagement = await payrollManagementByPayrollAreService.post(period) as IPayrollManagement;
-            setConfigData(payrollManagement);
+            setEntity(payrollManagement);
         } catch (error: any) {
-            toast.current?.show({
-                severity: "warn",
-                summary: "Error",
-                detail: error.response.data,
-                life: 3000,
-            });
+            // toast.current?.show({
+            //     severity: "warn",
+            //     summary: "Error",
+            //     detail: error.response.data,
+            //     life: 3000,
+            // });
             console.error("Failed to fetch period data:", error);
         }
     };
 
+    const payrollNumber = watch("payrollNumber");
+
     const getPeriod = () => {
-        const payrollNumber = watch("payrollNumber");
+        const payrollNumb = watch("payrollNumber");
         const date = watch("date");
 
-        if (!payrollNumber || !date) return;
+        if (!payrollNumb || !date) return;
 
         const period: IPayrollManagementByPayrollArea = {
             idPayrollArea: 1,
-            date: new Date(date.getFullYear(), date.getMonth(), payrollNumber),
+            date: new Date(date.getFullYear(), date.getMonth(), payrollNumb),
         };
         getData(period);
     };
@@ -102,7 +91,7 @@ const PayrollManagement = () => {
     const updateFormValues = (data: IPayrollManagement) => {
         Object.entries(data).forEach(([key, value]) => {
             if (["lastModifiedDate", "payrollPeriodStart",
-                "date", "payrollPeriodEnd", "retroactivePeriodLimit"].includes(key)) {
+                "date", "payrollPeriodEnd"].includes(key)) {
                 value = new Date(value);
             }
             setValue(key as keyof IPayrollManagement, value);
@@ -110,12 +99,16 @@ const PayrollManagement = () => {
     };
 
     useEffect(() => {
-        if (configData) {
-            updateFormValues(configData);
-        } else if (data) {
-            updateFormValues(data);
+        if (entity) {
+            updateFormValues(entity);
         }
-    }, [data, configData]);
+    }, [entity]);
+
+    useEffect(() => {
+        if (payrollNumber && initialPayrollNumber.current === null) {
+            initialPayrollNumber.current = payrollNumber;
+        }
+    }, [payrollNumber]);
 
     const onSubmit = (data: IPayrollManagement) => {
         data.idPayrollArea = data.idPayrollArea.toString() === 'Mensual' ? 2 : 1;
@@ -159,7 +152,7 @@ const PayrollManagement = () => {
                                         <GenericStatusDropDown
                                             id="idStatus"
                                             isValid={!!errors.idStatus}
-                                            idValueEdit={data?.idStatus}
+                                            idValueEdit={entity?.idStatus}
                                             setValue={setValue}
                                             watch={watch}
                                             isFocus={true}
@@ -184,10 +177,10 @@ const PayrollManagement = () => {
                                             <div className="field col-12 md:col-6 lg:col-3">
                                                 <InputNumber
                                                     id="payrollNumber"
-                                                    value={watch("payrollNumber")}
-                                                    onChange={(e: any) => {
-                                                        setValue("payrollNumber", e.value);
-                                                        getLastPayroll(e.value);
+                                                    value={payrollNumber || initialPayrollNumber.current}
+                                                    onChange={(e) => {
+                                                        setValue("payrollNumber", e.value!);
+                                                        getLastPayroll(e.value!);
                                                     }}
                                                     min={1}
                                                     format={false}
@@ -223,7 +216,7 @@ const PayrollManagement = () => {
                                                     id="payrollPeriodStart"
                                                     {...register("payrollPeriodStart")}
                                                     value={watch("payrollPeriodStart")
-                                                        ?? new Date(configData?.payrollPeriodStart!)}
+                                                        ?? new Date(entity?.payrollPeriodStart!)}
                                                     onChange={(e) => setValue("payrollPeriodStart", e.value!)}
                                                     showIcon
                                                     disabled
@@ -239,7 +232,7 @@ const PayrollManagement = () => {
                                                     id="payrollPeriodEnd"
                                                     {...register("payrollPeriodEnd")}
                                                     value={watch("payrollPeriodEnd")
-                                                        ?? new Date(configData?.payrollPeriodEnd!)}
+                                                        ?? new Date(entity?.payrollPeriodEnd!)}
                                                     onChange={(e) => setValue("payrollPeriodEnd", e.value!)}
                                                     showIcon
                                                     disabled
@@ -384,7 +377,7 @@ const PayrollManagement = () => {
                                 <GenericStatusDropDown
                                     id="idStatus"
                                     isValid={!!errors.idStatus}
-                                    idValueEdit={data?.idStatus}
+                                    idValueEdit={entity?.idStatus}
                                     setValue={setValue}
                                     watch={watch}
                                     isFocus={true}
