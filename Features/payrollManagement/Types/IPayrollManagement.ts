@@ -42,3 +42,9 @@ interface IPayrollManagementByPayrollArea {
     idPayrollArea: number;
     date: Date;
 }
+
+interface IPayrollManagementByPayrollNumber {
+    payrollNumber: number;
+    idPayrollArea: number;
+    date: Date;
+}

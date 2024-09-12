@@ -10,7 +10,7 @@ import { Divider } from 'primereact/divider'
 import { InputText } from 'primereact/inputtext'
 import { SelectButton } from 'primereact/selectbutton'
 import React, { useEffect, useState } from 'react'
-import { lastPayrollManagementService, payrollManagementByPayrollAreService } from '../../payrollManagementService'
+import { payrollManagementByPayrollAreService, payrollManagementByPayrollNumberService } from '../../payrollManagementService'
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter'
 import useGetPayrollManagementByIdPayrollArea from '../../Hooks/useGetLastPayrollManagement'
 import { InputNumber } from 'primereact/inputnumber'
@@ -53,13 +53,22 @@ const PayrollManagement = () => {
     });
 
     const getLastPayroll = async (payNumber: number) => {
-        try {
-            const payrollData = await lastPayrollManagementService.getById(payNumber) as IPayrollManagement;
-            setConfigData(payrollData);
-            getPeriod();
-        } catch (error) {
-            console.error("Failed to fetch payroll data:", error);
-        }
+        const payrollNumber = watch("idPayrollArea");
+        const date = watch("date");
+
+        console.log(date);
+
+        if (!payrollNumber || !date) return;
+
+        const period: IPayrollManagementByPayrollNumber = {
+            payrollNumber: payNumber,
+            idPayrollArea: 1,
+            date: new Date(date.getFullYear(), date.getMonth(), payrollNumber),
+        };
+
+        console.log(period);
+        // const payrollData = await payrollManagementByPayrollNumberService.post(period) as IPayrollManagement;
+        // console.log(payrollData);
     };
 
     const getData = async (period: IPayrollManagementByPayrollArea) => {
