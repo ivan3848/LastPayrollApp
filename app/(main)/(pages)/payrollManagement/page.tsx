@@ -13,6 +13,7 @@ const PayrollManagement = () => {
     const {
         setEditEntityDialog,
         setSubmitted,
+        submitted,
         toast,
         setEntity,
         entity,
@@ -25,13 +26,17 @@ const PayrollManagement = () => {
             setSubmitted(false);
             toast?.current?.show({ severity: 'info', summary: 'Información', detail: 'Registro cargado' });
         }
-    }, [data]);
+    }, [data, submitted]);
 
 
     return (
         <div className="card">
             <h5 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h5>
-            <PayrollManagementView entity={entity} setEntity={setEntity} />
+            <PayrollManagementView
+                entity={entity}
+                setEntity={setEntity}
+                toast={toast}
+                setSubmitted={setSubmitted} />
         </div>
     )
 }

@@ -16,13 +16,17 @@ import {
     payrollManagementByPayrollAreService,
     payrollManagementByPayrollNumberService
 } from '../../payrollManagementService'
+import useAddPayrollManagement from '../../Hooks/useAddPayrollManagement'
+import useEditPayrollManagement from '../../Hooks/useEditPayrollManagement'
 
 interface Props {
     entity: IPayrollManagement | null;
     setEntity: (entity: IPayrollManagement) => void;
+    setSubmitted: (value: boolean) => void;
+    toast: React.MutableRefObject<any>;
 }
 
-const PayrollManagement = ({ entity, setEntity }: Props) => {
+const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) => {
     const {
         register,
         handleSubmit,
@@ -38,19 +42,24 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
 
     const initialPayrollNumber = useRef<number | null>(null);
 
-    // const addEntity = useAddPayrollManagement({
-    //     toast,
-    //     setEditEntityDialog,
-    //     setSubmitted,
-    //     reset,
-    // });
+    const addEntity = useAddPayrollManagement({
+        toast,
+        setSubmitted,
+        reset,
+    });
 
-    const getLastPayroll = async (payNumber: number) => {
+    const editEntity = useEditPayrollManagement({
+        toast,
+        setSubmitted,
+        reset,
+    });
+
+    const getLastPayroll = async (payNumber?: number) => {
         const payrollArea = watch("idPayrollArea");
         const date = watch("date");
 
         const period: IPayrollManagementByPayrollNumber = {
-            payrollNumber: payNumber,
+            payrollNumber: payNumber ?? watch("payrollNumber"),
             idPayrollArea: payrollArea ?? 1,
             PayrollYear: new Date(date.getFullYear(), date.getMonth(), payNumber),
         };
@@ -61,14 +70,14 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
     const getData = async (period: IPayrollManagementByPayrollArea) => {
         try {
             const payrollManagement = await payrollManagementByPayrollAreService.post(period) as IPayrollManagement;
-            setEntity(payrollManagement);
+            !entity?.idPayrollManagement && setEntity(payrollManagement);
         } catch (error: any) {
-            // toast.current?.show({
-            //     severity: "warn",
-            //     summary: "Error",
-            //     detail: error.response.data,
-            //     life: 3000,
-            // });
+            toast.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: error.response.data,
+                life: 3000,
+            });
             console.error("Failed to fetch period data:", error);
         }
     };
@@ -111,14 +120,19 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
     }, [payrollNumber]);
 
     const onSubmit = (data: IPayrollManagement) => {
-        data.idPayrollArea = data.idPayrollArea.toString() === 'Mensual' ? 2 : 1;
         data.lastModifiedDate = new Date();
+        data.retroactivePeriodLimit = new Date();
 
-        console.log(data);
-        // addEntity.mutate(data);
+        if (data.idPayrollManagement) {
+            editEntity.mutate(data);
+            console.log(data);
+            return;
+        }
+        addEntity.mutate(data);
     };
 
     let options: string[] = ['Mensual', 'Quincenal'];
+    let process = `${watch("process") ?? 0}`;
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -129,9 +143,11 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
                             <strong>Area de Nómina</strong>
                         </label>
                         <SelectButton
-                            {...register("idPayrollArea")}
-                            value={options[watch("idPayrollArea") === 1 ? 1 : 0]}
-                            onChange={(e) => setValue("idPayrollArea", e.value)}
+                            value={watch("idPayrollArea") === 2 ? 'Mensual' : 'Quincenal'}
+                            onChange={(e) => {
+                                setValue("idPayrollArea", e.value === 'Mensual' ? 2 : 1)
+                                getLastPayroll(watch("payrollNumber"));
+                            }}
                             options={options}
                         />
                         {errors.idPayrollArea && (
@@ -152,7 +168,7 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
                                         <GenericStatusDropDown
                                             id="idStatus"
                                             isValid={!!errors.idStatus}
-                                            idValueEdit={entity?.idStatus}
+                                            idValueEdit={watch("idStatus") ?? entity?.idStatus}
                                             setValue={setValue}
                                             watch={watch}
                                             isFocus={true}
@@ -192,16 +208,13 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
                                                     </small>
                                                 )}
                                             </div>
-                                            <div className="field col-12 md:col-3">
+                                            <div className="field col-12 md:col-2">
                                                 <Calendar
                                                     id='date'
-                                                    showIcon
                                                     showButtonBar
                                                     value={watch("date") ?? new Date()}
-                                                    onChange={(e) => {
-                                                        if (e.value) {
-                                                            setValue("date", e.value);
-                                                        }
+                                                    onChange={(e: any) => {
+                                                        setValue("date", e.value);
                                                     }}
                                                     dateFormat='yy'
                                                 />
@@ -255,6 +268,7 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
                                             {...register("process")}
                                             placeholder="Proceso..."
                                             id="process"
+                                            value={process ?? entity?.process.toString}
                                             disabled={true}
                                         />
                                         {errors.process && (
@@ -277,7 +291,7 @@ const PayrollManagement = ({ entity, setEntity }: Props) => {
                                             id="retroactivePeriodLimit"
                                             setValue={setValue}
                                             isValid={!!errors.retroactivePeriodLimit}
-                                            currentValue={watch("payrollNumber")}
+                                            currentValue={watch("payrollNumber") ?? entity?.payrollNumber}
                                             watch={watch}
                                             prefix=''
                                             format={false}

@@ -6,13 +6,13 @@ interface Props {
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useAddPayrollManagement = ({
+const useEditPayrollManagement = ({
     toast,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IPayrollManagement) => payrollManagementService.post(entity),
+        mutationFn: (entity: IPayrollManagement) => payrollManagementService.put(entity),
 
         onError: (error: any) => {
             toast.current?.show({
@@ -36,4 +36,4 @@ const useAddPayrollManagement = ({
     });
 };
 
-export default useAddPayrollManagement;
+export default useEditPayrollManagement;
