@@ -1,13 +1,16 @@
 "use client";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
+import TabSkeletonTemplate from "@/Features/Shared/Components/TabSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
-import { Toast } from "primereact/toast";
-import { Suspense } from "react";
-import AddLease from "./AddLease";
-import LeaseTable from "./LeaseTable";
-import EditLease from "./EditLease";
 import { TabPanel, TabView } from "primereact/tabview";
+import { Toast } from "primereact/toast";
+import { Suspense, useState } from "react";
+import LeasePause from "../LeasePause/LeasePause";
+import AddLease from "./AddLease";
+import EditLease from "./EditLease";
+import LeaseTable from "./LeaseTable";
+import AddLeasePayment from "./Components/AddLeasePayment";
 
 interface props {
     id: number;
@@ -28,6 +31,8 @@ const Lease = ({ id }: props) => {
         toast,
     } = useCrudModals<ILease>();
 
+    const [paymentEntityDialog, setPaymentEntityDialog] = useState(false);
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
@@ -45,6 +50,16 @@ const Lease = ({ id }: props) => {
         setDeleteEntityDialog(true);
     };
 
+    const handleAmortize = (entity: ILease) => {
+        setEntity(entity);
+        //setSubmitted(false);
+        setAddEntityDialog(true);
+    };
+    const handlePayment = (entity: ILease) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setPaymentEntityDialog(true);
+    };
     const entityProperties = [
         "Concepto",
         "Fecha Inicio",
@@ -59,28 +74,38 @@ const Lease = ({ id }: props) => {
         <div className="grid">
             <div className="w-full">
                 <Toast ref={toast} />
-                <Suspense
-                    fallback={
-                        <TableSkeletonTemplate items={entityProperties} />
-                    }
-                >
-                    <div className="col-12">
-                        <TabView>
-                            <TabPanel header="Préstamo / Avances">
-                                <LeaseTable
-                                    submitted={submitted}
-                                    handleAdd={handleAdd}
-                                    handleDelete={handleDelete}
-                                    handleEdit={handleEdit}
-                                    idEmployee={id}
+                <TabView>
+                    <TabPanel
+                        header="Prestamos / Avances"
+                        leftIcon="pi pi-clipboard mr-2"
+                    >
+                        <Suspense
+                            fallback={
+                                <TableSkeletonTemplate
+                                    items={entityProperties}
                                 />
-                            </TabPanel>
-                            <TabPanel header="Suspensión de pago">
-                                klk2
-                            </TabPanel>
-                        </TabView>
-                    </div>
-                </Suspense>
+                            }
+                        >
+                            <LeaseTable
+                                handleAmortize={handleAmortize}
+                                submitted={submitted}
+                                handleAdd={handleAdd}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                handlePayment={handlePayment}
+                                idEmployee={id}
+                            />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Suspensión de pago"
+                        leftIcon="pi pi-user-minus mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <LeasePause id={id} />
+                        </Suspense>
+                    </TabPanel>
+                </TabView>
 
                 {editEntityDialog && (
                     <EditLease
@@ -111,6 +136,18 @@ const Lease = ({ id }: props) => {
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
+                    />
+                )}
+
+                {paymentEntityDialog && (
+                    <AddLeasePayment
+                        id={id}
+                        entity={entity!}
+                        submitted={submitted}
+                        addEntityDialog={paymentEntityDialog}
+                        setAddEntityDialog={setPaymentEntityDialog}
+                        toast={toast}
+                        setSubmitted={setSubmitted}
                     />
                 )}
             </div>

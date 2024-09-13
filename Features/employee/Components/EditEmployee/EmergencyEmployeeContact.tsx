@@ -7,7 +7,7 @@ import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
 import { useEffect } from "react";
 import { IEmployee } from "../../Types/IEmployee";
-import employeeContactFormSchemas from "../../Validations/EmployeeContactFormSchemas";
+import employeeContactFormSchemas from "../../Validation/Validations/EmployeeContactFormSchemas";
 
 interface Props {
     setContactInformation: (

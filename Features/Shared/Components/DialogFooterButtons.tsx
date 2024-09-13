@@ -6,15 +6,18 @@ interface Props {
 
 const DialogFooterButtons = ({ hideDialog }: Props) => {
     return (
-        <div className="flex justify-content-end mt-3">
+        <div
+            className="flex justify-content-end mt-3"
+            style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+        >
             <Button
                 label="Cancelar"
                 icon="pi pi-times"
-                text
-                type="button"
+                raised
                 onClick={hideDialog}
+                severity="danger"
             />
-            <Button label="Guardar" icon="pi pi-check" />
+            <Button label="Guardar" icon="pi pi-check" raised />
         </div>
     );
 };
