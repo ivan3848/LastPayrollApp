@@ -11,7 +11,8 @@ import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptD
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import { SelectButton } from "primereact/selectbutton";
-import { InputText } from "primereact/inputtext";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useCommissionArchiveQuery from "./Hooks/useCommissionArchiveQuery";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -56,7 +57,10 @@ const AddCommission = ({
         data.idPayrollPay = data.idPayrollPay;
         data.payDate = data.payDate;
         data.isExcecuted = false;
+        data.idCommission = data.idCommission;
         data.conceptCode = data.conceptCode;
+        data.chargeDate = new Date();
+        data.date = new Date();
         data.commissionDetail = [{ ...data }];
         addEntity.mutate(data);
     };
@@ -64,6 +68,7 @@ const AddCommission = ({
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
+
     return (
         <Dialog
             visible={addEntityDialog}
@@ -91,7 +96,7 @@ const AddCommission = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="birthDate">Fecha de pago</label>
+                            <label htmlFor="payDate">Fecha de pago</label>
                             <Calendar
                                 id="payDate"
                                 onChange={(e) => setValue("payDate", e.value!)}
@@ -107,7 +112,7 @@ const AddCommission = ({
 
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="isCommissionPayroll">
-                                Por Nomina de Comisiones
+                                Por Nomina
                             </label>
                             <div>
                                 <SelectButton
@@ -128,22 +133,30 @@ const AddCommission = ({
                             </div>
                         </div>
 
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="Description">Description</label>
-                            <InputText
-                                id="description"
-                                type="text"
-                                {...register("description")}
-                                defaultValue={
-                                    "Dejar vacio si no hay descripcion"
-                                }
-                            />
-                            {errors.description && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.description.message?.toString()}
-                                </small>
-                            )}
-                        </div>
+                        {
+                            <div className="field">
+                                <label
+                                    htmlFor="idPayrollPay"
+                                    className="w-full"
+                                >
+                                    Comisión
+                                </label>
+                                <GenericDropDown
+                                    id="idCommission"
+                                    isValid={!!errors.idCommission}
+                                    text="description"
+                                    placeholder="Si quiere una comisión nueva, deje el campo vacío."
+                                    useQuery={useCommissionArchiveQuery}
+                                    setValue={setValue}
+                                    watch={watch}
+                                />
+                                {errors.idPayrollPay && (
+                                    <small className="p-invalid text-danger">
+                                        {errors.idPayrollPay.message?.toString()}
+                                    </small>
+                                )}
+                            </div>
+                        }
 
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="idConcept">Concepto</label>

@@ -25,4 +25,9 @@ const deleteEmployeeService = new ApiService<IEmployee, IEmployee>(
 );
 
 export default employeeService;
-export { employeeChangeService, employeeHistory, addEmployeeService, deleteEmployeeService };
+export {
+    employeeChangeService,
+    employeeHistory,
+    addEmployeeService,
+    deleteEmployeeService,
+};

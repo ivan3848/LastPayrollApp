@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { IDependant } from "../Types/IDependant";
-import dependantService from "../Services/dependantService";
+import { userInsertService } from "../Service/userService";
+import { IInsertUser } from "../Types/IInsertUser";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -15,7 +15,7 @@ const useEditDependant = ({
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IDependant) => dependantService.put(entity),
+        mutationFn: (entity: IInsertUser) => userInsertService.put(entity),
 
         onError: (error: any) => {
             toast.current?.show({
@@ -33,7 +33,7 @@ const useEditDependant = ({
             toast.current?.show({
                 severity: "success",
                 summary: "Editado!",
-                detail: "Dependiente editado correctamente",
+                detail: "Registro editado correctamente",
                 life: 3000,
             });
         },
