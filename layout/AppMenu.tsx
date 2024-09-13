@@ -88,7 +88,7 @@ const AppMenu = () => {
                 {
                     label: "Area de Nómina",
                     icon: "pi pi-fw pi-book",
-                    to: "",
+                    to: "/payrollPay",
                 },
                 {
                     label: "Contabilizacion",
