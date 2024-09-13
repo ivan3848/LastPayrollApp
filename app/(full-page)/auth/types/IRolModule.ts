@@ -1,7 +1,4 @@
-export interface IRolModule {
-    module: string;
-    canWrite: boolean;
-}
+import IRolModule from "@/Features/rolModule/Types/IRolModule";
 
 export default interface IAuth {
     userId: string;

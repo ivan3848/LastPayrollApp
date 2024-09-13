@@ -5,7 +5,7 @@ import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import userConfigurationFormSchema from "../../UserConfiguration/Validation/userFormSchema";
 import useRolQuery from "../Hooks/useRolQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
-import PickUpListForRoles from "./PickUpListForRoles";
+import PickUpList from "./PickUpList";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { useEffect, useState } from "react";
 import IRol from "@/Features/rol/Types/IRol";
@@ -103,7 +103,7 @@ const AddRol = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="col-12">
                     <div className="p-fluid formgrid grid">
-                        <PickUpListForRoles
+                        <PickUpList
                             source={source}
                             target={target}
                             onChange={onChange}

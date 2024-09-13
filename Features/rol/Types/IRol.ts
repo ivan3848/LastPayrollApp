@@ -5,4 +5,5 @@ export default interface IRol {
     idRolModule: number;
     module: string;
     canWrite: boolean;
+    idRol?: number;
 }

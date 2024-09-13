@@ -3,4 +3,5 @@ export interface IInsertUser {
     password: string;
     idRol: number;
     idEmployee: number;
+    userId: number;
 }

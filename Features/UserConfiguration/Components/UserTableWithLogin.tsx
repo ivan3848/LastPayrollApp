@@ -4,18 +4,19 @@ import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
 import emptyImage from "@/constants/emptyImage";
-import { DataView, DataViewLayoutOptions } from "primereact/dataview";
+import { DataView } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
-import { classNames } from "primereact/utils";
 import { ChangeEvent, useState } from "react";
 import { userServiceWithLogin } from "../Service/userService";
 import useCrudModals from "../../Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { IUser } from "../Types/IUser";
 import EditUser from "./EditUser";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 interface Props {
     submitted: boolean;
 }
@@ -29,8 +30,14 @@ const sortOptions = [
 ];
 
 export default function UserTableWithLogin({ submitted }: Props) {
-    const { editEntityDialog, setEditEntityDialog, setSubmitted, toast } =
-        useCrudModals<IUser>();
+    const {
+        editEntityDialog,
+        setEditEntityDialog,
+        setDeleteEntityDialog,
+        setSubmitted,
+        toast,
+        deleteEntityDialog,
+    } = useCrudModals<IUser>();
 
     const {
         setPage,
@@ -42,12 +49,13 @@ export default function UserTableWithLogin({ submitted }: Props) {
     } = useParamFilter(6);
 
     const [layout, setLayout] = useState<
-        "list" | "grid" | (string & Record<string, unknown>)
+        "grid" | "grid" | (string & Record<string, unknown>)
     >("grid");
 
     const [sortKey, setSortKey] = useState(null);
     const [user, setUser] = useState<IUser | null>(null);
     const [showEditUser, setShowEditUser] = useState(false);
+    const [deleteUser, setDeleteUser] = useState(false);
     const listOfDependencies: boolean[] = [submitted];
 
     const { data, isLoading } = useEntityQuery(
@@ -57,11 +65,11 @@ export default function UserTableWithLogin({ submitted }: Props) {
         userServiceWithLogin
     );
 
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_USER_CONFIGURATION]);
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
     };
-
     const getSeverity = (users: IUser) => {
         switch (users.isActive) {
             case false:
@@ -70,52 +78,6 @@ export default function UserTableWithLogin({ submitted }: Props) {
             default:
                 return "success";
         }
-    };
-
-    const listItem = (users: IUser, index: number) => {
-        return (
-            <div className="col-12" key={users.idEmployee}>
-                <div
-                    className={classNames(
-                        "flex flex-column xl:flex-row xl:align-items-start p-4 gap-4",
-                        { "border-top-1 surface-border": index !== 0 }
-                    )}
-                >
-                    <img
-                        className="w-7 sm:w-16rem xl:w-7rem shadow-2 block xl:block mx-auto border-circle"
-                        src={users.employeeImage ?? emptyImage}
-                        alt={users.name!}
-                    />
-                    <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                        <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-                            <div className="text-2xl font-bold text-900">
-                                {users.idEmployee} -{users.name}
-                            </div>
-                            <div>
-                                <p>{users.email}</p>
-                            </div>
-                            <div className="flex align-items-center gap-3">
-                                <span className="flex align-items-center gap-2">
-                                    <i className="pi pi-warehouse"></i>
-                                    <span className="font-semibold">
-                                        {users.salary}
-                                    </span>
-                                </span>
-                                <Tag
-                                    value={
-                                        users.isActive ? "Activo" : "Inactivo"
-                                    }
-                                    severity={getSeverity(users)}
-                                ></Tag>
-                            </div>
-                        </div>
-                        {/* <div className="flex sm:flex-row align-items-center my-auto gap-1 sm:align-items-center">
-                            {actionButtons(user!)}
-                        </div> */}
-                    </div>
-                </div>
-            </div>
-        );
     };
 
     const gridItem = (user: IUser) => {
@@ -165,15 +127,10 @@ export default function UserTableWithLogin({ submitted }: Props) {
 
     const itemTemplate = (
         user: IUser,
-        layout: "list" | "grid" | (string & Record<string, unknown>),
-        index?: number
+        layout: "grid" | (string & Record<string, unknown>)
     ) => {
-        if (!user) {
-            return;
-        }
-
-        if (layout === "list") return listItem(user, index!);
-        else if (layout === "grid") return gridItem(user);
+        if (!user) return;
+        if (layout === "grid") return gridItem(user);
     };
 
     const actionButtons = (userSelected: IUser) => {
@@ -182,12 +139,24 @@ export default function UserTableWithLogin({ submitted }: Props) {
                 <Button
                     size="small"
                     className="min-w-min"
-                    label="Add Setting"
+                    label="Editar"
                     icon="pi pi-external-link"
                     onClick={() => {
                         setUser(userSelected);
                         setShowEditUser(true);
                         setEditEntityDialog(true);
+                    }}
+                />
+                <Button
+                    size="small"
+                    className="min-w-min"
+                    label="Eliminar Usuario"
+                    icon="pi pi-external-link"
+                    onClick={() => {
+                        setUser(userSelected);
+                        setDeleteUser(true);
+                        setEditEntityDialog(true);
+                        setDeleteEntityDialog(true);
                     }}
                 />
             </>
@@ -221,10 +190,6 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     placeholder="Buscar..."
                 />
             </span>
-            <DataViewLayoutOptions
-                layout={layout}
-                onChange={(e) => setLayout(e.value)}
-            />
         </div>
     );
 
@@ -239,6 +204,20 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     id={user!.idEmployee}
                     entity={user!}
                 />
+            )}
+            {deleteUser && (
+                <>
+                    <DeleteEntity
+                        id={user!.users[0].userId}
+                        endpoint="employee/user"
+                        deleteEntityDialog={deleteEntityDialog}
+                        setDeleteEntityDialog={setDeleteEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+
+                    {expireQuery()}
+                </>
             )}
             <Toast ref={toast} />
 

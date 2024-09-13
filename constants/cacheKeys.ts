@@ -58,6 +58,7 @@ export const CACHE_KEY_COMMISSION_Detail = "commissionDetail";
 export const CACHE_KEY_ARCHIVE_COMMISSION = "archiveCommission";
 export const CACHE_KEY_PAYROLL_PAY = "payrollPay";
 export const CACHE_KEY_USER_CONFIGURATION = "user";
+export const CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN = "userWithLogin";
 export const CACHE_KEY_ROL = "rol";
 export const CACHE_KEY_ROL_MODULE = "rolModule";
 

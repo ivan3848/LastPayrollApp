@@ -1,5 +1,4 @@
 import { useMutation } from "@tanstack/react-query";
-import { useRouter } from "next/navigation"; // Import useRouter for redirection
 import { IInsertUser } from "../Types/IInsertUser";
 import { userInsertService } from "../Service/userService";
 
@@ -16,8 +15,6 @@ const useAddUser = ({
     setSubmitted,
     reset,
 }: Props) => {
-    const router = useRouter();
-
     return useMutation({
         mutationFn: (entity: IInsertUser) => userInsertService.post(entity),
         onError: (error: any) => {
@@ -37,7 +34,6 @@ const useAddUser = ({
                 summary: "Éxito",
                 detail: "Usuario agregado correctamente",
                 life: 3000,
-                router: router.refresh(),
             });
         },
     });

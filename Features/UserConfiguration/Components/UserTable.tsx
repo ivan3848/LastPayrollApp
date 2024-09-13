@@ -1,34 +1,41 @@
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
+import {
+    CACHE_KEY_USER_CONFIGURATION,
+    CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN,
+} from "@/constants/cacheKeys";
+import emptyImage from "@/constants/emptyImage";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
-import emptyImage from "@/constants/emptyImage";
-import { DataView, DataViewLayoutOptions } from "primereact/dataview";
+import { DataView } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
-import { classNames } from "primereact/utils";
+import { Toast } from "primereact/toast";
 import { ChangeEvent, useState } from "react";
 import useCrudModals from "../../Shared/Hooks/useCrudModals";
-import AddUser from "./AddUser";
-import { Toast } from "primereact/toast";
 import userServiceWithOut from "../Service/userService";
 import { IUser } from "../Types/IUser";
+import AddUser from "./AddUser";
+
 interface Props {
     submitted: boolean;
 }
 
-const sortOptions = [
-    { label: "Ordenar por...", value: "" },
-    { label: "Código de empleado", value: "idEmployee" },
-    { label: "Nombre", value: "name" },
-    { label: "Posición", value: "position" },
-    { label: "Departamento", value: "department" },
-];
+const sortOptionsMap = {
+    "": "Ordenar por...",
+    idEmployee: "Código de empleado",
+    name: "Nombre",
+    position: "Posición",
+    department: "Departamento",
+};
+const sortOptions = Object.entries(sortOptionsMap).map(([value, label]) => ({
+    label,
+    value,
+}));
 
-export default function UserConfigurationTable({ submitted }: Props) {
+export default function UserTable({ submitted }: Props) {
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IUser>();
 
@@ -41,19 +48,15 @@ export default function UserConfigurationTable({ submitted }: Props) {
         params,
     } = useParamFilter(6);
 
-    const [layout, setLayout] = useState<
-        "list" | "grid" | (string & Record<string, unknown>)
-    >("grid");
-
     const [sortKey, setSortKey] = useState(null);
     const [user, setUser] = useState<IUser | null>(null);
     const [showAddUser, setShowAddUser] = useState(false);
-    const listOfDependencies: boolean[] = [submitted];
+    const [refreshData, setRefreshData] = useState(false);
 
     const { data, isLoading } = useEntityQuery(
         params,
-        listOfDependencies,
-        CACHE_KEY_USER_CONFIGURATION,
+        [submitted, refreshData],
+        CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN,
         userServiceWithOut
     );
 
@@ -63,59 +66,7 @@ export default function UserConfigurationTable({ submitted }: Props) {
     };
 
     const getSeverity = (users: IUser) => {
-        switch (users.isActive) {
-            case false:
-                return "danger";
-
-            default:
-                return "success";
-        }
-    };
-
-    const listItem = (users: IUser, index: number) => {
-        return (
-            <div className="col-12" key={users.idEmployee}>
-                <div
-                    className={classNames(
-                        "flex flex-column xl:flex-row xl:align-items-start p-4 gap-4",
-                        { "border-top-1 surface-border": index !== 0 }
-                    )}
-                >
-                    <img
-                        className="w-7 sm:w-16rem xl:w-7rem shadow-2 block xl:block mx-auto border-circle"
-                        src={users.employeeImage ?? emptyImage}
-                        alt={users.name!}
-                    />
-                    <div className="flex flex-column sm:flex-row justify-content-between align-items-center xl:align-items-start flex-1 gap-4">
-                        <div className="flex flex-column align-items-center sm:align-items-start gap-3">
-                            <div className="text-2xl font-bold text-900">
-                                {users.idEmployee} -{users.name}
-                            </div>
-                            <div>
-                                <p>{users.email}</p>
-                            </div>
-                            <div className="flex align-items-center gap-3">
-                                <span className="flex align-items-center gap-2">
-                                    <i className="pi pi-warehouse"></i>
-                                    <span className="font-semibold">
-                                        {users.salary}
-                                    </span>
-                                </span>
-                                <Tag
-                                    value={
-                                        users.isActive ? "Activo" : "Inactivo"
-                                    }
-                                    severity={getSeverity(users)}
-                                ></Tag>
-                            </div>
-                        </div>
-                        <div className="flex sm:flex-row align-items-center my-auto gap-1 sm:align-items-center">
-                            {actionButtons(user!)}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
+        return users.isActive ? "success" : "danger";
     };
 
     const gridItem = (user: IUser) => {
@@ -143,6 +94,10 @@ export default function UserConfigurationTable({ submitted }: Props) {
                             src={user.employeeImage ?? emptyImage}
                             alt={user.name!}
                         />
+                        <div className="text-2xl font-bold">{user.name}</div>
+                        <div>
+                            <p className="text-sky-400">{user.email}</p>
+                        </div>
                     </div>
                     <div className="flex justify-content-center flex-wrap gap-1">
                         {actionButtons(user)}
@@ -154,32 +109,25 @@ export default function UserConfigurationTable({ submitted }: Props) {
 
     const itemTemplate = (
         user: IUser,
-        layout: "list" | "grid" | (string & Record<string, unknown>),
-        index?: number
+        layout: "grid" | (string & Record<string, unknown>)
     ) => {
-        if (!user) {
-            return;
-        }
-
-        if (layout === "list") return listItem(user, index!);
-        else if (layout === "grid") return gridItem(user);
+        if (!user) return;
+        if (layout === "grid") return gridItem(user);
     };
 
     const actionButtons = (userSelected: IUser) => {
         return (
-            <>
-                <Button
-                    size="small"
-                    className="min-w-min"
-                    label="Add Setting"
-                    icon="pi pi-external-link"
-                    onClick={() => {
-                        setUser(userSelected);
-                        setShowAddUser(true);
-                        setAddEntityDialog(true);
-                    }}
-                />
-            </>
+            <Button
+                size="small"
+                className="min-w-min"
+                label="Add Setting"
+                icon="pi pi-external-link"
+                onClick={() => {
+                    setUser(userSelected);
+                    setShowAddUser(true);
+                    setAddEntityDialog(true);
+                }}
+            />
         );
     };
 
@@ -210,10 +158,6 @@ export default function UserConfigurationTable({ submitted }: Props) {
                     placeholder="Buscar..."
                 />
             </span>
-            <DataViewLayoutOptions
-                layout={layout}
-                onChange={(e) => setLayout(e.value)}
-            />
         </div>
     );
 
@@ -229,13 +173,11 @@ export default function UserConfigurationTable({ submitted }: Props) {
                 />
             )}
             <Toast ref={toast} />
-
             <div className="grid">
                 <div className="col-12">
                     <div className="flex justify-content-between mb-5">
                         <h3>Lista de Empleados Sin Usuario</h3>
                     </div>
-
                     {isLoading ? (
                         <div className="flex justify-content-center align-items-center">
                             <ProgressSpinner />
@@ -244,7 +186,7 @@ export default function UserConfigurationTable({ submitted }: Props) {
                         <DataView
                             value={data.items}
                             itemTemplate={itemTemplate}
-                            layout={layout}
+                            layout={"grid"}
                             header={header}
                             loading={isLoading}
                             lazy

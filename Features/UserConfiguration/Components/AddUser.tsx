@@ -1,14 +1,16 @@
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { Dialog } from "primereact/dialog";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import userFormSchema from "../Validation/userFormSchema";
-import { IInsertUser } from "../Types/IInsertUser";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import useRolQuery from "@/Features/rol/Hooks/useRolQuery";
+import { CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN } from "@/constants/cacheKeys";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import useRolQuery from "@/Features/rol/Hooks/useRolQuery";
+import { useForm } from "react-hook-form";
 import useAddUser from "../Hooks/useAddUser";
+import { IInsertUser } from "../Types/IInsertUser";
+import userFormSchema from "../Validation/userFormSchema";
 
 interface Props {
     addEntityDialog: boolean;
@@ -44,14 +46,21 @@ const AddUser = ({
         reset,
     });
 
+    const expireQuery = useExpireSessionQuery([
+        CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN,
+    ]);
+
     const onSubmit = (data: IInsertUser) => {
         data.idEmployee = id;
-        addEntity.mutate(data);
+        addEntity.mutateAsync(data).then(() => {
+            expireQuery();
+        });
     };
 
     const hideDialog = () => {
         setAddEntityDialog(false);
     };
+
     return (
         <Dialog
             visible={addEntityDialog}
@@ -81,7 +90,7 @@ const AddUser = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password">Contraseña</label>
                             <InputText
                                 id="password"
                                 type="text"
@@ -97,8 +106,8 @@ const AddUser = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="idBank" className="block">
-                                Banco
+                            <label htmlFor="idRol" className="block">
+                                Rol
                             </label>
                             <GenericDropDown
                                 id="idRol"
@@ -121,5 +130,4 @@ const AddUser = ({
         </Dialog>
     );
 };
-
 export default AddUser;

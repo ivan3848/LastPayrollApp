@@ -24,11 +24,6 @@ const User = () => {
         toast,
     } = useCrudModals<IEmployee>();
 
-    const handleAdd = () => {
-        setSubmitted(false);
-        setAddEntityDialog(true);
-    };
-
     const skeleton = () => {
         return (
             <div className="border-round border-1 surface-border p-4 surface-card">
@@ -63,7 +58,7 @@ const User = () => {
                             leftIcon="pi pi-globe mr-2"
                         >
                             <Suspense fallback={skeleton()}>
-                                <UserTable submitted={false} />
+                                <UserTable submitted={submitted} />
                             </Suspense>
                         </TabPanel>
                         <TabPanel header="Con login" leftIcon="pi pi-map mr-2">

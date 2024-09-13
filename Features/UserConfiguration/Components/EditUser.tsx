@@ -1,19 +1,22 @@
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { use, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { InputText } from "primereact/inputtext";
 import { Dialog } from "primereact/dialog";
-import { IPerson } from "@/Features/person/Types/IPerson";
-import userFormSchema from "../Validation/userFormSchema";
+import { InputText } from "primereact/inputtext";
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useRolQuery from "@/Features/rol/Hooks/useRolQuery";
-import { classNames } from "primereact/utils";
 import useEditUser from "../Hooks/useEditUser";
+import userFormSchema from "../Validation/userFormSchema";
 import { IInsertUser } from "../Types/IInsertUser";
-import useUserQuery from "../Hooks/useUserQuery";
 import { IUser } from "../Types/IUser";
+import { classNames } from "primereact/utils";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
+import BasicDemo from "./DataView";
+import conceptService from "../../concept/Services/conceptService";
+import { set } from "zod";
 
 interface Props {
     entity: IUser;
@@ -35,21 +38,20 @@ const EditUser = ({
     const { editEntityFormSchema } = userFormSchema();
     const { params } = useParamFilter();
 
-    const listOfDependencies: boolean[] = [true];
-    const { data, isLoading } = useUserQuery(params, listOfDependencies);
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
     const {
         handleSubmit,
         register,
         reset,
-        watch,
         setValue,
         formState: { errors },
+        watch,
     } = useForm<IInsertUser>({
         resolver: zodResolver(editEntityFormSchema),
+        defaultValues: {
+            password: "",
+            idRol: entity.idRol || 0,
+            idEmployee: entity.idEmployee || id,
+        },
     });
     const editEntity = useEditUser({
         toast,
@@ -57,23 +59,42 @@ const EditUser = ({
         setSubmitted,
         reset,
     });
+    const [idRol, setIdRol] = useState<number>();
+
+    useEffect(() => {
+        if (entity) {
+            const user = entity.users[0];
+
+            setValue("username", user.username || "");
+            setValue("idRol", user.idRol || entity.idRol);
+            setValue("password", user.password);
+        }
+    }, [entity, setValue, id]);
+
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_USER_CONFIGURATION]);
 
     const onSubmit = (data: IInsertUser) => {
-        data.idRol = data.idRol;
         data.idEmployee = id;
-        editEntity.mutate(data);
-        return;
+        data.userId = entity.users[0].userId;
+
+        editEntity.mutateAsync(data).then(() => {
+            expireQuery();
+        });
     };
 
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
 
+    if (!entity) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <Dialog
             visible={editEntityDialog}
-            style={{ width: "50vw" }}
-            header="Editar Dependiente"
+            style={{ width: "55vw" }}
+            header="Editar Usuario"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -82,30 +103,11 @@ const EditUser = ({
                 <div className="col-12">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="userName">Nombre de Usuario</label>
+                            <label htmlFor="username">Nombre de Usuario</label>
                             <InputText
                                 {...register("username")}
                                 id="username"
                                 autoFocus
-                                className={classNames({
-                                    "p-invalid": errors.username,
-                                })}
-                            />
-                            {errors.username && (
-                                <small className="p-invalid text-danger">
-                                    {errors.username.message?.toString()}
-                                </small>
-                            )}
-                        </div>
-                        <div className="field">
-                            <label htmlFor="name" className="w-full">
-                                username
-                            </label>
-                            <InputText
-                                {...register("username")}
-                                id="username"
-                                autoFocus
-                                defaultValue={entity?.username}
                                 className={classNames({
                                     "p-invalid": errors.username,
                                 })}
@@ -117,14 +119,33 @@ const EditUser = ({
                             )}
                         </div>
 
-                        <div className="field">
-                            <label htmlFor="idCosCenter" className="w-full">
-                                Centro De Costo
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="password">
+                                Contraseña de Usuario
                             </label>
+                            <InputText
+                                {...register("password")}
+                                id="password"
+                                autoFocus
+                                className={classNames({
+                                    "p-invalid": errors.password,
+                                })}
+                            />
+                            {errors.password && (
+                                <small className="p-invalid text-danger">
+                                    {errors.password.message?.toString()}
+                                </small>
+                            )}
+
+                            {/* <BasicDemo id={"idRol"} idValue={1} /> */}
+                        </div>
+
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="idRol">Rol</label>
                             <GenericDropDown
-                                id="idCostCenter"
+                                id="idRol"
                                 isValid={!!errors.idRol}
-                                text="name"
+                                text="description"
                                 useQuery={useRolQuery}
                                 setValue={setValue}
                                 watch={watch}

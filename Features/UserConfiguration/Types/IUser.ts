@@ -1,3 +1,5 @@
+import { IInsertUser } from "./IInsertUser";
+
 export interface IUser {
     idCompany: number;
     contactName: string;
@@ -11,6 +13,5 @@ export interface IUser {
     startDate: Date;
     employeeImage: string;
     idRol: number;
-    username: string;
-    password: string;
+    users: IInsertUser[];
 }
