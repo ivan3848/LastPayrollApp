@@ -155,7 +155,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     onClick={() => {
                         setUser(userSelected);
                         setDeleteUser(true);
-                        setEditEntityDialog(true);
+                        setDeleteEntityDialog(true);
                         setDeleteEntityDialog(true);
                     }}
                 />
