@@ -18,7 +18,7 @@ interface Props {
     setValue: (name: string, value: any) => void;
 }
 
-const initialPayrollNumber = useRef<number | null>(null);
+// const initialPayrollNumber = useRef<number | null>(null);
 
 const RealPayrollPay = ({
     entity,
@@ -30,11 +30,11 @@ const RealPayrollPay = ({
 
     const payrollNumber = watch("payrollNumber");
 
-    useEffect(() => {
-        if (payrollNumber && initialPayrollNumber.current === null) {
-            initialPayrollNumber.current = payrollNumber;
-        }
-    }, [payrollNumber]);
+    // useEffect(() => {
+    //     if (payrollNumber && initialPayrollNumber.current === null) {
+    //         initialPayrollNumber.current = payrollNumber;
+    //     }
+    // }, [payrollNumber]);
 
     useEffect(() => {
         if (entity) {

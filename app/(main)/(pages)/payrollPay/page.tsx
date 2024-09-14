@@ -11,7 +11,9 @@ import React, { useEffect, useState } from 'react'
 const PayrollPay = () => {
 
     const { params } = useParamFilter();
+
     let { data } = usePayrollPayQuery(params, []);
+    let { data: configData } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
 
     const {
         setEditEntityDialog,
@@ -22,7 +24,6 @@ const PayrollPay = () => {
         entity,
     } = useCrudModals<IPayrollPay>();
 
-    let { data: configData } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
 
     const [entityPayrollManagement, setEntityPayrollManagement] = useState<IPayrollManagement>();
 
@@ -37,18 +38,23 @@ const PayrollPay = () => {
             setEntity(data.items[0]);
             setEditEntityDialog(true);
             setSubmitted(false);
-            toast?.current?.show({ severity: 'info', summary: 'Información', detail: 'Registro cargado' });
+            toast?.current?.show({
+                severity: 'info',
+                summary: 'Información',
+                detail: 'Registro cargado'
+            });
         }
-    }, [data, submitted]);
+    }, [data, setEditEntityDialog, setEntity, setSubmitted, submitted, toast]);
 
 
     return (
         <div className="card">
-            <h5 className='mb-4' >NOMINA</h5>
+            <h4 className='mb-4 ml-3' >NÓMINA</h4>
             <PayrollPayView
                 entity={entity}
                 // setEntity={setEntity}
                 entityPayrollManagement={entityPayrollManagement}
+                setEntityPayrollManagement={setEntityPayrollManagement}
                 toast={toast}
                 setSubmitted={setSubmitted} />
         </div>
