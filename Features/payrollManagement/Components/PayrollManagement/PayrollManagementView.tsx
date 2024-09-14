@@ -53,7 +53,6 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
         setSubmitted,
         reset,
     });
-
     const getLastPayroll = async (payNumber?: number) => {
         const payrollArea = watch("idPayrollArea");
         const date = watch("date");
@@ -61,7 +60,7 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
         const period: IPayrollManagementByPayrollNumber = {
             payrollNumber: payNumber ?? watch("payrollNumber"),
             idPayrollArea: payrollArea ?? 1,
-            PayrollYear: new Date(date.getFullYear(), date.getMonth(), payNumber),
+            PayrollYear: date.getFullYear(),
         };
         const payrollData = await payrollManagementByPayrollNumberService.post(period) as IPayrollManagement;
         setEntity(payrollData);
@@ -70,7 +69,7 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
     const getData = async (period: IPayrollManagementByPayrollArea) => {
         try {
             const payrollManagement = await payrollManagementByPayrollAreService.post(period) as IPayrollManagement;
-            !entity?.idPayrollManagement && setEntity(payrollManagement);
+            setEntity(payrollManagement);
         } catch (error: any) {
             toast.current?.show({
                 severity: "warn",
@@ -91,7 +90,7 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
         if (!payrollNumb || !date) return;
 
         const period: IPayrollManagementByPayrollArea = {
-            idPayrollArea: 1,
+            idPayrollArea: watch("idPayrollArea") ?? 1,
             date: new Date(date.getFullYear(), date.getMonth(), payrollNumb),
         };
         getData(period);
@@ -125,7 +124,6 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
 
         if (data.idPayrollManagement) {
             editEntity.mutate(data);
-            console.log(data);
             return;
         }
         addEntity.mutate(data);
@@ -288,13 +286,14 @@ const PayrollManagement = ({ entity, setEntity, toast, setSubmitted }: Props) =>
                                             <strong>Periodo de retroactividad</strong>
                                         </label>
                                         <GenericInputNumber
-                                            id="retroactivePeriodLimit"
+                                            id="payrollNumber"
                                             setValue={setValue}
                                             isValid={!!errors.retroactivePeriodLimit}
                                             currentValue={watch("payrollNumber") ?? entity?.payrollNumber}
                                             watch={watch}
                                             prefix=''
                                             format={false}
+                                            isReadOnly={true}
                                         />
                                         {errors.retroactivePeriodLimit && (
                                             <small className="p-invalid text-danger">

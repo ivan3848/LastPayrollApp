@@ -46,5 +46,5 @@ interface IPayrollManagementByPayrollArea {
 interface IPayrollManagementByPayrollNumber {
     payrollNumber: number;
     idPayrollArea: number;
-    PayrollYear: Date;
+    PayrollYear: number;
 }
