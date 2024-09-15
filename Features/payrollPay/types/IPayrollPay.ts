@@ -6,6 +6,8 @@ export interface IPayrollPay {
     payrollNumber: number;
     totalTax?: number;
     totalPay?: number;
+    payrollStartDate?: Date;
     startDate?: Date;
     endDate?: Date;
+    
 }
