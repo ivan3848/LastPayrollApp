@@ -28,7 +28,6 @@ const PayrollManagement = () => {
         }
     }, [data, submitted]);
 
-
     return (
         <div className="card">
             <h5 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h5>
@@ -36,7 +35,9 @@ const PayrollManagement = () => {
                 entity={entity}
                 setEntity={setEntity}
                 toast={toast}
+                submitted={submitted}
                 setSubmitted={setSubmitted} />
+
         </div>
     )
 }
