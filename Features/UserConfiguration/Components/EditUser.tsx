@@ -14,9 +14,10 @@ import { IUser } from "../Types/IUser";
 import { classNames } from "primereact/utils";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
-import BasicDemo from "./DataView";
+import BasicDemo from "./BasicDemo";
 import conceptService from "../../concept/Services/conceptService";
 import { set } from "zod";
+import ComponentToTest from "./ComponentToTest";
 
 interface Props {
     entity: IUser;
@@ -136,13 +137,10 @@ const EditUser = ({
                                     {errors.password.message?.toString()}
                                 </small>
                             )}
-
-                            {/* <BasicDemo id={"idRol"} idValue={1} /> */}
                         </div>
-
-                        <div className="field col-12 md:col-6 lg:col-4">
+                        <div className="field col-12 md:col-6 lg:col-8">
                             <label htmlFor="idRol">Rol</label>
-                            <GenericDropDown
+                            <ComponentToTest
                                 id="idRol"
                                 isValid={!!errors.idRol}
                                 text="description"
@@ -151,11 +149,6 @@ const EditUser = ({
                                 watch={watch}
                                 idValueEdit={entity.idRol}
                             />
-                            {errors.idRol && (
-                                <small className="p-invalid text-danger">
-                                    {errors.idRol.message?.toString()}
-                                </small>
-                            )}
                         </div>
                     </div>
                 </div>

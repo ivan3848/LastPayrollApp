@@ -10,13 +10,19 @@ import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
 import { ChangeEvent, useState } from "react";
-import { userServiceWithLogin } from "../Service/userService";
+import {
+    userResetPassword,
+    userServiceWithLogin,
+} from "../Service/userService";
 import useCrudModals from "../../Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { IUser } from "../Types/IUser";
 import EditUser from "./EditUser";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import ResetUserPassword from "./ResetUserPassword";
+import { set } from "zod";
+import { Dialog } from "primereact/dialog";
 interface Props {
     submitted: boolean;
 }
@@ -56,6 +62,9 @@ export default function UserTableWithLogin({ submitted }: Props) {
     const [user, setUser] = useState<IUser | null>(null);
     const [showEditUser, setShowEditUser] = useState(false);
     const [deleteUser, setDeleteUser] = useState(false);
+    const [userResetPassword, setUserResetPassword] = useState(false);
+    const [userPass, setUserResetPasswordEntityDialog] = useState(false);
+
     const listOfDependencies: boolean[] = [submitted];
 
     const { data, isLoading } = useEntityQuery(
@@ -156,9 +165,20 @@ export default function UserTableWithLogin({ submitted }: Props) {
                         setUser(userSelected);
                         setDeleteUser(true);
                         setDeleteEntityDialog(true);
-                        setDeleteEntityDialog(true);
                     }}
                 />
+
+                {/* <Button
+                    size="small"
+                    className="min-w-min"
+                    label="Resetear Contraseña"
+                    icon="pi pi-external-link"
+                    onClick={() => {
+                        setUser(userSelected);
+                        setUserResetPassword(true);
+                        setUserResetPasswordEntityDialog(true);
+                    }}
+                /> */}
             </>
         );
     };
@@ -219,6 +239,19 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     {expireQuery()}
                 </>
             )}
+            {/* {userResetPassword && (
+                <>
+                    <ResetUserPassword
+                        id={user!.users[0].userId}
+                        endpoint={"employee/user/resetPassword"}
+                        userResetPasswordEntityDialog={userResetPassword}
+                        setUserResetPasswordEntityDialog={setUserResetPassword}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                </>
+            )} */}
+
             <Toast ref={toast} />
 
             <div className="grid">
