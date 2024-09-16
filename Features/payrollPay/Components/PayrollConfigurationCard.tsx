@@ -8,7 +8,9 @@ interface Props {
 
 const PayrollConfigurationCard = ({ entity }: Props) => {
 
-    if (entity?.idPayrollManagement == 0)
+    if (entity?.idPayrollManagement == 0
+        || entity?.idPayrollManagement == undefined
+        || entity.idStatus !== 151)
         return <div className='card'>
             <h4 className='flex' style={{ justifyContent: 'center' }}> No hay configuración de nómina</h4>
         </div>

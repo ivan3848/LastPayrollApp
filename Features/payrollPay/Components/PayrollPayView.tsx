@@ -15,6 +15,7 @@ import PayrollConfigurationCard from "./PayrollConfigurationCard";
 import { Toast } from "primereact/toast";
 import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
 import { Button } from "primereact/button";
+import DeletePayrollDialog from "./DeletePayrollDialog";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -42,6 +43,7 @@ const PayrollPayView = ({
 
     const [period, setPeriod] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
+    const [isVisibleDelete, setIsVisibleDelete] = useState(false);
     const [employees, setEmployees] = useState<IAddEmployee>();
     const [byEmployees, setByEmployees] = useState(true);
 
@@ -49,11 +51,19 @@ const PayrollPayView = ({
 
     const addEntity = useAddEntityQuery({
         service: generatePayrollPayService,
+        reset,
+        setSubmitted,
+        toast,
     });
 
     const handleAdd = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         event.preventDefault();
         setIsVisible(true);
+    };
+
+    const handleDelete = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        setIsVisibleDelete(true);
     };
 
     const getLastPayroll = useCallback(
@@ -112,130 +122,133 @@ const PayrollPayView = ({
                     <div className="card">
                         <TabView>
                             <TabPanel header="Nomina Real">
-                                <form onSubmit={handleSubmit(onSubmit)}>
-                                    <div
-                                        className="p-fluid formgrid grid"
-                                        style={{
-                                            marginTop: "15px",
-                                            marginBottom: "15px",
-                                            display: "flex",
-                                            justifyContent: "space-around",
-                                            width: "100%",
-                                        }}
-                                    >
-                                        <div className="field col-12 md:col-3">
-                                            <label htmlFor="idPayrollArea">
-                                                <strong>Area de Nómina</strong>
-                                            </label>
-                                            <SelectButton
-                                                {...register("idPayrollArea", {
-                                                    required: true,
-                                                })}
-                                                value={
-                                                    watch("idPayrollArea") === 2
-                                                        ? "Mensual"
-                                                        : "Quincenal"
-                                                }
-                                                onChange={(e) => {
-                                                    setValue(
-                                                        "idPayrollArea",
-                                                        e.value === "Mensual"
-                                                            ? 2
-                                                            : 1
-                                                    );
-                                                    getLastPayroll(
-                                                        watch("payrollNumber")
-                                                    );
-                                                }}
-                                                id="idPayrollArea"
-                                                options={options}
-                                            />
-                                        </div>
-                                        <div className="field col-12 md:col-2">
-                                            <h6 className="mt-2">
-                                                {period
-                                                    ? "Periodo actual"
-                                                    : "Otro periodo"}
-                                            </h6>
-                                            <InputSwitch
-                                                name="otherPeriod"
-                                                checked={period}
-                                                onChange={(e) =>
-                                                    setPeriod(e.value ?? false)
-                                                }
-                                            />
-                                        </div>
-                                        <div className="field col-12 md:col-1">
-                                            <label>
-                                                {!period ? (
-                                                    <strong># Nómina</strong>
-                                                ) : (
-                                                    "# Nómina"
-                                                )}
-                                            </label>
-                                            <InputNumber
-                                                id="payrollNumber"
-                                                value={
-                                                    payrollNumber ||
-                                                    initialPayrollNumber.current
-                                                }
-                                                onChange={(e) => {
-                                                    setValue(
-                                                        "payrollNumber",
-                                                        e.value!
-                                                    );
-                                                    getLastPayroll(e.value!);
-                                                }}
-                                                min={1}
-                                                format={false}
-                                                showButtons
-                                                disabled={period}
-                                            />
-                                        </div>
-                                        <div className="field col-12 md:col-3">
-                                            <label
-                                                htmlFor="idStatus"
-                                                className="w-full"
-                                            >
-                                                <strong>Descripción</strong>
-                                            </label>
-                                            <InputText
-                                                {...register("payrollName", {
-                                                    required: true,
-                                                })}
-                                                id="Description"
-                                                placeholder="Descripcion..."
-                                            />
-                                        </div>
+                                <div
+                                    className="p-fluid formgrid grid"
+                                    style={{
+                                        marginTop: "15px",
+                                        marginBottom: "15px",
+                                        display: "flex",
+                                        justifyContent: "space-around",
+                                        width: "100%",
+                                    }}
+                                >
+                                    <div className="field col-12 md:col-3">
+                                        <label htmlFor="idPayrollArea">
+                                            <strong>Area de Nómina</strong>
+                                        </label>
+                                        <SelectButton
+                                            {...register("idPayrollArea", {
+                                                required: true,
+                                            })}
+                                            value={
+                                                watch("idPayrollArea") === 2
+                                                    ? "Mensual"
+                                                    : "Quincenal"
+                                            }
+                                            onChange={(e) => {
+                                                setValue(
+                                                    "idPayrollArea",
+                                                    e.value === "Mensual"
+                                                        ? 2
+                                                        : 1
+                                                );
+                                                getLastPayroll(
+                                                    watch("payrollNumber")
+                                                );
+                                            }}
+                                            id="idPayrollArea"
+                                            options={options}
+                                        />
                                     </div>
-                                    <div
-                                        className="p-fluid formgrid grid"
-                                        style={{
-                                            marginTop: "15px",
-                                            marginBottom: "15px",
-                                            display: "flex",
-                                            justifyContent: "space-around",
-                                            width: "100%",
-                                        }}
-                                    >
-                                        <div className="field col-12 md:col-3">
-                                            <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
-                                            <InputSwitch
-                                                name="ByEmployee"
-                                                checked={byEmployees}
-                                                onChange={(e) =>
-                                                    setByEmployees(e.value ?? false)
-                                                }
-                                            />
-                                        </div>
-                                        <div className="field col-12 md:col-2 mt-3">
-                                            <Button
-                                                label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
-                                                onClick={handleAdd}
-                                            />
-                                        </div>
+                                    <div className="field col-12 md:col-2">
+                                        <h6 className="mt-2">
+                                            {period
+                                                ? "Periodo actual"
+                                                : "Otro periodo"}
+                                        </h6>
+                                        <InputSwitch
+                                            name="otherPeriod"
+                                            checked={period}
+                                            onChange={(e) =>
+                                                setPeriod(e.value ?? false)
+                                            }
+                                        />
                                     </div>
-                                </form>
+                                    <div className="field col-12 md:col-1">
+                                        <label>
+                                            {!period ? (
+                                                <strong># Nómina</strong>
+                                            ) : (
+                                                "# Nómina"
+                                            )}
+                                        </label>
+                                        <InputNumber
+                                            id="payrollNumber"
+                                            value={
+                                                payrollNumber ||
+                                                initialPayrollNumber.current
+                                            }
+                                            onChange={(e) => {
+                                                setValue(
+                                                    "payrollNumber",
+                                                    e.value!
+                                                );
+                                                getLastPayroll(e.value!);
+                                            }}
+                                            min={1}
+                                            format={false}
+                                            showButtons
+                                            disabled={period}
+                                        />
+                                    </div>
+                                    <div className="field col-12 md:col-3">
+                                        <label
+                                            htmlFor="idStatus"
+                                            className="w-full"
+                                        >
+                                            <strong>Descripción</strong>
+                                        </label>
+                                        <InputText
+                                            {...register("payrollName", {
+                                                required: true,
+                                            })}
+                                            id="Description"
+                                            placeholder="Descripcion..."
+                                        />
+                                    </div>
+                                </div>
+                                <div
+                                    className="p-fluid formgrid grid"
+                                    style={{
+                                        marginTop: "20px",
+                                        display: "flex",
+                                        justifyContent: "space-evenly",
+                                        width: "92%",
+                                    }}
+                                >
+                                    <div className="field col-12 md:col-3 mt-2">
+                                        <Button
+                                            label="Eliminar nomina"
+                                            onClick={handleDelete}
+                                        />
+                                    </div>
+                                    <div className="field col-12 md:col-2">
+                                        <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
+                                        <InputSwitch
+                                            name="ByEmployee"
+                                            checked={byEmployees}
+                                            onChange={(e) =>
+                                                setByEmployees(e.value ?? false)
+                                            }
+                                        />
+                                    </div>
+                                    <div className="field col-12 md:col-3 mt-2">
+                                        <Button
+                                            label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
+                                            onClick={handleAdd}
+                                        />
+                                    </div>
+                                </div>
                             </TabPanel>
                             <TabPanel header="Nomina Simulada">
                                 <p>
@@ -265,9 +278,21 @@ const PayrollPayView = ({
                             employees={employees}
                         />
                     )}
+                    {isVisibleDelete && (
+                        <DeletePayrollDialog
+                            isVisible={isVisibleDelete}
+                            setIsVisible={setIsVisibleDelete!}
+                            handleAdd={handleDelete}
+                            toast={toast}
+                            setSubmitted={setSubmitted}
+                            setEmployees={setEmployees}
+                            employees={employees}
+                        />
+                    )}
                     <DialogFooterButtonPayrollPay
                         isReadOnly={
                             entityPayrollManagement?.idPayrollManagement == 0
+                            || entityPayrollManagement?.idStatus !== 151
                         }
                     />
                 </div>

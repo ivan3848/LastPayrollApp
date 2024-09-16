@@ -16,6 +16,7 @@ import {
 } from "../../payrollManagementService";
 import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
 import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
+import { Toast } from "primereact/toast";
 
 interface Props {
     entity: IPayrollManagement | null;
@@ -58,6 +59,7 @@ const PayrollManagement = ({
         setSubmitted,
         reset,
     });
+
     const getLastPayroll = async () => {
         const payrollArea = watch("idPayrollArea");
         const date = watch("date");
@@ -156,7 +158,7 @@ const PayrollManagement = ({
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="col-12">
                 <div className="card">
-                    {/* <Toast ref={toast} /> */}
+                    <Toast ref={toast} />
                     <div className="field col-12 md:col-5">
                         <label htmlFor="idPayrollArea">
                             <strong>Area de Nómina</strong>

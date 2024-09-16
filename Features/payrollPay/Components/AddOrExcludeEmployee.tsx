@@ -37,9 +37,6 @@ const AddOrExcludeEmployee = ({
         formState: { errors },
     } = useForm<IAddEmployee>();
 
-    const onSubmit = (data: IAddEmployee) => {
-    };
-
     const hideDialog = () => {
         setContent(false);
     };
@@ -77,7 +74,7 @@ const AddOrExcludeEmployee = ({
                 </div>
                 <PayrollEmployeeTable
                     employees={employees}
-                    submitted={false}
+                    byPayroll={false}
                 />
             </div>
             <DialogFooterButtons hideDialog={hideDialog} />

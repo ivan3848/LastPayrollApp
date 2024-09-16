@@ -30,7 +30,7 @@ const PayrollManagement = () => {
 
     return (
         <div className="card">
-            <h5 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h5>
+            <h4 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h4>
             <PayrollManagementView
                 entity={entity}
                 setEntity={setEntity}
