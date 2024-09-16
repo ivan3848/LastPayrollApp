@@ -1,7 +1,6 @@
 "use client";
 import { TABLE_NAME_PAYROLLMANAGEMENT } from "@/constants/StatusTableName";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
@@ -157,6 +156,7 @@ const PayrollManagement = ({
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="col-12">
                 <div className="card">
+                    {/* <Toast ref={toast} /> */}
                     <div className="field col-12 md:col-5">
                         <label htmlFor="idPayrollArea">
                             <strong>Area de Nómina</strong>
@@ -266,7 +266,7 @@ const PayrollManagement = ({
                                                     showButtonBar
                                                     value={
                                                         watch("date") ??
-                                                        entity?.date ? new Date(entity?.date!) : new Date()
+                                                            entity?.date ? new Date(entity?.date!) : new Date()
                                                     }
                                                     onChange={(e: any) => {
                                                         setValue(
@@ -510,7 +510,7 @@ const PayrollManagement = ({
                             </div>
                         </div>
                     </div>
-                    <DialogFooterButtons hideDialog={() => {}} />
+                    <DialogFooterButtons hideDialog={() => { }} />
                 </div>
             </div>
         </form>
