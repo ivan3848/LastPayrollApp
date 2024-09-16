@@ -9,5 +9,5 @@ export interface IPayrollPay {
     payrollStartDate?: Date;
     startDate?: Date;
     endDate?: Date;
-    
+    employees?: number[];
 }

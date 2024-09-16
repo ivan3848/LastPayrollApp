@@ -26,7 +26,7 @@ const PayrollManagement = () => {
             setSubmitted(false);
             toast?.current?.show({ severity: 'info', summary: 'Información', detail: 'Registro cargado' });
         }
-    }, [data, submitted]);
+    }, [data]);
 
     return (
         <div className="card">

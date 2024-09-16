@@ -1,7 +1,6 @@
 "use client";
 import { payrollManagementByPayrollNumberService } from "@/Features/payrollManagement/payrollManagementService";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import { Calendar } from "primereact/calendar";
 import { InputNumber } from "primereact/inputnumber";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputText } from "primereact/inputtext";
@@ -13,10 +12,11 @@ import { generatePayrollPayService } from "../Services/payrollPayService";
 import { IPayrollPay } from "../types/IPayrollPay";
 import DialogFooterButtonPayrollPay from "./DialogFooterButtonPayrollPay";
 import PayrollConfigurationCard from "./PayrollConfigurationCard";
+import { Toast } from "primereact/toast";
+import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
+import { Button } from "primereact/button";
 
 interface Props {
-    entity: IPayrollPay | null;
-    setEntity?: (entity: IPayrollManagement) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
     entityPayrollManagement: IPayrollManagement | undefined;
@@ -24,8 +24,6 @@ interface Props {
 }
 
 const PayrollPayView = ({
-    entity,
-    setEntity,
     toast,
     setSubmitted,
     entityPayrollManagement,
@@ -40,33 +38,24 @@ const PayrollPayView = ({
         formState: { errors },
     } = useForm<IPayrollPay>();
 
+    console.log(errors);
+
     const initialPayrollNumber = useRef<number | null>(null);
+
     const [period, setPeriod] = useState(true);
-    const [vacation, setVacation] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [employees, setEmployees] = useState<IAddEmployee>();
 
     const payrollNumber = watch("payrollNumber");
+
     const addEntity = useAddEntityQuery({
         service: generatePayrollPayService,
     });
 
-    const updateFormValues = useCallback(
-        (data: IPayrollPay) => {
-            Object.entries(data).forEach(([key, value]) => {
-                if (
-                    [
-                        "lastModifiedDate",
-                        "payrollPeriodStart",
-                        "date",
-                        "payrollPeriodEnd",
-                    ].includes(key)
-                ) {
-                    value = new Date(value);
-                }
-                setValue(key as keyof IPayrollPay, value);
-            });
-        },
-        [setValue]
-    );
+    const handleAdd = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        event.preventDefault();
+        setIsVisible(true);
+    };
 
     const getLastPayroll = useCallback(
         async (payNumber?: number) => {
@@ -78,7 +67,7 @@ const PayrollPayView = ({
             }
 
             const period: IPayrollManagementByPayrollNumber = {
-                payrollNumber: payNumber ?? watch("payrollNumber"),
+                payrollNumber: watch("payrollNumber") ?? entityPayrollManagement?.payrollNumber,
                 idPayrollArea: payrollArea ?? 1,
                 PayrollYear: date
                     ? date.getFullYear()
@@ -95,12 +84,6 @@ const PayrollPayView = ({
     );
 
     useEffect(() => {
-        if (entity) {
-            updateFormValues(entity);
-        }
-    }, [entity, updateFormValues]);
-
-    useEffect(() => {
         if (payrollNumber && initialPayrollNumber.current === null) {
             initialPayrollNumber.current = payrollNumber;
         }
@@ -110,7 +93,8 @@ const PayrollPayView = ({
         data.payrollStartDate = new Date(entityPayrollManagement!.payrollPeriodStart);
         data.endDate = new Date(entityPayrollManagement!.payrollPeriodEnd);
         data.startDate = new Date(entityPayrollManagement!.retroactivePeriodLimit);
-        console.log("Submitting:", data);
+        data.employees = employees?.employees;
+
         addEntity.mutate(data);
     };
 
@@ -120,6 +104,7 @@ const PayrollPayView = ({
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="col-12">
                 <div className="card">
+                    <Toast ref={toast} />
                     <h5 className="mt-1">Configuración de nómina</h5>
                     <PayrollConfigurationCard
                         entity={entityPayrollManagement}
@@ -209,23 +194,17 @@ const PayrollPayView = ({
                                         </div>
                                         <div className="field col-12 md:col-3">
                                             <label
-                                                id="DateChange"
-                                                htmlFor="DateChange"
+                                                htmlFor="idStatus"
+                                                className="w-full"
                                             >
-                                                Fecha de inicio
+                                                <strong>Descripción</strong>
                                             </label>
-                                            <Calendar
-                                                {...register("payrollStartDate", {
+                                            <InputText
+                                                {...register("payrollName", {
                                                     required: true,
                                                 })}
-                                                id="payrollPeriodStart"
-                                                value={
-                                                    new Date(
-                                                        entityPayrollManagement?.payrollPeriodStart!
-                                                    )
-                                                }
-                                                showIcon
-                                                disabled={true}
+                                                id="Description"
+                                                placeholder="Descripcion..."
                                             />
                                         </div>
                                     </div>
@@ -240,21 +219,6 @@ const PayrollPayView = ({
                                         }}
                                     >
                                         <div className="field col-12 md:col-3">
-                                            <label
-                                                htmlFor="idStatus"
-                                                className="w-full"
-                                            >
-                                                <strong>Descripción</strong>
-                                            </label>
-                                            <InputText
-                                                {...register("payrollName", {
-                                                    required: true,
-                                                })}
-                                                id="Description"
-                                                placeholder="Descripcion..."
-                                            />
-                                        </div>
-                                        <div className="field col-12 md:col-3">
                                             <h6>Por empleado</h6>
                                             <InputSwitch
                                                 name="ByEmployee"
@@ -264,16 +228,10 @@ const PayrollPayView = ({
                                                 }
                                             />
                                         </div>
-                                        <div className="field col-12 md:col-3">
-                                            <h6>Excluir empleados</h6>
-                                            <InputSwitch
-                                                name="ExcludedEmployees"
-                                                checked={vacation}
-                                                onChange={(e) =>
-                                                    setVacation(
-                                                        e.value ?? false
-                                                    )
-                                                }
+                                        <div className="field col-12 md:col-2">
+                                            <Button
+                                                label="Agregar empleados"
+                                                onClick={handleAdd}
                                             />
                                         </div>
                                     </div>
@@ -296,6 +254,17 @@ const PayrollPayView = ({
                             </TabPanel>
                         </TabView>
                     </div>
+                    {isVisible && (
+                        <AddOrExcludeEmployee
+                            content={isVisible}
+                            setContent={setIsVisible!}
+                            handleAdd={handleAdd}
+                            toast={toast}
+                            setSubmitted={setSubmitted}
+                            setEmployees={setEmployees}
+                            employees={employees}
+                        />
+                    )}
                     <DialogFooterButtonPayrollPay
                         isReadOnly={
                             entityPayrollManagement?.idPayrollManagement == 0
