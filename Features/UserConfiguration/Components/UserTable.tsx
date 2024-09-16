@@ -1,6 +1,9 @@
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN } from "@/constants/cacheKeys";
+import {
+    CACHE_KEY_USER_CONFIGURATION,
+    CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN,
+} from "@/constants/cacheKeys";
 import emptyImage from "@/constants/emptyImage";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
@@ -48,11 +51,10 @@ export default function UserTable({ submitted }: Props) {
     const [sortKey, setSortKey] = useState(null);
     const [user, setUser] = useState<IUser | null>(null);
     const [showAddUser, setShowAddUser] = useState(false);
-    const [refreshData, setRefreshData] = useState(false);
 
     const { data, isLoading } = useEntityQuery(
         params,
-        [submitted, refreshData],
+        [submitted],
         CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN,
         userServiceWithOut
     );

@@ -13,11 +13,14 @@ interface Product<T> {
     canWrite?: boolean;
     setValue: UseFormSetValue<any>;
     idValue: number;
+    intialData: T;
 }
 
 export default function BasicDemo<T>({ idValue, id, setValue }: Product<T>) {
     const { params } = useParamFilter();
     const { data, isLoading, error } = useRolModuleByIdRol(params, [], idValue);
+
+    console.log(data);
 
     data?.map((item: any) => ({
         id: item.rolModuleId,
