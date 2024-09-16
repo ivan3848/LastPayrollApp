@@ -11,7 +11,6 @@ const PayrollManagement = () => {
     let { data } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
 
     const {
-        setEditEntityDialog,
         setSubmitted,
         submitted,
         toast,
@@ -22,11 +21,9 @@ const PayrollManagement = () => {
     useEffect(() => {
         if (data) {
             setEntity(data);
-            setEditEntityDialog(true);
             setSubmitted(false);
-            toast?.current?.show({ severity: 'info', summary: 'Información', detail: 'Registro cargado' });
         }
-    }, [data]);
+    }, [data, setEntity, setSubmitted]);
 
     return (
         <div className="card">
@@ -37,7 +34,6 @@ const PayrollManagement = () => {
                 toast={toast}
                 submitted={submitted}
                 setSubmitted={setSubmitted} />
-
         </div>
     )
 }
