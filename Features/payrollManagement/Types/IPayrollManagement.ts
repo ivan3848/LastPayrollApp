@@ -5,11 +5,13 @@ interface IPayrollManagement {
     lastModifiedDate: Date;
     payrollPeriodStart: Date;
     payrollPeriodEnd: Date;
-    date: Date;
+    date?: Date;
     retroactivePeriodLimit: Date;
     idStatus: number;
     payrollNumber: number;
+    retroactivityPayrollNumber: number;
     process: number;
+    employee?: string;
 }
 
 interface IPayrollManagementInsert {
@@ -40,4 +42,12 @@ interface IPayrollManagementUpdate {
 interface IPayrollManagementByPayrollArea {
     idPayrollArea: number;
     date: Date;
+}
+
+interface IPayrollManagementByPayrollNumber {
+    payrollNumber: number;
+    idPayrollArea: number;
+    PayrollYear: number;
+    retroactivityPayrollNumber?: number;
+    RetroactivityPayrollYear?: number;
 }

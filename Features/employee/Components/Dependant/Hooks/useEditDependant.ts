@@ -33,7 +33,7 @@ const useEditDependant = ({
             toast.current?.show({
                 severity: "success",
                 summary: "Editado!",
-                detail: "Registro editado correctamente",
+                detail: "Dependiente editado correctamente",
                 life: 3000,
             });
         },

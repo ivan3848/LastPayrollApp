@@ -88,15 +88,27 @@ const AppMenu = () => {
                 {
                     label: "Area de Nómina",
                     icon: "pi pi-fw pi-book",
-                    to: "",
+                    to: "/payrollPay",
                 },
                 {
                     label: "Contabilizacion",
                     icon: "pi pi-fw pi-calculator",
                     to: "",
                 },
-            ]
-        }
+            ],
+        },
+
+        {
+            label: "GESTION USUARIOS",
+            icon: "pi pi-fw pi-users",
+            items: [
+                {
+                    label: "Configuración de Usuarios",
+                    icon: "pi pi-fw pi-users",
+                    to: "/userConfiguration",
+                },
+            ],
+        },
     ];
 
     return <AppSubMenu model={model} />;

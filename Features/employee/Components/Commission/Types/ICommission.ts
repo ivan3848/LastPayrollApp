@@ -55,6 +55,7 @@ export interface ICommissionArchive {
     description: string;
     conceptcode: string | number;
     idpayrollpay: number;
+    documentName: string;
 
     commissionDetail: ICommissionDetailArchive[];
 }

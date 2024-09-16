@@ -1,5 +1,5 @@
 import ApiService from "@/services/ApiService";
-import { ICommission, ICommissionArchive } from "../Types/ICommission";
+import { ICommission } from "../Types/ICommission";
 import { IInsertCommission } from "../Types/IInsertCommission";
 import { ICommissionDetailArchive } from "../Types/ICommissionDetail";
 
@@ -8,7 +8,7 @@ const commissionService = new ApiService<IInsertCommission, IInsertCommission>(
 );
 
 const commissionServiceToInsert = new ApiService<ICommission, ICommission>(
-    "employee/commission"
+    "employee/commissionDetail"
 );
 
 const addCommissionService = new ApiService<ICommission, ICommission>(
