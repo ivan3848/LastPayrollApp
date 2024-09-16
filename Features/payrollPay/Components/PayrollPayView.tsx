@@ -38,13 +38,12 @@ const PayrollPayView = ({
         formState: { errors },
     } = useForm<IPayrollPay>();
 
-    console.log(errors);
-
     const initialPayrollNumber = useRef<number | null>(null);
 
     const [period, setPeriod] = useState(true);
     const [isVisible, setIsVisible] = useState(false);
     const [employees, setEmployees] = useState<IAddEmployee>();
+    const [byEmployees, setByEmployees] = useState(true);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -158,7 +157,7 @@ const PayrollPayView = ({
                                                     : "Otro periodo"}
                                             </h6>
                                             <InputSwitch
-                                                name="IsChristmasPayment"
+                                                name="otherPeriod"
                                                 checked={period}
                                                 onChange={(e) =>
                                                     setPeriod(e.value ?? false)
@@ -219,18 +218,18 @@ const PayrollPayView = ({
                                         }}
                                     >
                                         <div className="field col-12 md:col-3">
-                                            <h6>Por empleado</h6>
+                                            <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
                                             <InputSwitch
                                                 name="ByEmployee"
-                                                checked={false}
+                                                checked={byEmployees}
                                                 onChange={(e) =>
-                                                    setPeriod(e.value ?? false)
+                                                    setByEmployees(e.value ?? false)
                                                 }
                                             />
                                         </div>
-                                        <div className="field col-12 md:col-2">
+                                        <div className="field col-12 md:col-2 mt-3">
                                             <Button
-                                                label="Agregar empleados"
+                                                label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
                                                 onClick={handleAdd}
                                             />
                                         </div>
