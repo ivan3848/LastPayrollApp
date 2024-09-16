@@ -14,5 +14,7 @@ const userInsertService = new ApiService<IInsertUser, IInsertUser>(
     "employee/user/"
 );
 
+const userResetPassword = new ApiService<IUser, IUser>("employee/user/");
+
 export default userServiceWithOut;
-export { userInsertService, userServiceWithLogin };
+export { userInsertService, userResetPassword, userServiceWithLogin };
