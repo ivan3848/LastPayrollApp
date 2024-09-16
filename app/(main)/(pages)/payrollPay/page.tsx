@@ -20,8 +20,7 @@ const PayrollPay = () => {
         toast,
     } = useCrudModals<IPayrollPay>();
 
-    const [entityPayrollManagement, setEntityPayrollManagement] =
-        useState<IPayrollManagement>();
+    const [entityPayrollManagement, setEntityPayrollManagement] = useState<IPayrollManagement>();
 
     useEffect(() => {
         if (configData) {
