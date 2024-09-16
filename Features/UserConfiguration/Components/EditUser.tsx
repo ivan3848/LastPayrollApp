@@ -14,9 +14,6 @@ import { IUser } from "../Types/IUser";
 import { classNames } from "primereact/utils";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
-import BasicDemo from "./BasicDemo";
-import conceptService from "../../concept/Services/conceptService";
-import { set } from "zod";
 import ComponentToTest from "./ComponentToTest";
 
 interface Props {

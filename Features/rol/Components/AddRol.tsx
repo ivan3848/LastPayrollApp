@@ -16,7 +16,6 @@ interface Props {
     setAddEntityDialog: (value: boolean) => void;
     addEntityDialog: boolean;
     id: number;
-    handleAdd: () => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }

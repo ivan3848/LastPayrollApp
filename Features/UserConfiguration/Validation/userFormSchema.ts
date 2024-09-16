@@ -6,9 +6,8 @@ const userFormSchema = () => {
     const addEntityFormSchema = z.object({
         username: z
             .string()
-            .regex(/^[a-zA-Z0-9_]*$/, {
-                message:
-                    "El campo solo puede contener letras, números y guiones bajos",
+            .regex(/^[a-zA-Z_]*$/, {
+                message: "El campo solo puede contener letras y guiones bajos",
             })
             .min(minValue, {
                 message: `El campo debe de tener al menos ${minValue} caracteres`,

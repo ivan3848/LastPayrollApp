@@ -55,6 +55,7 @@ const AddUser = ({
         addEntity.mutateAsync(data).then(() => {
             expireQuery();
         });
+        return;
     };
 
     const hideDialog = () => {

@@ -1,4 +1,4 @@
-import { IRolModule } from "./IRolModule";
+import IRolModule from "@/Features/rolModule/Types/IRolModule";
 
 export default interface IUser {
     userId: string;

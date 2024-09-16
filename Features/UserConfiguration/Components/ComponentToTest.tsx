@@ -76,7 +76,12 @@ function ComponentToTest<T>({
                 disabled={isDisabled}
             />
 
-            <BasicDemo id={"idRol"} idValue={idTest} setValue={setValue} />
+            <BasicDemo
+                id={"idRol"}
+                idValue={idTest}
+                setValue={setValue}
+                intialData={idValueEdit}
+            />
         </>
     );
 }
