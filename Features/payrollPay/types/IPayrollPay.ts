@@ -10,4 +10,5 @@ export interface IPayrollPay {
     startDate?: Date;
     endDate?: Date;
     employees?: number[];
+    toExclude?: boolean;
 }
