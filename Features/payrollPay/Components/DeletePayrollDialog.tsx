@@ -8,6 +8,7 @@ import { InputSwitch } from 'primereact/inputswitch';
 import GenericDropDown from '@/Features/Shared/Components/GenericDropDown';
 import usePayrollPayQuery from '../Hook/usePayrollPayQuery';
 import useDeletePayrollPay from '../Hook/useDeletePayrollPay';
+import DialogFooterButtonDeletePayrollPay from './DialogFooterButtonDeletePayrollPay';
 
 export interface IAddEmployee {
     employees: number[];
@@ -58,7 +59,6 @@ const DeletePayrollDialog = ({
     const onSubmit = (data: IDeletePayrollPayDto) => {
         data.employeeCodes = employees?.employees.map((e: number) => e) ?? [];
         data.ToRemove = byPayroll;
-
         deleteEntity.mutate(data);
     };
 
@@ -83,7 +83,7 @@ const DeletePayrollDialog = ({
                                 <h6>Nómina</h6>
                                 <GenericDropDown
                                     id="idPayrollPay"
-                                    isValid={false}
+                                    isValid={!!errors.idPayrollPay}
                                     text="payrollName"
                                     useQuery={usePayrollPayQuery}
                                     setValue={setValue}
@@ -100,24 +100,26 @@ const DeletePayrollDialog = ({
                                     }
                                 />
                             </div>
-                            <div className="field col-12 md:col-12 lg:4">
-                                <label htmlFor="employees">
-                                    <strong>
-                                        Empleados
-                                    </strong>
-                                </label>
-                                <Chips
-                                    id="employees"
-                                    value={watch("employeeCodes")?.map(String) ?? []}
-                                    onChange={(e) => {
-                                        setValue("employeeCodes", e.value!.map(Number))
-                                        setEmployees({ employees: e.value!.map(Number) })
-                                    }}
-                                    keyfilter="int"
-                                    separator=' '
-                                    disabled={!byPayroll}
-                                />
-                            </div>
+                            {byPayroll &&
+                                <div className="field col-12 md:col-12 lg:4">
+                                    <label htmlFor="employees">
+                                        <strong>
+                                            Empleados
+                                        </strong>
+                                    </label>
+                                    <Chips
+                                        id="employees"
+                                        value={watch("employeeCodes")?.map(String) ?? []}
+                                        onChange={(e) => {
+                                            setValue("employeeCodes", e.value!.map(Number))
+                                            setEmployees({ employees: e.value!.map(Number) })
+                                        }}
+                                        keyfilter="int"
+                                        separator=' '
+                                        disabled={!byPayroll}
+                                    />
+                                </div>
+                            }
                         </div>
                     </div>
                     {byPayroll &&
@@ -126,7 +128,7 @@ const DeletePayrollDialog = ({
                             byPayroll={byPayroll}
                         />}
                 </div>
-                <DialogFooterButtons hideDialog={hideDialog} />
+                <DialogFooterButtonDeletePayrollPay hideDialog={hideDialog} />
             </form>
         </Dialog>
     )

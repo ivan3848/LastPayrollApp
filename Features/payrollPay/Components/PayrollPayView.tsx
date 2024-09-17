@@ -18,6 +18,7 @@ import { Button } from "primereact/button";
 import DeletePayrollDialog from "./DeletePayrollDialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
+import { classNames } from "primereact/utils";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -131,8 +132,6 @@ const PayrollPayView = ({
 
         setLoading(true);
 
-        setTimeout(() => {
-        }, 6000);
         try {
             await addEntity.mutateAsync(data);
         } finally {
@@ -199,8 +198,8 @@ const PayrollPayView = ({
                         </div>
                         <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)
                         }>
-                            <TabPanel header="Nomina Real">
-                                <div
+                            <TabPanel header={"Nomina Real"}>
+                                {activeIndex == 0 && (<><div
                                     className="p-fluid formgrid grid"
                                     style={{
                                         marginTop: "15px",
@@ -234,6 +233,12 @@ const PayrollPayView = ({
                                             }}
                                             id="idPayrollArea"
                                             options={options}
+                                            className={classNames(
+                                                {
+                                                    "p-invalid": errors.idPayrollArea,
+                                                },
+                                                "w-full"
+                                            )}
                                         />
                                     </div>
                                     <div className="field col-12 md:col-2">
@@ -294,45 +299,52 @@ const PayrollPayView = ({
                                             })}
                                             id="Description"
                                             placeholder="Descripcion..."
+                                            className={classNames(
+                                                {
+                                                    "p-invalid": errors.payrollName,
+                                                },
+                                                "w-full"
+                                            )}
                                         />
                                     </div>
                                 </div>
-                                <div className="p-fluid formgrid grid"
-                                    style={{
-                                        marginTop: "20px",
-                                        display: "flex",
-                                        justifyContent: "space-around",
-                                        width: "92%",
-                                    }}>
+                                    <div className="p-fluid formgrid grid"
+                                        style={{
+                                            marginTop: "20px",
+                                            display: "flex",
+                                            justifyContent: "space-around",
+                                            width: "92%",
+                                        }}>
 
-                                    <div className="field col-12 md:col-3 mt-2">
-                                        <Button
-                                            label="Eliminar nomina"
-                                            onClick={handleDelete}
-                                        />
+                                        <div className="field col-12 md:col-3 mt-2">
+                                            <Button
+                                                label="Eliminar nomina"
+                                                onClick={handleDelete}
+                                            />
+                                        </div>
+                                        <div className="field col-12 md:col-3">
+                                            <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
+                                            <InputSwitch
+                                                name="ByEmployee"
+                                                checked={byEmployees}
+                                                onChange={(e) =>
+                                                    setByEmployees(e.value ?? false)
+                                                }
+                                            />
+                                        </div>
+                                        <div className="field col-12 md:col-3 mt-2 mr-1">
+                                            <Button
+                                                label={
+                                                    viewEmployees ? 'Ver empleados'
+                                                        : byEmployees ? "Agregar empleados" : "Excluir empleados"}
+                                                onClick={handleAdd}
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="field col-12 md:col-3">
-                                        <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
-                                        <InputSwitch
-                                            name="ByEmployee"
-                                            checked={byEmployees}
-                                            onChange={(e) =>
-                                                setByEmployees(e.value ?? false)
-                                            }
-                                        />
-                                    </div>
-                                    <div className="field col-12 md:col-3 mt-2 mr-1">
-                                        <Button
-                                            label={
-                                                viewEmployees ? 'Ver empleados'
-                                                    : byEmployees ? "Agregar empleados" : "Excluir empleados"}
-                                            onClick={handleAdd}
-                                        />
-                                    </div>
-                                </div>
+                                </>)}
                             </TabPanel>
                             <TabPanel header="Nomina Simulada">
-                                <div
+                                {activeIndex == 1 && (<><div
                                     className="p-fluid formgrid grid"
                                     style={{
                                         marginTop: "15px",
@@ -350,11 +362,9 @@ const PayrollPayView = ({
                                             {...register("idPayrollArea", {
                                                 required: true,
                                             })}
-                                            value={
-                                                watch("idPayrollArea") === 2
-                                                    ? "Mensual"
-                                                    : "Quincenal"
-                                            }
+                                            value={watch("idPayrollArea") === 2
+                                                ? "Mensual"
+                                                : "Quincenal"}
                                             onChange={(e) => {
                                                 setValue(
                                                     "idPayrollArea",
@@ -366,8 +376,7 @@ const PayrollPayView = ({
                                             }}
                                             id="idPayrollArea"
                                             options={options}
-                                            defaultValue={1}
-                                        />
+                                            defaultValue={1} />
                                     </div>
                                     <div className="field col-12 md:col-2">
                                         <h6 className="mt-2">
@@ -378,10 +387,7 @@ const PayrollPayView = ({
                                         <InputSwitch
                                             name="otherPeriod"
                                             checked={period}
-                                            onChange={(e) =>
-                                                setPeriod(e.value ?? false)
-                                            }
-                                        />
+                                            onChange={(e) => setPeriod(e.value ?? false)} />
                                     </div>
                                     <div className="field col-12 md:col-1">
                                         <label>
@@ -393,10 +399,8 @@ const PayrollPayView = ({
                                         </label>
                                         <InputNumber
                                             id="payrollNumber"
-                                            value={
-                                                payrollNumber ||
-                                                initialPayrollNumber.current
-                                            }
+                                            value={payrollNumber ||
+                                                initialPayrollNumber.current}
                                             onChange={(e) => {
                                                 setValue(
                                                     "payrollNumber",
@@ -407,8 +411,7 @@ const PayrollPayView = ({
                                             min={1}
                                             format={false}
                                             showButtons
-                                            disabled={period}
-                                        />
+                                            disabled={period} />
                                     </div>
                                     <div className="field col-12 md:col-3">
                                         <label
@@ -426,41 +429,35 @@ const PayrollPayView = ({
                                                 required: true,
                                             })}
                                             id="Description"
-                                            placeholder="Descripcion..."
-                                        />
+                                            placeholder="Descripcion..." />
                                     </div>
-                                </div>
-                                <div className="p-fluid formgrid grid"
+                                </div><div className="p-fluid formgrid grid"
                                     style={{
                                         marginTop: "20px",
                                         display: "flex",
                                         justifyContent: "space-around",
                                         width: "92%",
                                     }}>
-
-                                    <div className="field col-12 md:col-3 mt-2">
-                                        <Button
-                                            label="Eliminar nomina"
-                                            onClick={handleDelete}
-                                        />
-                                    </div>
-                                    <div className="field col-12 md:col-3">
-                                        <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
-                                        <InputSwitch
-                                            name="ByEmployee"
-                                            checked={byEmployees}
-                                            onChange={(e) =>
-                                                setByEmployees(e.value ?? false)
-                                            }
-                                        />
-                                    </div>
-                                    <div className="field col-12 md:col-3 mt-2 mr-1">
-                                        <Button
-                                            label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
-                                            onClick={handleAdd}
-                                        />
-                                    </div>
-                                </div>
+                                        {activeIndex !== 1 &&
+                                            <div className="field col-12 md:col-3 mt-2">
+                                                <Button
+                                                    label="Eliminar nomina"
+                                                    onClick={handleDelete} />
+                                            </div>
+                                        }
+                                        <div className="field col-12 md:col-3">
+                                            <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
+                                            <InputSwitch
+                                                name="ByEmployee"
+                                                checked={byEmployees}
+                                                onChange={(e) => setByEmployees(e.value ?? false)} />
+                                        </div>
+                                        <div className="field col-12 md:col-3 mt-2 mr-1">
+                                            <Button
+                                                label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
+                                                onClick={handleAdd} />
+                                        </div>
+                                    </div></>)}
                             </TabPanel>
                         </TabView>
                     </div>

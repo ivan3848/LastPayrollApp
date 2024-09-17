@@ -17,6 +17,7 @@ import {
 import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
 import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
 import { Toast } from "primereact/toast";
+import DialogFooterButtonPayrollManagement from "./DialogFooterButtonPayrollManagement";
 
 interface Props {
     entity: IPayrollManagement | null;
@@ -512,7 +513,7 @@ const PayrollManagement = ({
                             </div>
                         </div>
                     </div>
-                    <DialogFooterButtons hideDialog={() => { }} />
+                    <DialogFooterButtonPayrollManagement hideDialog={() => { }} />
                 </div>
             </div>
         </form>
