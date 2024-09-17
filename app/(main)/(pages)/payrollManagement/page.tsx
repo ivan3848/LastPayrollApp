@@ -8,7 +8,6 @@ import React, { useEffect } from 'react'
 const PayrollManagement = () => {
 
     const { params } = useParamFilter();
-    let { data } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
 
     const {
         setSubmitted,
@@ -17,6 +16,8 @@ const PayrollManagement = () => {
         setEntity,
         entity,
     } = useCrudModals<IPayrollManagement>();
+
+    let { data } = useGetPayrollManagementByIdPayrollArea(params, [submitted], 1);
 
     useEffect(() => {
         if (data) {

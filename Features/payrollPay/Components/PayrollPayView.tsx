@@ -118,11 +118,12 @@ const PayrollPayView = ({
 
     useEffect(() => {
         if (payrollNumber && initialPayrollNumber.current === null) {
-            initialPayrollNumber.current = payrollNumber;
+            initialPayrollNumber.current = entityPayrollManagement?.payrollNumber ?? 0;
         }
     }, [payrollNumber]);
 
     const onSubmit = async (data: IPayrollPay) => {
+        data.payrollNumber = data.payrollNumber ?? entityPayrollManagement?.payrollNumber;
         data.payrollStartDate = new Date(entityPayrollManagement!.payrollPeriodStart);
         data.endDate = new Date(entityPayrollManagement!.payrollPeriodEnd);
         data.startDate = new Date(entityPayrollManagement!.retroactivePeriodLimit);
@@ -265,10 +266,7 @@ const PayrollPayView = ({
                                         </label>
                                         <InputNumber
                                             id="payrollNumber"
-                                            value={
-                                                payrollNumber ||
-                                                initialPayrollNumber.current
-                                            }
+                                            value={watch('payrollNumber') ?? entityPayrollManagement?.payrollNumber}
                                             onChange={(e) => {
                                                 setValue(
                                                     "payrollNumber",
@@ -399,8 +397,7 @@ const PayrollPayView = ({
                                         </label>
                                         <InputNumber
                                             id="payrollNumber"
-                                            value={payrollNumber ||
-                                                initialPayrollNumber.current}
+                                            value={watch('payrollNumber') ?? entityPayrollManagement?.payrollNumber}
                                             onChange={(e) => {
                                                 setValue(
                                                     "payrollNumber",

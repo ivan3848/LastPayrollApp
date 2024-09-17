@@ -83,7 +83,7 @@ const AppMenu = () => {
                 {
                     label: "Historial de Nómina",
                     icon: "pi pi-fw pi-book",
-                    to: "",
+                    to: "/payrollHistory",
                 },
                 {
                     label: "Area de Nómina",

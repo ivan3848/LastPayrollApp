@@ -7,6 +7,11 @@ import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import React, { useEffect, useState } from "react";
 
 const PayrollPay = () => {
+    const {
+        setSubmitted,
+        toast,
+    } = useCrudModals<IPayrollPay>();
+
     const { params } = useParamFilter();
 
     let { data: configData } = useGetPayrollManagementByIdPayrollArea(
@@ -14,11 +19,6 @@ const PayrollPay = () => {
         [],
         1
     );
-
-    const {
-        setSubmitted,
-        toast,
-    } = useCrudModals<IPayrollPay>();
 
     const [entityPayrollManagement, setEntityPayrollManagement] = useState<IPayrollManagement>();
 

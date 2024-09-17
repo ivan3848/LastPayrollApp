@@ -141,11 +141,11 @@ const PayrollManagement = ({
         }
     }, [payrollNumber]);
 
-    const onSubmit = (data: IPayrollManagement) => {
+    const onSubmit = async (data: IPayrollManagement) => {
         data.lastModifiedDate = new Date();
 
         if (data.idPayrollManagement) {
-            editEntity.mutate(data);
+            editEntity.mutateAsync(data);
             return;
         }
         addEntity.mutate(data);
