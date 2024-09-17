@@ -16,6 +16,8 @@ import { Toast } from "primereact/toast";
 import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
 import { Button } from "primereact/button";
 import DeletePayrollDialog from "./DeletePayrollDialog";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { ConfirmPopup } from "primereact/confirmpopup";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -23,6 +25,19 @@ interface Props {
     entityPayrollManagement: IPayrollManagement | undefined;
     setEntityPayrollManagement: (entity: IPayrollManagement) => void;
 }
+
+const style: React.CSSProperties = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#000",
+    zIndex: 9999,
+};
 
 const PayrollPayView = ({
     toast,
@@ -50,7 +65,9 @@ const PayrollPayView = ({
     const [isVisibleDelete, setIsVisibleDelete] = useState(false);
     const [employees, setEmployees] = useState<IAddEmployee>();
     const [byEmployees, setByEmployees] = useState(true);
-    const [isSimulate, setIsSimulate] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [activeIndex, setActiveIndex] = useState(0);
+    const [completed, setCompleted] = useState(false);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -94,7 +111,7 @@ const PayrollPayView = ({
                 )) as IPayrollManagement;
             setEntityPayrollManagement(payrollData);
         },
-        [watch, entityPayrollManagement, setEntityPayrollManagement]
+        [watch, entityPayrollManagement, setEntityPayrollManagement, loading]
     );
 
     useEffect(() => {
@@ -103,34 +120,83 @@ const PayrollPayView = ({
         }
     }, [payrollNumber]);
 
-    const onSubmit = (data: IPayrollPay) => {
+    const onSubmit = async (data: IPayrollPay) => {
         data.payrollStartDate = new Date(entityPayrollManagement!.payrollPeriodStart);
         data.endDate = new Date(entityPayrollManagement!.payrollPeriodEnd);
         data.startDate = new Date(entityPayrollManagement!.retroactivePeriodLimit);
         data.employees = employees?.employees;
         data.toExclude = !byEmployees;
-        data.isTest = isSimulate;
+        data.isTest = activeIndex === 1;
 
-        addEntity.mutate(data);
+        setLoading(true);
+
+        setTimeout(() => {
+        }, 6000);
+        try {
+            await addEntity.mutateAsync(data);
+        } finally {
+            setLoading(false);
+            setCompleted(true);
+        }
     };
 
     let options: string[] = ["Mensual", "Quincenal"];
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
+            {loading && (
+                <div style={style}>
+                    <ProgressSpinner aria-label="Ejecutando proceso de Nómina..." />
+                </div>
+            )}
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
+                    <ConfirmPopup />
+
+                    {completed &&
+                        <div style={style}>
+                            <div className="card flex flex-column gap-3 align-items-center">
+                                <div className="card">
+                                    <h5 className="my-2">
+                                        Nomina ejecutada correctamente!
+                                        <i className="pi pi-check-circle ml-2"
+                                            style={{ fontSize: '1.3rem', marginTop: '0.2rem' }}
+                                        />
+                                    </h5>
+                                </div>
+                                <div className="flex gap-3">
+                                    <Button
+                                        onClick={() => setCompleted(false)}
+                                        icon="pi pi-times" label="Cerrar"
+                                        className="p-button-danger" />
+                                    <Button
+                                        onClick={() => { }}
+                                        icon="pi pi-check"
+                                        label="Ver detalles" />
+                                </div>
+                            </div>
+                        </div>
+                    }
+
                     <h5 className="mt-1">Configuración de nómina</h5>
                     <PayrollConfigurationCard
                         entity={entityPayrollManagement}
-                        isSumulate={isSimulate}
+                        isTest={activeIndex === 1}
                     />
                     <div className="card">
-                        <TabView onTabChange={(e) => {
-                            console.log(e.index)
-                            setIsSimulate(!isSimulate)
-                        }}>
+                        <div className="flex mb-2 gap-2 justify-content-end">
+                            <Button
+                                onClick={() => setActiveIndex(0)}
+                                className="w-2rem h-2rem p-0" rounded
+                                outlined={activeIndex !== 0} label="1" />
+                            <Button onClick={() => setActiveIndex(1)}
+                                className="w-2rem h-2rem p-0"
+                                rounded outlined={activeIndex !== 1}
+                                label="2" />
+                        </div>
+                        <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)
+                        }>
                             <TabPanel header="Nomina Real">
                                 <div
                                     className="p-fluid formgrid grid"
@@ -214,7 +280,11 @@ const PayrollPayView = ({
                                             htmlFor="idStatus"
                                             className="w-full"
                                         >
-                                            <strong>Descripción</strong>
+                                            {!period ? (
+                                                <strong>Descripción</strong>
+                                            ) : (
+                                                "Descripción"
+                                            )}
                                         </label>
                                         <InputText
                                             {...register("payrollName", {
@@ -225,22 +295,21 @@ const PayrollPayView = ({
                                         />
                                     </div>
                                 </div>
-                                <div
-                                    className="p-fluid formgrid grid"
+                                <div className="p-fluid formgrid grid"
                                     style={{
                                         marginTop: "20px",
                                         display: "flex",
-                                        justifyContent: "space-evenly",
+                                        justifyContent: "space-around",
                                         width: "92%",
-                                    }}
-                                >
+                                    }}>
+
                                     <div className="field col-12 md:col-3 mt-2">
                                         <Button
                                             label="Eliminar nomina"
                                             onClick={handleDelete}
                                         />
                                     </div>
-                                    <div className="field col-12 md:col-2">
+                                    <div className="field col-12 md:col-3">
                                         <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
                                         <InputSwitch
                                             name="ByEmployee"
@@ -250,7 +319,7 @@ const PayrollPayView = ({
                                             }
                                         />
                                     </div>
-                                    <div className="field col-12 md:col-3 mt-2">
+                                    <div className="field col-12 md:col-3 mt-2 mr-1">
                                         <Button
                                             label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
                                             onClick={handleAdd}
@@ -342,7 +411,11 @@ const PayrollPayView = ({
                                             htmlFor="idStatus"
                                             className="w-full"
                                         >
-                                            <strong>Descripción</strong>
+                                            {!period ? (
+                                                <strong>Descripción</strong>
+                                            ) : (
+                                                "Descripción"
+                                            )}
                                         </label>
                                         <InputText
                                             {...register("payrollName", {
@@ -353,22 +426,21 @@ const PayrollPayView = ({
                                         />
                                     </div>
                                 </div>
-                                <div
-                                    className="p-fluid formgrid grid"
+                                <div className="p-fluid formgrid grid"
                                     style={{
                                         marginTop: "20px",
                                         display: "flex",
-                                        justifyContent: "space-evenly",
+                                        justifyContent: "space-around",
                                         width: "92%",
-                                    }}
-                                >
+                                    }}>
+
                                     <div className="field col-12 md:col-3 mt-2">
                                         <Button
                                             label="Eliminar nomina"
                                             onClick={handleDelete}
                                         />
                                     </div>
-                                    <div className="field col-12 md:col-2">
+                                    <div className="field col-12 md:col-3">
                                         <h6>{byEmployees ? 'Por empleado' : 'Excluir Empleados'}</h6>
                                         <InputSwitch
                                             name="ByEmployee"
@@ -378,7 +450,7 @@ const PayrollPayView = ({
                                             }
                                         />
                                     </div>
-                                    <div className="field col-12 md:col-3 mt-2">
+                                    <div className="field col-12 md:col-3 mt-2 mr-1">
                                         <Button
                                             label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
                                             onClick={handleAdd}
@@ -414,6 +486,7 @@ const PayrollPayView = ({
                         isReadOnly={
                             entityPayrollManagement?.idPayrollManagement == 0
                             || entityPayrollManagement?.idStatus !== 151
+                            || loading
                         }
                     />
                 </div>

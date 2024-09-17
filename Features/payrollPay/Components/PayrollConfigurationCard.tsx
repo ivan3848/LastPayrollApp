@@ -4,10 +4,10 @@ import React from 'react'
 
 interface Props {
     entity: IPayrollManagement | undefined;
-    isSumulate?: boolean;
+    isTest?: boolean;
 }
 
-const PayrollConfigurationCard = ({ entity, isSumulate }: Props) => {
+const PayrollConfigurationCard = ({ entity, isTest }: Props) => {
 
     if (entity?.idPayrollManagement == 0
         || entity?.idPayrollManagement == undefined
@@ -15,7 +15,7 @@ const PayrollConfigurationCard = ({ entity, isSumulate }: Props) => {
         return <div className='card'>
             <h4 className='flex' style={{ justifyContent: 'center' }}> No hay configuración de nómina</h4>
         </div>
-    else if (isSumulate) {
+    else if (isTest) {
         return <div className='card'>
             <h4 className='flex' style={{ justifyContent: 'center' }}> Nómina por simulación</h4>
         </div>
