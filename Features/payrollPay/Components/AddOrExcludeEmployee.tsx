@@ -17,28 +17,28 @@ interface Props {
     setEmployees: (value: IAddEmployee) => void;
     employees: IAddEmployee | undefined;
     toast: React.MutableRefObject<any>;
+    setViewEmployees: (value: boolean) => void;
 }
 
 const AddOrExcludeEmployee = ({
     setContent,
     content,
-    toast,
-    setSubmitted,
     setEmployees,
     employees,
+    setViewEmployees,
 }: Props) => {
 
     const {
-        handleSubmit,
         watch,
-        register,
-        reset,
         setValue,
         formState: { errors },
     } = useForm<IAddEmployee>();
 
     const hideDialog = () => {
         setContent(false);
+        (employees?.employees?.length ?? 0) > 0
+            ? setViewEmployees(true)
+            : setViewEmployees(false);
     };
 
     return (

@@ -68,6 +68,7 @@ const PayrollPayView = ({
     const [loading, setLoading] = useState(false);
     const [activeIndex, setActiveIndex] = useState(0);
     const [completed, setCompleted] = useState(false);
+    const [viewEmployees, setViewEmployees] = useState(false);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -137,6 +138,7 @@ const PayrollPayView = ({
         } finally {
             setLoading(false);
             setCompleted(true);
+            setViewEmployees(false);
         }
     };
 
@@ -321,7 +323,9 @@ const PayrollPayView = ({
                                     </div>
                                     <div className="field col-12 md:col-3 mt-2 mr-1">
                                         <Button
-                                            label={byEmployees ? "Agregar empleados" : "Excluir empleados"}
+                                            label={
+                                                viewEmployees ? 'Ver empleados'
+                                                    : byEmployees ? "Agregar empleados" : "Excluir empleados"}
                                             onClick={handleAdd}
                                         />
                                     </div>
@@ -469,6 +473,7 @@ const PayrollPayView = ({
                             setSubmitted={setSubmitted}
                             setEmployees={setEmployees}
                             employees={employees}
+                            setViewEmployees={setViewEmployees}
                         />
                     )}
                     {isVisibleDelete && (

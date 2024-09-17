@@ -1,5 +1,4 @@
 import { Button } from "primereact/button";
-import AboutUs from "../../../app/(main)/(pages)/aboutus/page";
 
 interface Props {
     hideDialog: () => void;
@@ -19,7 +18,12 @@ const DialogFooterButtons = ({ hideDialog }: Props) => {
                 onClick={hideDialog}
                 severity="danger"
             />
-            <Button label="Guardar" icon="pi pi-check" raised />
+            <Button
+                label="Guardar"
+                icon="pi pi-check"
+                raised
+                onClick={hideDialog}
+            />
         </div>
     );
 };
