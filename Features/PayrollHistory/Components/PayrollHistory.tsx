@@ -12,12 +12,15 @@ const PayrollHistory = () => {
     const {
         setAddEntityDialog,
         addEntityDialog,
+        setEntity,
+        entity,
         submitted,
         setSubmitted,
         toast,
     } = useCrudModals<IPayrollPay>();
 
-    const handleDetails = () => {
+    const handleDetails = (entity: IPayrollPay) => {
+        setEntity(entity);
         setSubmitted(false);
         setAddEntityDialog(true);
     };
@@ -48,10 +51,9 @@ const PayrollHistory = () => {
 
                 {addEntityDialog && (
                     <PayrollPayDetails
+                        entity={entity!}
                         editEntityDialog={addEntityDialog}
                         setEditEntityDialog={setAddEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
                     />
                 )}
             </div>

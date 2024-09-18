@@ -19,6 +19,7 @@ import DeletePayrollDialog from "./DeletePayrollDialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { classNames } from "primereact/utils";
+import { Divider } from "primereact/divider";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -181,7 +182,6 @@ const PayrollPayView = ({
                         </div>
                     }
 
-                    <h5 className="mt-1">Configuración de nómina</h5>
                     <PayrollConfigurationCard
                         entity={entityPayrollManagement}
                         isTest={activeIndex === 1}

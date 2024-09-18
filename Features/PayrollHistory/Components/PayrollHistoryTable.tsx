@@ -9,7 +9,7 @@ import { Button } from "primereact/button";
 
 interface Props {
     submitted: boolean;
-    handleDetails: () => void;
+    handleDetails: (entity: IPayrollPay) => void;
 }
 
 const PayrollHistoryTable = ({
@@ -17,8 +17,6 @@ const PayrollHistoryTable = ({
     handleDetails,
 }: Props) => {
     const {
-        setPage,
-        setPageSize,
         setFilters,
         setSorts,
         clearSorts,
@@ -145,7 +143,7 @@ const PayrollHistoryTable = ({
                             className="mr-2"
                             rounded
                             severity="info"
-                            onClick={handleDetails}
+                            onClick={() => handleDetails(rowData)}
                         />
                     )}
                 />

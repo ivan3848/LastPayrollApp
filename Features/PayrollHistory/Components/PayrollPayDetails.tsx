@@ -1,73 +1,63 @@
-import { IEmployee } from '@/Features/employee/Types/IEmployee';
-import { IAddEmployee } from '@/Features/payrollPay/Components/AddOrExcludeEmployee';
-import { employeesForPayrollPayService } from '@/Features/payrollPay/Services/payrollPayService';
 import DialogFooterButtons from '@/Features/Shared/Components/DialogFooterButtons';
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
 import { Button } from 'primereact/button';
-import { Card } from 'primereact/card';
-import { Column } from 'primereact/column';
-import { DataTableSortEvent, DataTable } from 'primereact/datatable';
 import { Dialog } from 'primereact/dialog';
+import { Divider } from 'primereact/divider';
 import { TabView, TabPanel } from 'primereact/tabview';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import PayrollPayDetailTable from './PayrollPayDetailTable';
+import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
+import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
+import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
+import usePayrollPayDetailQuery from '../Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService, { payrollPayDetailNotPaidService } from '../Services/payrollPayDetailService';
+import DialogFooterButtonPayrollPayDetails from './DialogFooterButtonPayrollPayDetails';
 
 interface Props {
-    byPayroll?: boolean;
-    employees?: IAddEmployee;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
-    setSubmitted: (value: boolean) => void;
-    toast: React.MutableRefObject<any>;
+    entity: IPayrollPay;
 }
 
 const PayrollPayDetails = ({
     editEntityDialog,
     setEditEntityDialog,
-    toast,
-    setSubmitted,
-    byPayroll,
-    employees }: Props) => {
-    const {
-        setFilters,
-        setSorts,
-        clearSorts,
-        clearFilters,
-        params,
-    } = useParamFilter();
+    entity,
+}: Props) => {
 
-    const [list, setList] = useState<IEmployee[]>([]);
     const [activeIndex, setActiveIndex] = useState(0);
+    const {
+        params,
+    } = useParamFilter(6);
 
-    const onSort = (event: DataTableSortEvent) => {
-        switch (event.sortOrder) {
-            case 1:
-                setSorts([{ sortBy: event.sortField, isAsc: true }]);
-                break;
-            case -1:
-                setSorts([{ sortBy: event.sortField, isAsc: false }]);
-                break;
-            default:
-                clearSorts();
-                break;
-        }
-    };
+    const payrollResumeService = activeIndex == 0
+        ? payrollPayDetailService
+        : payrollPayDetailNotPaidService;
 
-    useEffect(() => {
-        const response = async () => {
-            const response = await employeesForPayrollPayService.post(employees!.employees) as IEmployee[];
-            setList(response);
-        }
-        employees && response();
-    }, [byPayroll, employees]);
+    const cachekey = activeIndex == 0
+        ? CACHE_KEY_PAYROLLPAY_DETAIL
+        : CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID;
 
-    const onFilter = (event: any) => {
-        setFilters([
-            {
-                column: event.field,
-                value: event.constraints.constraints?.[0].value,
-            },
-        ]);
-    };
+    const { data } = usePayrollPayDetailQuery(
+        params,
+        [],
+        cachekey,
+        payrollResumeService,
+        entity.idPayrollPay
+    );
+
+    const [resume, setResume] = useState({
+        totalPay: 0.00,
+        totalDeduction: 0.00,
+        totalProfit: 0.00,
+    });
+
+    data.items.forEach((item) => {
+        setResume({
+            totalPay: item.totalPay ?? 20,
+            totalDeduction: item.totalDeduction ?? 0,
+            totalProfit: item.totalProfit ?? 0,
+        });
+    });
 
     const hideDialog = () => {
         setEditEntityDialog(false);
@@ -83,8 +73,22 @@ const PayrollPayDetails = ({
             onHide={hideDialog}
         >
             <div className="card">
-                <div className="p-col-12">
-                    <h4>Empleados</h4>
+                <Divider align="center">
+                    <h5>Periodo de Nómina # {entity.payrollNumber} - {entity.payrollName} </h5>
+                </Divider>
+                <div className='flex gap-3 justify-content-evenly'>
+                    <div className="p-col-12">
+                        <h4>RD${resume.totalProfit}</h4>
+                        <i>Total de Ingresos</i>
+                    </div>
+                    <div className="p-col-12">
+                        <h4>RD${resume.totalDeduction}</h4>
+                        <i>Total Deducciones</i>
+                    </div>
+                    <div className="p-col-12">
+                        <h4>RD${resume.totalPay}</h4>
+                        <i>Total Pagado</i>
+                    </div>
                 </div>
             </div>
             <div className='card'>
@@ -99,52 +103,20 @@ const PayrollPayDetails = ({
                         label="2" />
                 </div>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
-                    <TabPanel header={"Nomina Real"}>
-                        <DataTable
-                            value={list ?? []}
-                            className="p-datatable-sm"
-                            dataKey="idEmployee"
-                            style={{ width: "100%", height: "100%" }}
-                            paginator
-                            onSort={onSort}
-                            removableSort
-                            sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                            sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                            sortMode="single"
-                            rows={5}
-                            rowsPerPageOptions={[5, 10, 15]}
-                            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                            disabled={byPayroll}
-                        >
-                            <Column
-                                field="idEmployee"
-                                header="ID Empleado"
-                                sortable
-                                filter
-                                filterField="doctorName"
-                                filterPlaceholder="Buscar por nombre"
-                                showFilterMenuOptions={false}
-                                onFilterApplyClick={(e) => onFilter(e)}
-                                onFilterClear={clearFilters}
-                            ></Column>
-                            <Column
-                                field="employeeName"
-                                header="Nombre del Empleado"
-                                sortable
-                                filter
-                                filterField="doctorName"
-                                filterPlaceholder="Buscar por nombre"
-                                showFilterMenuOptions={false}
-                                onFilterApplyClick={(e) => onFilter(e)}
-                                onFilterClear={clearFilters}
-                            />
-                        </DataTable>
+                    <TabPanel header="Nomina Liquidada">
+                        <PayrollPayDetailTable
+                            entity={data.items}
+                        />
                     </TabPanel>
-                    <TabPanel header="Nomina Simulada">
+                    <TabPanel header="Nomina Sin Liquidar">
+                        <PayrollPayDetailTable
+                            entity={data.items}
+                            index={activeIndex}
+                        />
                     </TabPanel>
                 </TabView>
             </div>
-            <DialogFooterButtons hideDialog={hideDialog} />
+            <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
         </Dialog>
     )
 }
