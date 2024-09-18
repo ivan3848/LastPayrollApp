@@ -17,7 +17,7 @@ const PayrollManagement = () => {
         entity,
     } = useCrudModals<IPayrollManagement>();
 
-    let { data } = useGetPayrollManagementByIdPayrollArea(params, [submitted], 1);
+    let { data } = useGetPayrollManagementByIdPayrollArea(params, [submitted], 0);
 
     useEffect(() => {
         if (data) {

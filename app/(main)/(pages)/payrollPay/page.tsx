@@ -17,7 +17,7 @@ const PayrollPay = () => {
     let { data: configData } = useGetPayrollManagementByIdPayrollArea(
         params,
         [],
-        1
+        0
     );
 
     const [entityPayrollManagement, setEntityPayrollManagement] = useState<IPayrollManagement>();

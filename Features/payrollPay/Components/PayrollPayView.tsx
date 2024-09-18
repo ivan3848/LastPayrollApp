@@ -19,7 +19,6 @@ import DeletePayrollDialog from "./DeletePayrollDialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { classNames } from "primereact/utils";
-import { Divider } from "primereact/divider";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -56,7 +55,7 @@ const PayrollPayView = ({
         formState: { errors },
     } = useForm<IPayrollPay>({
         defaultValues: {
-            idPayrollArea: 1
+            idPayrollArea: entityPayrollManagement?.idPayrollArea
         }
     });
 
@@ -122,6 +121,12 @@ const PayrollPayView = ({
             initialPayrollNumber.current = entityPayrollManagement?.payrollNumber ?? 0;
         }
     }, [payrollNumber]);
+
+    useEffect(() => {
+        if (entityPayrollManagement?.idPayrollArea) {
+            setValue('idPayrollArea', entityPayrollManagement.idPayrollArea);
+        }
+    }, [entityPayrollManagement, setValue]);
 
     const onSubmit = async (data: IPayrollPay) => {
         data.payrollNumber = data.payrollNumber ?? entityPayrollManagement?.payrollNumber;
