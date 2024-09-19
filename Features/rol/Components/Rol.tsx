@@ -1,15 +1,14 @@
 "use client";
 
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
-import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-
-import AddRol from "./AddRol";
-import RolTable from "./RolTable";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import IRol from "../Types/IRol";
+import AddRol from "./AddRol";
+import EditRol from "./EditRol";
+import RolTable from "./RolTable";
 
 const Rol = () => {
     const {
@@ -71,28 +70,31 @@ const Rol = () => {
                             setSubmitted={setSubmitted}
                             toast={toast}
                             id={0}
+                            submitted={submitted}
                         />
                     )}
-                    {/*
+
                     {editEntityDialog && (
-                        <EditWorkScheduler
+                        <EditRol
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
+                            id={0}
                         />
                     )}
+
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idWorkScheduler ?? 0}
-                            endpoint="employee/workScheduler"
+                            id={entity?.idRol ?? 0}
+                            endpoint="employee/rol"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )} */}
+                    )}
                 </div>
             </div>
         </div>

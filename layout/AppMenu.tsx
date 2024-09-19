@@ -107,6 +107,12 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-users",
                     to: "/userConfiguration",
                 },
+
+                {
+                    label: "Roles",
+                    icon: "pi pi-fw pi-bullseye",
+                    to: "/userConfiguration/rol",
+                },
             ],
         },
     ];

@@ -1,7 +1,7 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { CACHE_KEY_ROL, CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
+import { CACHE_KEY_ROL } from "@/constants/cacheKeys";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
@@ -13,7 +13,6 @@ import {
 } from "primereact/datatable";
 import { useState } from "react";
 import "animate.css";
-import IUser from "@/app/(full-page)/auth/types/IUser";
 import rolService from "../Service/rolService";
 import IRol from "../Types/IRol";
 
@@ -82,7 +81,7 @@ const RolTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Horarios</h3>
+            <h3 className="m-0">Roles</h3>
 
             <Button
                 label="Agregar"
@@ -99,10 +98,9 @@ const RolTable = ({
             value={data.items}
             expandedRows={expandedRows}
             onRowToggle={(e) => setExpandedRows(e.data)}
-            dataKey="idWorkScheduler"
             header={header}
             tableStyle={{ minWidth: "60rem" }}
-            id="WorkScheduler-Table"
+            id="Rol-Table"
             lazy
             paginator
             loading={isLoading}
@@ -122,7 +120,7 @@ const RolTable = ({
             currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
         >
             <Column
-                field="Description"
+                field="description"
                 header="Descripción"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
@@ -135,16 +133,11 @@ const RolTable = ({
             ></Column>
 
             <Column
-                field="workSchedulerCode"
-                header="Código"
+                field="isSuperUser"
+                header="Administrador"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
-                filter
-                filterField="workSchedulerCode"
-                filterPlaceholder="Buscar por código"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
+                body={(rowData) => (rowData.isSuperUser ? "Si" : "No")}
             ></Column>
 
             <Column
