@@ -43,7 +43,6 @@ const CoverPosition = ({ employee }: Props) => {
     } = useForm<ICoverPosition>();
 
     const onFormSubmit = (data: ICoverPosition) => {
-        console.log("test", data);
         return;
     };
 

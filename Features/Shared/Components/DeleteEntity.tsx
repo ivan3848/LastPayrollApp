@@ -3,6 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
+import useExpireSessionQuery from "../Hooks/useExpireSessionQuery";
+import { CACHE_KEY_LEASE } from "@/constants/cacheKeys";
 
 interface Props {
     id: number;
@@ -22,6 +24,8 @@ const DeleteEntity = ({
     toast,
 }: Props) => {
     const apiService = new ApiService(endpoint);
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_LEASE]);
+
     const deleteRegister = useMutation({
         mutationFn: (id: number) => apiService.delete(id),
         onError: (error: any) => {
@@ -37,7 +41,7 @@ const DeleteEntity = ({
         onSuccess: () => {
             setDeleteEntityDialog(false);
             setSubmitted(true);
-
+            expireQuery();
             toast.current?.show({
                 severity: "success",
                 summary: "Eliminado!",

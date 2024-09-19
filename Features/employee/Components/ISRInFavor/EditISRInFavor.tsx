@@ -70,7 +70,7 @@ const EditISRInFavor = ({
         data.idConcept = 17;
         data.date = data.date;
         data.isrInFavorDetail = entity.isrInFavorDetail;
-        console.log(data);
+
         editEntity.mutate(data);
     };
 

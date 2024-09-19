@@ -18,7 +18,7 @@ interface Props {
     handleEdit?: (entity: ILease) => void;
     handleDelete?: (entity: ILease) => void;
     handleAdd?: () => void;
-    handlePay?: (entity: ILease) => void;
+    handlePayment?: (entity: ILease) => void;
     handleAmortize?: (entity: ILease) => void;
     showLeaseTable?: boolean;
     setShowLeaseTable?: (showLeaseTable: boolean) => void;
@@ -38,6 +38,7 @@ const LeaseTable = ({
     handleAddLeasePause,
     showAddLeasePauseBtn,
     setShowAddLeasePauseBtn,
+    handlePayment,
 }: Props) => {
     const {
         setPage,
@@ -141,12 +142,15 @@ const LeaseTable = ({
     };
     return (
         <>
-            <Amortization
-                customAddDialog={customAddDialog}
-                setCustomAddDialog={setCustomAddDialog}
-                customEntity={entity!}
-                id={entity?.idLease!}
-            />
+            {customAddDialog && (
+                <Amortization
+                    customAddDialog={customAddDialog}
+                    setCustomAddDialog={setCustomAddDialog}
+                    customEntity={entity!}
+                    id={entity?.idLease!}
+                />
+            )}
+
             <Card className="m-2">
                 <DataTable
                     value={data}
@@ -246,7 +250,9 @@ const LeaseTable = ({
                                     entity={rowData}
                                     handleEdit={handleEdit}
                                     handleDelete={handleDelete!}
-                                    handlePay={() => alert("Pagar")!}
+                                    handlePayment={() =>
+                                        handlePayment && handlePayment(rowData)
+                                    }
                                     handleAmortize={() =>
                                         handleAmortize(rowData)
                                     }

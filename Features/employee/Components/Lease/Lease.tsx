@@ -5,12 +5,12 @@ import TabSkeletonTemplate from "@/Features/Shared/Components/TabSkeletonTemplat
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { TabPanel, TabView } from "primereact/tabview";
 import { Toast } from "primereact/toast";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import LeasePause from "../LeasePause/LeasePause";
 import AddLease from "./AddLease";
 import EditLease from "./EditLease";
 import LeaseTable from "./LeaseTable";
-import Amortization from "../Amortization/Amortization";
+import AddLeasePayment from "./Components/AddLeasePayment";
 
 interface props {
     id: number;
@@ -30,6 +30,8 @@ const Lease = ({ id }: props) => {
         setSubmitted,
         toast,
     } = useCrudModals<ILease>();
+
+    const [paymentEntityDialog, setPaymentEntityDialog] = useState(false);
 
     const handleAdd = () => {
         setSubmitted(false);
@@ -53,7 +55,11 @@ const Lease = ({ id }: props) => {
         //setSubmitted(false);
         setAddEntityDialog(true);
     };
-
+    const handlePayment = (entity: ILease) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setPaymentEntityDialog(true);
+    };
     const entityProperties = [
         "Concepto",
         "Fecha Inicio",
@@ -86,6 +92,7 @@ const Lease = ({ id }: props) => {
                                 handleAdd={handleAdd}
                                 handleDelete={handleDelete}
                                 handleEdit={handleEdit}
+                                handlePayment={handlePayment}
                                 idEmployee={id}
                             />
                         </Suspense>
@@ -129,6 +136,18 @@ const Lease = ({ id }: props) => {
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
+                    />
+                )}
+
+                {paymentEntityDialog && (
+                    <AddLeasePayment
+                        id={id}
+                        entity={entity!}
+                        submitted={submitted}
+                        addEntityDialog={paymentEntityDialog}
+                        setAddEntityDialog={setPaymentEntityDialog}
+                        toast={toast}
+                        setSubmitted={setSubmitted}
                     />
                 )}
             </div>

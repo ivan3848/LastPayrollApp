@@ -4,6 +4,8 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import AddAmortization from "./AddAmortization";
+import EditAmortization from "./EditAmortization";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 
 interface props {
     id: number;
@@ -70,25 +72,46 @@ const Amortization = ({
                     }
                 >
                     <div className="col-12">
-                        {customEntity && (
-                            <AddAmortization
-                                setCustomAddDialog={setCustomAddDialog}
-                                submitted={submitted}
-                                handleDelete={handleDelete}
-                                handleEdit={handleEdit}
-                                entity={entity!}
-                                id={id}
-                                addEntityDialog={customAddDialog}
-                                setAddEntityDialog={setAddEntityDialog}
-                                handleAdd={handleAdd}
-                                toast={toast}
-                                setSubmitted={setSubmitted}
-                                idConcept={customEntity.idConcept}
-                            />
-                        )}
+                        {customAddDialog &&
+                            !editEntityDialog &&
+                            !deleteEntityDialog && (
+                                <AddAmortization
+                                    setCustomAddDialog={setCustomAddDialog}
+                                    submitted={submitted}
+                                    handleDelete={handleDelete}
+                                    handleEdit={handleEdit}
+                                    entity={entity!}
+                                    id={id}
+                                    addEntityDialog={customAddDialog}
+                                    setAddEntityDialog={setAddEntityDialog}
+                                    handleAdd={handleAdd}
+                                    toast={toast}
+                                    setSubmitted={setSubmitted}
+                                    idConcept={customEntity.idConcept}
+                                />
+                            )}
                     </div>
                 </Suspense>
 
+                {editEntityDialog && (
+                    <EditAmortization
+                        setEditEntityDialog={setEditEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                        entity={entity!}
+                        editEntityDialog={editEntityDialog}
+                    />
+                )}
+                {deleteEntityDialog && (
+                    <DeleteEntity
+                        id={entity?.idAmortization ?? 0}
+                        endpoint="employee/amortization"
+                        deleteEntityDialog={deleteEntityDialog}
+                        setDeleteEntityDialog={setDeleteEntityDialog}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                )}
                 {/* {addEntityDialog && (
                     <AddAmortization
                         entity={entity!}
@@ -99,7 +122,7 @@ const Amortization = ({
                         toast={toast}
                         setSubmitted={setSubmitted}
                     />
-                )} */}
+                )} }
                 {/* {editEntityDialog && (
                     <EditAmortization
                         setEditEntityDialog={setEditEntityDialog}

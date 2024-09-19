@@ -19,4 +19,5 @@ interface ILease {
     idDepositConcept: number;
     idDiscountConcept: number;
     totalDebt?: number;
+    recurrency?: string;
 }

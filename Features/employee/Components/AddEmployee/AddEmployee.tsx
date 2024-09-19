@@ -26,7 +26,7 @@ import { forwardRef, useImperativeHandle, useState } from "react";
 import { useForm } from "react-hook-form";
 import useEmployeeQuery from "../../Hooks/useEmployeeQuery";
 import { IEmployee } from "../../Types/IEmployee";
-import employeeFormSchemas from "../../Validations/EmployeeFormSchemas";
+import employeeFormSchemas from "../../Validation/Validations/EmployeeFormSchemas";
 
 interface Props {
     handleAdd: () => void;

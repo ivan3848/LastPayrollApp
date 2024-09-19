@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import { IEmployee } from '../Types/IEmployee'
-import DialogFooterButtons from '@/Features/Shared/Components/DialogFooterButtons'
-import GenericDropDown from '@/Features/Shared/Components/GenericDropDown'
-import GenericStatusDropDown from '@/Features/Shared/Components/GenericStatusDropDown'
-import { Calendar } from 'primereact/calendar'
-import { InputTextarea } from 'primereact/inputtextarea'
-import useEmployeeQuery from '../Hooks/useEmployeeQuery'
-import { useForm } from 'react-hook-form'
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter'
-import { InputSwitch } from 'primereact/inputswitch'
+import React, { useState } from "react";
+import { IEmployee } from "../Types/IEmployee";
+import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
+import { Calendar } from "primereact/calendar";
+import { InputTextarea } from "primereact/inputtextarea";
+import useEmployeeQuery from "../Hooks/useEmployeeQuery";
+import { useForm } from "react-hook-form";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { InputSwitch } from "primereact/inputswitch";
 
 interface Props {
-    employee: IEmployee
+    employee: IEmployee;
 }
 
 interface IFireEmployee {
@@ -34,8 +34,6 @@ const FireEmployee = ({ employee }: Props) => {
     const [vacation, setVacation] = useState(false);
     const [unemployment, setUnemployment] = useState(false);
 
-    console.log(employee);
-
     const {
         handleSubmit,
         register,
@@ -53,20 +51,32 @@ const FireEmployee = ({ employee }: Props) => {
     // });
 
     const onFormSubmit = (data: IFireEmployee) => {
-        console.log("test", data);
         // changePositionSalaryEdit.mutate(data);
         return;
-    }
+    };
 
     return (
         <div className="grid">
             <div className="col-12 mx-auto">
                 <div className="card">
                     <form onSubmit={handleSubmit(onFormSubmit)}>
-                        <h4 style={{ marginBottom: '30px' }}>Desvincular Empleado</h4>
-                        <div className="p-fluid formgrid grid" style={{ marginTop: '15px', display: 'flex', justifyContent: "space-evenly", width: "100%" }}>
+                        <h4 style={{ marginBottom: "30px" }}>
+                            Desvincular Empleado
+                        </h4>
+                        <div
+                            className="p-fluid formgrid grid"
+                            style={{
+                                marginTop: "15px",
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                                width: "100%",
+                            }}
+                        >
                             <div className="field col-12 md:col-3">
-                                <label htmlFor="IdChangeManager" className="w-full">
+                                <label
+                                    htmlFor="IdChangeManager"
+                                    className="w-full"
+                                >
                                     Medida
                                 </label>
                                 <GenericDropDown
@@ -103,44 +113,65 @@ const FireEmployee = ({ employee }: Props) => {
                                 )}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label id='DateChange' htmlFor="DateChange">Fecha de inicio</label>
+                                <label id="DateChange" htmlFor="DateChange">
+                                    Fecha de inicio
+                                </label>
                                 <Calendar
                                     {...register("FiredDate")}
-                                    name='FiredDate'
-                                    value={new Date()} showIcon />
+                                    name="FiredDate"
+                                    value={new Date()}
+                                    showIcon
+                                />
                             </div>
                         </div>
-                        <div className="p-fluid formgrid grid" style={{ marginTop: '15px', marginBottom: '15px', display: 'flex', justifyContent: "space-evenly", width: "100%" }}>
+                        <div
+                            className="p-fluid formgrid grid"
+                            style={{
+                                marginTop: "15px",
+                                marginBottom: "15px",
+                                display: "flex",
+                                justifyContent: "space-evenly",
+                                width: "100%",
+                            }}
+                        >
                             <div className="field col-12 md:col-3">
                                 <h6>Pago de Navidad</h6>
                                 <InputSwitch
                                     {...register("IsChristmasPayment")}
-                                    name='IsChristmasPayment'
+                                    name="IsChristmasPayment"
                                     checked={pagoNavidad}
-                                    onChange={(e) => setPagoNavidad(e.value ?? false)}
+                                    onChange={(e) =>
+                                        setPagoNavidad(e.value ?? false)
+                                    }
                                 />
                                 <h6>Pre-Aviso</h6>
                                 <InputSwitch
                                     {...register("IsNotice")}
-                                    name='IsNotice'
+                                    name="IsNotice"
                                     checked={notice}
-                                    onChange={(e) => setNotice(e.value ?? false)}
+                                    onChange={(e) =>
+                                        setNotice(e.value ?? false)
+                                    }
                                 />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <h6>Ha tomado vacaciones este año?</h6>
                                 <InputSwitch
                                     {...register("IsTakenVacation")}
-                                    name='IsTakenVacation'
+                                    name="IsTakenVacation"
                                     checked={vacation}
-                                    onChange={(e) => setVacation(e.value ?? false)}
+                                    onChange={(e) =>
+                                        setVacation(e.value ?? false)
+                                    }
                                 />
                                 <h6>Cesantia</h6>
                                 <InputSwitch
                                     {...register("IsUnemployment")}
-                                    name='IsUnemployment'
+                                    name="IsUnemployment"
                                     checked={unemployment}
-                                    onChange={(e) => setUnemployment(e.value ?? false)}
+                                    onChange={(e) =>
+                                        setUnemployment(e.value ?? false)
+                                    }
                                 />
                             </div>
                             <div className="field col-12 md:col-3">
@@ -148,15 +179,18 @@ const FireEmployee = ({ employee }: Props) => {
                                 <InputTextarea
                                     {...register("Comment")}
                                     id="Comment"
-                                    placeholder='Ingrese descripción...' rows={3} cols={30} />
+                                    placeholder="Ingrese descripción..."
+                                    rows={3}
+                                    cols={30}
+                                />
                             </div>
                         </div>
-                        <DialogFooterButtons hideDialog={() => { }} />
+                        <DialogFooterButtons hideDialog={() => {}} />
                     </form>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default FireEmployee
+export default FireEmployee;
