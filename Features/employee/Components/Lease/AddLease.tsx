@@ -1,23 +1,20 @@
-import { CONCEPT_TYPE_LEASE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
+import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
+import { TABLE_NAME_RECURRENCY } from "@/constants/StatusTableName";
+import { CONCEPT_TYPE_LEASE } from "@/constants/conceptTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
+import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
 import { addLeaseService } from "./Services/LeaseService";
 import LeaseFormSchema from "./Validation/LeaseFormSchema";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
-import useBankQuery from "@/Features/bank/Hooks/useBankQuery";
-import { TabPanel, TabView } from "primereact/tabview";
-import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
-import { TABLE_NAME_RECURRENCY } from "@/constants/StatusTableName";
-import { ToggleButton } from "primereact/togglebutton";
-import { useRef, useState } from "react";
-import { SelectButton } from "primereact/selectbutton";
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;

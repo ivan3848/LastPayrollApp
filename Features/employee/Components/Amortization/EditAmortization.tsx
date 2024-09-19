@@ -76,7 +76,6 @@ const EditAmortization = ({
     }, [entity, setEditEntityDialog]);
 
     const onSubmit = (data: IAmortization) => {
-        data.idEmployee = entity.idEmployee;
         editEntity.mutate(data);
     };
 
