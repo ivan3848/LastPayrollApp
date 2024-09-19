@@ -1,28 +1,23 @@
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
+import emptyImage from "@/constants/emptyImage";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
-import emptyImage from "@/constants/emptyImage";
 import { DataView } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { Tag } from "primereact/tag";
-import { ChangeEvent, useState } from "react";
-import {
-    userResetPassword,
-    userServiceWithLogin,
-} from "../Service/userService";
-import useCrudModals from "../../Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
+import { ChangeEvent, useState } from "react";
+import useCrudModals from "../../Shared/Hooks/useCrudModals";
+import { userServiceWithLogin } from "../Service/userService";
 import { IUser } from "../Types/IUser";
 import EditUser from "./EditUser";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
-import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import ResetUserPassword from "./ResetUserPassword";
-import { set } from "zod";
-import { Dialog } from "primereact/dialog";
 interface Props {
     submitted: boolean;
 }
@@ -168,17 +163,19 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     }}
                 />
 
-                {/* <Button
-                    size="small"
-                    className="min-w-min"
-                    label="Resetear Contraseña"
-                    icon="pi pi-external-link"
-                    onClick={() => {
-                        setUser(userSelected);
-                        setUserResetPassword(true);
-                        setUserResetPasswordEntityDialog(true);
-                    }}
-                /> */}
+                {/* {
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label="Resetear Contraseña"
+                        icon="pi pi-external-link"
+                        onClick={() => {
+                            setUser(userSelected);
+                            setUserResetPassword(true);
+                            setUserResetPasswordEntityDialog(true);
+                        }}
+                    />
+                } */}
             </>
         );
     };
@@ -239,18 +236,18 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     {expireQuery()}
                 </>
             )}
-            {/* {userResetPassword && (
+            {userResetPassword && (
                 <>
                     <ResetUserPassword
                         id={user!.users[0].userId}
-                        endpoint={"employee/user/resetPassword"}
+                        endpoint={"employee/user/resetPassword/"}
                         userResetPasswordEntityDialog={userResetPassword}
                         setUserResetPasswordEntityDialog={setUserResetPassword}
                         setSubmitted={setSubmitted}
                         toast={toast}
                     />
                 </>
-            )} */}
+            )}
 
             <Toast ref={toast} />
 

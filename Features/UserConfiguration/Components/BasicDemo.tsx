@@ -20,19 +20,12 @@ export default function BasicDemo<T>({ idValue, id, setValue }: Product<T>) {
     const { params } = useParamFilter();
     const { data, isLoading, error } = useRolModuleByIdRol(params, [], idValue);
 
-    console.log(data);
-
     data?.map((item: any) => ({
         id: item.rolModuleId,
         module: item.module,
         canWrite: item.canWrite,
         idValue: item.idRol,
     }));
-
-    const getSeverity = (moduleItem: Product<IRol>) => {
-        if (moduleItem.canWrite) return "success";
-        return "warning";
-    };
 
     useEffect(() => {
         if (idValue) {

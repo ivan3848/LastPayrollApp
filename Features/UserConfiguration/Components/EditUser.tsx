@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useRolQuery from "@/Features/rol/Hooks/useRolQuery";
 import useEditUser from "../Hooks/useEditUser";
@@ -34,8 +33,6 @@ const EditUser = ({
     id,
 }: Props) => {
     const { editEntityFormSchema } = userFormSchema();
-    const { params } = useParamFilter();
-
     const {
         handleSubmit,
         register,
@@ -57,7 +54,6 @@ const EditUser = ({
         setSubmitted,
         reset,
     });
-    const [idRol, setIdRol] = useState<number>();
 
     useEffect(() => {
         if (entity) {

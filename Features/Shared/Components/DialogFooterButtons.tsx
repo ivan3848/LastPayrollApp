@@ -18,13 +18,7 @@ const DialogFooterButtons = ({ hideDialog }: Props) => {
                 onClick={hideDialog}
                 severity="danger"
             />
-            <Button
-                label="Guardar"
-                icon="pi pi-check"
-                raised
-                type="button"
-            // onClick={hideDialog}
-            />
+            <Button label="Guardar" icon="pi pi-check" raised type="submit" />
         </div>
     );
 };

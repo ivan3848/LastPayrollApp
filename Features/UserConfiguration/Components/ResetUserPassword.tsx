@@ -28,6 +28,7 @@ const ResetUserPassword = ({
 
     const userResetPasswordRegister = useMutation({
         mutationFn: (id: number) => apiService.put(id),
+
         onError: (error: any) => {
             setUserResetPasswordEntityDialog(false);
 
@@ -44,8 +45,8 @@ const ResetUserPassword = ({
             expireQuery();
             toast.current?.show({
                 severity: "success",
-                summary: "Eliminado!",
-                detail: "Registro eliminado correctamente",
+                summary: "Reseteado!",
+                detail: "Contraseña reseteada correctamente",
                 life: 3000,
             });
         },

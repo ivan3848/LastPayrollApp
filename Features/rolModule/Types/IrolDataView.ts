@@ -55,5 +55,5 @@ export const predefinedModules: IRolDataView[] = [
     { module: "APROBACION_HORAS_EXTRAS", canWrite: true },
     { module: "DATA_EXTRAHOURLATENESS", canWrite: true },
     { module: "CONFIGURACION_TI", canWrite: true },
-    { module: "CONFIGURACION YEduinsa", canWrite: true },
+    { module: "CONFIGURACION", canWrite: true },
 ];
