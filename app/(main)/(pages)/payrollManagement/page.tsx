@@ -8,10 +8,8 @@ import React, { useEffect } from 'react'
 const PayrollManagement = () => {
 
     const { params } = useParamFilter();
-    let { data } = useGetPayrollManagementByIdPayrollArea(params, [], 1);
 
     const {
-        setEditEntityDialog,
         setSubmitted,
         submitted,
         toast,
@@ -19,25 +17,24 @@ const PayrollManagement = () => {
         entity,
     } = useCrudModals<IPayrollManagement>();
 
+    let { data } = useGetPayrollManagementByIdPayrollArea(params, [submitted], 0);
+
     useEffect(() => {
         if (data) {
             setEntity(data);
-            setEditEntityDialog(true);
             setSubmitted(false);
-            toast?.current?.show({ severity: 'info', summary: 'Información', detail: 'Registro cargado' });
         }
-    }, [data]);
+    }, [data, setEntity, setSubmitted]);
 
     return (
         <div className="card">
-            <h5 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h5>
+            <h4 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h4>
             <PayrollManagementView
                 entity={entity}
                 setEntity={setEntity}
                 toast={toast}
                 submitted={submitted}
                 setSubmitted={setSubmitted} />
-
         </div>
     )
 }

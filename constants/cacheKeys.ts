@@ -67,3 +67,5 @@ export const CACHE_KEY_LEASE = "lease";
 
 export const CACHE_KEY_AMORTIZATION = "amortization";
 export const CACHE_KEY_LEASE_DETAIL = "leasedetail";
+export const CACHE_KEY_PAYROLLPAY_DETAIL = "payrollPaydetail";
+export const CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID = "payrollPaydetailNotPaid";

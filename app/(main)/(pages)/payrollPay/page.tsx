@@ -7,21 +7,20 @@ import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import React, { useEffect, useState } from "react";
 
 const PayrollPay = () => {
-    const { params } = useParamFilter();
-
-    let { data: configData } = useGetPayrollManagementByIdPayrollArea(
-        params,
-        [],
-        1
-    );
-
     const {
         setSubmitted,
         toast,
     } = useCrudModals<IPayrollPay>();
 
-    const [entityPayrollManagement, setEntityPayrollManagement] =
-        useState<IPayrollManagement>();
+    const { params } = useParamFilter();
+
+    let { data: configData } = useGetPayrollManagementByIdPayrollArea(
+        params,
+        [],
+        0
+    );
+
+    const [entityPayrollManagement, setEntityPayrollManagement] = useState<IPayrollManagement>();
 
     useEffect(() => {
         if (configData) {

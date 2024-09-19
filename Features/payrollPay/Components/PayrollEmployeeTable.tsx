@@ -9,11 +9,11 @@ import { useEffect, useState } from "react";
 import { IEmployee } from "@/Features/employee/Types/IEmployee";
 
 interface Props {
-    submitted: boolean;
+    byPayroll: boolean;
     employees?: IAddEmployee;
 }
 
-const PayrollEmployeeTable = ({ submitted, employees }: Props) => {
+const PayrollEmployeeTable = ({ byPayroll, employees }: Props) => {
 
     const {
         setFilters,
@@ -46,7 +46,7 @@ const PayrollEmployeeTable = ({ submitted, employees }: Props) => {
             setList(response);
         }
         employees && response();
-    }, [submitted, employees]);
+    }, [byPayroll, employees]);
 
     const onFilter = (event: any) => {
         setFilters([
@@ -73,6 +73,7 @@ const PayrollEmployeeTable = ({ submitted, employees }: Props) => {
                 rows={5}
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                disabled={byPayroll}
             >
                 <Column
                     field="idEmployee"

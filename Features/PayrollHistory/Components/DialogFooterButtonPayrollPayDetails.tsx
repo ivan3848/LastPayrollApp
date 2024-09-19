@@ -4,29 +4,21 @@ interface Props {
     hideDialog: () => void;
 }
 
-const DialogFooterButtons = ({ hideDialog }: Props) => {
+const DialogFooterButtonPayrollPayDetails = ({ hideDialog }: Props) => {
     return (
         <div
             className="flex justify-content-end mt-3"
             style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
         >
             <Button
-                label="Cancelar"
-                icon="pi pi-times"
+                label="Cerrar"
+                icon="pi pi-sign-out"
                 raised
                 type="button"
                 onClick={hideDialog}
-                severity="danger"
-            />
-            <Button
-                label="Guardar"
-                icon="pi pi-check"
-                raised
-                type="button"
-            // onClick={hideDialog}
             />
         </div>
     );
 };
 
-export default DialogFooterButtons;
+export default DialogFooterButtonPayrollPayDetails;

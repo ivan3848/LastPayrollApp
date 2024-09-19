@@ -16,6 +16,8 @@ import {
 } from "../../payrollManagementService";
 import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
 import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
+import { Toast } from "primereact/toast";
+import DialogFooterButtonPayrollManagement from "./DialogFooterButtonPayrollManagement";
 
 interface Props {
     entity: IPayrollManagement | null;
@@ -58,6 +60,7 @@ const PayrollManagement = ({
         setSubmitted,
         reset,
     });
+
     const getLastPayroll = async () => {
         const payrollArea = watch("idPayrollArea");
         const date = watch("date");
@@ -138,11 +141,11 @@ const PayrollManagement = ({
         }
     }, [payrollNumber]);
 
-    const onSubmit = (data: IPayrollManagement) => {
+    const onSubmit = async (data: IPayrollManagement) => {
         data.lastModifiedDate = new Date();
 
         if (data.idPayrollManagement) {
-            editEntity.mutate(data);
+            editEntity.mutateAsync(data);
             return;
         }
         addEntity.mutate(data);
@@ -156,7 +159,7 @@ const PayrollManagement = ({
         <form onSubmit={handleSubmit(onSubmit)}>
             <div className="col-12">
                 <div className="card">
-                    {/* <Toast ref={toast} /> */}
+                    <Toast ref={toast} />
                     <div className="field col-12 md:col-5">
                         <label htmlFor="idPayrollArea">
                             <strong>Area de Nómina</strong>
@@ -510,7 +513,7 @@ const PayrollManagement = ({
                             </div>
                         </div>
                     </div>
-                    <DialogFooterButtons hideDialog={() => { }} />
+                    <DialogFooterButtonPayrollManagement hideDialog={() => { }} />
                 </div>
             </div>
         </form>

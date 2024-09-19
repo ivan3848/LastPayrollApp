@@ -1,28 +1,38 @@
 import { Calendar } from 'primereact/calendar'
+import { Divider } from 'primereact/divider';
 import { InputNumber } from 'primereact/inputnumber'
 import React from 'react'
 
 interface Props {
     entity: IPayrollManagement | undefined;
+    isTest?: boolean;
 }
 
-const PayrollConfigurationCard = ({ entity }: Props) => {
+const PayrollConfigurationCard = ({ entity, isTest }: Props) => {
 
-    if (entity?.idPayrollManagement == 0)
+    if (entity?.idPayrollManagement == 0
+        || entity?.idPayrollManagement == undefined
+        || entity.idStatus !== 151)
         return <div className='card'>
             <h4 className='flex' style={{ justifyContent: 'center' }}> No hay configuración de nómina</h4>
         </div>
+    else if (isTest) {
+        return <div className='card'>
+            <h4 className='flex' style={{ justifyContent: 'center' }}> Nómina por simulación</h4>
+        </div>
+    }
 
     return (
         <div className="card">
             <div className="p-fluid formgrid grid"
                 style={{
-                    marginTop: "15px",
-                    marginBottom: "15px",
                     display: "flex",
                     justifyContent: "space-evenly",
                     width: "100%",
                 }}>
+                <Divider align="center" className='mx-6'>
+                    <h5 className="mt-1">Configuración de nómina</h5>
+                </Divider>
 
                 <div className="field col-12 md:col-2">
                     <label htmlFor="idPayrollArea">
