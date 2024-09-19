@@ -4,11 +4,11 @@ const userFormSchema = () => {
     const minValue = 5;
     const maxValue = 50;
     const addEntityFormSchema = z.object({
-        description: z
+        username: z
             .string()
-            .regex(/^(?=.*[A-Z])[a-zA-Z]*$/, {
+            .regex(/^[A-Z][a-z]*$/, {
                 message:
-                    "El campo solo debe contener letras y al menos una letra mayúscula",
+                    "El campo debe comenzar con una letra mayúscula seguida de letras minúsculas",
             })
             .min(minValue, {
                 message: `El campo debe de tener al menos ${minValue} caracteres`,
@@ -16,18 +16,52 @@ const userFormSchema = () => {
             .max(maxValue, {
                 message: `El campo debe de tener menos ${maxValue} caracteres`,
             }),
-        rolModule: z.any(
-            z.object({
-                module: z.string(),
-                canWrite: z.boolean(),
-                rolModuleId: z.number(),
-                idRolNumber: z.number(),
+        password: z
+            .string()
+            .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]*$/, {
+                message:
+                    "El campo debe contener al menos una letra mayúscula, una letra minúscula y un número",
             })
-        ),
+            .min(minValue, {
+                message: `El campo debe de tener al menos ${minValue} caracteres`,
+            })
+            .max(maxValue, {
+                message: `El campo debe de tener menos ${maxValue} caracteres`,
+            }),
+        idRol: z.number({
+            message: `Debe de elejir una Opción`,
+        }),
     });
 
     const editEntityFormSchema = z.object({
-        description: z.string().optional(),
+        username: z
+            .string()
+            .regex(/^[A-Z][a-z]*$/, {
+                message:
+                    "El campo debe comenzar con una letra mayúscula seguida de letras minúsculas",
+            })
+            .min(minValue, {
+                message: `El campo debe de tener al menos ${minValue} caracteres`,
+            })
+            .max(maxValue, {
+                message: `El campo debe de tener menos ${maxValue} caracteres`,
+            }),
+        password: z
+            .string()
+            .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]*$/, {
+                message:
+                    "El campo debe contener al menos una letra mayúscula, una letra minúscula y un número",
+            })
+            .min(minValue, {
+                message: `El campo debe de tener al menos ${minValue} caracteres`,
+            })
+            .max(maxValue, {
+                message: `El campo debe de tener menos ${maxValue} caracteres`,
+            }),
+        idRol: z.number({
+            message: `Debe de elejir una Opción`,
+        }),
+        userId: z.number().optional(),
     });
 
     return { editEntityFormSchema, addEntityFormSchema };

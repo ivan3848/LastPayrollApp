@@ -1,17 +1,17 @@
 import useRolModuleQuery from "@/Features/rolModule/Hooks/useRolModuleQuery";
+import { predefinedModules } from "@/Features/rolModule/Types/IrolDataView";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import userConfigurationFormSchema from "../../UserConfiguration/Validation/userFormSchema";
 import rolService from "../Service/rolService";
 import IRol from "../Types/IRol";
 import PickUpList from "./PickUpList";
-import { predefinedModules } from "@/Features/rolModule/Types/IrolDataView";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import rolFormSchema from "../Validation/rolFormSchema";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -23,7 +23,7 @@ interface Props {
 }
 
 const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
-    const { addEntityFormSchema } = userConfigurationFormSchema();
+    const { addEntityFormSchema } = rolFormSchema();
 
     const {
         handleSubmit,
