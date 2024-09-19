@@ -91,14 +91,6 @@ const EditAmortization = ({
         }
     }, [entity, setEditEntityDialog]);
 
-    const onSubmit = (data: IAmortization) => {
-        editEntity.mutate(data);
-    };
-
-    const hideDialog = () => {
-        setEditEntityDialog(false);
-    };
-
     return (
         <Dialog
             visible={editEntityDialog}
