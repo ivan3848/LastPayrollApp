@@ -60,6 +60,7 @@ const DeletePayrollDialog = ({
         data.employeeCodes = employees?.employees.map((e: number) => e) ?? [];
         data.ToRemove = byPayroll;
         deleteEntity.mutate(data);
+        hideDialog();
     };
 
     const hideDialog = () => {
