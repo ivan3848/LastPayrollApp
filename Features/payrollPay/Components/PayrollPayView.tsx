@@ -19,6 +19,7 @@ import DeletePayrollDialog from "./DeletePayrollDialog";
 import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { classNames } from "primereact/utils";
+import Link from "next/link";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -178,10 +179,12 @@ const PayrollPayView = ({
                                         onClick={() => setCompleted(false)}
                                         icon="pi pi-times" label="Cerrar"
                                         className="p-button-danger" />
-                                    <Button
-                                        onClick={() => { }}
-                                        icon="pi pi-check"
-                                        label="Ver detalles" />
+                                    <Link href="/payrollDetail">
+                                        <Button
+                                            icon="pi pi-list"
+                                            label="Ver detalles"
+                                        />
+                                    </Link>
                                 </div>
                             </div>
                         </div>

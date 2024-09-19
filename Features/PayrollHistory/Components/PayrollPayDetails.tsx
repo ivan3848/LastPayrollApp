@@ -11,6 +11,7 @@ import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from
 import usePayrollPayDetailQuery from '../Hooks/usePayrollPayDetailQuery';
 import payrollPayDetailService, { payrollPayDetailNotPaidService } from '../Services/payrollPayDetailService';
 import DialogFooterButtonPayrollPayDetails from './DialogFooterButtonPayrollPayDetails';
+import Link from 'next/link';
 
 interface Props {
     editEntityDialog: boolean;
@@ -116,7 +117,9 @@ const PayrollPayDetails = ({
                     </TabPanel>
                 </TabView>
             </div>
-            <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
+            <Link href="/payrollHistory">
+                <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
+            </Link>
         </Dialog>
     )
 }
