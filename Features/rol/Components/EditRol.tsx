@@ -7,35 +7,42 @@ import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import userConfigurationFormSchema from "../../UserConfiguration/Validation/userFormSchema";
-import rolService from "../Service/rolService";
+import useEditRolQuery from "../Hooks/useEditRolQuery";
 import IRol from "../Types/IRol";
 import PickUpList from "./PickUpList";
 import { predefinedModules } from "@/Features/rolModule/Types/IrolDataView";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 
 interface Props {
-    setAddEntityDialog: (value: boolean) => void;
-    addEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
+    editEntityDialog: boolean;
     id: number;
-    submitted: boolean;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
+    entity: IRol;
 }
 
-const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
-    const { addEntityFormSchema } = userConfigurationFormSchema();
-
+const EditRol = ({
+    setEditEntityDialog,
+    editEntityDialog,
+    toast,
+    setSubmitted,
+    entity,
+}: Props) => {
+    const { editEntityFormSchema } = userConfigurationFormSchema();
     const {
         handleSubmit,
         register,
+        reset,
         formState: { errors },
     } = useForm<IRol>({
-        resolver: zodResolver(addEntityFormSchema),
+        resolver: zodResolver(editEntityFormSchema),
     });
 
-    const addEntity = useAddEntityQuery({
+    const editEntity = useEditRolQuery({
         toast,
-        service: rolService,
+        setEditEntityDialog,
+        setSubmitted,
+        reset,
     });
 
     const { params } = useParamFilter(500);
@@ -43,24 +50,49 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
     const [target, setTarget] = useState<IRol[]>([]);
     const { data, isLoading, error } = useRolModuleQuery(params, []);
 
+    useEffect(() => {
+        if (data && data.items) {
+            const initialSource = predefinedModules.filter(
+                (item) =>
+                    !target.some(
+                        (targetItem) => targetItem.module === item.module
+                    )
+            );
+            setSource(initialSource);
+        }
+    }, [data, target]);
+
+    useEffect(() => {
+        if (entity && data?.items) {
+            reset({ description: entity.description });
+            const initialTarget = entity.rolModule;
+
+            const filteredSource = predefinedModules.filter(
+                (item) =>
+                    !initialTarget!.some(
+                        (targetItem) => targetItem.module === item.module
+                    )
+            );
+
+            setTarget(initialTarget!);
+            setSource(filteredSource);
+        }
+    }, [entity, data, reset]);
+
     const onChange = (e: { source: IRol[]; target: IRol[] }) => {
         setSource(e.source);
         setTarget(e.target);
     };
-    const onSubmit = (data: IRol) => {
-        if (target.length === 0) return;
-        data.rolModule = target;
-        addEntity.mutate(data);
 
-        setAddEntityDialog(false);
+    const onSubmit = (formData: IRol) => {
+        formData.idRol = entity.idRol;
+        formData.rolModule = target;
+        formData.description = entity.description;
+        editEntity.mutate(formData);
     };
 
-    useEffect(() => {
-        setSource(predefinedModules);
-    }, [predefinedModules]);
-
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
     };
 
     const itemTemplate = (data: IRol, onToggle: (item: IRol) => void) => {
@@ -84,32 +116,37 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
             </div>
         );
     };
+
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "55vw" }}
-            header="Agregar Configuración de Usuario"
+            header="Editar Configuración de Usuario"
             modal
             className="p-fluid"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description" className="w-full">
+                        Descripción
+                    </label>
                     <InputText
-                        id="description"
-                        type="text"
                         {...register("description")}
+                        id="description"
+                        autoFocus
+                        className={errors.description ? "p-invalid" : ""}
+                        disabled={true}
                     />
                     {errors.description && (
-                        <small className="p-invalid text-red-500 text-lg">
+                        <small className="p-invalid text-danger">
                             {errors.description.message?.toString()}
                         </small>
                     )}
                 </div>
 
                 <div className="col-12" id="rolModuleId">
-                    <div className="p-fluid formgrid grid " id="rolModuleId">
+                    <div className="p-fluid formgrid grid" id="rolModuleId">
                         <PickUpList
                             source={source}
                             target={target}
@@ -122,6 +159,11 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
                             pageSize={25}
                         />
                     </div>
+                    {errors.module && (
+                        <small className="p-invalid text-red-500 text-lg">
+                            {errors.module.message?.toString()}
+                        </small>
+                    )}
                 </div>
 
                 <DialogFooterButtons hideDialog={hideDialog} />
@@ -130,4 +172,4 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
     );
 };
 
-export default AddRol;
+export default EditRol;
