@@ -1,6 +1,5 @@
 "use client";
 import { TABLE_NAME_PAYROLLMANAGEMENT } from "@/constants/StatusTableName";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
@@ -8,15 +7,15 @@ import { Divider } from "primereact/divider";
 import { InputNumber } from "primereact/inputnumber";
 import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
-import { useEffect, useRef, useState } from "react";
+import { Toast } from "primereact/toast";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
+import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
+import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
 import {
     payrollManagementByPayrollAreService,
     payrollManagementByPayrollNumberService,
 } from "../../payrollManagementService";
-import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
-import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
-import { Toast } from "primereact/toast";
 import DialogFooterButtonPayrollManagement from "./DialogFooterButtonPayrollManagement";
 
 interface Props {
@@ -122,7 +121,7 @@ const PayrollManagement = ({
                         "payrollPeriodStart",
                         "date",
                         "payrollPeriodEnd",
-                        "retroactivePeriodLimit"
+                        "retroactivePeriodLimit",
                     ].includes(key)
                 ) {
                     value = new Date(value);
@@ -269,7 +268,11 @@ const PayrollManagement = ({
                                                     showButtonBar
                                                     value={
                                                         watch("date") ??
-                                                            entity?.date ? new Date(entity?.date!) : new Date()
+                                                        entity?.date
+                                                            ? new Date(
+                                                                  entity?.date!
+                                                              )
+                                                            : new Date()
                                                     }
                                                     onChange={(e: any) => {
                                                         setValue(
@@ -427,7 +430,11 @@ const PayrollManagement = ({
                                         id="retroactivePeriodLimit"
                                         showIcon
                                         showButtonBar
-                                        value={new Date(entity?.retroactivePeriodLimit!) ?? watch("payrollPeriodStart")}
+                                        value={
+                                            new Date(
+                                                entity?.retroactivePeriodLimit!
+                                            ) ?? watch("payrollPeriodStart")
+                                        }
                                         disabled={true}
                                     />
                                     {errors.payrollPeriodEnd && (
@@ -513,7 +520,9 @@ const PayrollManagement = ({
                             </div>
                         </div>
                     </div>
-                    <DialogFooterButtonPayrollManagement hideDialog={() => { }} />
+                    <DialogFooterButtonPayrollManagement
+                        hideDialog={() => {}}
+                    />
                 </div>
             </div>
         </form>

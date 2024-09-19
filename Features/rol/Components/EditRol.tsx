@@ -1,4 +1,5 @@
 import useRolModuleQuery from "@/Features/rolModule/Hooks/useRolModuleQuery";
+import { predefinedModules } from "@/Features/rolModule/Types/IrolDataView";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,11 +7,10 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import userConfigurationFormSchema from "../../UserConfiguration/Validation/userFormSchema";
 import useEditRolQuery from "../Hooks/useEditRolQuery";
 import IRol from "../Types/IRol";
 import PickUpList from "./PickUpList";
-import { predefinedModules } from "@/Features/rolModule/Types/IrolDataView";
+import rolFormSchema from "../Validation/rolFormSchema";
 
 interface Props {
     setEditEntityDialog: (value: boolean) => void;
@@ -28,7 +28,7 @@ const EditRol = ({
     setSubmitted,
     entity,
 }: Props) => {
-    const { editEntityFormSchema } = userConfigurationFormSchema();
+    const { editEntityFormSchema } = rolFormSchema();
     const {
         handleSubmit,
         register,
