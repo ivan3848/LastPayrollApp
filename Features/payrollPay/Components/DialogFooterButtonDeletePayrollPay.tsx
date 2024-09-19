@@ -23,7 +23,6 @@ const DialogFooterButtonDeletePayrollPay = ({ hideDialog }: Props) => {
                 label="Guardar"
                 icon="pi pi-check"
                 raised
-                onClick={hideDialog}
             />
         </div>
     );

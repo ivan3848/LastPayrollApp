@@ -59,7 +59,9 @@ const DeletePayrollDialog = ({
     const onSubmit = (data: IDeletePayrollPayDto) => {
         data.employeeCodes = employees?.employees.map((e: number) => e) ?? [];
         data.ToRemove = byPayroll;
-        deleteEntity.mutate(data);
+        // deleteEntity.mutate(data);
+        console.log(data);
+        hideDialog();
     };
 
     const hideDialog = () => {
