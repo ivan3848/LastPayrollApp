@@ -12,6 +12,8 @@ import rolService from "../Service/rolService";
 import IRol from "../Types/IRol";
 import PickUpList from "./PickUpList";
 import rolFormSchema from "../Validation/rolFormSchema";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import { CACHE_KEY_ROL } from "@/constants/cacheKeys";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -47,11 +49,14 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
         setSource(e.source);
         setTarget(e.target);
     };
+
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_ROL]);
     const onSubmit = (data: IRol) => {
         if (target.length === 0) return;
         data.rolModule = target;
-        addEntity.mutate(data);
-
+        addEntity.mutateAsync(data).then(() => {
+            expireQuery();
+        });
         setAddEntityDialog(false);
     };
 
@@ -88,7 +93,7 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
         <Dialog
             visible={addEntityDialog}
             style={{ width: "55vw" }}
-            header="Agregar Configuración de Usuario"
+            header="Agregar Rol"
             modal
             className="p-fluid"
             onHide={hideDialog}
