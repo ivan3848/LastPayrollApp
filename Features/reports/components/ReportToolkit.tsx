@@ -59,7 +59,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
 
     const reportOptions = [
         { key: 12, name: "Acumulados" },
-        { key: 2, name: "Comparativo de Nomina" },
+        // { key: 2, name: "Comparativo de Nomina" },
         { key: 11, name: "Conceptos de Nómina" },
         { key: 17, name: "Costo" },
         { key: 15, name: "Data Consolidada" },
@@ -67,8 +67,8 @@ const ReportToolkit = ({ setFilter }: Props) => {
         { key: 23, name: "Desvinculados" },
         { key: 6, name: "Empleados" },
         { key: 13, name: "Gastos de Nomina" },
-        { key: 9, name: "Horas Extras Resumen" },
-        { key: 10, name: "Horas Extras Detalle" },
+        // { key: 9, name: "Horas Extras Resumen" },
+        // { key: 10, name: "Horas Extras Detalle" },
         { key: 16, name: "Horas Retroactivas" },
         { key: 20, name: "Horas Extras" },
         { key: 21, name: "Horas no laboradas" },
@@ -83,7 +83,13 @@ const ReportToolkit = ({ setFilter }: Props) => {
         { key: 14, name: "Seguro Medico" },
         { key: 24, name: "Seguro de Dependiente" },
         { key: 7, name: "Vacaciones" },
-        { key: 28, name: "Sabana Reporte de Nómina" },
+        // { key: 28, name: "Sabana Reporte de Nómina" },
+        { key: 108, name: "Centro de Costo" },
+        { key: 109, name: "Total de Impuesto" },
+        { key: 110, name: "Beneficios" },
+        { key: 111, name: "Pago Neto" },
+        { key: 112, name: "Departamentos" },
+        { key: 113, name: "Posiciones" },
     ];
 
     const {
