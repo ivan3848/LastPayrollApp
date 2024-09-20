@@ -1,4 +1,5 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
+import IFilterReport from "@/Features/reports/Types/IFilterReport";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import axios from "axios";
@@ -112,6 +113,27 @@ class ApiService<Q, R> {
         } catch (error: any) {
             throw error;
         }
+    }
+
+    async getAllReports(filterReport: IFilterReport): Promise<IResponse<R>> {
+        return await axiosInstance
+            .get<IResponse<R>>(this.endpoint, {
+                params: filterReport,
+            })
+            .then((res) => res.data);
+    }
+
+    async getForReport(params: IParamsApi, filterReport: IFilterReport): Promise<IResponse<R>> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<IResponse<R>>(finalEndpoint, {
+                params: {
+                    ...params.filter,
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
     }
 }
 
