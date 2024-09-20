@@ -1,5 +1,5 @@
 "use client";
-import { payrollManagementByPayrollNumberService } from "@/Features/payrollManagement/payrollManagementService";
+import { lastPayrollManagementService, payrollManagementByPayrollNumberService } from "@/Features/payrollManagement/payrollManagementService";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { InputNumber } from "primereact/inputnumber";
 import { InputSwitch } from "primereact/inputswitch";
@@ -151,6 +151,11 @@ const PayrollPayView = ({
 
     let options: string[] = ["Mensual", "Quincenal"];
 
+    const getLastRecord = async (idPayrollArea: number) => {
+        const result = await lastPayrollManagementService.getById(idPayrollArea) as IPayrollManagement;
+        setEntityPayrollManagement(result);
+    }
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             {loading && (
@@ -238,7 +243,9 @@ const PayrollPayView = ({
                                                         ? 2
                                                         : 1
                                                 );
-                                                getLastPayroll();
+                                                getLastRecord(e.value === "Mensual"
+                                                    ? 2
+                                                    : 1);
                                             }}
                                             id="idPayrollArea"
                                             options={options}

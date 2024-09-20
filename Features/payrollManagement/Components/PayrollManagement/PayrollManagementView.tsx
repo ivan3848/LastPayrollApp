@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import useAddPayrollManagement from "../../Hooks/useAddPayrollManagement";
 import useEditPayrollManagement from "../../Hooks/useEditPayrollManagement";
 import {
+    lastPayrollManagementService,
     payrollManagementByPayrollAreService,
     payrollManagementByPayrollNumberService,
 } from "../../payrollManagementService";
@@ -112,6 +113,11 @@ const PayrollManagement = ({
         getData(period);
     };
 
+    const getLastRecord = async (idPayrollArea: number) => {
+        const result = await lastPayrollManagementService.getById(idPayrollArea) as IPayrollManagement;
+        setEntity(result);
+    }
+
     useEffect(() => {
         const updateFormValues = (data: IPayrollManagement) => {
             Object.entries(data).forEach(([key, value]) => {
@@ -174,7 +180,7 @@ const PayrollManagement = ({
                                     "idPayrollArea",
                                     e.value === "Mensual" ? 2 : 1
                                 );
-                                getLastPayroll();
+                                getLastRecord(e.value === "Mensual" ? 2 : 1);
                             }}
                             options={options}
                         />
@@ -268,10 +274,10 @@ const PayrollManagement = ({
                                                     showButtonBar
                                                     value={
                                                         watch("date") ??
-                                                        entity?.date
+                                                            entity?.date
                                                             ? new Date(
-                                                                  entity?.date!
-                                                              )
+                                                                entity?.date!
+                                                            )
                                                             : new Date()
                                                     }
                                                     onChange={(e: any) => {
@@ -521,7 +527,7 @@ const PayrollManagement = ({
                         </div>
                     </div>
                     <DialogFooterButtonPayrollManagement
-                        hideDialog={() => {}}
+                        hideDialog={() => { }}
                     />
                 </div>
             </div>
