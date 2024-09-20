@@ -1,27 +1,31 @@
+import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
+import DialogFooterButtonPayrollPayDetails from '@/Features/PayrollHistory/Components/DialogFooterButtonPayrollPayDetails';
+import PayrollPayDetailTable from '@/Features/PayrollHistory/Components/PayrollPayDetailTable';
+import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService, { payrollPayDetailNotPaidService } from '@/Features/PayrollHistory/Services/payrollPayDetailService';
+import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
+import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Divider } from 'primereact/divider';
 import { TabView, TabPanel } from 'primereact/tabview';
 import React, { useState } from 'react'
-import PayrollPayDetailTable from './PayrollPayDetailTable';
-import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
-import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
-import usePayrollPayDetailQuery from '../Hooks/usePayrollPayDetailQuery';
-import payrollPayDetailService, { payrollPayDetailNotPaidService } from '../Services/payrollPayDetailService';
-import DialogFooterButtonPayrollPayDetails from './DialogFooterButtonPayrollPayDetails';
-import Link from 'next/link';
+import FirstContabilizationTable from './FirstContabilizationTable';
 
 interface Props {
+    entity: IPayrollPay;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
-    entity: IPayrollPay;
+    setSubmitted: (value: boolean) => void;
+    toast: React.MutableRefObject<any>;
 }
 
-const PayrollPayDetails = ({
-    editEntityDialog,
-    setEditEntityDialog,
+const FirstContabilization = ({
     entity,
+    setEditEntityDialog,
+    setSubmitted,
+    toast,
+    editEntityDialog,
 }: Props) => {
 
     const [activeIndex, setActiveIndex] = useState(0);
@@ -65,7 +69,6 @@ const PayrollPayDetails = ({
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
-
     return (
         <Dialog
             visible={editEntityDialog}
@@ -96,35 +99,17 @@ const PayrollPayDetails = ({
                 </div>
             </div>
             <div className='card'>
-                <div className="flex mb-2 gap-2 justify-content-end">
-                    <Button
-                        onClick={() => setActiveIndex(0)}
-                        className="w-2rem h-2rem p-0" rounded
-                        outlined={activeIndex !== 0} label="1" />
-                    <Button onClick={() => setActiveIndex(1)}
-                        className="w-2rem h-2rem p-0"
-                        rounded outlined={activeIndex !== 1}
-                        label="2" />
-                </div>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
-                    <TabPanel header="Nomina Liquidada">
-                        <PayrollPayDetailTable
+                    <TabPanel header="Contabilization #1">
+                        <FirstContabilizationTable
                             entity={data.items}
-                        />
-                    </TabPanel>
-                    <TabPanel header="Nomina Con Saldo Cero">
-                        <PayrollPayDetailTable
-                            entity={data.items}
-                            index={activeIndex}
                         />
                     </TabPanel>
                 </TabView>
             </div>
-            <Link href="/payrollHistory">
-                <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
-            </Link>
+            <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
         </Dialog>
     )
 }
 
-export default PayrollPayDetails
+export default FirstContabilization

@@ -93,7 +93,7 @@ const AppMenu = () => {
                 {
                     label: "Contabilizacion",
                     icon: "pi pi-fw pi-calculator",
-                    to: "",
+                    to: "/contabilization",
                 },
             ],
         },

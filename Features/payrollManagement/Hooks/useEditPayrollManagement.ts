@@ -15,6 +15,7 @@ const useEditPayrollManagement = ({
         mutationFn: (entity: IPayrollManagement) => payrollManagementService.put(entity),
 
         onError: (error: any) => {
+            console.log("Error" + error);
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",
@@ -22,7 +23,18 @@ const useEditPayrollManagement = ({
                 life: 3000,
             });
         },
-        onSuccess: () => {
+        onSuccess: (text: any) => {
+
+            if (text.includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: text,
+                    life: 3000,
+                });
+                return;
+            }
+
             reset();
             setSubmitted(true);
 

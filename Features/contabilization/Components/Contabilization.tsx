@@ -1,27 +1,16 @@
 "use client";
-import usePayrollPayDetailQuery from "@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery";
-import useGetPayrollManagementByIdPayrollArea from "@/Features/payrollManagement/Hooks/useGetLastPayrollManagement";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import useGetContabilizationQuery from "../Hooks/useGetContabilizationQuery";
+import ContabilizationTable from "./ContabilizationTable";
+import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
+import FirstContabilization from "./FirstContabilization";
+import SecondContabilization from "./SecondContabilization";
 
 
 const Contabilization = () => {
-
-    const {
-        params,
-    } = useParamFilter(6);
-
-    const { data } = useGetContabilizationQuery(
-        params,
-        [],
-        1
-    );
-
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -34,20 +23,21 @@ const Contabilization = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IContabilization>();
+    } = useCrudModals<IPayrollPay>();
 
-    const handleAdd = () => {
-        setSubmitted(false);
-        setAddEntityDialog(true);
-    };
-
-    const handleEdit = (entity: IContabilization) => {
+    const handleContabilization1 = (entity: IPayrollPay) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IContabilization) => {
+    const handleContabilization2 = (entity: IPayrollPay) => {
+        setEntity(entity);
+        setSubmitted(false);
+        setAddEntityDialog(true);
+    };
+
+    const handleDelete = (entity: IPayrollPay) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -71,17 +61,16 @@ const Contabilization = () => {
                         <TableSkeletonTemplate items={entityProperties} />
                     }
                 >
-                    {/* <LicenseTable
+                    {<ContabilizationTable
                         submitted={submitted}
-                        handleAdd={handleAdd}
+                        handleContabilization1={handleContabilization1}
+                        handleContabilization2={handleContabilization2}
                         handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        idEmployee={id}
-                    /> */}
+                    />}
                 </Suspense>
 
-                {/* {editEntityDialog && (
-                    <EditLicense
+                {editEntityDialog && (
+                    <FirstContabilization
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
@@ -91,20 +80,19 @@ const Contabilization = () => {
                 )}
 
                 {addEntityDialog && (
-                    <AddLicense
-                        id={id}
-                        addEntityDialog={addEntityDialog}
-                        setAddEntityDialog={setAddEntityDialog}
-                        handleAdd={handleAdd}
+                    <SecondContabilization
+                        entity={entity!}
+                        editEntityDialog={addEntityDialog}
+                        setEditEntityDialog={setAddEntityDialog}
                         toast={toast}
                         setSubmitted={setSubmitted}
                     />
-                )} */}
+                )}
 
                 {deleteEntityDialog && (
                     <DeleteEntity
                         id={entity?.idPayrollPay ?? 0}
-                        endpoint="employee/payrollPay"
+                        endpoint="employee/payrollPay/delete"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
                         setSubmitted={setSubmitted}

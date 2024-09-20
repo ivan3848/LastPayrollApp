@@ -1,27 +1,32 @@
+import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
+import DialogFooterButtonPayrollPayDetails from '@/Features/PayrollHistory/Components/DialogFooterButtonPayrollPayDetails';
+import PayrollPayDetailTable from '@/Features/PayrollHistory/Components/PayrollPayDetailTable';
+import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService, { payrollPayDetailNotPaidService } from '@/Features/PayrollHistory/Services/payrollPayDetailService';
+import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
+import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
+import Link from 'next/link';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Divider } from 'primereact/divider';
 import { TabView, TabPanel } from 'primereact/tabview';
 import React, { useState } from 'react'
-import PayrollPayDetailTable from './PayrollPayDetailTable';
-import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
-import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
-import usePayrollPayDetailQuery from '../Hooks/usePayrollPayDetailQuery';
-import payrollPayDetailService, { payrollPayDetailNotPaidService } from '../Services/payrollPayDetailService';
-import DialogFooterButtonPayrollPayDetails from './DialogFooterButtonPayrollPayDetails';
-import Link from 'next/link';
+import SecondContabilizationTable from './SecondContabilizationTable';
 
 interface Props {
+    entity: IPayrollPay;
     editEntityDialog: boolean;
     setEditEntityDialog: (value: boolean) => void;
-    entity: IPayrollPay;
+    setSubmitted: (value: boolean) => void;
+    toast: React.MutableRefObject<any>;
 }
 
-const PayrollPayDetails = ({
-    editEntityDialog,
-    setEditEntityDialog,
+const SecondContabilization = ({
     entity,
+    setEditEntityDialog,
+    setSubmitted,
+    toast,
+    editEntityDialog,
 }: Props) => {
 
     const [activeIndex, setActiveIndex] = useState(0);
@@ -65,7 +70,6 @@ const PayrollPayDetails = ({
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
-
     return (
         <Dialog
             visible={editEntityDialog}
@@ -113,18 +117,16 @@ const PayrollPayDetails = ({
                         />
                     </TabPanel>
                     <TabPanel header="Nomina Con Saldo Cero">
-                        <PayrollPayDetailTable
+                        <SecondContabilizationTable
                             entity={data.items}
                             index={activeIndex}
                         />
                     </TabPanel>
                 </TabView>
             </div>
-            <Link href="/payrollHistory">
-                <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
-            </Link>
+            <DialogFooterButtonPayrollPayDetails hideDialog={hideDialog} />
         </Dialog>
     )
 }
 
-export default PayrollPayDetails
+export default SecondContabilization

@@ -5,16 +5,20 @@ import { DataTable, DataTableSortEvent } from "primereact/datatable";
 import { Card } from "primereact/card";
 import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
-import { Button } from "primereact/button";
+import ActionsTableContabilization from "./ActionsTableContabilizaiton";
 
 interface Props {
     submitted: boolean;
-    handleDetails: (entity: IPayrollPay) => void;
+    handleContabilization1: (entity: IPayrollPay) => void;
+    handleContabilization2: (entity: IPayrollPay) => void;
+    handleDelete: (entity: IPayrollPay) => void;
 }
 
-const PayrollHistoryTable = ({
+const ContabilizationTable = ({
     submitted,
-    handleDetails,
+    handleContabilization1,
+    handleContabilization2,
+    handleDelete,
 }: Props) => {
     const {
         setFilters,
@@ -66,10 +70,6 @@ const PayrollHistoryTable = ({
         return <div>Loading...</div>;
     }
 
-    const formatMoney = (value: number) => {
-        return `RD$${value}`;
-    };
-
     return (
         <Card className="m-2">
             <DataTable
@@ -87,8 +87,19 @@ const PayrollHistoryTable = ({
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
                 <Column
+                    field="payrollNumber"
+                    header="Numero de Nómina"
+                    sortable
+                    filter
+                    filterField="payrollNumber"
+                    filterPlaceholder="Buscar por nombre"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                />
+                <Column
                     field="payrollName"
-                    header="Descripción"
+                    header="Nombre"
                     sortable
                     filter
                     filterField="payrollName"
@@ -98,52 +109,20 @@ const PayrollHistoryTable = ({
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idPayrollArea"
-                    header="Tipo de Nómina"
-                    sortable
-                    filter
-                    filterField="idPayrollArea"
-                    filterPlaceholder="Buscar por nombre"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                />
-                <Column
                     field="PayrollPayDate"
-                    header="Fecha de corrida"
+                    header="Fecha de pago"
                     body={(rowData: IPayrollPay) =>
                         formatDate(rowData.payrollPayDate?.toString()!)
                     }
                 />
                 <Column
-                    field="startDate"
-                    header="Fecha de inicio"
-                    body={(rowData: IPayrollPay) =>
-                        formatDate(rowData.startDate?.toString()!)
-                    }
-                />
-                <Column
-                    field="endDate"
-                    header="Fecha Final"
-                    body={(rowData: IPayrollPay) =>
-                        formatDate(rowData.endDate?.toString()!)
-                    }
-                />
-                <Column
-                    key="totalPay"
-                    field="totalPay"
-                    header="Total pagado"
-                    body={(rowData: IPayrollPay) => formatMoney(rowData.totalPay ?? 0)}
-                />
-                <Column
                     header="Acciones"
                     body={(rowData: IPayrollPay) => (
-                        <Button
-                            icon="pi pi-list-check"
-                            className="mr-2"
-                            rounded
-                            severity="info"
-                            onClick={() => handleDetails(rowData)}
+                        <ActionsTableContabilization
+                            entity={rowData}
+                            Contabilization1={handleContabilization1}
+                            Contabilization2={handleContabilization2}
+                            handleDelete={handleDelete}
                         />
                     )}
                 />
@@ -152,4 +131,4 @@ const PayrollHistoryTable = ({
     );
 };
 
-export default PayrollHistoryTable;
+export default ContabilizationTable;
