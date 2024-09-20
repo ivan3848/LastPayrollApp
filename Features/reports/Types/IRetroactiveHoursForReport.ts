@@ -1,0 +1,32 @@
+export interface IRetroactiveHoursForReport {
+    identifier: string;
+    idExtraHour: number;
+    idEmployee: number;
+    fullName: string;
+    costCenter: string;
+    salary: number;
+    percentage: number;
+    hourType: string;
+    hourAmount: number;
+    amount: number;
+    date: string;
+    isActive: boolean;
+    payrollName: string;
+    idPayrollPay: number;
+    isPaid: string;
+    idPosition: number;
+    position: string;
+    idDepartment: number;
+    department: string;
+    accountNumber: string;
+    idCostCenter: number;
+    isRetroactivity: string;
+    startDate: string;
+    idConcept: number;
+    concept: string;
+    idAccountingAccount: number;
+    accountingAccountNumber: string;
+    name: string;
+    conceptCode: string;
+    idCompany: number;
+}
