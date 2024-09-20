@@ -163,7 +163,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     }}
                 />
 
-                {/* {
+                {
                     <Button
                         size="small"
                         className="min-w-min"
@@ -175,7 +175,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                             setUserResetPasswordEntityDialog(true);
                         }}
                     />
-                } */}
+                }
             </>
         );
     };
@@ -240,7 +240,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                 <>
                     <ResetUserPassword
                         id={user!.users[0].userId}
-                        endpoint={"employee/user/resetPassword/"}
+                        endpoint={"employee/user/resetPassword"}
                         userResetPasswordEntityDialog={userResetPassword}
                         setUserResetPasswordEntityDialog={setUserResetPassword}
                         setSubmitted={setSubmitted}

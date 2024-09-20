@@ -27,7 +27,7 @@ const ResetUserPassword = ({
     const expireQuery = useExpireSessionQuery([CACHE_KEY_USER_CONFIGURATION]);
 
     const userResetPasswordRegister = useMutation({
-        mutationFn: (id: number) => apiService.put(id),
+        mutationFn: (id: number) => apiService.posts({ userId: id }),
 
         onError: (error: any) => {
             setUserResetPasswordEntityDialog(false);
@@ -51,6 +51,7 @@ const ResetUserPassword = ({
             });
         },
     });
+
     const handleUserReset = () => {
         userResetPasswordRegister.mutate(id);
     };
