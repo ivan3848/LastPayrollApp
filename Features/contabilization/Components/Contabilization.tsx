@@ -1,15 +1,26 @@
 "use client";
+import usePayrollPayDetailQuery from "@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery";
+import useGetPayrollManagementByIdPayrollArea from "@/Features/payrollManagement/Hooks/useGetLastPayrollManagement";
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useGetContabilizationQuery from "../Hooks/useGetContabilizationQuery";
 
-interface props {
-    id: number;
-}
 
-const Contabilization = ({ id }: props) => {
+const Contabilization = () => {
+
+    const {
+        params,
+    } = useParamFilter(6);
+
+    const { data } = useGetContabilizationQuery(
+        params,
+        [],
+        1
+    );
 
     const {
         deleteEntityDialog,
