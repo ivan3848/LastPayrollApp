@@ -1,53 +1,19 @@
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
-import { DataTableSortEvent } from 'primereact/datatable';
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { TreeTable } from 'primereact/treetable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
-import { NodeService } from '@/demo/service/NodeService';
 import { TreeNode } from 'primereact/treenode';
 
 interface Props {
-    entity: IPayrollPayResume[];
-    index?: number;
+    entity: IAllPayrollPay;
 }
 
-const FirstContabilizationTable = ({ entity, index }: Props) => {
+
+const FirstContabilizationTable = ({ entity }: Props) => {
 
     const [nodes, setNodes] = useState<TreeNode[]>([]);
     const [expandedKeys, setExpandedKeys] = useState<Record<string, boolean>>({});
-
-    const {
-        setFilters,
-        setSorts,
-        clearSorts,
-        clearFilters,
-        params,
-    } = useParamFilter();
-
-    const onFilter = (event: any) => {
-        setFilters([
-            {
-                column: event.field,
-                value: event.constraints.constraints?.[0].value,
-            },
-        ]);
-    };
-
-    const onSort = (event: DataTableSortEvent) => {
-        switch (event.sortOrder) {
-            case 1:
-                setSorts([{ sortBy: event.sortField, isAsc: true }]);
-                break;
-            case -1:
-                setSorts([{ sortBy: event.sortField, isAsc: false }]);
-                break;
-            default:
-                clearSorts();
-                break;
-        }
-    };
 
     const toggleApplications = () => {
         let _expandedKeys = { ...expandedKeys };
@@ -59,8 +25,31 @@ const FirstContabilizationTable = ({ entity, index }: Props) => {
     };
 
     useEffect(() => {
-        NodeService.getFilesystem().then((data) => setNodes(data));
-    }, []);
+        const treeNodes: TreeNode[] = transformToTreeNodes(entity);
+        setNodes(treeNodes);
+    }, [entity]);
+
+    const transformToTreeNodes = (entity: IAllPayrollPay): TreeNode[] => {
+        const treeNodes: TreeNode[] = [];
+
+        if (Array.isArray(entity.payrollPayDetailConcept)) {
+            entity.payrollPayDetailConcept.forEach((concept) => {
+                const node: TreeNode = {
+                    data: {
+                        idEmployee: concept.idEmployee,
+                        debit: concept.isProfit ? concept.amount : 0,
+                        credit: !concept.isProfit ? concept.amount : 0,
+                        difference: 0
+                    },
+                    children: []
+                };
+                treeNodes.push(node);
+            });
+        }
+
+        return treeNodes;
+    };
+
 
     return (
         <div className="card">
@@ -77,9 +66,10 @@ const FirstContabilizationTable = ({ entity, index }: Props) => {
                 className="mt-4"
                 tableStyle={{ minWidth: '50rem' }}
             >
-                <Column field="name" header="Name" expander></Column>
-                <Column field="size" header="Size"></Column>
-                <Column field="type" header="Type"></Column>
+                <Column field="idEmployee" header="Codigo Empleado" expander></Column>
+                <Column field="debit" header="Credito"></Column>
+                <Column field="credit" header="Debito"></Column>
+                <Column field="difference" header="Diferencia"></Column>
             </TreeTable>
         </div>
     );

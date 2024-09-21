@@ -1,103 +1,89 @@
+import { CACHE_KEY_PAYROLLPAY_DETAIL, CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID } from '@/constants/cacheKeys';
+import DialogFooterButtonPayrollPayDetails from '@/Features/PayrollHistory/Components/DialogFooterButtonPayrollPayDetails';
+import PayrollPayDetailTable from '@/Features/PayrollHistory/Components/PayrollPayDetailTable';
+import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService, { payrollPayDetailNotPaidService } from '@/Features/PayrollHistory/Services/payrollPayDetailService';
+import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
+import Link from 'next/link';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import { Divider } from 'primereact/divider';
+import { TabView, TabPanel } from 'primereact/tabview';
+import React, { useEffect, useState } from 'react'
 import { Column } from 'primereact/column';
-import { DataTable, DataTableSortEvent } from 'primereact/datatable';
-import React from 'react'
+import { TreeNode } from 'primereact/treenode';
+import { TreeTable } from 'primereact/treetable';
+
 
 interface Props {
-    entity: IPayrollPayResume[];
-    index?: number;
+    entity: IAllPayrollPay;
 }
 
-const SecondContabilizationTable = ({ entity, index }: Props) => {
+const SecondContabilizationTable = ({ entity }: Props) => {
 
-    const {
-        setFilters,
-        setSorts,
-        clearSorts,
-        clearFilters,
-        params,
-    } = useParamFilter();
+    const [nodes, setNodes] = useState<TreeNode[]>([]);
+    const [expandedKeys, setExpandedKeys] = useState<Record<string, boolean>>({});
 
-    const onFilter = (event: any) => {
-        setFilters([
-            {
-                column: event.field,
-                value: event.constraints.constraints?.[0].value,
-            },
-        ]);
+    const toggleApplications = () => {
+        let _expandedKeys = { ...expandedKeys };
+
+        if (_expandedKeys['0']) delete _expandedKeys['0'];
+        else _expandedKeys['0'] = true;
+
+        setExpandedKeys(_expandedKeys);
     };
 
-    const onSort = (event: DataTableSortEvent) => {
-        switch (event.sortOrder) {
-            case 1:
-                setSorts([{ sortBy: event.sortField, isAsc: true }]);
-                break;
-            case -1:
-                setSorts([{ sortBy: event.sortField, isAsc: false }]);
-                break;
-            default:
-                clearSorts();
-                break;
+    useEffect(() => {
+        const treeNodes: TreeNode[] = transformToTreeNodes(entity);
+        setNodes(treeNodes);
+    }, [entity]);
+
+    const transformToTreeNodes = (entity: IAllPayrollPay): TreeNode[] => {
+        const treeNodes: TreeNode[] = [];
+
+        if (Array.isArray(entity.payrollPayDetailConcept)) {
+            entity.payrollPayDetailConcept.forEach((concept) => {
+                const node: TreeNode = {
+                    data: {
+                        idEmployee: concept.idEmployee,
+                        debit: concept.isProfit ? concept.amount : 0,
+                        credit: !concept.isProfit ? concept.amount : 0,
+                        difference: 0
+                    },
+                    children: []
+                };
+                treeNodes.push(node);
+            });
         }
+
+        return treeNodes;
     };
 
-    const formatMoney = (value: number) => {
-        return `RD$${value}`;
-    };
 
     return (
-        <DataTable
-            value={entity}
-            className="p-datatable-sm"
-            dataKey="idPayrollPayResume"
-            style={{ width: "100%", height: "100%" }}
-            paginator
-            onSort={onSort}
-            removableSort
-            sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-            sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-            sortMode="single"
-            rows={5}
-            rowsPerPageOptions={[5, 10, 15]}
-            paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        >
-            <Column
-                field="idEmployee"
-                header="ID Empleado"
-                sortable
-                filter
-                filterField="idEmployee"
-                filterPlaceholder="Buscar por nombre"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-            ></Column>
-            <Column
-                key="salary"
-                field="salary"
-                header="Salario"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
+        <div className="card">
+            <Button
+                onClick={toggleApplications}
+                label="Toggle Applications"
+                className="flex justify-start"
+                style={{ width: "30%", gap: "5px", marginRight: "auto" }}
             />
-            <Column
-                key="totalProfit"
-                field="totalProfit"
-                header="Total de Ingresos"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
-            />
-            <Column
-                key="totalDeduction"
-                field="totalDeduction"
-                header="Total de Deducciones"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
-            />
-            <Column
-                key="totalPay"
-                field="totalPay"
-                header={index == 1 ? "Pendiente por reducir" : "Total a pagar"}
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
-            />
-        </DataTable>
-    )
+            <TreeTable
+                value={nodes}
+                expandedKeys={expandedKeys}
+                onToggle={(e) => setExpandedKeys(e.value)}
+                className="mt-4"
+                tableStyle={{ minWidth: '50rem' }}
+            >
+                <Column field="idEmployee" header="Codigo Empleado" expander></Column>
+                <Column field="debit" header="Credito"></Column>
+                <Column field="credit" header="Debito"></Column>
+                <Column field="difference" header="Diferencia"></Column>
+            </TreeTable>
+        </div>
+    );
 }
+
 
 export default SecondContabilizationTable
