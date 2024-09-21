@@ -50,6 +50,7 @@ function GenericDropDown<T>({
     return (
         <>
             <Dropdown
+                showClear
                 value={
                     data.items.find(
                         (item: any) =>
