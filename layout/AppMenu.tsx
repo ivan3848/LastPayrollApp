@@ -118,9 +118,6 @@ const AppMenu = () => {
                 },
             ],
         },
-            ],
-        },
-
         {
             label: "GESTION USUARIOS",
             icon: "pi pi-fw pi-users",
