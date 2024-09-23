@@ -1,5 +1,7 @@
 import ApiService from "@/services/ApiService";
 import { useMutation } from "@tanstack/react-query";
+import useExpireSessionQuery from "./useExpireSessionQuery";
+import { CACHE_KEY_EMPLOYEE } from "@/constants/cacheKeys";
 
 interface Props<T> {
     toast?: React.MutableRefObject<any>;
@@ -21,6 +23,7 @@ function useAddEntityQuery<T>({
     setCustomAddDialog,
     message,
 }: Props<T>) {
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_EMPLOYEE]);
     return useMutation({
         mutationFn: (entity: T) => service.post(entity),
         onError: (error: any) => {
@@ -32,7 +35,6 @@ function useAddEntityQuery<T>({
             });
         },
         onSuccess: (data: any) => {
-
             if (data.toString().includes("Hay")) {
                 toast?.current?.show({
                     severity: "warn",
@@ -40,6 +42,7 @@ function useAddEntityQuery<T>({
                     detail: data,
                     life: 3000,
                 });
+                expireQuery();
                 return;
             }
 
@@ -48,6 +51,7 @@ function useAddEntityQuery<T>({
             if (setCustomAddDialog) setCustomAddDialog(false);
             if (setSubmitted) setSubmitted(true);
             if (setEntity) setEntity(data);
+            expireQuery();
 
             toast?.current?.show({
                 severity: "success",

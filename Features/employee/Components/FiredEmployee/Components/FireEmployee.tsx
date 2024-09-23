@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { IEmployee } from "../../../Types/IEmployee";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { Calendar } from "primereact/calendar";
 import { InputTextarea } from "primereact/inputtextarea";
 import { useForm } from "react-hook-form";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { InputSwitch } from "primereact/inputswitch";
 import FiredEmployeeFormSchema from "../Validation/FiredEmployeeFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -61,8 +59,11 @@ const FireEmployee = ({ employee }: Props) => {
         data.firedDate = data.firedDate ?? new Date();
         data.idStatusFired = data.idStatusFired;
 
-        addEntity.mutate(data);
-        return;
+        addEntity.mutate(data, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
     };
 
     return (
