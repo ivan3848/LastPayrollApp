@@ -140,13 +140,18 @@ const PayrollPayView = ({
 
         setLoading(true);
 
-        try {
-            await addEntity.mutateAsync(data);
-        } finally {
-            setLoading(false);
-            setCompleted(true);
-            setViewEmployees(false);
-        }
+        await addEntity.mutateAsync(data, {
+            onSuccess: () => {
+                setLoading(false);
+                setCompleted(true);
+                setViewEmployees(false);
+            },
+            onError: () => {
+                setLoading(false);
+                setViewEmployees(false);
+            },
+        });
+
     };
 
     let options: string[] = ["Mensual", "Quincenal"];
