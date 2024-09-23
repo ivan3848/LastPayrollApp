@@ -15,17 +15,16 @@ const useEditPayrollManagement = ({
         mutationFn: (entity: IPayrollManagement) => payrollManagementService.put(entity),
 
         onError: (error: any) => {
-            console.log("Error" + error);
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",
-                detail: error.response.data,
+                detail: error?.response?.data,
                 life: 3000,
             });
         },
         onSuccess: (text: any) => {
 
-            if (text.includes("Hay")) {
+            if (text.toString().includes("Hay")) {
                 toast.current?.show({
                     severity: "warn",
                     summary: "Advertencia",

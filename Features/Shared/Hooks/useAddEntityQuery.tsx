@@ -9,6 +9,7 @@ interface Props<T> {
     service: ApiService<T, T>;
     setEntity?: (value: any) => void;
     setCustomAddDialog?: (openAddAmortization: boolean) => void;
+    message?: string;
 }
 function useAddEntityQuery<T>({
     toast,
@@ -18,6 +19,7 @@ function useAddEntityQuery<T>({
     service,
     setEntity,
     setCustomAddDialog,
+    message,
 }: Props<T>) {
     return useMutation({
         mutationFn: (entity: T) => service.post(entity),
@@ -39,7 +41,7 @@ function useAddEntityQuery<T>({
             toast?.current?.show({
                 severity: "success",
                 summary: "Insertado!",
-                detail: "Registro agregado correctamente",
+                detail: message ?? "Registro agregado correctamente",
                 life: 3000,
             });
         },
