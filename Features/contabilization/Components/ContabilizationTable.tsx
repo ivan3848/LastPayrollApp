@@ -122,7 +122,6 @@ const ContabilizationTable = ({
                             entity={rowData}
                             Contabilization1={handleContabilization1}
                             Contabilization2={handleContabilization2}
-                            handleDelete={handleDelete}
                         />
                     )}
                 />

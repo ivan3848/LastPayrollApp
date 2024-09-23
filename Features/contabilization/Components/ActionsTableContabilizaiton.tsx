@@ -5,7 +5,7 @@ interface Props<T> {
     entity: T;
     Contabilization1?: (entity: T) => void;
     Contabilization2?: (entity: T) => void;
-    handleDelete: (entity: T) => void;
+    handleDelete?: (entity: T) => void;
     isCustomDelete?: boolean;
 }
 

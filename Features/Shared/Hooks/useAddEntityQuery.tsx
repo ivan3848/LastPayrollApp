@@ -32,6 +32,17 @@ function useAddEntityQuery<T>({
             });
         },
         onSuccess: (data: any) => {
+
+            if (data.toString().includes("Hay")) {
+                toast?.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: data,
+                    life: 3000,
+                });
+                return;
+            }
+
             if (reset) reset();
             if (setAddEntityDialog) setAddEntityDialog(false);
             if (setCustomAddDialog) setCustomAddDialog(false);
