@@ -1,38 +1,35 @@
 import React, { useState } from "react";
-import { IEmployee } from "../Types/IEmployee";
-import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
+import { IEmployee } from "../../../Types/IEmployee";
 import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDropDown";
 import { Calendar } from "primereact/calendar";
 import { InputTextarea } from "primereact/inputtextarea";
-import useEmployeeQuery from "../Hooks/useEmployeeQuery";
 import { useForm } from "react-hook-form";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { InputSwitch } from "primereact/inputswitch";
+import FiredEmployeeFormSchema from "../Validation/FiredEmployeeFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import firedEmployeeService from "../Services/firedEmployee";
+import useCrudModals from '@/Features/Shared/Hooks/useCrudModals';
+import { Button } from "primereact/button";
+import { Toast } from "primereact/toast";
 
 interface Props {
     employee: IEmployee;
 }
 
-interface IFireEmployee {
-    IdEmployee: number;
-    FiredDate: Date;
-    Comment: string;
-    IsTakenVacation: boolean;
-    IsUnemployment: boolean;
-    IsPreview: boolean;
-    IsNotice: boolean;
-    IsChristmasPayment: boolean;
-    IdStatusFired: number;
-    IdCancelationType: number;
-}
-
 const FireEmployee = ({ employee }: Props) => {
-    const { setFilters, params, setAllData } = useParamFilter();
+
+    const {
+        setSubmitted,
+        toast,
+    } = useCrudModals<IFireEmployee>();
+
     const [pagoNavidad, setPagoNavidad] = useState(false);
     const [notice, setNotice] = useState(false);
     const [vacation, setVacation] = useState(false);
     const [unemployment, setUnemployment] = useState(false);
+
+    const addEntitySchema = FiredEmployeeFormSchema();
 
     const {
         handleSubmit,
@@ -41,24 +38,39 @@ const FireEmployee = ({ employee }: Props) => {
         setValue,
         watch,
         formState: { errors },
-    } = useForm<IFireEmployee>();
+    } = useForm<IFireEmployee>({
+        resolver: zodResolver(addEntitySchema),
+    });
 
-    // const changePositionSalaryEdit = useChangePositionSalaryQuery({
-    //     toast,
-    //     setAddEntityDialog,
-    //     setSubmitted,
-    //     reset,
-    // });
+    const addEntity = useAddEntityQuery({
+        toast,
+        setSubmitted,
+        reset,
+        service: firedEmployeeService,
+        message: "Empleado desvinculado correctamente",
+    });
 
     const onFormSubmit = (data: IFireEmployee) => {
-        // changePositionSalaryEdit.mutate(data);
-        return;
+        data.idEmployee = employee.idEmployee;
+        data.isChristmasPayment = pagoNavidad;
+        data.isNotice = notice;
+        data.isTakenVacation = vacation;
+        data.isUnemployment = unemployment;
+        data.firedDate = data.firedDate ?? new Date();
+        data.idStatusFired = data.idStatusFired;
+
+        addEntity.mutate(data, {
+            onSuccess: () => {
+                window.location.reload();
+            },
+        });
     };
 
     return (
         <div className="grid">
             <div className="col-12 mx-auto">
                 <div className="card">
+                    <Toast ref={toast} />
                     <form onSubmit={handleSubmit(onFormSubmit)}>
                         <h4 style={{ marginBottom: "30px" }}>
                             Desvincular Empleado
@@ -74,23 +86,22 @@ const FireEmployee = ({ employee }: Props) => {
                         >
                             <div className="field col-12 md:col-3">
                                 <label
-                                    htmlFor="IdChangeManager"
+                                    htmlFor="idStatusFired"
                                     className="w-full"
                                 >
                                     Medida
                                 </label>
-                                <GenericDropDown
-                                    id="idHierarchyPositionManager"
-                                    isValid={!!errors.IdStatusFired}
-                                    text="name"
-                                    useQuery={useEmployeeQuery}
+                                <GenericStatusDropDown
+                                    id="idStatusFired"
+                                    isValid={!!errors.idStatusFired}
                                     setValue={setValue}
                                     watch={watch}
-                                    param={params}
+                                    isFocus={true}
+                                    tableName="CancelationReasonStatus"
                                 />
-                                {errors.IdStatusFired && (
+                                {errors.idStatusFired && (
                                     <small className="p-invalid text-danger">
-                                        {errors.IdStatusFired.message?.toString()}
+                                        {errors.idStatusFired.message?.toString()}
                                     </small>
                                 )}
                             </div>
@@ -99,27 +110,29 @@ const FireEmployee = ({ employee }: Props) => {
                                     Motivo
                                 </label>
                                 <GenericStatusDropDown
-                                    id="IdCancelationType"
-                                    isValid={!!errors.IdCancelationType}
+                                    id="idCancelationType"
+                                    isValid={!!errors.idCancelationType}
                                     setValue={setValue}
                                     watch={watch}
                                     isFocus={true}
-                                    tableName="SalaryNewsStatus"
+                                    tableName="CancelationTypeStatus"
                                 />
-                                {errors.IdCancelationType && (
+                                {errors.idCancelationType && (
                                     <small className="p-invalid text-danger">
-                                        {errors.IdCancelationType.message?.toString()}
+                                        {errors.idCancelationType.message?.toString()}
                                     </small>
                                 )}
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label id="DateChange" htmlFor="DateChange">
+                                <label id="firedDate" htmlFor="firedDate">
                                     Fecha de inicio
                                 </label>
                                 <Calendar
-                                    {...register("FiredDate")}
-                                    name="FiredDate"
-                                    value={new Date()}
+                                    {...register("firedDate")}
+                                    id="firedDate"
+                                    name="firedDate"
+                                    value={watch("firedDate") ?? new Date()}
+                                    onChange={(e) => setValue("firedDate", e.value!)}
                                     showIcon
                                 />
                             </div>
@@ -137,28 +150,30 @@ const FireEmployee = ({ employee }: Props) => {
                             <div className="field col-12 md:col-3">
                                 <h6>Pago de Navidad</h6>
                                 <InputSwitch
-                                    {...register("IsChristmasPayment")}
-                                    name="IsChristmasPayment"
+                                    {...register("isChristmasPayment")}
+                                    id="isChristmasPayment"
+                                    name="isChristmasPayment"
                                     checked={pagoNavidad}
                                     onChange={(e) =>
-                                        setPagoNavidad(e.value ?? false)
+                                        setPagoNavidad(e.value)
                                     }
                                 />
                                 <h6>Pre-Aviso</h6>
                                 <InputSwitch
-                                    {...register("IsNotice")}
-                                    name="IsNotice"
+                                    {...register("isNotice")}
+                                    name="isNotice"
                                     checked={notice}
                                     onChange={(e) =>
-                                        setNotice(e.value ?? false)
+                                        setNotice(e.value)
                                     }
                                 />
                             </div>
                             <div className="field col-12 md:col-3">
                                 <h6>Ha tomado vacaciones este año?</h6>
                                 <InputSwitch
-                                    {...register("IsTakenVacation")}
-                                    name="IsTakenVacation"
+                                    {...register("isTakenVacation")}
+                                    id="isTakenVacation"
+                                    name="isTakenVacation"
                                     checked={vacation}
                                     onChange={(e) =>
                                         setVacation(e.value ?? false)
@@ -166,8 +181,9 @@ const FireEmployee = ({ employee }: Props) => {
                                 />
                                 <h6>Cesantia</h6>
                                 <InputSwitch
-                                    {...register("IsUnemployment")}
-                                    name="IsUnemployment"
+                                    {...register("isUnemployment")}
+                                    id="isUnemployment"
+                                    name="isUnemployment"
                                     checked={unemployment}
                                     onChange={(e) =>
                                         setUnemployment(e.value ?? false)
@@ -175,17 +191,30 @@ const FireEmployee = ({ employee }: Props) => {
                                 />
                             </div>
                             <div className="field col-12 md:col-3">
-                                <label htmlFor="Description">Descripción</label>
+                                <label htmlFor="comment">Descripción</label>
                                 <InputTextarea
-                                    {...register("Comment")}
-                                    id="Comment"
+                                    {...register("comment")}
+                                    id="comment"
                                     placeholder="Ingrese descripción..."
                                     rows={3}
                                     cols={30}
                                 />
                             </div>
                         </div>
-                        <DialogFooterButtons hideDialog={() => {}} />
+                        <div
+                            className="flex justify-content-end mt-3"
+                            style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+                        >
+                            <Button
+                                label="Cancelar"
+                                icon="pi pi-times"
+                                raised
+                                type="button"
+                                onClick={() => { }}
+                                severity="danger"
+                            />
+                            <Button label="Guardar" disabled={!employee.isActive} icon="pi pi-check" raised type="submit" />
+                        </div>
                     </form>
                 </div>
             </div>

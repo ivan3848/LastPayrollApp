@@ -93,11 +93,31 @@ const AppMenu = () => {
                 {
                     label: "Contabilizacion",
                     icon: "pi pi-fw pi-calculator",
+                    to: "/contabilization",
+                },
+            ],
+        },
+        {
+            label: "REPORTES",
+            icon: "pi pi-fw pi-users",
+            items: [
+                {
+                    label: "Reportes",
+                    icon: "pi pi-fw pi-book",
+                    to: "/reports",
+                },
+                {
+                    label: "Reportes DGT",
+                    icon: "pi pi-fw pi-book",
+                    to: "",
+                },
+                {
+                    label: "Reportes TSS",
+                    icon: "pi pi-fw pi-book",
                     to: "",
                 },
             ],
         },
-
         {
             label: "GESTION USUARIOS",
             icon: "pi pi-fw pi-users",

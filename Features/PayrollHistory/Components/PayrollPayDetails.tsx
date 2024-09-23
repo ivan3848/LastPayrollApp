@@ -1,4 +1,3 @@
-import DialogFooterButtons from '@/Features/Shared/Components/DialogFooterButtons';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Divider } from 'primereact/divider';
@@ -46,19 +45,22 @@ const PayrollPayDetails = ({
         entity.idPayrollPay
     );
 
-    const [resume, setResume] = useState({
-        totalPay: 0.00,
-        totalDeduction: 0.00,
-        totalProfit: 0.00,
+    const [resume, setResume] = React.useState({
+        totalDeduction: 0,
+        totalProfit: 0,
+        totalPay: 0,
     });
 
-    data.items.forEach((item) => {
-        setResume({
-            totalPay: item.totalPay ?? 20,
-            totalDeduction: item.totalDeduction ?? 0,
-            totalProfit: item.totalProfit ?? 0,
+    React.useEffect(() => {
+        data.items?.forEach((item) => {
+            setResume({
+                totalDeduction: item.totalDeduction ?? 0,
+                totalProfit: item.totalProfit ?? 0,
+                totalPay: entity.totalPay ?? 0,
+            });
         });
-    });
+
+    }, [entity]);
 
     const hideDialog = () => {
         setEditEntityDialog(false);
@@ -72,6 +74,7 @@ const PayrollPayDetails = ({
             modal
             className="p-fluid"
             onHide={hideDialog}
+            maximizable
         >
             <div className="card">
                 <Divider align="center">
@@ -109,7 +112,7 @@ const PayrollPayDetails = ({
                             entity={data.items}
                         />
                     </TabPanel>
-                    <TabPanel header="Nomina Sin Liquidar">
+                    <TabPanel header="Nomina Con Saldo Cero">
                         <PayrollPayDetailTable
                             entity={data.items}
                             index={activeIndex}

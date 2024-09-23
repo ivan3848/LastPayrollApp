@@ -114,7 +114,7 @@ const PayrollPayView = ({
                 )) as IPayrollManagement;
             setEntityPayrollManagement(payrollData);
         },
-        [watch, entityPayrollManagement, setEntityPayrollManagement, loading]
+        [watch, entityPayrollManagement, setEntityPayrollManagement]
     );
 
     useEffect(() => {
