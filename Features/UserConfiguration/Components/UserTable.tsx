@@ -71,7 +71,6 @@ export default function UserTable({ submitted }: Props) {
         return users.isActive ? "success" : "danger";
     };
 
-    console.log(data);
     const gridItem = (user: IUser) => {
         return (
             <div

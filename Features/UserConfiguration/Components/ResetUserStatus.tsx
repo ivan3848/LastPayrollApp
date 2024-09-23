@@ -30,7 +30,6 @@ const ResetUserStatus = ({
 
         onError: (error: any) => {
             setUserResetStatusEntityDialog(false);
-            console.log(id);
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",

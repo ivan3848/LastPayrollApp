@@ -31,7 +31,6 @@ const ResetUserPassword = ({
 
         onError: (error: any) => {
             setUserResetPasswordEntityDialog(false);
-            console.log(id);
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",
