@@ -3,13 +3,46 @@ import type { Page } from "@/types";
 import { useRouter } from "next/navigation";
 import { Button } from "primereact/button";
 import { Password } from "primereact/password";
-import { useContext } from "react";
+import { useContext, useRef, useState } from "react";
 import { LayoutContext } from "../../../../layout/context/layoutcontext";
+import { Toast } from "primereact/toast";
+import { useForm } from "react-hook-form";
+import { ILogin } from "../types/ILogin";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import z from "zod";
+import newPasswordFormSchema from "./newPasswordFormSchema";
 
 const NewPassword: Page = () => {
+    const toast = useRef<Toast | null>(null);
+    const [loading, setLoading] = useState(false); // Step 1: Loading state
     const router = useRouter();
+    const { resetPasswordFormSchema } = newPasswordFormSchema();
+
+    const {
+        handleSubmit,
+        register,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm<ILogin>({ resolver: zodResolver(resetPasswordFormSchema) });
+
+    // const onSubmit = async (data: ILogin) => {
+    //     setLoading(true);
+
+    //     const response = await SignIn(data);
+
+    //     if (response === "success") {
+    //         window.location.reload();
+    //         reset();
+    //         return;
+    //     }
+    //     setLoading(false);
+    //     show(response);
+    // };
+
     const { layoutConfig } = useContext(LayoutContext);
-    const dark = layoutConfig.colorScheme !== "light";
+    const dark = layoutConfig?.colorScheme !== "light";
 
     return (
         <>

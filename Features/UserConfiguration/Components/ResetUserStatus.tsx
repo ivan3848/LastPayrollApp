@@ -5,21 +5,20 @@ import { Dialog } from "primereact/dialog";
 import React from "react";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
-import conceptFormSchemas from "../../concept/Validations/ConceptFormSchemas";
 
 interface Props {
     id: number;
     endpoint: string;
-    userResetPasswordEntityDialog: boolean;
-    setUserResetPasswordEntityDialog: (value: boolean) => void;
+    userResetStatusEntityDialog: boolean;
+    setUserResetStatusEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const ResetUserPassword = ({
+const ResetUserStatus = ({
     id,
-    userResetPasswordEntityDialog,
-    setUserResetPasswordEntityDialog,
+    userResetStatusEntityDialog,
+    setUserResetStatusEntityDialog,
     setSubmitted,
     endpoint,
     toast,
@@ -30,7 +29,7 @@ const ResetUserPassword = ({
         mutationFn: (id: number) => apiService.post(id),
 
         onError: (error: any) => {
-            setUserResetPasswordEntityDialog(false);
+            setUserResetStatusEntityDialog(false);
             console.log(id);
             toast.current?.show({
                 severity: "warn",
@@ -40,13 +39,13 @@ const ResetUserPassword = ({
             });
         },
         onSuccess: () => {
-            setUserResetPasswordEntityDialog(false);
+            setUserResetStatusEntityDialog(false);
             setSubmitted(true);
             expireQuery();
             toast.current?.show({
                 severity: "success",
-                summary: "Reseteado!",
-                detail: "Contraseña reseteada correctamente",
+                summary: "Activación!",
+                detail: "Usuario ha sido restaurado correctamente",
                 life: 3000,
             });
         },
@@ -57,7 +56,7 @@ const ResetUserPassword = ({
     };
 
     const hideUserResetEntityDialog = () => {
-        setUserResetPasswordEntityDialog(false);
+        setUserResetStatusEntityDialog(false);
     };
 
     const userResetProductDialogFooter = (
@@ -78,9 +77,9 @@ const ResetUserPassword = ({
     );
     return (
         <Dialog
-            visible={userResetPasswordEntityDialog}
-            style={{ width: "450px" }}
-            header="Resetear contraseña"
+            visible={userResetStatusEntityDialog}
+            style={{ width: "25vw" }}
+            header="Activar Usuario"
             modal
             footer={userResetProductDialogFooter}
             onHide={hideUserResetEntityDialog}
@@ -90,10 +89,10 @@ const ResetUserPassword = ({
                     className="pi pi-exclamation-triangle mr-3"
                     style={{ fontSize: "2rem" }}
                 />
-                {id && <span>¿Está seguro de resetear la contraseña?</span>}
+                {id && <span>¿Está seguro de activar el usuario?</span>}
             </div>
         </Dialog>
     );
 };
 
-export default ResetUserPassword;
+export default ResetUserStatus;

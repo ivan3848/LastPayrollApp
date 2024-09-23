@@ -18,6 +18,7 @@ import { userServiceWithLogin } from "../Service/userService";
 import { IUser } from "../Types/IUser";
 import EditUser from "./EditUser";
 import ResetUserPassword from "./ResetUserPassword";
+import ResetUserStatus from "./ResetUserStatus";
 interface Props {
     submitted: boolean;
 }
@@ -58,7 +59,9 @@ export default function UserTableWithLogin({ submitted }: Props) {
     const [showEditUser, setShowEditUser] = useState(false);
     const [deleteUser, setDeleteUser] = useState(false);
     const [userResetPassword, setUserResetPassword] = useState(false);
+    const [userResetStatus, setUserResetStatus] = useState(false);
     const [userPass, setUserResetPasswordEntityDialog] = useState(false);
+    const [userStatus, setUserResetStatusEntityDialog] = useState(false);
 
     const listOfDependencies: boolean[] = [submitted];
 
@@ -163,7 +166,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     }}
                 />
 
-                {
+                {/* {
                     <Button
                         size="small"
                         className="min-w-min"
@@ -173,6 +176,20 @@ export default function UserTableWithLogin({ submitted }: Props) {
                             setUser(userSelected);
                             setUserResetPassword(true);
                             setUserResetPasswordEntityDialog(true);
+                        }}
+                    />
+                } */}
+
+                {
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label={userSelected.isActive ? "Desactivar" : "Activar"}
+                        icon="pi pi-external-link"
+                        onClick={() => {
+                            setUser(userSelected);
+                            setUserResetStatus(true);
+                            setUserResetStatusEntityDialog(true);
                         }}
                     />
                 }
@@ -225,7 +242,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
             {deleteUser && (
                 <>
                     <DeleteEntity
-                        id={user!.users[0].userId}
+                        id={user!.users[0].userId!}
                         endpoint="employee/user"
                         deleteEntityDialog={deleteEntityDialog}
                         setDeleteEntityDialog={setDeleteEntityDialog}
@@ -239,7 +256,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
             {userResetPassword && (
                 <>
                     <ResetUserPassword
-                        id={user!.users[0].userId}
+                        id={user!.users[0].userId!}
                         endpoint={"employee/user/resetPassword"}
                         userResetPasswordEntityDialog={userResetPassword}
                         setUserResetPasswordEntityDialog={setUserResetPassword}
@@ -249,6 +266,18 @@ export default function UserTableWithLogin({ submitted }: Props) {
                 </>
             )}
 
+            {userResetStatus && (
+                <>
+                    <ResetUserStatus
+                        id={user!.users[0].userId!}
+                        endpoint={"employee/user/activateUser"}
+                        userResetStatusEntityDialog={userResetStatus}
+                        setUserResetStatusEntityDialog={setUserResetStatus}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                </>
+            )}
             <Toast ref={toast} />
 
             <div className="grid">

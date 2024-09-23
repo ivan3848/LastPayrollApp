@@ -1,5 +1,5 @@
 import ApiService from "@/services/ApiService";
-import { IInsertUser } from "../Types/IInsertUser";
+import { IInsertUser, IUserReactivation } from "../Types/IInsertUser";
 import { IUser } from "../Types/IUser";
 
 const userServiceWithOut = new ApiService<IUser, IUser>(
@@ -13,8 +13,15 @@ const userServiceWithLogin = new ApiService<IUser, IUser>(
 const userInsertService = new ApiService<IInsertUser, IInsertUser>(
     "employee/user/"
 );
-
+const userUpdateService = new ApiService<IUserReactivation, IUserReactivation>(
+    "employee/user/"
+);
 const userResetPassword = new ApiService<IUser, IUser>("employee/user/");
 
 export default userServiceWithOut;
-export { userInsertService, userResetPassword, userServiceWithLogin };
+export {
+    userInsertService,
+    userResetPassword,
+    userServiceWithLogin,
+    userUpdateService,
+};

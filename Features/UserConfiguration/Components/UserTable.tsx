@@ -18,6 +18,7 @@ import useCrudModals from "../../Shared/Hooks/useCrudModals";
 import userServiceWithOut from "../Service/userService";
 import { IUser } from "../Types/IUser";
 import AddUser from "./AddUser";
+import ResetUserStatus from "./ResetUserStatus";
 
 interface Props {
     submitted: boolean;
@@ -38,6 +39,8 @@ const sortOptions = Object.entries(sortOptionsMap).map(([value, label]) => ({
 export default function UserTable({ submitted }: Props) {
     const { addEntityDialog, setAddEntityDialog, setSubmitted, toast } =
         useCrudModals<IUser>();
+    const [userResetStatus, setUserResetStatus] = useState(false);
+    const [userStatus, setUserResetStatusEntityDialog] = useState(false);
 
     const {
         setPage,
@@ -68,6 +71,7 @@ export default function UserTable({ submitted }: Props) {
         return users.isActive ? "success" : "danger";
     };
 
+    console.log(data);
     const gridItem = (user: IUser) => {
         return (
             <div
@@ -116,17 +120,33 @@ export default function UserTable({ submitted }: Props) {
 
     const actionButtons = (userSelected: IUser) => {
         return (
-            <Button
-                size="small"
-                className="min-w-min"
-                label="Add Setting"
-                icon="pi pi-external-link"
-                onClick={() => {
-                    setUser(userSelected);
-                    setShowAddUser(true);
-                    setAddEntityDialog(true);
-                }}
-            />
+            <>
+                {userSelected?.users?.length === 0 ? (
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label="Add Setting"
+                        icon="pi pi-external-link"
+                        onClick={() => {
+                            setUser(userSelected);
+                            setShowAddUser(true);
+                            setAddEntityDialog(true);
+                        }}
+                    />
+                ) : (
+                    <Button
+                        size="small"
+                        className="min-w-min"
+                        label={userSelected.isActive ? "Activar" : "Desactivar"}
+                        icon="pi pi-external-link"
+                        onClick={() => {
+                            setUser(userSelected);
+                            setUserResetStatus(true);
+                            setUserResetStatusEntityDialog(true);
+                        }}
+                    />
+                )}
+            </>
         );
     };
 
@@ -170,6 +190,19 @@ export default function UserTable({ submitted }: Props) {
                     setSubmitted={setSubmitted}
                     toast={toast}
                 />
+            )}
+
+            {userResetStatus && (
+                <>
+                    <ResetUserStatus
+                        id={user!.users[0].userId!}
+                        endpoint={"employee/user/activateUser"}
+                        userResetStatusEntityDialog={userResetStatus}
+                        setUserResetStatusEntityDialog={setUserResetStatus}
+                        setSubmitted={setSubmitted}
+                        toast={toast}
+                    />
+                </>
             )}
             <Toast ref={toast} />
             <div className="grid">

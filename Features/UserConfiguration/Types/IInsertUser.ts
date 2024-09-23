@@ -1,7 +1,12 @@
 export interface IInsertUser {
-    username: string;
-    password: string;
-    idRol: number;
+    username?: string;
+    password?: string;
+    idRol?: number;
+    idEmployee?: number;
+    userId?: number;
+}
+
+export interface IUserReactivation extends IInsertUser {
     idEmployee: number;
-    userId: number;
+    isActive: boolean;
 }
