@@ -28,7 +28,6 @@ interface IContabilization {
     accountName: string; 
     idAccountingAccount?: number; 
     paymentMethod: string; 
-    isCompany?: boolean; 
     isDebit?: boolean; 
     debit?: number; 
     credit?: number; 

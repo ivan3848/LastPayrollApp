@@ -2,11 +2,14 @@ import DialogFooterButtonPayrollPayDetails from '@/Features/PayrollHistory/Compo
 import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
 import { Dialog } from 'primereact/dialog';
-import { Divider } from 'primereact/divider';
 import { TabView, TabPanel } from 'primereact/tabview';
 import React, { useState } from 'react'
 import FirstContabilizationTable from './FirstContabilizationTable';
 import useContabilizationById from '@/Features/payrollPay/Hook/useContabilizationById';
+import { CACHE_KEY_PAYROLLPAY_DETAIL } from '@/constants/cacheKeys';
+import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService from '@/Features/PayrollHistory/Services/payrollPayDetailService';
+import TotalsCard from '../../PayrollHistory/Components/TotalsCard';
 
 interface Props {
     entity: IPayrollPay;
@@ -29,6 +32,14 @@ const FirstContabilization = ({
     const { params } = useParamFilter(6);
     const { data } = useContabilizationById(params, [], entity.idPayrollPay);
 
+    const { data: payrollResume } = usePayrollPayDetailQuery(
+        params,
+        [],
+        CACHE_KEY_PAYROLLPAY_DETAIL,
+        payrollPayDetailService,
+        entity.idPayrollPay
+    );
+
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
@@ -43,25 +54,8 @@ const FirstContabilization = ({
             onHide={hideDialog}
             maximizable
         >
-            <div className="card">
-                <Divider align="center">
-                    <h5>Periodo de Nómina # {entity.payrollNumber} - {entity.payrollName} </h5>
-                </Divider>
-                <div className='flex gap-3 justify-content-evenly'>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalProfit}</h4>
-                        <i>Total de Ingresos</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalDeduction}</h4>
-                        <i>Total Deducciones</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalPay}</h4>
-                        <i>Total Pagado</i>
-                    </div>
-                </div>
-            </div>
+            <TotalsCard data={payrollResume} entity={entity} />
+
             <div className='card'>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
                     <TabPanel header="Contabilization #1">
