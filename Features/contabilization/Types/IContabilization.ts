@@ -1,34 +1,23 @@
 
 interface IContabilization {
-    Id: string;
-    idCostCenter?: number; 
     costCenter: string; 
-    accountNumber: string; 
-    idEmployee: number; 
+    accountNumber: string;
+    accountName: string; 
+    idEmployee: number;
     firstName: string; 
     firstLastName: string; 
-    idDepartment: number; 
+    secondLastName: string; 
     department: string;
-    idPayrollPay: number;
     payrollName: string;
-    idConcept: number; 
     concept: string; 
     conceptCode: string;
-    isTax?: boolean; 
     amount: number; 
-    isProfit?: boolean; 
     totalPay: number; 
     totalPayEmployee?: number;
     totalPayExpense?: number;
     totalTax?: number; 
-    isMain: boolean; 
     name: string; 
-    conceptAccountNumber: string; 
-    isExpense?: boolean; 
-    accountName: string; 
-    idAccountingAccount?: number; 
     paymentMethod: string; 
-    isDebit?: boolean; 
     debit?: number; 
     credit?: number; 
 }

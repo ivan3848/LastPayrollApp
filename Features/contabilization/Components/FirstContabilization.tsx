@@ -10,7 +10,6 @@ import { CACHE_KEY_PAYROLLPAY_DETAIL } from '@/constants/cacheKeys';
 import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
 import payrollPayDetailService from '@/Features/PayrollHistory/Services/payrollPayDetailService';
 import TotalsCard from '../../PayrollHistory/Components/TotalsCard';
-import ContabilizationDifference from './ContabilizationDifference';
 
 interface Props {
     entity: IPayrollPay;

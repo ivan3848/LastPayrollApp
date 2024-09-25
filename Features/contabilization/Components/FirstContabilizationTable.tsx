@@ -6,10 +6,6 @@ import { MultiSelect } from 'primereact/multiselect';
 import { Button } from 'primereact/button';
 import * as XLSX from 'xlsx';
 
-interface IContabilization {
-    [key: string]: any;
-}
-
 interface Props {
     entity: IContabilization[];
 }
@@ -21,7 +17,17 @@ const FirstContabilizationTable = ({ entity }: Props) => {
     useEffect(() => {
         if (entity.length > 0) {
             const dynamicColumns = Object.keys(entity[0])
-                .filter(key => !key.toLowerCase().includes('id') && !key.toLocaleLowerCase().includes('is'))
+                .filter(key => key == 'costCenter' ||
+                    key == 'accountNumber' ||
+                    key == 'accountName' ||
+                    key == 'idEmployee' ||
+                    key == 'firstName' ||
+                    key == 'firstLastName' ||
+                    key == 'department' ||
+                    key == 'concept' ||
+                    key == 'debit' ||
+                    key == 'credit'
+                )
                 .map(key => ({
                     field: key,
                     header: translateColumnName(key)
@@ -38,10 +44,10 @@ const FirstContabilizationTable = ({ entity }: Props) => {
             firstName: 'Nombre',
             firstLastName: 'Apellido',
             department: 'Departamento',
+            secondLastName: 'Segundo Apellido',
             payrollName: 'Nombre de Nómina',
             concept: 'Concepto',
             conceptCode: 'Código de Concepto',
-            conceptAccountNumber: 'Cuenta de Concepto',
             amount: 'Monto',
             totalPay: 'Total de Pago',
             totalPayEmployee: 'Total de Pago de Empleado',
@@ -51,13 +57,7 @@ const FirstContabilizationTable = ({ entity }: Props) => {
             salary: 'Salario',
             debit: 'Débito',
             credit: 'Crédito',
-            secondLastName: 'Segundo Apellido',
-            employeeStartDate: 'Fecha de Inicio de Empleado',
-            employeeEndDate: 'Fecha de Fin de Empleado',
             employeeStatus: 'Estado de Empleado',
-            payrollStartDate: 'Fecha de Inicio de Pago de Nómina',
-            payrollEndDate: 'Fecha de Fin de Pago de Nómina',
-            payrollPayDate: 'Fecha de Pago de Nómina',
             payrollArea: 'Área de Nómina',
             paymentMethod: 'Método de Pago',
             payrollNumber: 'Número de Nómina',
@@ -74,10 +74,19 @@ const FirstContabilizationTable = ({ entity }: Props) => {
     };
 
     const exportToExcel = () => {
-        const translatedEntity = entity.map(item => {
+        const translatedEntity = entity.map((item: any) => {
             const translatedItem: { [key: string]: any } = {};
             for (const key in item) {
-                if (!key.toLowerCase().includes('id') && !key.toLowerCase().includes('is')) {
+                if (key == 'costCenter' ||
+                    key == 'accountNumber' ||
+                    key == 'accountName' ||
+                    key == 'idEmployee' ||
+                    key == 'firstName' ||
+                    key == 'firstLastName' ||
+                    key == 'department' ||
+                    key == 'concept' ||
+                    key == 'debit' ||
+                    key == 'credit') {
                     translatedItem[translateColumnName(key)] = item[key];
                 }
             }
@@ -91,7 +100,7 @@ const FirstContabilizationTable = ({ entity }: Props) => {
     };
 
     const header = (
-        <div className='flex justify-between gap-3'>
+        <div className='flex justify-between gap-6'>
             <MultiSelect
                 value={visibleColumns}
                 options={visibleColumns}
