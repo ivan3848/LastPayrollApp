@@ -50,3 +50,12 @@ interface IContabilizationGroupBy {
     Debit?: number;
     Credit?: number;
 }
+
+interface IContabilizationDifference {
+    identifier?: string;
+    idEmployee?: number;
+    idPayrollPay?: number;
+    debit?: number;
+    credit?: number;
+    difference?: number;
+}

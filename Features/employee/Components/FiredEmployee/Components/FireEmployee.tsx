@@ -12,6 +12,7 @@ import firedEmployeeService from "../Services/firedEmployee";
 import useCrudModals from '@/Features/Shared/Hooks/useCrudModals';
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
+import { Divider } from "primereact/divider";
 
 interface Props {
     employee: IEmployee;
@@ -72,9 +73,6 @@ const FireEmployee = ({ employee }: Props) => {
                 <div className="card">
                     <Toast ref={toast} />
                     <form onSubmit={handleSubmit(onFormSubmit)}>
-                        <h4 style={{ marginBottom: "30px" }}>
-                            Desvincular Empleado
-                        </h4>
                         <div
                             className="p-fluid formgrid grid"
                             style={{
@@ -97,7 +95,7 @@ const FireEmployee = ({ employee }: Props) => {
                                     setValue={setValue}
                                     watch={watch}
                                     isFocus={true}
-                                    tableName="CancelationReasonStatus"
+                                    tableName="CancelationTypeStatus"
                                 />
                                 {errors.idStatusFired && (
                                     <small className="p-invalid text-danger">
@@ -115,7 +113,7 @@ const FireEmployee = ({ employee }: Props) => {
                                     setValue={setValue}
                                     watch={watch}
                                     isFocus={true}
-                                    tableName="CancelationTypeStatus"
+                                    tableName="CancelationReasonStatus"
                                 />
                                 {errors.idCancelationType && (
                                     <small className="p-invalid text-danger">
@@ -201,10 +199,17 @@ const FireEmployee = ({ employee }: Props) => {
                                 />
                             </div>
                         </div>
+                        <Divider align="center">
+                        </Divider>
                         <div
                             className="flex justify-content-end mt-3"
-                            style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+                            style={{ width: "auto", gap: "5px", marginLeft: "auto" }}
                         >
+
+                            <Button
+                                label="Previsualizar"
+                                severity="info"
+                                raised />
                             <Button
                                 label="Cancelar"
                                 icon="pi pi-times"
@@ -213,7 +218,11 @@ const FireEmployee = ({ employee }: Props) => {
                                 onClick={() => { }}
                                 severity="danger"
                             />
-                            <Button label="Guardar" disabled={!employee.isActive} icon="pi pi-check" raised type="submit" />
+                            <Button
+                                label="Guardar"
+                                disabled={!employee.isActive}
+                                icon="pi pi-check"
+                                raised type="submit" />
                         </div>
                     </form>
                 </div>

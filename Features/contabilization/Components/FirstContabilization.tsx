@@ -10,6 +10,7 @@ import { CACHE_KEY_PAYROLLPAY_DETAIL } from '@/constants/cacheKeys';
 import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
 import payrollPayDetailService from '@/Features/PayrollHistory/Services/payrollPayDetailService';
 import TotalsCard from '../../PayrollHistory/Components/TotalsCard';
+import ContabilizationDifference from './ContabilizationDifference';
 
 interface Props {
     entity: IPayrollPay;
@@ -22,8 +23,6 @@ interface Props {
 const FirstContabilization = ({
     entity,
     setEditEntityDialog,
-    setSubmitted,
-    toast,
     editEntityDialog,
 }: Props) => {
 
@@ -55,6 +54,16 @@ const FirstContabilization = ({
             maximizable
         >
             <TotalsCard data={payrollResume} entity={entity} />
+            {/* 
+            {isVisible && (
+                <>
+                    <ContabilizationDifference
+                        idPayrollPay={entity.idPayrollPay}
+                        isVisible={isVisible}
+                        setIsVisible={setIsVisible}
+                    />
+                </>
+            )} */}
 
             <div className='card'>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>

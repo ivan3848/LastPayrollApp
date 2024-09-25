@@ -3,7 +3,12 @@ import { useState, useEffect } from 'react';
 import { Column } from 'primereact/column';
 import { DataTable } from 'primereact/datatable';
 import { MultiSelect } from 'primereact/multiselect';
-import CostCenter from '@/Features/costCenter/Components/CostCenter';
+import { Button } from 'primereact/button';
+import * as XLSX from 'xlsx';
+
+interface IContabilization {
+    [key: string]: any;
+}
 
 interface Props {
     entity: IContabilization[];
@@ -29,13 +34,14 @@ const FirstContabilizationTable = ({ entity }: Props) => {
         const translations: { [key: string]: string } = {
             costCenter: 'Centro de Costo',
             accountNumber: 'Número de Cuenta',
-            accountName: 'Número de Cuenta',
+            accountName: 'Nombre de Cuenta',
             firstName: 'Nombre',
             firstLastName: 'Apellido',
             department: 'Departamento',
             payrollName: 'Nombre de Nómina',
             concept: 'Concepto',
             conceptCode: 'Código de Concepto',
+            conceptAccountNumber: 'Cuenta de Concepto',
             amount: 'Monto',
             totalPay: 'Total de Pago',
             totalPayEmployee: 'Total de Pago de Empleado',
@@ -67,15 +73,43 @@ const FirstContabilizationTable = ({ entity }: Props) => {
         setVisibleColumns(orderedSelectedColumns);
     };
 
+    const exportToExcel = () => {
+        const translatedEntity = entity.map(item => {
+            const translatedItem: { [key: string]: any } = {};
+            for (const key in item) {
+                if (!key.toLowerCase().includes('id') && !key.toLowerCase().includes('is')) {
+                    translatedItem[translateColumnName(key)] = item[key];
+                }
+            }
+            return translatedItem;
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(translatedEntity);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Data');
+        XLSX.writeFile(workbook, 'data.xlsx');
+    };
+
     const header = (
-        <MultiSelect
-            value={visibleColumns}
-            options={visibleColumns}
-            optionLabel="header"
-            onChange={onColumnToggle}
-            className="w-full sm:w-20rem"
-            display="chip"
-        />
+        <div className='flex justify-between gap-3'>
+            <MultiSelect
+                value={visibleColumns}
+                options={visibleColumns}
+                optionLabel="header"
+                onChange={onColumnToggle}
+                className="w-full sm:w-20rem"
+                display="chip"
+            />
+            <Button
+                className='w-20rem ml-4'
+                label="Exportar a Excel"
+                icon="pi pi-file-excel"
+                raised severity="success"
+                text
+                onClick={exportToExcel}
+            />
+            {/* <Button label="Diferencias" icon="pi pi-wallet" onClick={() => setIsVisible(true)} /> */}
+        </div>
     );
 
     return (
