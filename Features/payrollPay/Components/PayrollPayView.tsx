@@ -151,7 +151,6 @@ const PayrollPayView = ({
                 setViewEmployees(false);
             },
         });
-
     };
 
     let options: string[] = ["Mensual", "Quincenal"];

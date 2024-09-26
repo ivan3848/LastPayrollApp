@@ -116,7 +116,7 @@ const ContabilizationTable = ({
                     }
                 />
                 <Column
-                    header="Acciones"
+                    header="Contabilizacion 1 & 2"
                     body={(rowData: IPayrollPay) => (
                         <ActionsTableContabilization
                             entity={rowData}
