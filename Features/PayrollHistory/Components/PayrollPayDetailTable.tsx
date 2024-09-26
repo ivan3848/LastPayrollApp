@@ -9,7 +9,6 @@ interface Props {
 }
 
 const PayrollPayDetailTable = ({ entity, index }: Props) => {
-
     const {
         setFilters,
         setSorts,
@@ -76,19 +75,19 @@ const PayrollPayDetailTable = ({ entity, index }: Props) => {
                 key="salary"
                 field="salary"
                 header="Salario"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
+                body={(rowData: IPayrollPayResume) => formatMoney(rowData.salary ?? 0)}
             />
             <Column
                 key="totalProfit"
                 field="totalProfit"
                 header="Total de Ingresos"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
+                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalProfit ?? 0)}
             />
             <Column
                 key="totalDeduction"
                 field="totalDeduction"
                 header="Total de Deducciones"
-                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalPay ?? 0)}
+                body={(rowData: IPayrollPayResume) => formatMoney(rowData.totalDeduction ?? 0)}
             />
             <Column
                 key="totalPay"
