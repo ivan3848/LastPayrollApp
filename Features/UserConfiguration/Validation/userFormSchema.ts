@@ -7,8 +7,7 @@ const userFormSchema = () => {
         username: z
             .string()
             .regex(/^[A-Z][a-z]*$/, {
-                message:
-                    "El campo debe comenzar con una letra mayúscula seguida de letras minúsculas",
+                message: "Debe seguir el estilo: Admin1",
             })
             .min(minValue, {
                 message: `El campo debe de tener al menos ${minValue} caracteres`,

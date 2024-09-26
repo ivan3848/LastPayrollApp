@@ -166,7 +166,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                     }}
                 />
 
-                {/* {
+                {
                     <Button
                         size="small"
                         className="min-w-min"
@@ -178,7 +178,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                             setUserResetPasswordEntityDialog(true);
                         }}
                     />
-                } */}
+                }
 
                 {
                     <Button

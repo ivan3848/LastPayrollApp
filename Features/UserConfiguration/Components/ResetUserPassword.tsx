@@ -5,7 +5,6 @@ import { Dialog } from "primereact/dialog";
 import React from "react";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
-import conceptFormSchemas from "../../concept/Validations/ConceptFormSchemas";
 
 interface Props {
     id: number;
