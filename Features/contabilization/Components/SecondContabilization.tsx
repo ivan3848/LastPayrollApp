@@ -1,14 +1,15 @@
+import { CACHE_KEY_PAYROLLPAY_DETAIL } from '@/constants/cacheKeys';
 import DialogFooterButtonPayrollPayDetails from '@/Features/PayrollHistory/Components/DialogFooterButtonPayrollPayDetails';
-import PayrollPayDetailTable from '@/Features/PayrollHistory/Components/PayrollPayDetailTable';
+import TotalsCard from '@/Features/PayrollHistory/Components/TotalsCard';
+import usePayrollPayDetailQuery from '@/Features/PayrollHistory/Hooks/usePayrollPayDetailQuery';
+import payrollPayDetailService from '@/Features/PayrollHistory/Services/payrollPayDetailService';
 import { IPayrollPay } from '@/Features/payrollPay/types/IPayrollPay';
 import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
-import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Divider } from 'primereact/divider';
-import { TabView, TabPanel } from 'primereact/tabview';
-import React, { useState } from 'react'
+import { TabPanel, TabView } from 'primereact/tabview';
+import React, { useState } from 'react';
 import SecondContabilizationTable from './SecondContabilizationTable';
-import useContabilizationById from '@/Features/payrollPay/Hook/useContabilizationById';
+import useSecondContabilizationQuery from '../Hooks/useSecondContabilizationQuery';
 
 interface Props {
     entity: IPayrollPay;
@@ -21,19 +22,25 @@ interface Props {
 const SecondContabilization = ({
     entity,
     setEditEntityDialog,
-    setSubmitted,
-    toast,
     editEntityDialog,
 }: Props) => {
 
     const [activeIndex, setActiveIndex] = useState(0);
-
     const { params } = useParamFilter(6);
-    const { data } = useContabilizationById(params, [], entity.idPayrollPay);
+    const { data } = useSecondContabilizationQuery(params, [], entity.idPayrollPay);
+
+    const { data: payrollResume } = usePayrollPayDetailQuery(
+        params,
+        [],
+        CACHE_KEY_PAYROLLPAY_DETAIL,
+        payrollPayDetailService,
+        entity.idPayrollPay
+    );
 
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
+
     return (
         <Dialog
             visible={editEntityDialog}
@@ -44,25 +51,8 @@ const SecondContabilization = ({
             onHide={hideDialog}
             maximizable
         >
-            <div className="card">
-                <Divider align="center">
-                    <h5>Periodo de Nómina # {entity.payrollNumber} - {entity.payrollName} </h5>
-                </Divider>
-                <div className='flex gap-3 justify-content-evenly'>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalProfit}</h4>
-                        <i>Total de Ingresos</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalDeduction}</h4>
-                        <i>Total Deducciones</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${data.totalPay}</h4>
-                        <i>Total Pagado</i>
-                    </div>
-                </div>
-            </div>
+            <TotalsCard data={payrollResume} entity={entity} />
+
             <div className='card'>
                 <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
                     <TabPanel header="Contabilization #2">
