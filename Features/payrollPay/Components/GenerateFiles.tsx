@@ -11,7 +11,7 @@ import usePayrollPayQuery from '../Hook/usePayrollPayQuery';
 import useGenerateFileQuery from '../Hook/useGenerateFileQuery';
 import { IPaymentLoad } from '../types/IPayrollPay';
 import * as XLSX from 'xlsx';
-import { generateTXT } from './generateTXT';
+import { saveAs } from 'file-saver';
 
 interface Props {
     setContent: (value: boolean) => void;
@@ -58,13 +58,13 @@ const GenerateFiles = ({
     const onSubmit = async (data: IGetPaymentLoadsDto) => {
         data.employeeCodes = employees?.employees.map((e: number) => e) ?? [];
 
-        const response = await generateFiles.mutateAsync(data);
+        const response = await generateFiles.mutateAsync(data) as IPaymentLoad;
 
         if (fileType) {
             generateExcel(response);
         }
         else {
-            generateTXT(response as IPaymentLoad);
+            generateFile(response as any);
         }
         hideDialog();
     };
@@ -118,6 +118,14 @@ const GenerateFiles = ({
             documentType: 'Tipo de Documento'
         };
         return translations[columnName] || columnName.charAt(0).toUpperCase() + columnName.slice(1);
+    };
+
+    const generateFile = (data: any) => {
+        const content = Object.entries(data[0])
+            .map(([key, value]) => `${key}: ${value ?? 'N/A'}`)
+            .join('\n');
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        saveAs(blob, data.fileName || "payment_details.txt");
     };
 
     const hideDialog = () => {
