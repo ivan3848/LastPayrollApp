@@ -142,13 +142,13 @@ const RolTable = ({
                 onFilterApplyClick={onFilter}
                 onFilterClear={clearFilters}
             />
-            <Column
+            {/* <Column
                 field="isSuperUser"
                 header="Administrador"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 body={(rowData) => (rowData.isSuperUser ? "Si" : "No")}
-            />
+            /> */}
             <Column
                 header="Acciones"
                 body={(rowData) => (

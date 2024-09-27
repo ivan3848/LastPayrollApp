@@ -139,11 +139,11 @@ export default function UserTableWithLogin({ submitted }: Props) {
         const items = [
             {
                 label: "Opciones",
-                icon: "pi pi-search",
+                icon: "pi pi-objects-column",
                 items: [
                     {
                         label: "Editar",
-                        icon: "pi pi-external-link",
+                        icon: "pi pi-hammer",
                         command: () => {
                             setUser(userSelected);
                             setShowEditUser(true);
@@ -172,7 +172,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                         ? [
                               {
                                   label: "Bloquear",
-                                  icon: "pi pi-lock-open",
+                                  icon: "pi pi-lock",
                                   command: () => {
                                       setUser(userSelected);
                                       setUserResetStatus(true);
@@ -185,7 +185,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
                         ? [
                               {
                                   label: "Desbloquear",
-                                  icon: "pi pi-lock",
+                                  icon: "pi pi-lock-open",
                                   command: () => {
                                       setUser(userSelected);
                                       setUserActive(true);
