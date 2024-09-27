@@ -4,6 +4,7 @@ export interface IInsertUser {
     idRol?: number;
     idEmployee?: number;
     userId?: number;
+    isBlock?: boolean;
 }
 
 export interface IUserReactivation extends IInsertUser {

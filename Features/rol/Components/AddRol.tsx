@@ -14,7 +14,6 @@ import PickUpList from "./PickUpList";
 import rolFormSchema from "../Validation/rolFormSchema";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import { CACHE_KEY_ROL } from "@/constants/cacheKeys";
-import { Toast } from "primereact/toast";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;

@@ -1,6 +1,8 @@
 import ApiService from "@/services/ApiService";
 import { IInsertUser, IUserReactivation } from "../Types/IInsertUser";
 import { IUser } from "../Types/IUser";
+import { ILogin } from "@/app/(full-page)/auth/types/ILogin";
+import { IResetPassword } from "../Types/IResetPassword";
 
 const userServiceWithOut = new ApiService<IUser, IUser>(
     "employee/employee/getEmployeeWithOutLogin"
@@ -16,7 +18,9 @@ const userInsertService = new ApiService<IInsertUser, IInsertUser>(
 const userUpdateService = new ApiService<IUserReactivation, IUserReactivation>(
     "employee/user/"
 );
-const userResetPassword = new ApiService<IUser, IUser>("employee/user/");
+const userResetPassword = new ApiService<IResetPassword, ILogin>(
+    "employee/user/changePassword"
+);
 
 export default userServiceWithOut;
 export {

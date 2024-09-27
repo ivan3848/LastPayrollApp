@@ -43,8 +43,8 @@ const ResetUserStatus = ({
             expireQuery();
             toast.current?.show({
                 severity: "success",
-                summary: "Activación!",
-                detail: "Usuario ha sido restaurado correctamente",
+                summary: "Atualizar Usuario",
+                detail: "Actualizado correctamente",
                 life: 3000,
             });
         },
@@ -78,7 +78,7 @@ const ResetUserStatus = ({
         <Dialog
             visible={userResetStatusEntityDialog}
             style={{ width: "25vw" }}
-            header="Activar Usuario"
+            header="Actualizar Usuario"
             modal
             footer={userResetProductDialogFooter}
             onHide={hideUserResetEntityDialog}
@@ -88,7 +88,7 @@ const ResetUserStatus = ({
                     className="pi pi-exclamation-triangle mr-3"
                     style={{ fontSize: "2rem" }}
                 />
-                {id && <span>¿Está seguro de activar el usuario?</span>}
+                {id && <span>¿Está seguro de hacer este cambio?</span>}
             </div>
         </Dialog>
     );

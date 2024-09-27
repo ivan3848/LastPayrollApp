@@ -4,6 +4,7 @@ import { LayoutProvider } from "../layout/context/layoutcontext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
+import es from "primelocale/es.json";
 import { PrimeReactProvider, addLocale, locale } from "primereact/api";
 import "primereact/resources/primereact.css";
 import { useEffect, useState } from "react";
@@ -11,7 +12,6 @@ import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
 import Login from "./(full-page)/auth/login/page";
-import es from "primelocale/es.json";
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -48,7 +48,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
                         {isLoggedIn ? (
                             <LayoutProvider>{children}</LayoutProvider>
                         ) : (
-                            <Login />
+                            <>
+                                <Login />
+                            </>
                         )}
                     </PrimeReactProvider>
                 </QueryClientProvider>
