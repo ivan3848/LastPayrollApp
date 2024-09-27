@@ -7,18 +7,34 @@ import { useForm } from "react-hook-form";
 import { InputSwitch } from "primereact/inputswitch";
 import FiredEmployeeFormSchema from "../Validation/FiredEmployeeFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import firedEmployeeService from "../Services/firedEmployee";
 import useCrudModals from '@/Features/Shared/Hooks/useCrudModals';
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
+import useFiredEmployeeEntityQuery from "../Hooks/useFiredEmployeeEntityQuery";
+import Link from "next/link";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 interface Props {
     employee: IEmployee;
+    setCloseDialog: (value: boolean) => void;
 }
 
-const FireEmployee = ({ employee }: Props) => {
+const style: React.CSSProperties = {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    color: "#000",
+    zIndex: 9999,
+};
+
+const FireEmployee = ({ employee, setCloseDialog }: Props) => {
 
     const {
         setSubmitted,
@@ -29,6 +45,9 @@ const FireEmployee = ({ employee }: Props) => {
     const [notice, setNotice] = useState(false);
     const [vacation, setVacation] = useState(false);
     const [unemployment, setUnemployment] = useState(false);
+    const [isPreview, setIsPreview] = useState(false);
+    const [completed, setCompleted] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const addEntitySchema = FiredEmployeeFormSchema();
 
@@ -43,7 +62,7 @@ const FireEmployee = ({ employee }: Props) => {
         resolver: zodResolver(addEntitySchema),
     });
 
-    const addEntity = useAddEntityQuery({
+    const addEntity = useFiredEmployeeEntityQuery({
         toast,
         setSubmitted,
         reset,
@@ -51,7 +70,12 @@ const FireEmployee = ({ employee }: Props) => {
         message: "Empleado desvinculado correctamente",
     });
 
-    const onFormSubmit = (data: IFireEmployee) => {
+    const onPreview = async (previewData: IFireEmployee) => {
+        const response = await firedEmployeeService.post(previewData);
+        console.log(response);
+    };
+
+    const onFormSubmit = async (data: IFireEmployee) => {
         data.idEmployee = employee.idEmployee;
         data.isChristmasPayment = pagoNavidad;
         data.isNotice = notice;
@@ -59,12 +83,32 @@ const FireEmployee = ({ employee }: Props) => {
         data.isUnemployment = unemployment;
         data.firedDate = data.firedDate ?? new Date();
         data.idStatusFired = data.idStatusFired;
+        data.isPreview = isPreview;
 
-        addEntity.mutate(data, {
+        setLoading(true);
+
+        if (isPreview) {
+            onPreview(data);
+            setLoading(false);
+            return;
+        }
+
+        const test = await addEntity.mutateAsync(data, {
             onSuccess: () => {
-                window.location.reload();
+                setLoading(false);
+            },
+            onError: () => {
+                setLoading(false);
             },
         });
+
+        if (!test.toString().includes("Hay")) {
+            setCompleted(true);
+        }
+    };
+
+    const hideDialog = () => {
+        setCloseDialog(false);
     };
 
     return (
@@ -72,6 +116,41 @@ const FireEmployee = ({ employee }: Props) => {
             <div className="col-12 mx-auto">
                 <div className="card">
                     <Toast ref={toast} />
+                    {loading && (
+                        <div style={style}>
+                            <ProgressSpinner aria-label="Ejecutando proceso de Nómina..." />
+                        </div>
+                    )}
+                    {completed &&
+                        <div style={style}>
+                            <div className="card flex flex-column gap-3 align-items-center">
+                                <div className="card">
+                                    <h5 className="my-2">
+                                        Empleado desvinculado correctamente!
+                                        <i className="pi pi-check-circle ml-2"
+                                            style={{ fontSize: '1.3rem', marginTop: '0.2rem' }}
+                                        />
+                                    </h5>
+                                </div>
+                                <div className="flex gap-3">
+                                    <Link href="/employee">
+                                        <Button
+                                            onClick={() => {
+                                                setCompleted(false)
+                                            }}
+                                            icon="pi pi-times" label="Cerrar"
+                                            className="p-button-danger" />
+                                    </Link>
+                                    <Link href="/">
+                                        <Button
+                                            icon="pi pi-list"
+                                            label="Ver detalles"
+                                        />
+                                    </Link>
+                                </div>
+                            </div>
+                        </div>
+                    }
                     <form onSubmit={handleSubmit(onFormSubmit)}>
                         <div
                             className="p-fluid formgrid grid"
@@ -203,25 +282,28 @@ const FireEmployee = ({ employee }: Props) => {
                         </Divider>
                         <div
                             className="flex justify-content-end mt-3"
-                            style={{ width: "auto", gap: "5px", marginLeft: "auto" }}
+                            style={{ width: "auto", gap: "6px", marginLeft: "auto" }}
                         >
-
                             <Button
                                 label="Previsualizar"
                                 severity="info"
-                                raised />
+                                icon="pi pi-eye"
+                                onClick={() => setIsPreview(true)}
+                                type="submit"
+                                raised
+                            />
                             <Button
                                 label="Cancelar"
-                                icon="pi pi-times"
+                                icon="pi pi-undo"
                                 raised
                                 type="button"
-                                onClick={() => { }}
+                                onClick={hideDialog}
                                 severity="danger"
                             />
                             <Button
-                                label="Guardar"
+                                label="Desvincular"
                                 disabled={!employee.isActive}
-                                icon="pi pi-check"
+                                icon="pi pi-ban"
                                 raised type="submit" />
                         </div>
                     </form>

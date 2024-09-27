@@ -72,7 +72,10 @@ const EmployeeActions = ({
                         <EmployeeOptions setAction={setOpenAction} />
                     )}
                     {openAction === EmployeeOptionsEnum.FireEmployee && (
-                        <FireEmployee employee={employee} />
+                        <FireEmployee
+                            employee={employee}
+                            setCloseDialog={setShowEmployeeActions}
+                        />
                     )}
                     {openAction === EmployeeOptionsEnum.BankManagement && (
                         <BankEmployeeHistory id={employee.idEmployee!} />
