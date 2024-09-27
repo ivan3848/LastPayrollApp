@@ -1,3 +1,4 @@
+import { useMemo, useCallback, useState } from "react";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
@@ -11,8 +12,6 @@ import {
     DataTableSortEvent,
     DataTableValueArray,
 } from "primereact/datatable";
-import { useState } from "react";
-import "animate.css";
 import rolService from "../Service/rolService";
 import IRol from "../Types/IRol";
 
@@ -43,7 +42,8 @@ const RolTable = ({
         params,
     } = useParamFilter();
 
-    const listOfDependencies: boolean[] = [submitted];
+    const listOfDependencies = useMemo(() => [submitted], [submitted]);
+
     const { data, isLoading } = useEntityQuery(
         params,
         listOfDependencies,
@@ -51,51 +51,62 @@ const RolTable = ({
         rolService
     );
 
-    const onPage = (event: DataTablePageEvent) => {
-        setPage(event.page! + 1);
-        setPageSize(event.rows);
-    };
-
-    const onSort = (event: DataTableSortEvent) => {
-        switch (event.sortOrder) {
-            case 1:
+    const onSort = useCallback(
+        (event: DataTableSortEvent) => {
+            if (event.sortOrder === 1) {
                 setSorts([{ sortBy: event.sortField, isAsc: true }]);
-                break;
-            case -1:
+            } else if (event.sortOrder === -1) {
                 setSorts([{ sortBy: event.sortField, isAsc: false }]);
-                break;
-            default:
+            } else {
                 clearSorts();
-                break;
-        }
-    };
+            }
+        },
+        [setSorts, clearSorts]
+    );
 
-    const onFilter = (event: any) => {
-        setFilters([
-            {
-                column: event.field,
-                value: event.constraints.constraints?.[0].value,
-            },
-        ]);
-    };
+    const onFilter = useCallback(
+        (event: any) => {
+            const timeout = setTimeout(() => {
+                setFilters([
+                    {
+                        column: event.field,
+                        value: event.constraints?.constraints?.[0]?.value,
+                    },
+                ]);
+            }, 300);
 
-    const header = (
-        <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Roles</h3>
+            return () => clearTimeout(timeout);
+        },
+        [setFilters]
+    );
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
-        </div>
+    const onPage = useCallback(
+        (event: DataTablePageEvent) => {
+            setPage(event.page! + 1);
+            setPageSize(event.rows);
+        },
+        [setPage, setPageSize]
+    );
+
+    const header = useMemo(
+        () => (
+            <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                <h3 className="m-0">Roles</h3>
+                <Button
+                    label="Agregar"
+                    icon="pi pi-plus"
+                    severity="info"
+                    className="mr-2"
+                    onClick={handleAdd}
+                />
+            </div>
+        ),
+        [handleAdd]
     );
 
     return (
         <DataTable
-            value={data.items}
+            value={data?.items}
             expandedRows={expandedRows}
             onRowToggle={(e) => setExpandedRows(e.data)}
             header={header}
@@ -128,18 +139,16 @@ const RolTable = ({
                 filterField="description"
                 filterPlaceholder="Buscar por descripción"
                 showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
+                onFilterApplyClick={onFilter}
                 onFilterClear={clearFilters}
-            ></Column>
-
+            />
             <Column
                 field="isSuperUser"
                 header="Administrador"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 body={(rowData) => (rowData.isSuperUser ? "Si" : "No")}
-            ></Column>
-
+            />
             <Column
                 header="Acciones"
                 body={(rowData) => (
@@ -150,7 +159,7 @@ const RolTable = ({
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
-            ></Column>
+            />
         </DataTable>
     );
 };
