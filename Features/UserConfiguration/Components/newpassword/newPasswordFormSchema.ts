@@ -7,7 +7,8 @@ const newPasswordFormSchema = () => {
         oldPassword: z
             .string()
             .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)[A-Za-z\d]*$/, {
-                message: "El puede contener letras y numeros.",
+                message:
+                    "Debe contener una letra mayuscula, una minuscula y un número",
             })
             .min(minValue, {
                 message: `El campo debe de tener al menos ${minValue} caracteres`,
