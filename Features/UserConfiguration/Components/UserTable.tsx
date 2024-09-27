@@ -25,8 +25,6 @@ const sortOptionsMap = {
     "": "Ordenar por...",
     idEmployee: "Código de empleado",
     name: "Nombre",
-    position: "Posición",
-    department: "Departamento",
 };
 const sortOptions = Object.entries(sortOptionsMap).map(([value, label]) => ({
     label,

@@ -27,8 +27,6 @@ const sortOptions = [
     { label: "Ordenar por...", value: "" },
     { label: "Código de empleado", value: "idEmployee" },
     { label: "Nombre", value: "name" },
-    { label: "Posición", value: "position" },
-    { label: "Departamento", value: "department" },
 ];
 
 export default function UserTableWithLogin({ submitted }: Props) {
