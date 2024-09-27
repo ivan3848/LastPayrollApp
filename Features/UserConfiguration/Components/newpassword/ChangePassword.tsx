@@ -49,9 +49,7 @@ const ChangePassword = ({ entity, setSubmitted }: Props) => {
 
     const onSubmit = (data: ILogin) => {
         data.username = entity?.username;
-        simulateLoading(() => {
-            editEntity.mutate(data);
-        });
+
         if (data.oldPassword !== data.newPassword) {
             return toast.current?.show({
                 severity: "error",
@@ -60,6 +58,9 @@ const ChangePassword = ({ entity, setSubmitted }: Props) => {
                 life: 3000,
             });
         }
+        simulateLoading(() => {
+            editEntity.mutate(data);
+        });
     };
 
     const handleCancel = () => {
