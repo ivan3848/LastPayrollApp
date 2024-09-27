@@ -8,10 +8,15 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import * as XLSX from "xlsx";
 import useEmployeeForReportQuery from "../Hook/useEmployeeForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { PDFViewer } from "@react-pdf/renderer";
+import { Quixote } from "../Quixote";
+import { Invoice } from "./Invoice";
+import { createRoot } from "react-dom/client";
+import InvoiceViewer from "./InvoiceViewer";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -37,9 +42,11 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
     }
 
     const { data, isLoading } = useEmployeeForReportQuery(filterReport, params);
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -81,36 +88,32 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código de empleado",
                     "Número de cuenta",
                     "Nombre Completo",
-                    "Codigo Posicion Jerarquica",
+                    "Código Posición Jerárquica",
                     "Primer Apellido",
                     "Segundo Apellido",
                     "Sexo",
-                    "Cedula",
+                    "Cédula",
                     "Fecha de inicio",
                     "Fecha de nacimiento",
                     "Salario",
-                    "Posicion",
-                    "Codigo de posicion",
+                    "Posición",
+                    "Código de posición",
                     "Departamento",
                     "Supervisor",
-                    "Codigo de Departamento",
-                    //"Es supervisor",
-                    "Funcion",
-                    "Codigo de grupo",
-                    //"Imagen de Empleado",
+                    "Código de Departamento",
+                    "Función",
+                    "Código de grupo",
                     "Sindicato",
-                    //"Codigo position jerarquica",
-                    "Codigo de horario",
+                    "Código de horario",
                     "Horario Laboral",
-                    "Codigo Area de nómina",
+                    "Código Area de nómina",
                     "Discapacidad",
-                    "Codigo zona",
+                    "Código zona",
                     "Zona",
-                    "Codigo Nacionalidad",
-                    "Codigo Educacion",
-                    "Fecha de Desvinculacion",
-                    "Status Ocupacion",
-                    // "Estado de empleado",
+                    "Código Nacionalidad",
+                    "Código Educación",
+                    "Fecha de Desvinculación",
+                    "Status Ocupación",
                     "Area de nómina",
                     "Centro de Costo",
                     "Correo",
@@ -137,12 +140,9 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.departamento,
                 item.supervisor,
                 item.idDepartment,
-                //item.isSupervisor,
                 item.functionDescription,
                 item.idGroupManager,
-                //item.employeeImage,
                 item.sindicate,
-                //item.idHierarchyPositionManager,
                 item.idWorkScheduler,
                 item.workScheduler,
                 item.idPayrollArea,
@@ -153,7 +153,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.idEducation,
                 item.firedDate,
                 item.isOccupied,
-                //item.employeeStatus,
                 item.payrollArea,
                 item.costCenter,
                 item.email,
@@ -168,7 +167,64 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const employeesWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const header = [
+            "Código de empleado",
+            "Número de cuenta",
+            "Nombre Completo",
+            "Código Posición Jerárquica",
+            "Primer Apellido",
+            "Segundo Apellido",
+            "Sexo",
+            "Cédula",
+            "Fecha de inicio",
+            "Fecha de nacimiento",
+            "Salario",
+            "Posición",
+            "Código de posición",
+            "Departamento",
+            "Supervisor",
+            "Código de Departamento",
+            "Función",
+            "Código de grupo",
+            "Sindicato",
+            "Código de horario",
+            "Horario Laboral",
+            "Código Area de nómina",
+            "Discapacidad",
+            "Código zona",
+            "Zona",
+            "Código Nacionalidad",
+            "Código Educación",
+            "Fecha de Desvinculación",
+            "Status Ocupación",
+            "Area de nómina",
+            "Centro de Costo",
+            "Correo",
+            "Labor Directa",
+            "Banco",
+            "Método de pago",
+            "Número de cuenta",
+        ];
+
+        const mapObjectToHeader = (item: any, header: any) => {
+            const mappedObject = {} as any;
+            header.forEach((key: any, index: any) => {
+                const originalKey = Object.keys(item)[index];
+                mappedObject[key] = item[originalKey];
+            });
+            return mappedObject;
+        };
+
+        const renamedEmployees = employeesWithoutIdentifier.map((item) =>
+            mapObjectToHeader(item, header)
+        );
+
+        const worksheetData = [header, ...renamedEmployees.map(Object.values)];
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "EmployeeForReport.xlsx");
@@ -207,9 +263,25 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
             />
         </div>
     );
+    const openNewTab = () => {
+        const newTab = window.open("", "_blank");
+        if (newTab) {
+            newTab.document.write('<div id="invoice-viewer-root"></div>');
+            newTab.document.close();
+
+            const rootElement = newTab.document.getElementById(
+                "invoice-viewer-root"
+            );
+            if (rootElement) {
+                const root = createRoot(rootElement);
+                root.render(<InvoiceViewer />);
+            }
+        }
+    };
 
     return (
         <div className="card">
+            <button onClick={openNewTab}>Mock Comprobante de nomina</button>
             <DataTable
                 id="EmployeeForReport-Table"
                 dataKey="identifier"
@@ -239,6 +311,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -269,19 +342,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
-                <Column
-                    field="idHierarchyPosition"
-                    header="Codigo Posicion Jerarquica"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idHierarchyPosition"
-                    filterPlaceholder="Buscar por código de posición jerárquica"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
                 <Column
                     field="firstLastName"
                     header="Primer Apellido"
@@ -410,12 +470,12 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="departamento"
+                    field="departament"
                     header="Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="departamento"
+                    filterField="Departamento!"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -447,20 +507,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
-
-                <Column
-                    field="isSupervisor"
-                    header="Es supervisor"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="isSupervisor"
-                    filterPlaceholder="Buscar por supervisor"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
                 <Column
                     field="functionDescription"
                     header="Funcion"
@@ -488,19 +534,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="employeeImage"
-                    header="Imagen de Empleado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="employeeImage"
-                    filterPlaceholder="Buscar por imagen de empleado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
                     field="sindicate"
                     header="Sindicato"
                     headerStyle={{ minWidth: "15rem" }}
@@ -508,18 +541,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="sindicate"
                     filterPlaceholder="Buscar por sindicato"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="idHierarchyPositionManager"
-                    header="Codigo position jerarquica"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idHierarchyPositionManager"
-                    filterPlaceholder="Buscar por código de posición jerárquica"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
@@ -642,18 +663,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="isOccupied"
                     filterPlaceholder="Buscar por status de ocupación"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="employeeStatus"
-                    header="Estado de empleado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="employeeStatus"
-                    filterPlaceholder="Buscar por estado de empleado"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

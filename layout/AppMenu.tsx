@@ -117,10 +117,8 @@ const AppMenu = () => {
                     to: "",
                 },
             ],
-        },
-            ],
-        },
-
+        },  
+    
         {
             label: "GESTION USUARIOS",
             icon: "pi pi-fw pi-users",
