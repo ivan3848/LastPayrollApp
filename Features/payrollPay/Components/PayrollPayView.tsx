@@ -20,6 +20,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { classNames } from "primereact/utils";
 import Link from "next/link";
+import GenerateFiles from "./GenerateFiles";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -71,6 +72,7 @@ const PayrollPayView = ({
     const [activeIndex, setActiveIndex] = useState(0);
     const [completed, setCompleted] = useState(false);
     const [viewEmployees, setViewEmployees] = useState(false);
+    const [generatefile, setGenerateFiles] = useState(false);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -167,6 +169,18 @@ const PayrollPayView = ({
                     <ProgressSpinner aria-label="Ejecutando proceso de Nómina..." />
                 </div>
             )}
+
+            {
+                generatefile && (
+                    <GenerateFiles
+                        setContent={setGenerateFiles}
+                        content={generatefile}
+                        setEmployees={setEmployees}
+                        employees={employees}
+                        setViewEmployees={setViewEmployees}
+                    />
+                )
+            }
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
@@ -506,6 +520,7 @@ const PayrollPayView = ({
                             || entityPayrollManagement?.idStatus !== 151
                             || loading
                         }
+                        setGenereateFiles={() => setGenerateFiles(true)}
                     />
                 </div>
             </div>
