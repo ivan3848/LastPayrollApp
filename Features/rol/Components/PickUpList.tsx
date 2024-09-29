@@ -95,7 +95,7 @@ export default function PickUpList<T extends { canWrite: boolean }>({
                         targetFilterPlaceholder="Buscar..."
                     />
 
-                    <Paginator
+                    {/* <Paginator
                         first={sourcePage * pageSize}
                         rows={pageSize}
                         totalRecords={source.length}
@@ -108,7 +108,7 @@ export default function PickUpList<T extends { canWrite: boolean }>({
                         totalRecords={target.length}
                         onPageChange={onTargetPageChange}
                         className="p-mt-3"
-                    />
+                    /> */}
                 </>
             )}
         </Card>

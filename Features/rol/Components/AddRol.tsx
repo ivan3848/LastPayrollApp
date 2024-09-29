@@ -52,7 +52,16 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
 
     const expireQuery = useExpireSessionQuery([CACHE_KEY_ROL]);
     const onSubmit = (data: IRol) => {
-        if (target.length === 0) return;
+        if (target.length === 0) {
+            toast.current.show({
+                severity: "error",
+                summary: "Error",
+                detail: "Debe seleccionar al menos un modulo",
+                life: 3000,
+            });
+            return;
+        }
+
         data.rolModule = target;
         addEntity.mutateAsync(data).then(() => {
             expireQuery();
@@ -126,6 +135,11 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
                             dataKey={"module"}
                             pageSize={25}
                         />
+                        {errors.module && (
+                            <small className="p-invalid text-red-500 text-lg">
+                                {errors.module.message?.toString()}
+                            </small>
+                        )}
                     </div>
                 </div>
 

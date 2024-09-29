@@ -10,7 +10,7 @@ const PayrollDetailPage = () => {
 
     const [isVisible, setIsVisible] = React.useState(true);
 
-    const payrollItem = data?.items?.findLast((item) => item);
+    const payrollItem = React.useMemo(() => data?.items?.findLast((item) => item), [data]);
 
     return (
         <div>

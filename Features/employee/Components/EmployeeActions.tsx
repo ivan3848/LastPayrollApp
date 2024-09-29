@@ -4,7 +4,7 @@ import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
-import FireEmployee from "./FireEmployee";
+import FireEmployee from "./FiredEmployee/Components/FireEmployee";
 import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
 import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
 import Dependant from "./Dependant/Dependant";
@@ -72,7 +72,10 @@ const EmployeeActions = ({
                         <EmployeeOptions setAction={setOpenAction} />
                     )}
                     {openAction === EmployeeOptionsEnum.FireEmployee && (
-                        <FireEmployee employee={employee} />
+                        <FireEmployee
+                            employee={employee}
+                            setCloseDialog={setShowEmployeeActions}
+                        />
                     )}
                     {openAction === EmployeeOptionsEnum.BankManagement && (
                         <BankEmployeeHistory id={employee.idEmployee!} />
@@ -109,8 +112,8 @@ const EmployeeActions = ({
                     )}
                     {openAction ===
                         EmployeeOptionsEnum.WorkSchedulerSubstitute && (
-                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
-                    )}
+                            <WorkSchedulerSubstitute id={employee.idEmployee!} />
+                        )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />
                     )}

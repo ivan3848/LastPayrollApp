@@ -2,14 +2,23 @@ import { Button } from "primereact/button";
 
 interface Props {
     isReadOnly?: boolean;
+    setGenereateFiles: () => void;
 }
 
-const DialogFooterButtonPayrollPay = ({ isReadOnly }: Props) => {
+const DialogFooterButtonPayrollPay = ({ isReadOnly, setGenereateFiles }: Props) => {
     return (
         <div
             className="flex justify-content-end mt-3"
-            style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+            style={{ width: "50%", gap: "5px", marginLeft: "auto" }}
         >
+            <Button
+                label="Generar Archivos"
+                icon="pi pi-file-excel"
+                onClick={setGenereateFiles}
+                raised
+                severity="success"
+                text
+            />
             <Button
                 label="Correr Nómina"
                 icon="pi pi-check"

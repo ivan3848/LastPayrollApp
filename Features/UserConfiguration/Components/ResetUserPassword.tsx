@@ -25,13 +25,11 @@ const ResetUserPassword = ({
 }: Props) => {
     const apiService = new ApiService(endpoint);
     const expireQuery = useExpireSessionQuery([CACHE_KEY_USER_CONFIGURATION]);
-
     const userResetPasswordRegister = useMutation({
-        mutationFn: (id: number) => apiService.posts({ userId: id }),
+        mutationFn: (id: number) => apiService.post(id),
 
         onError: (error: any) => {
             setUserResetPasswordEntityDialog(false);
-
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",

@@ -1,7 +1,5 @@
-import DialogFooterButtons from '@/Features/Shared/Components/DialogFooterButtons';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { Divider } from 'primereact/divider';
 import { TabView, TabPanel } from 'primereact/tabview';
 import React, { useState } from 'react'
 import PayrollPayDetailTable from './PayrollPayDetailTable';
@@ -12,6 +10,7 @@ import usePayrollPayDetailQuery from '../Hooks/usePayrollPayDetailQuery';
 import payrollPayDetailService, { payrollPayDetailNotPaidService } from '../Services/payrollPayDetailService';
 import DialogFooterButtonPayrollPayDetails from './DialogFooterButtonPayrollPayDetails';
 import Link from 'next/link';
+import TotalsCard from './TotalsCard';
 
 interface Props {
     editEntityDialog: boolean;
@@ -46,20 +45,6 @@ const PayrollPayDetails = ({
         entity.idPayrollPay
     );
 
-    const [resume, setResume] = useState({
-        totalPay: 0.00,
-        totalDeduction: 0.00,
-        totalProfit: 0.00,
-    });
-
-    data.items.forEach((item) => {
-        setResume({
-            totalPay: item.totalPay ?? 20,
-            totalDeduction: item.totalDeduction ?? 0,
-            totalProfit: item.totalProfit ?? 0,
-        });
-    });
-
     const hideDialog = () => {
         setEditEntityDialog(false);
     };
@@ -72,26 +57,10 @@ const PayrollPayDetails = ({
             modal
             className="p-fluid"
             onHide={hideDialog}
+            maximizable
         >
-            <div className="card">
-                <Divider align="center">
-                    <h5>Periodo de Nómina # {entity.payrollNumber} - {entity.payrollName} </h5>
-                </Divider>
-                <div className='flex gap-3 justify-content-evenly'>
-                    <div className="p-col-12">
-                        <h4>RD${resume.totalProfit}</h4>
-                        <i>Total de Ingresos</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${resume.totalDeduction}</h4>
-                        <i>Total Deducciones</i>
-                    </div>
-                    <div className="p-col-12">
-                        <h4>RD${resume.totalPay}</h4>
-                        <i>Total Pagado</i>
-                    </div>
-                </div>
-            </div>
+            <TotalsCard data={data} entity={entity} />
+
             <div className='card'>
                 <div className="flex mb-2 gap-2 justify-content-end">
                     <Button
@@ -109,7 +78,7 @@ const PayrollPayDetails = ({
                             entity={data.items}
                         />
                     </TabPanel>
-                    <TabPanel header="Nomina Sin Liquidar">
+                    <TabPanel header="Nomina Con Saldo Cero">
                         <PayrollPayDetailTable
                             entity={data.items}
                             index={activeIndex}

@@ -44,7 +44,6 @@ const DeletePayrollDialog = ({
     const {
         handleSubmit,
         watch,
-        register,
         reset,
         setValue,
         formState: { errors },

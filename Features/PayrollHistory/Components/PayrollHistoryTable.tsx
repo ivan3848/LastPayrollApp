@@ -110,7 +110,7 @@ const PayrollHistoryTable = ({
                 />
                 <Column
                     field="PayrollPayDate"
-                    header="Fecha de nómina"
+                    header="Fecha de corrida"
                     body={(rowData: IPayrollPay) =>
                         formatDate(rowData.payrollPayDate?.toString()!)
                     }

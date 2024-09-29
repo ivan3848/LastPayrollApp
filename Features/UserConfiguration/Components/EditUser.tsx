@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useRolQuery from "@/Features/rol/Hooks/useRolQuery";
 import useEditUser from "../Hooks/useEditUser";
 import userFormSchema from "../Validation/userFormSchema";
@@ -69,6 +68,7 @@ const EditUser = ({
 
     const onSubmit = (data: IInsertUser) => {
         data.idEmployee = id;
+        data.password = entity.users[0].password;
         data.userId = entity.users[0].userId;
 
         editEntity.mutateAsync(data).then(() => {
@@ -113,7 +113,7 @@ const EditUser = ({
                             )}
                         </div>
 
-                        <div className="field col-12 md:col-6 lg:col-4">
+                        {/* <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="password">
                                 Contraseña de Usuario
                             </label>
@@ -130,7 +130,7 @@ const EditUser = ({
                                     {errors.password.message?.toString()}
                                 </small>
                             )}
-                        </div>
+                        </div> */}
                         <div className="field col-12 md:col-6 lg:col-8">
                             <label htmlFor="idRol">Rol</label>
                             <ComponentToTest

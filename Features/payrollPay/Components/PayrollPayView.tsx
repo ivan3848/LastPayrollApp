@@ -1,7 +1,5 @@
-import {
-    lastPayrollManagementService,
-    payrollManagementByPayrollNumberService,
-} from "@/Features/payrollManagement/payrollManagementService";
+"use client";
+import { lastPayrollManagementService, payrollManagementByPayrollNumberService } from "@/Features/payrollManagement/payrollManagementService";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { InputNumber } from "primereact/inputnumber";
 import { InputSwitch } from "primereact/inputswitch";
@@ -22,9 +20,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { ConfirmPopup } from "primereact/confirmpopup";
 import { classNames } from "primereact/utils";
 import Link from "next/link";
-import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
-import { createRoot } from "react-dom/client";
-import { IGetPayrollExecution } from "../types/IGetPayrollExecution";
+import GenerateFiles from "./GenerateFiles";
 import React from "react";
 
 interface Props {
@@ -77,6 +73,7 @@ const PayrollPayView = ({
     const [activeIndex, setActiveIndex] = useState(0);
     const [completed, setCompleted] = useState(false);
     const [viewEmployees, setViewEmployees] = useState(false);
+    const [generatefile, setGenerateFiles] = useState(false);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -121,7 +118,7 @@ const PayrollPayView = ({
             period
         )) as IPayrollManagement;
         setEntityPayrollManagement(payrollData);
-    }, [watch, entityPayrollManagement, setEntityPayrollManagement, loading]);
+    }, [watch, entityPayrollManagement, setEntityPayrollManagement]);
 
     useEffect(() => {
         if (payrollNumber && initialPayrollNumber.current === null) {
@@ -136,32 +133,6 @@ const PayrollPayView = ({
         }
     }, [entityPayrollManagement, setValue]);
 
-    const executeReport = (data: IGetPayrollExecution[]) => {
-        if (data?.length) {
-            const getPayrollExecutionWithoutIdentifier = data!.map(
-                ({ identifier, ...rest }) => rest
-            );
-
-            const newTab = window.open("", "_blank");
-            if (newTab) {
-                newTab.document.write('<div id="invoice-viewer-root"></div>');
-                newTab.document.close();
-
-                const rootElement = newTab.document.getElementById(
-                    "invoice-viewer-root"
-                );
-                if (rootElement) {
-                    const root = createRoot(rootElement);
-                    root.render(
-                        <InvoiceViewer
-                            data={getPayrollExecutionWithoutIdentifier}
-                        />
-                    );
-                }
-            }
-        }
-    };
-
     const onSubmit = async (data: IPayrollPay) => {
         data.payrollNumber =
             data.payrollNumber ?? entityPayrollManagement?.payrollNumber;
@@ -169,24 +140,24 @@ const PayrollPayView = ({
             entityPayrollManagement!.payrollPeriodStart
         );
         data.endDate = new Date(entityPayrollManagement!.payrollPeriodEnd);
-        data.startDate = new Date(
-            entityPayrollManagement!.retroactivePeriodLimit
-        );
+        data.startDate = new Date(entityPayrollManagement!.retroactivePeriodLimit);
         data.employees = employees?.employees;
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
 
         setLoading(true);
 
-        try {
-            await addEntity.mutateAsync(data).then((res: IPayrollPay) => {
-                executeReport(res.getPayrollExecution!);
-            });
-        } finally {
-            setLoading(false);
-            setCompleted(true);
-            setViewEmployees(false);
-        }
+        await addEntity.mutateAsync(data, {
+            onSuccess: () => {
+                setLoading(false);
+                setCompleted(true);
+                setViewEmployees(false);
+            },
+            onError: () => {
+                setLoading(false);
+                setViewEmployees(false);
+            },
+        });
     };
 
     let options: string[] = ["Mensual", "Quincenal"];
@@ -205,6 +176,18 @@ const PayrollPayView = ({
                     <ProgressSpinner aria-label="Ejecutando proceso de Nómina..." />
                 </div>
             )}
+
+            {
+                generatefile && (
+                    <GenerateFiles
+                        setContent={setGenerateFiles}
+                        content={generatefile}
+                        setEmployees={setEmployees}
+                        employees={employees}
+                        setViewEmployees={setViewEmployees}
+                    />
+                )
+            }
             <div className="col-12">
                 <div className="card">
                     <Toast ref={toast} />
@@ -651,6 +634,7 @@ const PayrollPayView = ({
                             entityPayrollManagement?.idStatus !== 151 ||
                             loading
                         }
+                        setGenereateFiles={() => setGenerateFiles(true)}
                     />
                 </div>
             </div>

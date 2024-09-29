@@ -93,7 +93,7 @@ const AppMenu = () => {
                 {
                     label: "Contabilizacion",
                     icon: "pi pi-fw pi-calculator",
-                    to: "",
+                    to: "/contabilization",
                 },
             ],
         },
@@ -117,8 +117,7 @@ const AppMenu = () => {
                     to: "",
                 },
             ],
-        },  
-    
+        },
         {
             label: "GESTION USUARIOS",
             icon: "pi pi-fw pi-users",

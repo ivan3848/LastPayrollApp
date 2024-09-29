@@ -61,7 +61,7 @@ const User = () => {
                                 <UserTable submitted={submitted} />
                             </Suspense>
                         </TabPanel>
-                        <TabPanel header="Con login" leftIcon="pi pi-map mr-2">
+                        <TabPanel header="Con Login" leftIcon="pi pi-map mr-2">
                             <Suspense fallback={<TabSkeletonTemplate />}>
                                 <UserTableWithLogin submitted={false} />
                             </Suspense>

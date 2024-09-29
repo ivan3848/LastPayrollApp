@@ -88,6 +88,16 @@ const EditRol = ({
         formData.idRol = entity.idRol;
         formData.rolModule = target;
         formData.description = entity.description;
+
+        if (target.length === 0) {
+            toast.current.show({
+                severity: "error",
+                summary: "Error",
+                detail: "Debe seleccionar al menos un modulo",
+                life: 3000,
+            });
+            return;
+        }
         editEntity.mutate(formData);
     };
 
@@ -123,13 +133,13 @@ const EditRol = ({
             style={{ width: "55vw" }}
             header="Editar Configuración de Usuario"
             modal
-            className="p-fluid"
+            className="p-fluid m-auto"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field col-12 md:col-6 lg:col-4">
                     <label htmlFor="description" className="w-full">
-                        Descripción
+                        Descrimpción
                     </label>
                     <InputText
                         {...register("description")}
@@ -145,7 +155,7 @@ const EditRol = ({
                     )}
                 </div>
 
-                <div className="col-12" id="rolModuleId">
+                <div id="rolModuleId">
                     <div className="p-fluid formgrid grid" id="rolModuleId">
                         <PickUpList
                             source={source}
