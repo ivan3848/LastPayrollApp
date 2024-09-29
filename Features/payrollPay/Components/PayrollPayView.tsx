@@ -25,6 +25,7 @@ import Link from "next/link";
 import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
 import { createRoot } from "react-dom/client";
 import { IGetPayrollExecution } from "../types/IGetPayrollExecution";
+import React from "react";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
