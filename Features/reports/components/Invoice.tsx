@@ -1,3 +1,4 @@
+import { IGetPayrollExecution } from "@/Features/payrollPay/types/IGetPayrollExecution";
 import {
     Document,
     Page,
@@ -8,511 +9,418 @@ import {
 } from "@react-pdf/renderer";
 import React from "react";
 
-const dummyData = {
-    employees: [
-        {
-            idEmployee: 1,
-            items: [
-                {
-                    description: "Horas No Laboradas",
-                    quantity: "2.0",
-                    price: 50.26,
-                },
-                {
-                    description: "Horas Extras 45%",
-                    quantity: "1.0",
-                    price: 100.21,
-                },
-                {
-                    description: "Horas Extras 100%",
-                    quantity: "3.0",
-                    price: 2010.6,
-                },
-                {
-                    description: "Horas Extras Fer. 165%",
-                    quantity: "2.0",
-                    price: 11855.0,
-                },
-                {
-                    description: "Prima Nocturnidad 15%",
-                    quantity: "1.0",
-                    price: 223.67,
-                },
-                { description: "Salario", quantity: "3.0", price: 5716.21 },
-                {
-                    description: "AFP Aporte Empleado",
-                    quantity: "2.0",
-                    price: 50,
-                },
-                {
-                    description: "ARS Aport Empleado",
-                    quantity: "1.0",
-                    price: 100,
-                },
-                {
-                    description: "Seguro Adicional Padre",
-                    quantity: "3.0",
-                    price: 30,
-                },
-            ],
-        },
-        {
-            idEmployee: 2,
-            items: [
-                {
-                    description: "Horas No Laboradas",
-                    quantity: "1.0",
-                    price: 25.13,
-                },
-                {
-                    description: "Horas Extras 45%",
-                    quantity: "2.0",
-                    price: 200.42,
-                },
-                {
-                    description: "Horas Extras 100%",
-                    quantity: "1.5",
-                    price: 1005.3,
-                },
-                {
-                    description: "Horas Extras Fer. 165%",
-                    quantity: "1.0",
-                    price: 5927.5,
-                },
-                {
-                    description: "Prima Nocturnidad 15%",
-                    quantity: "0.5",
-                    price: 111.84,
-                },
-                { description: "Salario", quantity: "1.5", price: 2858.11 },
-                {
-                    description: "AFP Aporte Empleado",
-                    quantity: "1.0",
-                    price: 25,
-                },
-                {
-                    description: "ARS Aport Empleado",
-                    quantity: "0.5",
-                    price: 50,
-                },
-                {
-                    description: "Seguro Adicional Padre",
-                    quantity: "1.5",
-                    price: 15,
-                },
-            ],
-        },
-        {
-            idEmployee: 3,
-            items: [
-                {
-                    description: "Horas No Laboradas",
-                    quantity: "3.0",
-                    price: 75.39,
-                },
-                {
-                    description: "Horas Extras 45%",
-                    quantity: "1.5",
-                    price: 150.31,
-                },
-                {
-                    description: "Horas Extras 100%",
-                    quantity: "4.5",
-                    price: 3015.9,
-                },
-                {
-                    description: "Horas Extras Fer. 165%",
-                    quantity: "3.0",
-                    price: 17782.5,
-                },
-                {
-                    description: "Prima Nocturnidad 15%",
-                    quantity: "1.5",
-                    price: 335.51,
-                },
-                { description: "Salario", quantity: "4.5", price: 8574.32 },
-                {
-                    description: "AFP Aporte Empleado",
-                    quantity: "3.0",
-                    price: 75,
-                },
-                {
-                    description: "ARS Aport Empleado",
-                    quantity: "1.5",
-                    price: 150,
-                },
-                {
-                    description: "Seguro Adicional Padre",
-                    quantity: "4.5",
-                    price: 45,
-                },
-            ],
-        },
-    ],
+const groupByEmployee = (
+    data: IGetPayrollExecution[]
+): Record<number, IGetPayrollExecution[]> => {
+    const groupedByEmployee: Record<number, IGetPayrollExecution[]> = {};
+    const uniqueItems: Record<number, Set<string>> = {};
+
+    data.forEach((item) => {
+        const idEmployee = item.idEmployee!;
+        const itemIdentifier = JSON.stringify(item);
+
+        if (!groupedByEmployee[idEmployee]) {
+            groupedByEmployee[idEmployee] = [];
+            uniqueItems[idEmployee] = new Set();
+        }
+
+        if (!uniqueItems[idEmployee].has(itemIdentifier)) {
+            groupedByEmployee[idEmployee].push(item);
+            uniqueItems[idEmployee].add(itemIdentifier);
+        }
+    });
+
+    return groupedByEmployee;
 };
 
-export const Invoice = () => (
-    <Document>
-        {dummyData.employees.map((item, index) => (
-            <Page key={index} style={styles.body}>
-                <View style={[styles.table]}>
-                    <View
-                        style={[
-                            styles.marginTop,
-                            styles.tableRow,
-                            styles.textColor,
-                            styles.withOurBorderRight,
-                        ]}
-                    >
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
+interface Props {
+    data: IGetPayrollExecution[];
+}
 
-                                styles.textAlignLeft,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Recibo de Nomina
-                        </Text>
-                        <Text
+export const Invoice = ({ data }: Props) => {
+    const groupedData = groupByEmployee(data);
+    return (
+        <Document>
+            {Object.entries(groupedData).map(([idEmployee, items], index) => (
+                <Page key={index} style={styles.body}>
+                    <View style={[styles.table]}>
+                        <View
                             style={[
-                                styles.tableCol,
+                                styles.marginTop,
+                                styles.tableRow,
                                 styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
+                                styles.withOurBorderRight,
                             ]}
                         >
-                            Cesar Iglesias, S.A
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.textAlignRight,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Fecha de pago
-                        </Text>
-                    </View>
-                    <View
-                        style={[
-                            styles.tableRow,
-                            styles.textColor,
-                            styles.withOurBorderRight,
-                            styles.lastTableCol,
-                        ]}
-                    >
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.marginBottomPositive,
-                                styles.textAlignLeft,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Periodo 5/2023
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Desde 01/03/2023 Hasta 15/03/2023
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.textColor,
-                                styles.textAlignRight,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            18/07/2023
-                        </Text>
-                    </View>
-                    <View
-                        style={[
-                            styles.marginTop,
-                            styles.tableRow,
-                            styles.textColor,
-                            styles.withOurBorderRight,
-                        ]}
-                    >
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-
-                                styles.textAlignLeft,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Nombre : {item.idEmployee}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            {" "}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.textAlignRight,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Codigo : 32686
-                        </Text>
-                    </View>
-                    <View
-                        style={[
-                            styles.tableRow,
-                            styles.textColor,
-                            styles.withOurBorderRight,
-                            styles.lastTableCol,
-                        ]}
-                    >
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.marginBottomPositive,
-                                styles.textAlignLeft,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            Cta : 0321450-002-6
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.textColor,
-                                styles.removeRightLine,
-                                { flexWrap: "wrap" },
-                            ]}
-                        >
-                            Canal Exportaciones e Institucionales
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.marginTopMinus,
-                                styles.textColor,
-                                styles.textAlignRight,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            CC : 859
-                        </Text>
-                    </View>
-                    <View style={styles.tableRow}>
-                        <Text
-                            style={[
-                                styles.tableColHeader,
-                                styles.textColor,
-                                styles.withBorderRight,
-                            ]}
-                        >
-                            Descripción
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableColHeader,
-                                styles.colWidthTenP,
-                                styles.textColor,
-                                styles.withBorderRight,
-                            ]}
-                        >
-                            Cant
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableColHeader,
-                                styles.textColor,
-                                styles.withBorderRight,
-                                styles.colWidthTwentyP,
-                            ]}
-                        >
-                            Ingresos
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableColHeader,
-                                styles.textColor,
-                                styles.withBorderRight,
-                                styles.colWidthTwentyP,
-                            ]}
-                        >
-                            Deducciones
-                        </Text>
-                        <Text style={[styles.tableColHeader, styles.textColor]}>
-                            Bces / Acum
-                        </Text>
-                    </View>
-                    {dummyData.employees.map((item, index) => (
-                        <View key={index} style={styles.tableRow}>
                             <Text
                                 style={[
                                     styles.tableCol,
-                                    styles.withBorderRight,
+                                    styles.textColor,
                                     styles.textAlignLeft,
-                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
                                 ]}
                             >
-                                {/* {item.description} */}
+                                Recibo de Nomina
                             </Text>
                             <Text
                                 style={[
                                     styles.tableCol,
-                                    styles.withBorderRight,
-                                    styles.colWidthTenP,
-                                    styles.textAlignRight,
                                     styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
                                 ]}
                             >
-                                {/* {item.quantity} */}
+                                Cesar Iglesias, S.A
                             </Text>
                             <Text
                                 style={[
                                     styles.tableCol,
-                                    styles.withBorderRight,
-                                    styles.textAlignRight,
                                     styles.textColor,
-                                    styles.colWidthTwentyP,
+                                    styles.textAlignRight,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
                                 ]}
                             >
-                                {/* {item.price} */}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.withBorderRight,
-                                    styles.textAlignRight,
-                                    styles.textColor,
-                                    styles.colWidthTwentyP,
-                                ]}
-                            >
-                                {/* {item.price} */}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textAlignRight,
-                                    styles.textColor,
-                                ]}
-                            >
-                                {/* {item.price} */}
+                                Fecha de pago
                             </Text>
                         </View>
-                    ))}
 
-                    <View style={[styles.tableRow, styles.addTopline]}>
-                        <Text
+                        <View
                             style={[
-                                styles.tableCol,
+                                styles.tableRow,
                                 styles.textColor,
-                                styles.colWidthTwentyP,
+                                styles.withOurBorderRight,
+                                styles.lastTableCol,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.marginBottomPositive,
+                                    styles.textAlignLeft,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                Periodo 5/2023
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                Desde 01/03/2023 Hasta 15/03/2023
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.textColor,
+                                    styles.textAlignRight,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                18/07/2023
+                            </Text>
+                        </View>
+                        <View
+                            style={[
+                                styles.marginTop,
+                                styles.tableRow,
+                                styles.textColor,
+                                styles.withOurBorderRight,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.textAlignLeft,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                Nombre : {items[index].employeeName}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                {" "}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.textAlignRight,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                Codigo : {idEmployee}
+                            </Text>
+                        </View>
+                        <View
+                            style={[
+                                styles.tableRow,
+                                styles.textColor,
+                                styles.withOurBorderRight,
+                                styles.lastTableCol,
+                            ]}
+                        >
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.marginBottomPositive,
+                                    styles.textAlignLeft,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                Cta : {items[index].accountNumber}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.textColor,
+                                    styles.removeRightLine,
+                                    { flexWrap: "wrap" },
+                                ]}
+                            >
+                                {items[index].departmentName}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.marginTopMinus,
+                                    styles.textColor,
+                                    styles.textAlignRight,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                CC : {items[index].idCostCenter}
+                            </Text>
+                        </View>
+                        <View style={styles.tableRow}>
+                            <Text
+                                style={[
+                                    styles.tableColHeader,
+                                    styles.textColor,
+                                    styles.withBorderRight,
+                                ]}
+                            >
+                                Descripción
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableColHeader,
+                                    styles.colWidthTenP,
+                                    styles.textColor,
+                                    styles.withBorderRight,
+                                ]}
+                            >
+                                Cant
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableColHeader,
+                                    styles.textColor,
+                                    styles.withBorderRight,
+                                    styles.colWidthTwentyP,
+                                ]}
+                            >
+                                Ingresos
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableColHeader,
+                                    styles.textColor,
+                                    styles.withBorderRight,
+                                    styles.colWidthTwentyP,
+                                ]}
+                            >
+                                Deducciones
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableColHeader,
+                                    styles.textColor,
+                                ]}
+                            >
+                                Bces / Acum
+                            </Text>
+                        </View>
+                        {items.map((item, itemIndex) => (
+                            <View key={itemIndex} style={styles.tableRow}>
+                                <Text
+                                    style={[
+                                        styles.tableCol,
+                                        styles.withBorderRight,
+                                        styles.textAlignLeft,
+                                        styles.textColor,
+                                    ]}
+                                >
+                                    {item.name}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCol,
+                                        styles.withBorderRight,
+                                        styles.colWidthTenP,
+                                        styles.textAlignRight,
+                                        styles.textColor,
+                                    ]}
+                                >
+                                    {item.quantity}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCol,
+                                        styles.withBorderRight,
+                                        styles.textAlignRight,
+                                        styles.textColor,
+                                        styles.colWidthTwentyP,
+                                    ]}
+                                >
+                                    {item.totalAmount}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCol,
+                                        styles.withBorderRight,
+                                        styles.textAlignRight,
+                                        styles.textColor,
+                                        styles.colWidthTwentyP,
+                                    ]}
+                                >
+                                    {item.totalDeduction}
+                                </Text>
+                                <Text
+                                    style={[
+                                        styles.tableCol,
+                                        styles.textAlignRight,
+                                        styles.textColor,
+                                    ]}
+                                >
+                                    {item.totalPay}
+                                </Text>
+                            </View>
+                        ))}
 
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            INGRESOS
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.colWidthTwentyP,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            {"21,015.15"}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            DEDUCCIONES
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.colWidthTwentyP,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            {"1,847.60"}
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.removeRightLine,
-                            ]}
-                        >
-                            PAGO NETO
-                        </Text>
-                        <Text
-                            style={[
-                                styles.tableCol,
-                                styles.textColor,
-                                styles.removeLeftLine,
-                                styles.colWidthTwentyP,
-                            ]}
-                        >
-                            {"19,168.19"}
-                        </Text>
+                        <View style={[styles.tableRow, styles.addTopline]}>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.colWidthTwentyP,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                INGRESOS
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.colWidthTwentyP,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                {items
+                                    .reduce(
+                                        (acc, item) => acc + item.totalAmount!,
+                                        index
+                                    )
+                                    .toFixed(2)}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                DEDUCCIONES
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.colWidthTwentyP,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                {items
+                                    .reduce(
+                                        (acc, item) =>
+                                            acc + item.totalDeduction!,
+                                        index
+                                    )
+                                    .toFixed(2)}
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.removeRightLine,
+                                ]}
+                            >
+                                PAGO NETO
+                            </Text>
+                            <Text
+                                style={[
+                                    styles.tableCol,
+                                    styles.textColor,
+                                    styles.removeLeftLine,
+                                    styles.colWidthTwentyP,
+                                ]}
+                            >
+                                {items
+                                    .reduce(
+                                        (acc, item) => acc + item.totalPay!,
+                                        index
+                                    )
+                                    .toFixed(2)}
+                            </Text>
+                        </View>
                     </View>
-                </View>
-                <Text
-                    style={[
-                        styles.tableRow,
-                        styles.pageNumber,
-                        styles.textColor,
-                    ]}
-                    render={({ pageNumber, totalPages }) =>
-                        `${pageNumber} / ${totalPages}`
-                    }
-                    fixed
-                />
-            </Page>
-        ))}
-    </Document>
-);
+                    <Text
+                        style={[
+                            styles.tableRow,
+                            styles.pageNumber,
+                            styles.textColor,
+                        ]}
+                        render={({ pageNumber, totalPages }) =>
+                            `${pageNumber} / ${totalPages}`
+                        }
+                        fixed
+                    />
+                </Page>
+            ))}
+        </Document>
+    );
+};
 
 Font.register({
     family: "Oswald",

@@ -263,25 +263,9 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
             />
         </div>
     );
-    const openNewTab = () => {
-        const newTab = window.open("", "_blank");
-        if (newTab) {
-            newTab.document.write('<div id="invoice-viewer-root"></div>');
-            newTab.document.close();
-
-            const rootElement = newTab.document.getElementById(
-                "invoice-viewer-root"
-            );
-            if (rootElement) {
-                const root = createRoot(rootElement);
-                root.render(<InvoiceViewer />);
-            }
-        }
-    };
 
     return (
         <div className="card">
-            <button onClick={openNewTab}>Mock Comprobante de nomina</button>
             <DataTable
                 id="EmployeeForReport-Table"
                 dataKey="identifier"
