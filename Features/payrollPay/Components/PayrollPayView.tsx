@@ -136,7 +136,7 @@ const PayrollPayView = ({
         data.payrollStartDate = new Date(entityPayrollManagement!.payrollPeriodStart);
         data.endDate = new Date(entityPayrollManagement!.payrollPeriodEnd);
         data.startDate = new Date(entityPayrollManagement!.retroactivePeriodLimit);
-        data.employees = employees?.employees;
+        data.employeeCodes = employees?.employees;
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
 

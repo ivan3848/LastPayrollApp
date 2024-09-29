@@ -9,7 +9,7 @@ export interface IPayrollPay {
     payrollStartDate?: Date;
     startDate?: Date;
     endDate?: Date;
-    employees?: number[];
+    employeeCodes?: number[];
     toExclude?: boolean;
     isTest?: boolean;
 }
