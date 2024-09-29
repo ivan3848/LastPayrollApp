@@ -1,3 +1,5 @@
+import { IGetPayrollExecution } from "./IGetPayrollExecution";
+
 export interface IPayrollPay {
     idPayrollPay: number;
     payrollName: string;
@@ -12,6 +14,7 @@ export interface IPayrollPay {
     employeeCodes?: number[];
     toExclude?: boolean;
     isTest?: boolean;
+    getPayrollExecution?: IGetPayrollExecution[];
 }
 
 export interface IPaymentLoad {
