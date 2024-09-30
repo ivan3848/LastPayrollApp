@@ -93,7 +93,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
             }
         }
     };
-    
+
     const executeReportAfterInsert = (data: IGetFiredEmployee[]) => {
         if (data?.length) {
             const newTab = window.open("", "_blank");
@@ -349,6 +349,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                 icon="pi pi-eye"
                                 onClick={() => setIsPreview(true)}
                                 type="submit"
+                                disabled={!employee.isActive}
                                 raised
                             />
                             <Button

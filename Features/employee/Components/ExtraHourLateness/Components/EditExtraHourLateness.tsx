@@ -1,73 +1,90 @@
-import { CONCEPT_TYPE_EXTRAHOUR_LATENESS, CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
-import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
-import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
+import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import { CONCEPT_TYPE_EXTRAHOUR_LATENESS } from "@/constants/conceptTypes";
 import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
-import { useForm } from "react-hook-form";
-import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
+import useEditExtraHourLateness from "../Hooks/useEditExtraHourLateness";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
-    setAddEntityDialog: (value: boolean) => void;
-    addEntityDialog: boolean;
-    id: number;
-    handleAdd: () => void;
+    entity: IExtraHourLateness;
+    editEntityDialog: boolean;
+    setEditEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
 }
 
-const AddExtraHourLateness = ({
-    setAddEntityDialog,
-    addEntityDialog,
-    id,
-    toast,
+const EdiExtraHourLateness = ({
+    entity,
+    setEditEntityDialog,
     setSubmitted,
+    toast,
+    editEntityDialog,
 }: Props) => {
-    // const { addEntityFormSchema } = LicensesFormSchema();
+    // const { editEntityFormSchema } = LicensesFormSchema();
 
     const {
         handleSubmit,
-        watch,
         register,
         reset,
+        watch,
         setValue,
         formState: { errors },
     } = useForm<IExtraHourLateness>();
 
-    const addEntity = useAddEntityQuery({
+    const editEntity = useEditExtraHourLateness({
         toast,
-        setAddEntityDialog,
+        setEditEntityDialog,
         setSubmitted,
         reset,
-        service: addExtraHourLatenessService,
     });
 
-    const onSubmit = (data: IExtraHourLateness) => {
-        data.idEmployee = id;
-        data.idConcept = data.idConcept;
-        data.date = data.date;
-        data.hourAmount = data.hourAmount;
-        data.description = data.description;
-        data.typeValue = data.typeValue;
+    useEffect(() => {
+        if (entity) {
+            Object.keys(entity).forEach((key) => {
+                if (key === "date") {
+                    setValue(
+                        key as keyof IExtraHourLateness,
+                        new Date(entity[key as keyof IExtraHourLateness] as Date)
+                    );
+                    return;
+                }
+                setValue(
+                    key as keyof IExtraHourLateness,
+                    entity[key as keyof IExtraHourLateness]
+                );
+            });
+        }
+    }, [entity, setEditEntityDialog]);
 
-        // addEntity.mutate(data);
+    const onSubmit = (data: IExtraHourLateness) => {
+        data.idExtraHourLateness = entity.idExtraHourLateness;
+        data.idEmployee = entity.idEmployee;
+        data.idConcept = data.idConcept ?? entity.idConcept;
+        data.date = data.date ?? entity.date;
+        data.hourAmount = data.hourAmount ?? entity.hourAmount;
+        data.description = data.description;
+        data.typeValue = data.typeValue ?? entity.typeValue;
+
+        // editEntity.mutate(data);
     };
 
     const hideDialog = () => {
-        setAddEntityDialog(false);
+        setEditEntityDialog(false);
     };
 
     let typeValue: string[] = ["Hora extra", "Tardanza"];
 
     return (
         <Dialog
-            visible={addEntityDialog}
+            visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Agregar Horas"
+            header="Editar Horas extras / Tardanzas"
             modal
             className="p-fluid"
             onHide={hideDialog}
@@ -154,4 +171,4 @@ const AddExtraHourLateness = ({
     );
 };
 
-export default AddExtraHourLateness;
+export default EdiExtraHourLateness;

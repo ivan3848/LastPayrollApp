@@ -3,7 +3,7 @@ interface IExtraHourLateness {
     idConcept: number;
     idEmployee: number;
     hourAmount: number;
-    date: string;
+    date: Date;
     typeValue: string;
     idCostCenter: number;
     description: string;

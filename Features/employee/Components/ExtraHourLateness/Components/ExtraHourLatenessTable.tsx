@@ -71,7 +71,7 @@ const ExtraHourLatenessTable = ({
     };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Deducción </h3>
+            <h3 className="m-0">Horas Extras / Tardanza </h3>
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
