@@ -1,3 +1,4 @@
+import React from "react";
 import {
     TABLE_NAME_CONTRACT,
     TABLE_NAME_RELATIONSHIP,

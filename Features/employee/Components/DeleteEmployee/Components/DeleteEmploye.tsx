@@ -1,42 +1,58 @@
-"use client";
+import { CACHE_KEY_LEASE } from "@/constants/cacheKeys";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import ApiService from "@/services/ApiService";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import useDeleteEmployeeQuery from "../Hooks/useDeleteEmployeeQuery";
-import { Toast } from "primereact/toast";
+import React from "react";
 
 interface Props {
-    idEmployee: number;
+    id: number;
+    endpoint: string;
     deleteEntityDialog: boolean;
     setDeleteEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
-    setShowEmployeeActions: (value: boolean) => void;
+    setHide: (value: boolean) => void;
 }
 
-const DeleteEmployee = ({
-    idEmployee,
+const DeleteEmploye = ({
+    id,
     deleteEntityDialog,
     setDeleteEntityDialog,
+    setSubmitted,
+    endpoint,
     toast,
-    setShowEmployeeActions,
 }: Props) => {
-    const handleSubmit = () => {
-        setDeleteEntityDialog(true);
-    };
+    const apiService = new ApiService(endpoint);
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_LEASE]);
 
-    const deleteEmployeeEntity = useDeleteEmployeeQuery({
-        idEmployee,
-        toast,
-        deleteEntityDialog,
-        setDeleteEntityDialog,
+    const deleteRegister = useMutation({
+        mutationFn: (id: number) => apiService.delete(id),
+        onError: (error: any) => {
+            setDeleteEntityDialog(false);
+
+            toast.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: error.response.data,
+                life: 3000,
+            });
+        },
+        onSuccess: () => {
+            setDeleteEntityDialog(false);
+            setSubmitted(true);
+            expireQuery();
+            toast.current?.show({
+                severity: "success",
+                summary: "Eliminado!",
+                detail: "Registro Desactivado correctamente",
+                life: 3000,
+            });
+        },
     });
-
-    const handleDelete = async () => {
-        await deleteEmployeeEntity
-            .mutateAsync(idEmployee)
-            .then(() => setShowEmployeeActions(false));
-
-        return;
+    const handleDelete = () => {
+        deleteRegister.mutate(id);
     };
 
     const hideDeleteEntityDialog = () => {
@@ -60,29 +76,23 @@ const DeleteEmployee = ({
         </>
     );
     return (
-        <>
-            <Toast ref={toast} />
-            <Button onClick={handleSubmit} severity="danger" label="Eliminar" />
-            <Dialog
-                visible={deleteEntityDialog}
-                style={{ width: "450px" }}
-                header="Eliminar Registro"
-                modal
-                footer={deleteProductDialogFooter}
-                onHide={hideDeleteEntityDialog}
-            >
-                <div className="flex align-items-center justify-content-center">
-                    <i
-                        className="pi pi-exclamation-triangle mr-3"
-                        style={{ fontSize: "2rem" }}
-                    />
-                    {idEmployee && (
-                        <span>¿Está seguro de eliminar el Empleado?</span>
-                    )}
-                </div>
-            </Dialog>
-        </>
+        <Dialog
+            visible={deleteEntityDialog}
+            style={{ width: "450px" }}
+            header="Desactivar Registro"
+            modal
+            footer={deleteProductDialogFooter}
+            onHide={hideDeleteEntityDialog}
+        >
+            <div className="flex align-items-center justify-content-center">
+                <i
+                    className="pi pi-exclamation-triangle mr-3"
+                    style={{ fontSize: "2rem" }}
+                />
+                {id && <span>¿Está seguro de descativar el registro?</span>}
+            </div>
+        </Dialog>
     );
 };
 
-export default DeleteEmployee;
+export default DeleteEmploye;

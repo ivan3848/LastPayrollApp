@@ -139,7 +139,7 @@ const EditRol = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field col-12 md:col-6 lg:col-4">
                     <label htmlFor="description" className="w-full">
-                        Descrimpción
+                        Descripción
                     </label>
                     <InputText
                         {...register("description")}

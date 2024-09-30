@@ -7,10 +7,15 @@ import { IEmployee } from "../Types/IEmployee";
 import DeleteEmployee from "./DeleteEmployee/Components/DeleteEmploye";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
+import React from "react";
+import ReactivateEmployee from "./DeleteEmployee/Components/ReactivateEmployee";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 
 interface Props {
     employee: IEmployee;
     setShowEmployeeActions: (value: boolean) => void;
+    setReactivateEntityDialog: (value: boolean) => void;
+    reactivateEmployee: boolean;
 }
 
 const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
@@ -77,23 +82,40 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
                             </div>
                         </div>
                         <div className="flex sm:flex-row align-items-center my-auto sm:align-items-center gap-3 sm:gap-2">
-                            <Button
-                                label={
-                                    employee.isActive ? "Inactivar" : "Activar"
-                                }
-                            />
                             <Toast ref={toast} />
 
                             {employee.isActive && (
-                                <DeleteEmployee
+                                <>
+                                    <Button
+                                        label="Desactivar"
+                                        onClick={() =>
+                                            setDeleteEntityDialog(true)
+                                        }
+                                        className="p-button-danger"
+                                    />
+
+                                    <DeleteEmployee
+                                        id={employee.idEmployee}
+                                        endpoint="employee/employee"
+                                        deleteEntityDialog={deleteEntityDialog}
+                                        setSubmitted={setSubmitted}
+                                        setDeleteEntityDialog={
+                                            setDeleteEntityDialog
+                                        }
+                                        setHide={() =>
+                                            setDeleteEntityDialog(false)
+                                        }
+                                        toast={toast}
+                                    />
+                                </>
+                            )}
+
+                            {!employee.isActive && (
+                                <ReactivateEmployee
                                     setShowEmployeeActions={
                                         setShowEmployeeActions
                                     }
                                     idEmployee={employee.idEmployee!}
-                                    deleteEntityDialog={deleteEntityDialog}
-                                    setDeleteEntityDialog={
-                                        setDeleteEntityDialog
-                                    }
                                     setSubmitted={setSubmitted}
                                     toast={toast}
                                 />

@@ -23,6 +23,7 @@ import { useForm } from "react-hook-form";
 import useEmployeeQuery from "../Hooks/useEmployeeQuery";
 import { IEmployee } from "../Types/IEmployee";
 import employeeFormSchemas from "../Validation/Validations/EmployeeFormSchemas";
+import React from "react";
 
 interface Props {
     setEmployee: (value: IEmployee) => void;
