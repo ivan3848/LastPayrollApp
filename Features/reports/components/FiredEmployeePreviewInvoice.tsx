@@ -1,3 +1,4 @@
+import { IGetFiredEmployeePreviewInformation } from "@/Features/employee/Components/FiredEmployee/Types/IGetFiredEmployeePreviewInformation";
 import {
     Document,
     Font,
@@ -6,12 +7,14 @@ import {
     Text,
     View,
 } from "@react-pdf/renderer";
-import { IGetFiredEmployee } from "@/Features/employee/Components/FiredEmployee/Types/IGetFiredEmployee";
 
 const groupByEmployee = (
-    data: IGetFiredEmployee[]
-): Record<number, IGetFiredEmployee[]> => {
-    const groupedByEmployee: Record<number, IGetFiredEmployee[]> = {};
+    data: IGetFiredEmployeePreviewInformation[]
+): Record<number, IGetFiredEmployeePreviewInformation[]> => {
+    const groupedByEmployee: Record<
+        number,
+        IGetFiredEmployeePreviewInformation[]
+    > = {};
     const uniqueItems: Record<number, Set<string>> = {};
 
     data.forEach((item) => {
@@ -33,10 +36,10 @@ const groupByEmployee = (
 };
 
 interface Props {
-    data: IGetFiredEmployee[];
+    data: IGetFiredEmployeePreviewInformation[];
 }
 
-export const FiredEmployeeInvoice = ({ data }: Props) => {
+export const FiredEmployeePreviewInvoice = ({ data }: Props) => {
     const groupedData = groupByEmployee(data);
     return (
         <Document>

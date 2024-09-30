@@ -2,9 +2,10 @@ import { PDFViewer } from "@react-pdf/renderer";
 import React from "react";
 import { IFiredEmployeeForReport } from "../Types/IFiredEmployeeForReport";
 import { FiredEmployeeInvoice } from "./FiredEmployeeInvoice";
+import { IGetFiredEmployee } from "@/Features/employee/Components/FiredEmployee/Types/IGetFiredEmployee";
 
 interface Props {
-    data: IFiredEmployeeForReport[];
+    data: IGetFiredEmployee[];
 }
 const FiredEmployeeInvoiceViewer = ({ data }: Props) => {
     return (

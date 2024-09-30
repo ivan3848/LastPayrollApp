@@ -1,5 +1,7 @@
+import { IGetFiredEmployee } from "./IGetFiredEmployee";
+import { IGetFiredEmployeePreviewInformation } from "./IGetFiredEmployeePreviewInformation";
 
-interface IFireEmployee {
+export interface IFireEmployee {
     idEmployee: number;
     firedDate: Date;
     comment: string;
@@ -12,7 +14,7 @@ interface IFireEmployee {
     idCancelationType: number;
 }
 
-interface IFireEmployeeResponse {
+export interface IFireEmployeeResponse {
     idFiredEmployee: number;
     idEmployee: number;
     idStatusFired: number;
@@ -36,4 +38,6 @@ interface IFireEmployeeResponse {
     timeWork: string;
     idFiredEmployeeResume: number;
     totalProfit: number;
+    getFiredEmployeePreviewInformation: IGetFiredEmployeePreviewInformation[]
+    getFiredEmployee: IGetFiredEmployee[]
 }

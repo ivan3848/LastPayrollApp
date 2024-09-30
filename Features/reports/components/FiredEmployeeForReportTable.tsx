@@ -137,33 +137,8 @@ const FiredEmployeeForReportTable = ({
         XLSX.writeFile(workbook, "FiredEmployeeForReport.xlsx");
     };
 
-    const openFiredEmployeeInvoice = () => {
-        //var value = data?.items.map((item) => item);
-
-        const newTab = window.open("", "_blank");
-        if (newTab) {
-            FiredEmployeeInvoiceViewer;
-
-            newTab.document.write(
-                '<div id="fired-employee-invoice-viewer-root"></div>'
-            );
-            newTab.document.close();
-
-            const rootElement = newTab.document.getElementById(
-                "fired-employee-invoice-viewer-root"
-            );
-            if (rootElement) {
-                const root = createRoot(rootElement);
-                root.render(<FiredEmployeeInvoiceViewer data={data?.items} />);
-            }
-        }
-    };
-
     const header = (
         <div className="flex align-items-center justify-content-end gap-2">
-            {/* <Button onClick={openFiredEmployeeInvoice}>
-                Ver Empleado desvinculado
-            </Button> */}
             <h2
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
