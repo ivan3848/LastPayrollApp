@@ -71,7 +71,7 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Cesar Iglesias, S.A
+                                Comprobante
                             </Text>
                             <Text
                                 style={[
@@ -105,7 +105,13 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Periodo 5/2023
+                                Periodo{" "}
+                                {new Date(items[index].payrollPeriodStart!)
+                                    .toLocaleDateString("en-GB", {
+                                        month: "2-digit",
+                                        year: "numeric",
+                                    })
+                                    .replace(" ", "/")}
                             </Text>
                             <Text
                                 style={[
@@ -116,7 +122,14 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Desde 01/03/2023 Hasta 15/03/2023
+                                Desde{" "}
+                                {new Date(
+                                    items[index].payrollPeriodStart!
+                                ).toLocaleDateString("en-GB")}{" "}
+                                Hasta{" "}
+                                {new Date(
+                                    items[index].payrollPeriodEnd!
+                                ).toLocaleDateString("en-GB")}
                             </Text>
                             <Text
                                 style={[
@@ -128,7 +141,9 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                18/07/2023
+                                {new Date(
+                                    items[index].payrollPayDate!
+                                ).toLocaleDateString("en-GB")}
                             </Text>
                         </View>
                         <View
@@ -157,9 +172,7 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeLeftLine,
                                     styles.removeRightLine,
                                 ]}
-                            >
-                                {" "}
-                            </Text>
+                            ></Text>
                             <Text
                                 style={[
                                     styles.tableCol,
@@ -202,6 +215,10 @@ export const Invoice = ({ data }: Props) => {
                                     { flexWrap: "wrap" },
                                 ]}
                             >
+                                Ing{" "}
+                                {new Date(
+                                    items[index].startDate!
+                                ).toLocaleDateString("en-GB")}{" "}
                                 {items[index].departmentName}
                             </Text>
                             <Text
@@ -298,7 +315,15 @@ export const Invoice = ({ data }: Props) => {
                                         styles.colWidthTwentyP,
                                     ]}
                                 >
-                                    {item.totalAmount}
+                                    {item.conceptDefinition != "false"
+                                        ? item.totalAmount?.toLocaleString(
+                                              "es-DO",
+                                              {
+                                                  style: "currency",
+                                                  currency: "DOP",
+                                              }
+                                          )
+                                        : ""}
                                 </Text>
                                 <Text
                                     style={[
@@ -309,7 +334,15 @@ export const Invoice = ({ data }: Props) => {
                                         styles.colWidthTwentyP,
                                     ]}
                                 >
-                                    {item.totalDeduction}
+                                    {item.conceptDefinition === "false"
+                                        ? item.totalAmount?.toLocaleString(
+                                              "es-DO",
+                                              {
+                                                  style: "currency",
+                                                  currency: "DOP",
+                                              }
+                                          )
+                                        : ""}
                                 </Text>
                                 <Text
                                     style={[
@@ -318,7 +351,10 @@ export const Invoice = ({ data }: Props) => {
                                         styles.textColor,
                                     ]}
                                 >
-                                    {item.totalPay}
+                                    {item.accrued?.toLocaleString("es-DO", {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    })}
                                 </Text>
                             </View>
                         ))}
@@ -344,12 +380,13 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                {items
-                                    .reduce(
-                                        (acc, item) => acc + item.totalAmount!,
-                                        index
-                                    )
-                                    .toFixed(2)}
+                                {items[index].totalProfit?.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -370,13 +407,13 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                {items
-                                    .reduce(
-                                        (acc, item) =>
-                                            acc + item.totalDeduction!,
-                                        index
-                                    )
-                                    .toFixed(2)}
+                                {items[index].totalDeduction?.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -396,12 +433,13 @@ export const Invoice = ({ data }: Props) => {
                                     styles.colWidthTwentyP,
                                 ]}
                             >
-                                {items
-                                    .reduce(
-                                        (acc, item) => acc + item.totalPay!,
-                                        index
-                                    )
-                                    .toFixed(2)}
+                                {items[index].totalPay?.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                         </View>
                     </View>
