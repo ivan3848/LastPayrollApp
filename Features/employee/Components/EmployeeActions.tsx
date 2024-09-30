@@ -19,6 +19,7 @@ import Vacation from "./Vacation/Vacation";
 import WorkSchedulerSubstitute from "./WorkSchedulerSubstitute/WorkSchedulerSubstitute";
 import Commission from "./Commission/Commission";
 import Lease from "./Lease/Lease";
+import React from "react";
 
 interface Props {
     showEmployeeActions: boolean;
@@ -64,6 +65,7 @@ const EmployeeActions = ({
                     <EmployeeProfile
                         setShowEmployeeActions={setShowEmployeeActions}
                         employee={employee}
+                        reactivateEmployee={false}
                     />
                 </div>
 
@@ -112,8 +114,8 @@ const EmployeeActions = ({
                     )}
                     {openAction ===
                         EmployeeOptionsEnum.WorkSchedulerSubstitute && (
-                            <WorkSchedulerSubstitute id={employee.idEmployee!} />
-                        )}
+                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
+                    )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />
                     )}

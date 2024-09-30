@@ -9,12 +9,11 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import React from "react";
 import ReactivateEmployee from "./DeleteEmployee/Components/ReactivateEmployee";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 
 interface Props {
     employee: IEmployee;
     setShowEmployeeActions: (value: boolean) => void;
-    setReactivateEntityDialog: (value: boolean) => void;
+    setReactivateEntityDialog?: (value: boolean) => void;
     reactivateEmployee: boolean;
 }
 
