@@ -123,7 +123,10 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async getForReport(params: IParamsApi, filterReport: IFilterReport): Promise<IResponse<R>> {
+    async getForReport(
+        params: IParamsApi,
+        filterReport: IFilterReport
+    ): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         return await axiosInstance
@@ -134,6 +137,18 @@ class ApiService<Q, R> {
                 },
             })
             .then((res) => res.data);
+    }
+
+    async reactivate(id: number, missEndpoint?: string): Promise<string | R> {
+        const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
+        try {
+            const result = await axiosInstance.post<R>(
+                `${finalEndpoint}/${id}`
+            );
+            return result.data;
+        } catch (error: any) {
+            throw error;
+        }
     }
 }
 
