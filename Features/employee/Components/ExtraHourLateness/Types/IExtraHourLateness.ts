@@ -9,6 +9,14 @@ interface IExtraHourLateness {
     description: string;
 }
 
+interface IExtraHourLatenessData {
+    idExtraHourLatenessData?: number;
+    description: string;
+    dateExecute: Date;
+    isPaid: boolean;
+    idCompany: number;
+}
+
 interface IExtraHourLatenessUpdate {
     idExtraHourLateness: number;
     idConcept: number;
