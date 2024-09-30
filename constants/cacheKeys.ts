@@ -100,4 +100,5 @@ export const CACHE_KEY_PAYROLLPAY_DETAIL = "payrollPaydetail";
 export const CACHE_KEY_PAYROLLPAY_DETAIL_NOTPAID = "payrollPaydetailNotPaid";
 export const CACHE_KEY_CONTABILIZATION = "contabilization";
 export const CACHE_KEY_SECOND_CONTABILIZATION = "secondContabilization";
+export const CACHE_KEY_EXTRAHOUR_LATENESS = "extraHourLateness";
 

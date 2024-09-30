@@ -35,6 +35,18 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                         }
                     />
                 </Link>
+                <Link href="/massiveChange/extraHourLatenessFile">
+                    <Button
+                        label="Horas extras y tardanzas"
+                        icon="pi pi-search"
+                        className="m-2"
+                        onClick={() =>
+                            setAction(
+                                MassiveChangeOptionsEnum.ExtraHourLatenessFile
+                            )
+                        }
+                    />
+                </Link>
             </Fieldset>
         </div>
     );

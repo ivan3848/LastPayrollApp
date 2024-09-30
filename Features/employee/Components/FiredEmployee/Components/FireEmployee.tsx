@@ -8,13 +8,19 @@ import { InputSwitch } from "primereact/inputswitch";
 import FiredEmployeeFormSchema from "../Validation/FiredEmployeeFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import firedEmployeeService from "../Services/firedEmployee";
-import useCrudModals from '@/Features/Shared/Hooks/useCrudModals';
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { Divider } from "primereact/divider";
 import useFiredEmployeeEntityQuery from "../Hooks/useFiredEmployeeEntityQuery";
 import Link from "next/link";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { IFireEmployee, IFireEmployeeResponse } from "../Types/IFiredEmployee";
+import { IGetFiredEmployeePreviewInformation } from "../Types/IGetFiredEmployeePreviewInformation";
+import { createRoot } from "react-dom/client";
+import FiredEmployeeInvoiceViewer from "@/Features/reports/components/FiredEmployeeInvoiceViewer";
+import FiredEmployeePreviewInvoiceViewer from "@/Features/reports/components/FiredEmployeePreviewInvoiceViewer";
+import { IGetFiredEmployee } from "../Types/IGetFiredEmployee";
 
 interface Props {
     employee: IEmployee;
@@ -35,11 +41,7 @@ const style: React.CSSProperties = {
 };
 
 const FireEmployee = ({ employee, setCloseDialog }: Props) => {
-
-    const {
-        setSubmitted,
-        toast,
-    } = useCrudModals<IFireEmployee>();
+    const { setSubmitted, toast } = useCrudModals<IFireEmployee>();
 
     const [pagoNavidad, setPagoNavidad] = useState(false);
     const [notice, setNotice] = useState(false);
@@ -70,9 +72,56 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
         message: "Empleado desvinculado correctamente",
     });
 
-    const onPreview = async (previewData: IFireEmployee) => {
-        const response = await firedEmployeeService.post(previewData);
-        console.log(response);
+    const executeReport = (data: IGetFiredEmployeePreviewInformation[]) => {
+        if (data?.length) {
+            const newTab = window.open("", "_blank");
+            if (newTab) {
+                newTab.document.write(
+                    '<div id="fired-employee-preview-invoice-viewer-root"></div>'
+                );
+                newTab.document.close();
+
+                const rootElement = newTab.document.getElementById(
+                    "fired-employee-preview-invoice-viewer-root"
+                );
+                if (rootElement) {
+                    const root = createRoot(rootElement);
+                    root.render(
+                        <FiredEmployeePreviewInvoiceViewer data={data} />
+                    );
+                }
+            }
+        }
+    };
+
+    const executeReportAfterInsert = (data: IGetFiredEmployee[]) => {
+        if (data?.length) {
+            const newTab = window.open("", "_blank");
+            if (newTab) {
+                newTab.document.write(
+                    '<div id="fired-employee-invoice-viewer-root"></div>'
+                );
+                newTab.document.close();
+
+                const rootElement = newTab.document.getElementById(
+                    "fired-employee-invoice-viewer-root"
+                );
+                if (rootElement) {
+                    const root = createRoot(rootElement);
+                    root.render(<FiredEmployeeInvoiceViewer data={data} />);
+                }
+            }
+        }
+    };
+
+    const onPreview = (previewData: IFireEmployee) => {
+        firedEmployeeService
+            .post(previewData)
+            .then((res: string | IFireEmployeeResponse) => {
+                if (typeof res !== "string") {
+                    executeReport(res.getFiredEmployeePreviewInformation);
+                }
+            });
     };
 
     const onFormSubmit = async (data: IFireEmployee) => {
@@ -94,7 +143,10 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
         }
 
         const test = await addEntity.mutateAsync(data, {
-            onSuccess: () => {
+            onSuccess: (res: string | IFireEmployeeResponse) => {
+                if (typeof res !== "string") {
+                    executeReportAfterInsert(res.getFiredEmployee);
+                }
                 setLoading(false);
             },
             onError: () => {
@@ -121,14 +173,18 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                             <ProgressSpinner aria-label="Ejecutando proceso de Nómina..." />
                         </div>
                     )}
-                    {completed &&
+                    {completed && (
                         <div style={style}>
                             <div className="card flex flex-column gap-3 align-items-center">
                                 <div className="card">
                                     <h5 className="my-2">
                                         Empleado desvinculado correctamente!
-                                        <i className="pi pi-check-circle ml-2"
-                                            style={{ fontSize: '1.3rem', marginTop: '0.2rem' }}
+                                        <i
+                                            className="pi pi-check-circle ml-2"
+                                            style={{
+                                                fontSize: "1.3rem",
+                                                marginTop: "0.2rem",
+                                            }}
                                         />
                                     </h5>
                                 </div>
@@ -136,10 +192,12 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                     <Link href="/employee">
                                         <Button
                                             onClick={() => {
-                                                setCompleted(false)
+                                                setCompleted(false);
                                             }}
-                                            icon="pi pi-times" label="Cerrar"
-                                            className="p-button-danger" />
+                                            icon="pi pi-times"
+                                            label="Cerrar"
+                                            className="p-button-danger"
+                                        />
                                     </Link>
                                     <Link href="/">
                                         <Button
@@ -150,7 +208,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                 </div>
                             </div>
                         </div>
-                    }
+                    )}
                     <form onSubmit={handleSubmit(onFormSubmit)}>
                         <div
                             className="p-fluid formgrid grid"
@@ -209,7 +267,9 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                     id="firedDate"
                                     name="firedDate"
                                     value={watch("firedDate") ?? new Date()}
-                                    onChange={(e) => setValue("firedDate", e.value!)}
+                                    onChange={(e) =>
+                                        setValue("firedDate", e.value!)
+                                    }
                                     showIcon
                                 />
                             </div>
@@ -231,18 +291,14 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                     id="isChristmasPayment"
                                     name="isChristmasPayment"
                                     checked={pagoNavidad}
-                                    onChange={(e) =>
-                                        setPagoNavidad(e.value)
-                                    }
+                                    onChange={(e) => setPagoNavidad(e.value)}
                                 />
                                 <h6>Pre-Aviso</h6>
                                 <InputSwitch
                                     {...register("isNotice")}
                                     name="isNotice"
                                     checked={notice}
-                                    onChange={(e) =>
-                                        setNotice(e.value)
-                                    }
+                                    onChange={(e) => setNotice(e.value)}
                                 />
                             </div>
                             <div className="field col-12 md:col-3">
@@ -278,11 +334,14 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                 />
                             </div>
                         </div>
-                        <Divider align="center">
-                        </Divider>
+                        <Divider align="center"></Divider>
                         <div
                             className="flex justify-content-end mt-3"
-                            style={{ width: "auto", gap: "6px", marginLeft: "auto" }}
+                            style={{
+                                width: "auto",
+                                gap: "6px",
+                                marginLeft: "auto",
+                            }}
                         >
                             <Button
                                 label="Previsualizar"
@@ -290,6 +349,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                 icon="pi pi-eye"
                                 onClick={() => setIsPreview(true)}
                                 type="submit"
+                                disabled={!employee.isActive}
                                 raised
                             />
                             <Button
@@ -304,7 +364,9 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                                 label="Desvincular"
                                 disabled={!employee.isActive}
                                 icon="pi pi-ban"
-                                raised type="submit" />
+                                raised
+                                type="submit"
+                            />
                         </div>
                     </form>
                 </div>

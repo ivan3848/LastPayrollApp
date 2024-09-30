@@ -14,5 +14,6 @@ export enum EmployeeOptionsEnum {
     Vacation = "Vacaciones",
     WorkSchedulerSubstitute = "Suplencias",
     Commission = "Comisiones",
-    Lease = "Prestamos"
+    Lease = "Prestamos",
+    ExtraHourLateness = "Horas Extras"
 }

@@ -1,15 +1,20 @@
-export interface IFiredEmployeeForReport {
+export interface IGetFiredEmployee {
     identifier: string;
     idFiredEmployee: number;
     idEmployee: number;
+    position: string;
     firedDate: string;
+    employeeStartDate: string;
     employeeName: string;
+    identification: string;
     idPerson: number;
     employeeSalary: number;
     departmentName: string;
     conceptName: string;
-    isProfit?: boolean;
+    isProfit: boolean;
     dailySalary: number;
+    description: string;
+    costCenter: string;
     royaltiesDay: string;
     unemploymentDay: string;
     noticeDay: string;
@@ -18,11 +23,5 @@ export interface IFiredEmployeeForReport {
     timeWork: string;
     amount: number;
     totalProfit: number;
-    resume: string;
-    costCenter: string;
-    description: string;
-    identification: string;
-    employeeStartDate: string;
-    position: string;
     idCompany: number;
 }

@@ -12,7 +12,8 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useFiredEmployeeForReportQuery from "../Hook/useFiredEmployeeForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
-
+import { createRoot } from "react-dom/client";
+import FiredEmployeeInvoiceViewer from "./FiredEmployeeInvoiceViewer";
 interface Props {
     filterValues: IFilterReport | null;
     setFilterValues: (value: IFilterReport | null) => void;
@@ -171,248 +172,251 @@ const FiredEmployeeForReportTable = ({
     );
 
     return (
-        <div className="card">
-            <DataTable
-                id="FiredEmployeeForReport-Table"
-                dataKey="identifier"
-                value={data?.items}
-                lazy
-                paginator
-                loading={isLoading}
-                onSort={onSort}
-                removableSort
-                sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                sortMode="single"
-                totalRecords={data?.totalCount}
-                className="datatable-responsive"
-                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                emptyMessage="No hay registros para mostrar."
-                header={header}
-                onPage={onPage}
-                rowsPerPageOptions={[5, 10, 25]}
-                rows={data?.pageSize!}
-                first={data.firstRow!}
-                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
-            >
-                <Column
-                    field="idEmployee"
-                    header="Código Empleado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idEmployee"
-                    filterPlaceholder="Buscar por código empleado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="employeeName"
-                    header="Empleado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="employeeName"
-                    filterPlaceholder="Buscar por empleado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="idFiredEmployee"
-                    header="Código Empleado Desvinculado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idFiredEmployee"
-                    filterPlaceholder="Buscar por código empleado desvinculado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="identification"
-                    header="Cédula"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="identification"
-                    filterPlaceholder="Buscar por cédula"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="employeeSalary"
-                    header="Salario"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="employeeSalary"
-                    filterPlaceholder="Buscar por salario"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="departmentName"
-                    header="Departamento"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="departmentName"
-                    filterPlaceholder="Buscar por departamento"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="conceptName"
-                    header="Concepto"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="conceptName"
-                    filterPlaceholder="Buscar por concepto"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="dailySalary"
-                    header="Salario Diario"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="dailySalary"
-                    filterPlaceholder="Buscar por salario diario"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="royaltiesDay"
-                    header="Navidad"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="royaltiesDay"
-                    filterPlaceholder="Buscar por navidad"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="unemploymentDay"
-                    header="Cesantía"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="unemploymentDay"
-                    filterPlaceholder="Buscar por cesantía"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="noticeDay"
-                    header="Pre-Aviso"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="noticeDay"
-                    filterPlaceholder="Buscar por pre-aviso"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="vacationDay"
-                    header="Vacaciones"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="vacationDay"
-                    filterPlaceholder="Buscar por vacaciones"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="missLease"
-                    header="Deuda Préstamo"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="missLease"
-                    filterPlaceholder="Buscar por deuda préstamo"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="timeWork"
-                    header="Tiempo trabajado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="timeWork"
-                    filterPlaceholder="Buscar por tiempo trabajado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="amount"
-                    header="Cantidad"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="amount"
-                    filterPlaceholder="Buscar por cantidad"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="totalProfit"
-                    header="Ingreso"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="totalProfit"
-                    filterPlaceholder="Buscar por ingreso"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="resume"
-                    header="Resumen"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="resume"
-                    filterPlaceholder="Buscar por resumen"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="netPay"
-                    header="Pago neto"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="netPay"
-                    filterPlaceholder="Buscar por pago neto"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-            </DataTable>
-        </div>
+        console.log(data.items),
+        (
+            <div className="card">
+                <DataTable
+                    id="FiredEmployeeForReport-Table"
+                    dataKey="identifier"
+                    value={data?.items}
+                    lazy
+                    paginator
+                    loading={isLoading}
+                    onSort={onSort}
+                    removableSort
+                    sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
+                    sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
+                    sortMode="single"
+                    totalRecords={data?.totalCount}
+                    className="datatable-responsive"
+                    paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                    emptyMessage="No hay registros para mostrar."
+                    header={header}
+                    onPage={onPage}
+                    rowsPerPageOptions={[5, 10, 25]}
+                    rows={data?.pageSize!}
+                    first={data.firstRow!}
+                    currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                >
+                    <Column
+                        field="idEmployee"
+                        header="Código Empleado"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="idEmployee"
+                        filterPlaceholder="Buscar por código empleado"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="employeeName"
+                        header="Empleado"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="employeeName"
+                        filterPlaceholder="Buscar por empleado"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="idFiredEmployee"
+                        header="Código Empleado Desvinculado"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="idFiredEmployee"
+                        filterPlaceholder="Buscar por código empleado desvinculado"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="identification"
+                        header="Cédula"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="identification"
+                        filterPlaceholder="Buscar por cédula"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="employeeSalary"
+                        header="Salario"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="employeeSalary"
+                        filterPlaceholder="Buscar por salario"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="departmentName"
+                        header="Departamento"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="departmentName"
+                        filterPlaceholder="Buscar por departamento"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="conceptName"
+                        header="Concepto"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="conceptName"
+                        filterPlaceholder="Buscar por concepto"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="dailySalary"
+                        header="Salario Diario"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="dailySalary"
+                        filterPlaceholder="Buscar por salario diario"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="royaltiesDay"
+                        header="Navidad"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="royaltiesDay"
+                        filterPlaceholder="Buscar por navidad"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="unemploymentDay"
+                        header="Cesantía"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="unemploymentDay"
+                        filterPlaceholder="Buscar por cesantía"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="noticeDay"
+                        header="Pre-Aviso"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="noticeDay"
+                        filterPlaceholder="Buscar por pre-aviso"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="vacationDay"
+                        header="Vacaciones"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="vacationDay"
+                        filterPlaceholder="Buscar por vacaciones"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="missLease"
+                        header="Deuda Préstamo"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="missLease"
+                        filterPlaceholder="Buscar por deuda préstamo"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="timeWork"
+                        header="Tiempo trabajado"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="timeWork"
+                        filterPlaceholder="Buscar por tiempo trabajado"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="amount"
+                        header="Cantidad"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="amount"
+                        filterPlaceholder="Buscar por cantidad"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="totalProfit"
+                        header="Ingreso"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="totalProfit"
+                        filterPlaceholder="Buscar por ingreso"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="resume"
+                        header="Resumen"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="resume"
+                        filterPlaceholder="Buscar por resumen"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                    <Column
+                        field="netPay"
+                        header="Pago neto"
+                        headerStyle={{ minWidth: "15rem" }}
+                        sortable
+                        filter
+                        filterField="netPay"
+                        filterPlaceholder="Buscar por pago neto"
+                        showFilterMenuOptions
+                        onFilterApplyClick={(e) => onFilter(e.field)}
+                        onFilterClear={clearFilters}
+                    ></Column>
+                </DataTable>
+            </div>
+        )
     );
 };
 

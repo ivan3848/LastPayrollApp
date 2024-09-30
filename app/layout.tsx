@@ -12,6 +12,8 @@ import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
 import Login from "./(full-page)/auth/login/page";
+import { getToken } from "firebase/app-check";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -21,6 +23,7 @@ const queryClient = new QueryClient();
 
 const RootLayout = ({ children }: RootLayoutProps) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     addLocale("es", es.es);
 
@@ -28,6 +31,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         const session = async () => {
             const checkSession = await sessionCheck();
             if (checkSession) setIsLoggedIn(true);
+            setIsCheckingAuth(false)
         };
         session();
         locale("es");
@@ -45,11 +49,15 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {isLoggedIn ? (
+                        {isCheckingAuth ? (
+                            <ProgressSpinner />
+                        ) : isLoggedIn ? (
                             <LayoutProvider>{children}</LayoutProvider>
                         ) : (
                             <>
-                                <Login />
+                                <LayoutProvider>
+                                    <Login />
+                                </LayoutProvider>
                             </>
                         )}
                     </PrimeReactProvider>

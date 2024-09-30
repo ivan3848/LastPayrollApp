@@ -4,7 +4,7 @@ import { MassiveChangeOptionsEnum } from "../Enums/MassiveChangeOptionsEnum";
 import MassiveChangeOptions from "./MassiveChangeOptions";
 import MassiveIncrease from "./MassiveIncrease/Components/MassiveIncrease";
 
-const MassiveChangeAction = ({}) => {
+const MassiveChangeAction = ({ }) => {
     const [openAction, setOpenAction] = useState<MassiveChangeOptionsEnum>(
         MassiveChangeOptionsEnum.NoOption
     );
@@ -16,6 +16,9 @@ const MassiveChangeAction = ({}) => {
                     <MassiveChangeOptions setAction={setOpenAction} />
                 )}
                 {openAction === MassiveChangeOptionsEnum.MassiveIncrease && (
+                    <MassiveIncrease />
+                )}
+                {openAction === MassiveChangeOptionsEnum.ExtraHourLatenessFile && (
                     <MassiveIncrease />
                 )}
             </div>
