@@ -4,6 +4,7 @@ import { Dialog } from 'primereact/dialog';
 import React from 'react'
 import { useForm } from 'react-hook-form';
 import PayrollEmployeeTable from './PayrollEmployeeTable';
+import { Button } from 'primereact/button';
 
 export interface IAddEmployee {
     employees: number[];
@@ -77,7 +78,25 @@ const AddOrExcludeEmployee = ({
                     byPayroll={false}
                 />
             </div>
-            <DialogFooterButtons hideDialog={hideDialog} />
+            <div
+                className="flex justify-content-end mt-3"
+                style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+            >
+                <Button
+                    label="Cancelar"
+                    icon="pi pi-times"
+                    raised
+                    type="button"
+                    onClick={hideDialog}
+                    severity="danger"
+                />
+                <Button
+                    label="Guardar"
+                    icon="pi pi-check"
+                    onClick={hideDialog}
+                    raised
+                    type="submit" />
+            </div>
         </Dialog>
     )
 }
