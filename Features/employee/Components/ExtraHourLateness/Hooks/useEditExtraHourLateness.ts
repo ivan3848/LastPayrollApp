@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import extraHourLatenessService from "../Services/ExtraHourLatenessServices";
+import extraHourLatenessService from "../Services/extraHourLatenessServices";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -7,14 +7,15 @@ interface Props {
     setSubmitted: (value: boolean) => void;
     reset: () => void;
 }
-const useEditExtraHourLateness= ({
+const useEditExtraHourLateness = ({
     toast,
     setEditEntityDialog,
     setSubmitted,
     reset,
 }: Props) => {
     return useMutation({
-        mutationFn: (entity: IExtraHourLateness) => extraHourLatenessService.put(entity),
+        mutationFn: (entity: IExtraHourLateness) =>
+            extraHourLatenessService.put(entity),
 
         onError: (error: any) => {
             toast.current?.show({
