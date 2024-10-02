@@ -1,10 +1,11 @@
-import { CACHE_KEY_LEASE } from "@/constants/cacheKeys";
+import { CACHE_KEY_EMPLOYEE, CACHE_KEY_LEASE } from "@/constants/cacheKeys";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import ApiService from "@/services/ApiService";
 import { useMutation } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
+import { confirmDialog } from "primereact/confirmdialog";
 
 interface Props {
     id: number;
@@ -13,23 +14,41 @@ interface Props {
     setDeleteEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
-    setHide: (value: boolean) => void;
+    confirmDialogText: string;
+    summary: string;
+    detail: string;
+    header: string;
 }
 
 const DeleteEmploye = ({
     id,
+    confirmDialogText,
+    summary,
     deleteEntityDialog,
+    detail,
     setDeleteEntityDialog,
     setSubmitted,
     endpoint,
     toast,
+    header,
 }: Props) => {
     const apiService = new ApiService(endpoint);
-    const expireQuery = useExpireSessionQuery([CACHE_KEY_LEASE]);
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_EMPLOYEE]);
 
     const deleteRegister = useMutation({
         mutationFn: (id: number) => apiService.delete(id),
         onError: (error: any) => {
+            const text = error.response.data;
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: "Hay nominas libre para calculo",
+                    life: 3000,
+                });
+                return;
+            }
+
             setDeleteEntityDialog(false);
 
             toast.current?.show({
@@ -45,8 +64,8 @@ const DeleteEmploye = ({
             expireQuery();
             toast.current?.show({
                 severity: "success",
-                summary: "Eliminado!",
-                detail: "Registro Desactivado correctamente",
+                summary: summary,
+                detail: detail,
                 life: 3000,
             });
         },
@@ -79,7 +98,7 @@ const DeleteEmploye = ({
         <Dialog
             visible={deleteEntityDialog}
             style={{ width: "450px" }}
-            header="Desactivar Registro"
+            header={header}
             modal
             footer={deleteProductDialogFooter}
             onHide={hideDeleteEntityDialog}
@@ -89,7 +108,7 @@ const DeleteEmploye = ({
                     className="pi pi-exclamation-triangle mr-3"
                     style={{ fontSize: "2rem" }}
                 />
-                {id && <span>¿Está seguro de descativar el registro?</span>}
+                {id && <span>{confirmDialogText}</span>}
             </div>
         </Dialog>
     );
