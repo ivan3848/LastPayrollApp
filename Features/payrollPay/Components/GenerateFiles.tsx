@@ -57,9 +57,7 @@ const GenerateFiles = ({
 
     const onSubmit = async (data: IGetPaymentLoadsDto) => {
         data.employeeCodes = employees?.employees.map((e: number) => e) ?? [];
-
         const response = await generateFiles.mutateAsync(data) as IPaymentLoad;
-
         if (fileType) {
             generateExcel(response);
         }
@@ -96,7 +94,31 @@ const GenerateFiles = ({
         return entity.map((item: any) => {
             const translatedItem: { [key: string]: any } = {};
             for (const key in item) {
-                if (['bankName', 'bankCode', 'paymentMethod', 'accountNumber', 'totalPay', 'employeeName', 'countryName', 'email', 'transactionType', 'documentType'].includes(key)) {
+                if (['bankName',
+                    'bankCode',
+                    'paymentMethod',
+                    'accountNumber',
+                    'totalPay', 'employeeName',
+                    'countryName', 'email',
+                    'transactionType',
+                    'documentType'].includes(key)) {
+                    translatedItem[translateColumnName(key)] = item[key];
+                }
+            }
+            return translatedItem;
+        });
+    };
+
+
+    const translateDataTxt = (entity: any) => {
+        return entity.map((item: any) => {
+            const translatedItem: { [key: string]: any } = {};
+            for (const key in item) {
+                if (['employeeName',
+                    'totalPay',
+                    'accountNumber',
+                    'transactionType',
+                    'documentType'].includes(key)) {
                     translatedItem[translateColumnName(key)] = item[key];
                 }
             }
@@ -121,9 +143,12 @@ const GenerateFiles = ({
     };
 
     const generateFile = (data: any) => {
-        const content = Object.entries(data[0])
-            .map(([key, value]) => `${key}: ${value ?? 'N/A'}`)
-            .join('\n');
+        if (data.length === 0) return;
+        const translatedData = translateDataTxt(data);
+        const rows = translatedData.map((item: any) =>
+            Object.values(item).map(value => value ?? 'N/A').join(';')
+        ).join('\n');
+        const content = rows;
         const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
         saveAs(blob, data.fileName || "payment_details.txt");
     };
