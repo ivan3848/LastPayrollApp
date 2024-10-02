@@ -42,7 +42,7 @@ export const Invoice = ({ data }: Props) => {
     return (
         <Document>
             {Object.entries(groupedData).map(([idEmployee, items], index) => (
-                <Page key={index} style={styles.body}>
+                < Page key={index} style={styles.body} >
                     <View style={[styles.table]}>
                         <View
                             style={[
@@ -106,12 +106,15 @@ export const Invoice = ({ data }: Props) => {
                                 ]}
                             >
                                 Periodo{" "}
-                                {new Date(items[index].payrollPeriodStart!)
-                                    .toLocaleDateString("en-GB", {
-                                        month: "2-digit",
-                                        year: "numeric",
-                                    })
-                                    .replace(" ", "/")}
+                                {items[index] && items[index].payrollPeriodStart ? (
+                                    new Date(items[index].payrollPeriodStart!)
+                                        .toLocaleDateString("en-GB", {
+                                            month: "2-digit",
+                                            year: "numeric",
+                                        })
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -123,13 +126,19 @@ export const Invoice = ({ data }: Props) => {
                                 ]}
                             >
                                 Desde{" "}
-                                {new Date(
-                                    items[index].payrollPeriodStart!
-                                ).toLocaleDateString("en-GB")}{" "}
+                                {items[index] && items[index].payrollPeriodStart ? (
+                                    new Date(items[index].payrollPeriodStart!)
+                                        .toLocaleDateString("en-GB")
+                                ) : (
+                                    "N/A"
+                                )}{" "}
                                 Hasta{" "}
-                                {new Date(
-                                    items[index].payrollPeriodEnd!
-                                ).toLocaleDateString("en-GB")}
+                                {items[index] && items[index].payrollPeriodEnd ? (
+                                    new Date(items[index].payrollPeriodEnd!)
+                                        .toLocaleDateString("en-GB")
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -141,9 +150,12 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                {new Date(
-                                    items[index].payrollPayDate!
-                                ).toLocaleDateString("en-GB")}
+                                {items[index] && items[index].payrollPayDate ? (
+                                    new Date(items[index].payrollPayDate!)
+                                        .toLocaleDateString("en-GB")
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                         </View>
                         <View
@@ -163,7 +175,11 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Nombre : {items[index].employeeName}
+                                Nombre : {items[index] && items[index].employeeName ? (
+                                    items[index].employeeName
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -204,7 +220,11 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Cta : {items[index].accountNumber}
+                                Cta : {items[index] && items[index].accountNumber ? (
+                                    items[index].accountNumber
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -216,10 +236,16 @@ export const Invoice = ({ data }: Props) => {
                                 ]}
                             >
                                 Ing{" "}
-                                {new Date(
-                                    items[index].startDate!
-                                ).toLocaleDateString("en-GB")}{" "}
-                                {items[index].departmentName}
+                                {items[index] && items[index].payrollPayDate ? (
+                                    new Date(items[index].payrollPayDate!)
+                                        .toLocaleDateString("en-GB")
+                                ) : (
+                                    "N/A"
+                                )}{items[index] && items[index].departmentName ? (
+                                    items[index].departmentName
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                             <Text
                                 style={[
@@ -231,7 +257,11 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                CC : {items[index].idCostCenter}
+                                CC : {items[index] && items[index].idCostCenter ? (
+                                    items[index].idCostCenter
+                                ) : (
+                                    "N/A"
+                                )}
                             </Text>
                         </View>
                         <View style={styles.tableRow}>
@@ -317,12 +347,12 @@ export const Invoice = ({ data }: Props) => {
                                 >
                                     {item.conceptDefinition != "false"
                                         ? item.totalAmount?.toLocaleString(
-                                              "es-DO",
-                                              {
-                                                  style: "currency",
-                                                  currency: "DOP",
-                                              }
-                                          )
+                                            "es-DO",
+                                            {
+                                                style: "currency",
+                                                currency: "DOP",
+                                            }
+                                        )
                                         : ""}
                                 </Text>
                                 <Text
@@ -336,12 +366,12 @@ export const Invoice = ({ data }: Props) => {
                                 >
                                     {item.conceptDefinition === "false"
                                         ? item.totalAmount?.toLocaleString(
-                                              "es-DO",
-                                              {
-                                                  style: "currency",
-                                                  currency: "DOP",
-                                              }
-                                          )
+                                            "es-DO",
+                                            {
+                                                style: "currency",
+                                                currency: "DOP",
+                                            }
+                                        )
                                         : ""}
                                 </Text>
                                 <Text
@@ -380,13 +410,16 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                {items[index].totalProfit?.toLocaleString(
+                                {items[index] && items[index].totalProfit ? items[index].totalProfit?.toLocaleString(
                                     "es-DO",
                                     {
                                         style: "currency",
                                         currency: "DOP",
                                     }
+                                ) : (
+                                    "N/A"
                                 )}
+
                             </Text>
                             <Text
                                 style={[
@@ -407,12 +440,14 @@ export const Invoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                {items[index].totalDeduction?.toLocaleString(
+                                {items[index] && items[index].totalDeduction ? items[index].totalDeduction?.toLocaleString(
                                     "es-DO",
                                     {
                                         style: "currency",
                                         currency: "DOP",
                                     }
+                                ) : (
+                                    "N/A"
                                 )}
                             </Text>
                             <Text
@@ -433,12 +468,14 @@ export const Invoice = ({ data }: Props) => {
                                     styles.colWidthTwentyP,
                                 ]}
                             >
-                                {items[index].totalPay?.toLocaleString(
+                                {items[index] && items[index].totalPay ? items[index].totalPay?.toLocaleString(
                                     "es-DO",
                                     {
                                         style: "currency",
                                         currency: "DOP",
                                     }
+                                ) : (
+                                    "N/A"
                                 )}
                             </Text>
                         </View>
@@ -455,8 +492,9 @@ export const Invoice = ({ data }: Props) => {
                         fixed
                     />
                 </Page>
-            ))}
-        </Document>
+            ))
+            }
+        </Document >
     );
 };
 

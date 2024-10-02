@@ -47,7 +47,7 @@ function ActionsTableContabilization<T>({
                         />
                     ) : (
                         <Button
-                            icon="pi pi-trash"
+                            icon="pi pi-ban"
                             rounded
                             severity="danger"
                             onClick={() => handleDelete(entity)}

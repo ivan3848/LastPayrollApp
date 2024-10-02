@@ -1,5 +1,4 @@
 "use client";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
@@ -37,7 +36,7 @@ const Contabilization = () => {
         setAddEntityDialog(true);
     };
 
-    const handleDelete = (entity: IPayrollPay) => {
+    const handleFiredEmplyeeContabilization = (entity: IPayrollPay) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
@@ -65,7 +64,7 @@ const Contabilization = () => {
                         submitted={submitted}
                         handleContabilization1={handleContabilization1}
                         handleContabilization2={handleContabilization2}
-                        handleDelete={handleDelete}
+                        handleDelete={handleFiredEmplyeeContabilization}
                     />}
                 </Suspense>
 
@@ -86,17 +85,6 @@ const Contabilization = () => {
                         setEditEntityDialog={setAddEntityDialog}
                         toast={toast}
                         setSubmitted={setSubmitted}
-                    />
-                )}
-
-                {deleteEntityDialog && (
-                    <DeleteEntity
-                        id={entity?.idPayrollPay ?? 0}
-                        endpoint="employee/payrollPay/delete"
-                        deleteEntityDialog={deleteEntityDialog}
-                        setDeleteEntityDialog={setDeleteEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
                     />
                 )}
             </div>
