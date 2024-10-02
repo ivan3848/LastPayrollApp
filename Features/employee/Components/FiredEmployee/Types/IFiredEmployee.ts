@@ -41,3 +41,17 @@ export interface IFireEmployeeResponse {
     getFiredEmployeePreviewInformation: IGetFiredEmployeePreviewInformation[]
     getFiredEmployee: IGetFiredEmployee[]
 }
+
+export interface IFiredEmployeeContabilization{
+    id: string,
+    costCenterAccount: string,
+    conceptAccountNumber: string,
+    idEmployee: number,
+    firedDate: Date,
+    isProfit?: boolean,
+    IsDebit?: boolean,
+    amount: number,
+    AccountName: string,
+    name: string,
+    IsCompany?: boolean,
+}
