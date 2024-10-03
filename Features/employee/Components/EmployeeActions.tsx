@@ -66,7 +66,6 @@ const EmployeeActions = ({
                     <EmployeeProfile
                         setShowEmployeeActions={setShowEmployeeActions}
                         employee={employee}
-                        reactivateEmployee={false}
                     />
                 </div>
 

@@ -14,7 +14,6 @@ import React from "react";
 interface Props {
     employee: IEmployee;
     setShowEmployeeActions: (value: boolean) => void;
-    reactivateEmployee: boolean;
 }
 
 const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
@@ -23,6 +22,7 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
 
     const [reactivateEntityDialog, setReactivateEntity] = useState(false);
     const [deactivateEntityDialog, setDeactivateEntityDialog] = useState(false);
+
     const getSeverity = (employee: IEmployee) => {
         switch (employee.isActive) {
             case false:
@@ -131,7 +131,9 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
                                         deleteEntityDialog={
                                             deactivateEntityDialog
                                         }
-                                        setSubmitted={setSubmitted}
+                                        setSubmitted={() => {
+                                            setSubmitted(true);
+                                        }}
                                         setDeleteEntityDialog={
                                             setDeactivateEntityDialog
                                         }

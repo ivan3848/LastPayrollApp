@@ -59,7 +59,6 @@ const DeleteEmploye = ({
             });
         },
         onSuccess: () => {
-            setDeleteEntityDialog(false);
             setSubmitted(true);
             expireQuery();
             toast.current?.show({
@@ -68,6 +67,8 @@ const DeleteEmploye = ({
                 detail: detail,
                 life: 3000,
             });
+            location.reload();
+            setDeleteEntityDialog(false);
         },
     });
     const handleDelete = () => {

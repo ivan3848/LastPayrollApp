@@ -2,6 +2,7 @@ import { CACHE_KEY_EMPLOYEE, CACHE_KEY_LEASE } from "@/constants/cacheKeys";
 import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import ApiService from "@/services/ApiService";
 import { useMutation } from "@tanstack/react-query";
+import exp from "constants";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
@@ -41,6 +42,7 @@ const ReactivateEmployee = ({
                 return;
             }
             setReactivateEntityDialog(false);
+            expireQuery();
 
             toast.current?.show({
                 severity: "warn",
@@ -50,26 +52,17 @@ const ReactivateEmployee = ({
             });
         },
 
-        onSuccess: (text: any) => {
-            console.log(text);
-            if (text.toString().includes("Hay")) {
-                toast.current?.show({
-                    severity: "warn",
-                    summary: "Advertencia",
-                    detail: text,
-                    life: 3000,
-                });
-                return;
-            }
+        onSuccess: () => {
             setReactivateEntityDialog(false);
             setSubmitted(true);
-            expireQuery();
             toast.current?.show({
                 severity: "success",
                 summary: "Eliminado!",
                 detail: "Registro Activado correctamente",
                 life: 3000,
             });
+            location.reload();
+            expireQuery();
         },
     });
     const handleDelete = () => {
