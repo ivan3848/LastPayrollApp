@@ -1,15 +1,14 @@
-import { CONCEPT_TYPE_EXTRAHOUR_LATENESS, CONCEPT_TYPE_LICENSE } from "@/constants/conceptTypes";
+import { CONCEPT_TYPE_EXTRAHOUR_LATENESS } from "@/constants/conceptTypes";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
 import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
-import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -105,7 +104,9 @@ const AddExtraHourLateness = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="hourAmount">Cantidad de horas</label>
+                            <label htmlFor="hourAmount">
+                                Cantidad de horas
+                            </label>
                             <div>
                                 <GenericInputNumber
                                     id="hourAmount"
@@ -125,9 +126,18 @@ const AddExtraHourLateness = ({
                             <div>
                                 <SelectButton
                                     {...register("typeValue")}
-                                    value={watch("typeValue") == "extraHour" ? "Hora extra" : "Tardanza"}
+                                    value={
+                                        watch("typeValue") == "extraHour"
+                                            ? "Hora extra"
+                                            : "Tardanza"
+                                    }
                                     onChange={(e) => {
-                                        setValue("typeValue", e.value === "Hora extra" ? "extraHour" : "lateness");
+                                        setValue(
+                                            "typeValue",
+                                            e.value === "Hora extra"
+                                                ? "extraHour"
+                                                : "lateness"
+                                        );
                                     }}
                                     options={typeValue}
                                 />

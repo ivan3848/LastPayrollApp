@@ -1,19 +1,19 @@
 import emptyImage from "@/constants/emptyImage";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";
 import { Tag } from "primereact/tag";
-import { classNames } from "primereact/utils";
-import { IEmployee } from "../Types/IEmployee";
-import DeleteEmployee from "./DeleteEmployee/Components/DeleteEmploye";
-import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
-import React from "react";
+import { classNames } from "primereact/utils";
+import { useState } from "react";
+import { IEmployee } from "../Types/IEmployee";
+import DeleteEmploye from "./DeleteEmployee/Components/DeleteEmploye";
 import ReactivateEmployee from "./DeleteEmployee/Components/ReactivateEmployee";
+import React from "react";
 
 interface Props {
     employee: IEmployee;
     setShowEmployeeActions: (value: boolean) => void;
-    setReactivateEntityDialog?: (value: boolean) => void;
     reactivateEmployee: boolean;
 }
 
@@ -21,6 +21,8 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
     const { setDeleteEntityDialog, deleteEntityDialog, setSubmitted, toast } =
         useCrudModals<IEmployee>();
 
+    const [reactivateEntityDialog, setReactivateEntity] = useState(false);
+    const [deactivateEntityDialog, setDeactivateEntityDialog] = useState(false);
     const getSeverity = (employee: IEmployee) => {
         switch (employee.isActive) {
             case false:
@@ -82,42 +84,91 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
                         </div>
                         <div className="flex sm:flex-row align-items-center my-auto sm:align-items-center gap-3 sm:gap-2">
                             <Toast ref={toast} />
-
                             {employee.isActive && (
                                 <>
+                                    <>
+                                        <Button
+                                            label="Eliminar"
+                                            onClick={() =>
+                                                setDeleteEntityDialog(true)
+                                            }
+                                            className="p-button-danger"
+                                        />
+                                        <DeleteEmploye
+                                            key={`delete-${employee.idEmployee}`}
+                                            id={employee.idEmployee}
+                                            endpoint="employee/employee/byidemployee"
+                                            deleteEntityDialog={
+                                                deleteEntityDialog
+                                            }
+                                            setSubmitted={setSubmitted}
+                                            setDeleteEntityDialog={
+                                                setDeleteEntityDialog
+                                            }
+                                            toast={toast}
+                                            confirmDialogText={
+                                                "Seguro que desea eliminar el empleado"
+                                            }
+                                            summary={"Eliminado!"}
+                                            detail={
+                                                "Empleado eliminado correctamente"
+                                            }
+                                            header="Eliminar Empleado"
+                                        />
+                                    </>
+
                                     <Button
                                         label="Desactivar"
                                         onClick={() =>
-                                            setDeleteEntityDialog(true)
+                                            setDeactivateEntityDialog(true)
                                         }
-                                        className="p-button-danger"
+                                        className="p-button-warning"
                                     />
-
-                                    <DeleteEmployee
+                                    <DeleteEmploye
+                                        key={`deactivate-${employee.idEmployee}`}
                                         id={employee.idEmployee}
-                                        endpoint="employee/employee"
-                                        deleteEntityDialog={deleteEntityDialog}
+                                        endpoint="employee/employee/deactivate"
+                                        deleteEntityDialog={
+                                            deactivateEntityDialog
+                                        }
                                         setSubmitted={setSubmitted}
                                         setDeleteEntityDialog={
-                                            setDeleteEntityDialog
+                                            setDeactivateEntityDialog
                                         }
-                                        setHide={() =>
-                                            setDeleteEntityDialog(false)
+                                        toast={toast}
+                                        header="Desactivar Empleado"
+                                        confirmDialogText={
+                                            "Seguro que desea desactivar el empleado"
+                                        }
+                                        summary={"Desactivación!"}
+                                        detail={
+                                            "Empleado desactivado correctamente"
+                                        }
+                                    />
+                                </>
+                            )}
+                            {!employee.isActive && (
+                                <>
+                                    <Button
+                                        label="Activar"
+                                        onClick={() =>
+                                            setReactivateEntity(true)
+                                        }
+                                        className="p-button-success"
+                                    />
+                                    <ReactivateEmployee
+                                        id={employee.idEmployee}
+                                        endpoint="employee/employee/reactivateEmployee"
+                                        reactivateEntityDialog={
+                                            reactivateEntityDialog
+                                        }
+                                        setSubmitted={setShowEmployeeActions}
+                                        setReactivateEntityDialog={
+                                            setReactivateEntity
                                         }
                                         toast={toast}
                                     />
                                 </>
-                            )}
-
-                            {!employee.isActive && (
-                                <ReactivateEmployee
-                                    setShowEmployeeActions={
-                                        setShowEmployeeActions
-                                    }
-                                    idEmployee={employee.idEmployee!}
-                                    setSubmitted={setSubmitted}
-                                    toast={toast}
-                                />
                             )}
                         </div>
                     </div>

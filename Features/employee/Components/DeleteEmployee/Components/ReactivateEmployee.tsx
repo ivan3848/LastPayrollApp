@@ -1,91 +1,118 @@
-"use client";
+import { CACHE_KEY_EMPLOYEE, CACHE_KEY_LEASE } from "@/constants/cacheKeys";
+import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
+import ApiService from "@/services/ApiService";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { Toast } from "primereact/toast";
-import React, { useState } from "react";
-import useReactivateEmployeeQuery from "../Hooks/useReactivateEmployeeQuery";
+import React from "react";
 
 interface Props {
-    idEmployee: number;
+    id: number;
+    endpoint: string;
+    reactivateEntityDialog: boolean;
+    setReactivateEntityDialog: (value: boolean) => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
-    setShowEmployeeActions: (value: boolean) => void;
 }
 
 const ReactivateEmployee = ({
-    idEmployee,
-    toast,
-    setShowEmployeeActions,
+    id,
+    reactivateEntityDialog,
+    setReactivateEntityDialog,
     setSubmitted,
+    endpoint,
+    toast,
 }: Props) => {
-    const handleSubmit = () => {
-        setReactivateEntityDialog(true);
-    };
-    const [reactivateEntityDialog, setReactivateEntityDialog] = useState(false);
+    const apiService = new ApiService(endpoint);
+    const expireQuery = useExpireSessionQuery([CACHE_KEY_EMPLOYEE]);
 
-    const reactivateEntity = useReactivateEmployeeQuery({
-        toast,
-        setReactivateEntityDialog,
-        idEmployee,
-        reactivateEntityDialog,
-    });
+    const activateEmployee = useMutation({
+        mutationFn: (id: number) => apiService.reactivate(id),
 
-    const handleReactivate = async () => {
-        await reactivateEntity.mutateAsync(idEmployee).then(() => {
-            setShowEmployeeActions(false);
+        onError: (error: any) => {
+            var text = error.response.data;
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: "Hay nominas libre para calculo",
+                    life: 3000,
+                });
+                return;
+            }
             setReactivateEntityDialog(false);
-        });
 
-        setSubmitted(true);
+            toast.current?.show({
+                severity: "warn",
+                summary: "Error",
+                detail: error.response.data,
+                life: 3000,
+            });
+        },
+
+        onSuccess: (text: any) => {
+            console.log(text);
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: text,
+                    life: 3000,
+                });
+                return;
+            }
+            setReactivateEntityDialog(false);
+            setSubmitted(true);
+            expireQuery();
+            toast.current?.show({
+                severity: "success",
+                summary: "Eliminado!",
+                detail: "Registro Activado correctamente",
+                life: 3000,
+            });
+        },
+    });
+    const handleDelete = () => {
+        activateEmployee.mutate(id);
     };
 
-    const hideReactivateEntityDialog = () => {
+    const hideDeleteEntityDialog = () => {
         setReactivateEntityDialog(false);
     };
 
-    const reactivateProductDialogFooter = (
+    const deleteProductDialogFooter = (
         <>
             <Button
                 label="Cancelar"
                 icon="pi pi-times"
                 text
-                onClick={hideReactivateEntityDialog}
+                onClick={hideDeleteEntityDialog}
             />
             <Button
                 label="Confirmar"
                 icon="pi pi-check"
                 text
-                onClick={handleReactivate}
+                onClick={handleDelete}
             />
         </>
     );
     return (
-        <>
-            <Toast ref={toast} />
-            <Button
-                onClick={handleSubmit}
-                severity="success"
-                label="Reactivar"
-            />
-            <Dialog
-                visible={reactivateEntityDialog}
-                style={{ width: "450px" }}
-                header="Activar Registro"
-                modal
-                footer={reactivateProductDialogFooter}
-                onHide={hideReactivateEntityDialog}
-            >
-                <div className="flex align-items-center justify-content-center">
-                    <i
-                        className="pi pi-exclamation-triangle mr-3"
-                        style={{ fontSize: "2rem" }}
-                    />
-                    {idEmployee && (
-                        <span>¿Está seguro de activar el Empleado?</span>
-                    )}
-                </div>
-            </Dialog>
-        </>
+        <Dialog
+            visible={reactivateEntityDialog}
+            style={{ width: "450px" }}
+            header="Activar Registro"
+            modal
+            footer={deleteProductDialogFooter}
+            onHide={hideDeleteEntityDialog}
+        >
+            <div className="flex align-items-center justify-content-center">
+                <i
+                    className="pi pi-exclamation-triangle mr-3"
+                    style={{ fontSize: "2rem" }}
+                />
+                {id && <span>¿Está seguro de activar el registro?</span>}
+            </div>
+        </Dialog>
     );
 };
 

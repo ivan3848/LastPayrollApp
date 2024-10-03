@@ -67,7 +67,8 @@ export const CACHE_KEY_LEASE = "lease";
 
 export const CACHE_KEY_AMORTIZATION = "amortization";
 export const CACHE_KEY_LEASE_DETAIL = "leasedetail";
-export const CACHE_KEY_PAYROLL_PAY_EXPENSE_FOR_REPORT = "payrollPayExpenseForReport";
+export const CACHE_KEY_PAYROLL_PAY_EXPENSE_FOR_REPORT =
+    "payrollPayExpenseForReport";
 export const CACHE_KEY_ACCUMULATE_FOR_REPORT = "accumulateForReport";
 export const CACHE_KEY_BANK_PAYMENT_FOR_REPORT = "bankPaymentForReport";
 export const CACHE_KEY_CONCEPT_FOR_REPORT = "conceptForReport";
@@ -76,7 +77,8 @@ export const CACHE_KEY_COST_CENTER_FOR_REPORT = "costCenterForReport";
 export const CACHE_KEY_COST_FOR_REPORT = "costForReport";
 export const CACHE_KEY_DEPARTMENT_FOR_REPORT = "departmentForReport";
 export const CACHE_KEY_DEPENDANT_FOR_REPORT = "dependantForReport";
-export const CACHE_KEY_DEPENDANT_INSURANCE_FOR_REPORT = "dependantInsuranceForReport";
+export const CACHE_KEY_DEPENDANT_INSURANCE_FOR_REPORT =
+    "dependantInsuranceForReport";
 export const CACHE_KEY_EMPLOYEE_FOR_REPORT = "employeeForReport";
 export const CACHE_KEY_EMPLOYEE_HISTORY_FOR_REPORT = "employeeHistoryForReport";
 export const CACHE_KEY_EXTRA_HOUR_FOR_REPORT = "extraHourForReport";
@@ -92,7 +94,8 @@ export const CACHE_KEY_PLANT_PUNCH_FOR_REPORT = "plantPunchForReport";
 export const CACHE_KEY_POSITION_FOR_REPORT = "positionForReport";
 export const CACHE_KEY_PROFIT_FOR_REPORT = "profitForReport";
 export const CACHE_KEY_PUNCH_FOR_REPORT = "punchForReport";
-export const CACHE_KEY_RETROACTIVE_HOURS_FOR_REPORT = "retroactiveHoursForReport";
+export const CACHE_KEY_RETROACTIVE_HOURS_FOR_REPORT =
+    "retroactiveHoursForReport";
 export const CACHE_KEY_TOTAL_TAX_FOR_REPORT = "totalTaxForReport";
 export const CACHE_KEY_VACATION_FOR_REPORT = "vacationForReport";
 export const CACHE_KEY_CHECK_PAYMENT_FOR_REPORT = "checkPaymentForReport";
@@ -102,5 +105,5 @@ export const CACHE_KEY_CONTABILIZATION = "contabilization";
 export const CACHE_KEY_SECOND_CONTABILIZATION = "secondContabilization";
 export const CACHE_KEY_EXTRAHOUR_LATENESS = "extraHourLateness";
 export const CACHE_KEY_FIREDEMPLOYEE = "firedEmployee";
-export const CACHE_KEY_FIREDEMPLOYEE_CONTABILIZATION = "firedEmployeeContabilization";
-
+export const CACHE_KEY_FIREDEMPLOYEE_CONTABILIZATION =
+    "firedEmployeeContabilization";

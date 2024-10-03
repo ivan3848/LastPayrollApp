@@ -21,8 +21,6 @@ const useReactivateEmployeeQuery = ({
         mutationFn: (idEmployee: number) =>
             reactivateEmployeeService.reactivate(idEmployee),
         onError: (error: any) => {
-            setReactivateEntityDialog(false);
-
             toast.current?.show({
                 severity: "warn",
                 summary: "Error",
@@ -31,7 +29,9 @@ const useReactivateEmployeeQuery = ({
             });
             expireQuery();
         },
-        onSuccess: () => {
+        onSuccess: (text) => {
+            console.log(text);
+
             setReactivateEntityDialog(false);
             expireQuery();
 
