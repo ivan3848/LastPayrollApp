@@ -462,8 +462,8 @@ const PayrollPayView = ({
                                                         viewEmployees
                                                             ? "Ver empleados"
                                                             : byEmployees
-                                                            ? "Agregar empleados"
-                                                            : "Excluir empleados"
+                                                                ? "Agregar empleados"
+                                                                : "Excluir empleados"
                                                     }
                                                     onClick={handleAdd}
                                                 />
