@@ -9,6 +9,8 @@ import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
 import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
+import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -26,7 +28,7 @@ const AddExtraHourLateness = ({
     toast,
     setSubmitted,
 }: Props) => {
-    // const { addEntityFormSchema } = LicensesFormSchema();
+    const { addEntityFormSchema } = ExtraHourLatenessFormSchema();
 
     const {
         handleSubmit,
@@ -35,7 +37,9 @@ const AddExtraHourLateness = ({
         reset,
         setValue,
         formState: { errors },
-    } = useForm<IExtraHourLateness>();
+    } = useForm<IExtraHourLateness>({
+        resolver: zodResolver(addEntityFormSchema),
+    });
 
     const addEntity = useAddEntityQuery({
         toast,
@@ -53,7 +57,7 @@ const AddExtraHourLateness = ({
         data.description = data.description;
         data.typeValue = data.typeValue;
 
-        // addEntity.mutate(data);
+        addEntity.mutate(data);
     };
 
     const hideDialog = () => {
@@ -113,6 +117,7 @@ const AddExtraHourLateness = ({
                                     isValid={!!errors.hourAmount}
                                     setValue={setValue}
                                     watch={watch}
+                                    format={false}
                                 />
                                 {errors.hourAmount && (
                                     <small className="p-invalid text-danger">
@@ -126,10 +131,9 @@ const AddExtraHourLateness = ({
                             <div>
                                 <SelectButton
                                     {...register("typeValue")}
-                                    value={
-                                        watch("typeValue") == "extraHour"
-                                            ? "Hora extra"
-                                            : "Tardanza"
+                                    value={watch("typeValue") == "extraHour"
+                                        ? "Hora extra"
+                                        : "Tardanza"
                                     }
                                     onChange={(e) => {
                                         setValue(

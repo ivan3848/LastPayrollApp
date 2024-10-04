@@ -61,6 +61,7 @@ const ExtraHourLatenessTable = ({
         }
     };
 
+
     const onFilter = (event: any) => {
         setFilters([
             {
@@ -75,6 +76,10 @@ const ExtraHourLatenessTable = ({
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
+
+    const formatMoney = (value: number) => {
+        return `RD$${value}`;
+    };
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -106,7 +111,7 @@ const ExtraHourLatenessTable = ({
                 />
                 <Column
                     field="typeValue"
-                    header="Tipo"
+                    header="Tipo de Horas"
                     sortable
                     filter
                     filterField="typeValue"
@@ -116,19 +121,14 @@ const ExtraHourLatenessTable = ({
                     onFilterClear={clearFilters}
                 />
                 <Column
+                    key="idConcept"
                     field="idConcept"
-                    header="Tipo de hora"
-                    sortable
-                    filter
-                    filterField="idConcept"
-                    filterPlaceholder="Buscar por Concepto"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
+                    header="Monto"
+                    body={(rowData: IPersonInsurance) => formatMoney(rowData.amount)}
                 />
                 <Column
                     field="hourAmount"
-                    header="Horas"
+                    header="Cantidad de Horas"
                     sortable
                     filter
                     filterField="hourAmount"

@@ -10,6 +10,7 @@ import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import useEditExtraHourLateness from "../Hooks/useEditExtraHourLateness";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
 
 interface Props {
     entity: IExtraHourLateness;
@@ -26,7 +27,7 @@ const EdiExtraHourLateness = ({
     toast,
     editEntityDialog,
 }: Props) => {
-    // const { editEntityFormSchema } = LicensesFormSchema();
+    const { editEntityFormSchema } = ExtraHourLatenessFormSchema();
 
     const {
         handleSubmit,
@@ -35,7 +36,9 @@ const EdiExtraHourLateness = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IExtraHourLateness>();
+    } = useForm<IExtraHourLateness>({
+        resolver: zodResolver(editEntityFormSchema),
+    });
 
     const editEntity = useEditExtraHourLateness({
         toast,
@@ -71,7 +74,7 @@ const EdiExtraHourLateness = ({
         data.description = data.description;
         data.typeValue = data.typeValue ?? entity.typeValue;
 
-        // editEntity.mutate(data);
+        editEntity.mutate(data);
     };
 
     const hideDialog = () => {
@@ -96,9 +99,11 @@ const EdiExtraHourLateness = ({
                             <label htmlFor="date">Fecha</label>
                             <Calendar
                                 id="date"
+                                value={watch("date") ?? new Date(entity?.date!)}
                                 onChange={(e) => setValue("date", e.value!)}
                                 showIcon
                                 showButtonBar
+                                key={entity?.date.toString()}
                             />
                             {errors.date && (
                                 <small className="p-invalid text-red-500">
@@ -129,6 +134,7 @@ const EdiExtraHourLateness = ({
                                     isValid={!!errors.hourAmount}
                                     setValue={setValue}
                                     watch={watch}
+                                    format={false}
                                 />
                                 {errors.hourAmount && (
                                     <small className="p-invalid text-danger">
