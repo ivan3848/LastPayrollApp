@@ -128,7 +128,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
         data.idEmployee = employee.idEmployee;
         data.isChristmasPayment = pagoNavidad;
         data.isNotice = notice;
-        data.isTakenVacation = vacation;
+        data.isTakeVacation = vacation;
         data.isUnemployment = unemployment;
         data.firedDate = data.firedDate ?? new Date();
         data.idStatusFired = data.idStatusFired;
@@ -304,7 +304,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
                             <div className="field col-12 md:col-3">
                                 <h6>Ha tomado vacaciones este año?</h6>
                                 <InputSwitch
-                                    {...register("isTakenVacation")}
+                                    {...register("isTakeVacation")}
                                     id="isTakenVacation"
                                     name="isTakenVacation"
                                     checked={vacation}

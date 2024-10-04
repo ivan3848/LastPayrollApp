@@ -86,7 +86,7 @@ const AddVacation = ({
         data.totalRemain = data.totalRemain ?? 2;
         data.enjoymentDay = data.enjoymentDay;
         data.reEntryDate = data.end ?? new Date();
-        data.payrollPayDate = data.payrollPayDate ?? new Date();
+        data.payrollPayDate = data.payrollPayDate;
         data.absenteeism = data.absenteeism ?? 0;
         data.dayPay = data.dayPay ?? 0;
 
@@ -205,6 +205,20 @@ const AddVacation = ({
                             {errors.enjoymentDay && (
                                 <small className="text-red-600">
                                     {errors.enjoymentDay.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="payrollPayDate">Fecha de pago</label>
+                            <Calendar
+                                id="payrollPayDate"
+                                onChange={(e) => setValue("payrollPayDate", e.value!)}
+                                showIcon
+                                showButtonBar
+                            />
+                            {errors.end && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.end.message?.toString()}
                                 </small>
                             )}
                         </div>
