@@ -1,4 +1,5 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
+import IFilterDGT from "@/Features/reports/Types/IFilterDGT";
 import IFilterReport from "@/Features/reports/Types/IFilterReport";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
@@ -11,9 +12,9 @@ const axiosInstance = axios.create({
     baseURL: "http://localhost:5038/",
 
     headers: {
-            "Content-Type": "application/json",
-            IdCompany: user?.idCompany ?? "2",
-            IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
+        "Content-Type": "application/json",
+        IdCompany: user?.idCompany ?? "2",
+        IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
     },
 });
 
@@ -130,6 +131,18 @@ class ApiService<Q, R> {
             .get<IResponse<R>>(finalEndpoint, {
                 params: {
                     ...params.filter,
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
+    }
+
+    async getForDGT(filterReport: IFilterDGT): Promise<R[]> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<R[]>(finalEndpoint, {
+                params: {
                     ...filterReport,
                 },
             })
