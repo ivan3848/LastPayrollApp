@@ -382,6 +382,11 @@ const DGT = () => {
 
     return (
         <>
+            <div className="text-center">
+                <h1 className="mb-4" style={{ color: "var(--primary-color)" }}>
+                    DGT
+                </h1>
+            </div>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="p-fluid formgrid grid mb-4">
                     <div className="field col-12 md:col-6">
