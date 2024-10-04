@@ -72,7 +72,7 @@ const EditVacation = ({
     useEffect(() => {
         if (entity) {
             Object.keys(entity).forEach((key) => {
-                if (key === "start" || key === "end") {
+                if (key === "start" || key === "end" || key === "payrollPayDate") {
                     setValue(
                         key as keyof IVacation,
                         new Date(entity[key as keyof IVacation] as Date)
@@ -220,6 +220,22 @@ const EditVacation = ({
                             {errors.enjoymentDay && (
                                 <small className="text-red-600">
                                     {errors.enjoymentDay.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="end">Fecha Final</label>
+                            <Calendar
+                                id="end"
+                                {...register("payrollPayDate")}
+                                value={watch("payrollPayDate") ?? new Date(entity.payrollPayDate!)}
+                                onChange={(e) => setValue("payrollPayDate", new Date(e.value!))}
+                                key={entity.end.toString()}
+                                showIcon
+                            />
+                            {errors.end && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.end.message?.toString()}
                                 </small>
                             )}
                         </div>
