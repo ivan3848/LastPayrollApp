@@ -35,6 +35,7 @@ function useAddEntityQuery<T>({
             });
         },
         onSuccess: (data: any) => {
+
             if (data.toString().includes("Hay")) {
                 toast?.current?.show({
                     severity: "warn",

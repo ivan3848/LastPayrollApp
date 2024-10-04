@@ -8,6 +8,7 @@ import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber"
 import VacationFormSchema from "./Validation/VacationFormSchema";
 import useEditVacation from "./Hooks/useEditVacation";
 import { calculateVacationDayService } from "./Services/vacationService";
+import { InputSwitch } from "primereact/inputswitch";
 
 interface Props {
     entity: IVacation;
@@ -27,6 +28,7 @@ const EditVacation = ({
     const service = calculateVacationDayService;
     const { editEntityFormSchema } = VacationFormSchema();
     const [vacationData, setVacationData] = useState<ICalculateVacationDaysResult>();
+    const [paid, setPaid] = useState(entity.paid!);
 
     const calculateVacationdays = async (entity: ICalculateVacationDays) => {
         try {
@@ -92,7 +94,7 @@ const EditVacation = ({
         data.idEmployee = entity.idEmployee;
         data.end = data.end;
         data.start = data.start;
-        data.paid = data.paid;
+        data.paid = paid;
         data.totalRemain = data.totalRemain;
         data.enjoymentDay = data.enjoymentDay;
         data.reEntryDate = data.end;
@@ -238,6 +240,19 @@ const EditVacation = ({
                                     {errors.end.message?.toString()}
                                 </small>
                             )}
+                        </div>
+                        <div className="field col-12 md:col-3">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("paid")}
+                                id="paid"
+                                defaultChecked={entity.paid}
+                                name="paid"
+                                checked={paid}
+                                onChange={(e) =>
+                                    setPaid(e.value ?? false)
+                                }
+                            />
                         </div>
                     </div>
                 </div>
