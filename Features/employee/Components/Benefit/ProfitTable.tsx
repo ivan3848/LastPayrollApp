@@ -39,6 +39,8 @@ const BenefitTable = ({
         idEmployee
     );
 
+    console.log(data);
+
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString("es-DO", {
             year: "numeric",

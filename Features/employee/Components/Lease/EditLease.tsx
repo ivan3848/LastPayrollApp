@@ -346,8 +346,8 @@ const EditLease = ({
                                         setValue("paymentMethod", e.value)
                                     }
                                     options={[
-                                        { label: "Cheque", value: true },
-                                        { label: "Nomina", value: false },
+                                        { label: "Cheque", value: false },
+                                        { label: "Nomina", value: true },
                                     ]}
                                 />
                             </div>
