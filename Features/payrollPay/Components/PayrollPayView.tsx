@@ -153,6 +153,9 @@ const PayrollPayView = ({
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
 
+        const periodForTest = new Date(entityPayrollManagement!.payrollPeriodStart);
+        data.period = `${data.payrollNumber}/${periodForTest.getFullYear()}`;
+
         setLoading(true);
 
         await addEntity
@@ -666,9 +669,10 @@ const PayrollPayView = ({
                     )}
                     <DialogFooterButtonPayrollPay
                         isReadOnly={
-                            entityPayrollManagement?.idPayrollManagement == 0 ||
-                            entityPayrollManagement?.idStatus !== 151 ||
-                            loading
+                            activeIndex === 0 &&
+                            (entityPayrollManagement?.idPayrollManagement == 0 ||
+                                entityPayrollManagement?.idStatus !== 151 ||
+                                loading)
                         }
                         setGenereateFiles={() => setGenerateFiles(true)}
                     />

@@ -15,6 +15,8 @@ export interface IPayrollPay {
     toExclude?: boolean;
     isTest?: boolean;
     getPayrollExecution?: IGetPayrollExecution[];
+    isRetroactive?: boolean;
+    period?: string;
 }
 
 export interface IPaymentLoad {
