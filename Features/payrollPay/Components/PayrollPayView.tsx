@@ -153,8 +153,8 @@ const PayrollPayView = ({
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
 
-        const payrollPeriodStartDate = new Date(entityPayrollManagement!.payrollPeriodStart);
-        data.period = `${data.payrollNumber}/${payrollPeriodStartDate.getFullYear()}`;
+        const periodForTest = new Date(entityPayrollManagement!.payrollPeriodStart);
+        data.period = `${data.payrollNumber}/${periodForTest.getFullYear()}`;
 
         setLoading(true);
 
