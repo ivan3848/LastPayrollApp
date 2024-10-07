@@ -12,6 +12,7 @@ import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSch
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputSwitch } from "primereact/inputswitch";
 import { useState } from "react";
+import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
