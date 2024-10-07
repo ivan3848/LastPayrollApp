@@ -7,6 +7,7 @@ interface IExtraHourLateness {
     typeValue: string;
     idCostCenter: number;
     description: string;
+    isToPay?: boolean;
 }
 
 interface IExtraHourLatenessData {

@@ -11,6 +11,8 @@ import { useForm } from "react-hook-form";
 import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
 import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { InputSwitch } from "primereact/inputswitch";
+import { useState } from "react";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -41,6 +43,8 @@ const AddExtraHourLateness = ({
         resolver: zodResolver(addEntityFormSchema),
     });
 
+    const [isToPay, setIsToPay] = useState(false);
+
     const addEntity = useAddEntityQuery({
         toast,
         setAddEntityDialog,
@@ -56,6 +60,7 @@ const AddExtraHourLateness = ({
         data.hourAmount = data.hourAmount;
         data.description = data.description;
         data.typeValue = data.typeValue;
+        data.isToPay = isToPay;
 
         addEntity.mutate(data);
     };
@@ -127,25 +132,33 @@ const AddExtraHourLateness = ({
                             </div>
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="isToPay">Tipo</label>
-                            <div>
-                                <SelectButton
-                                    {...register("typeValue")}
-                                    value={watch("typeValue") == "extraHour"
-                                        ? "Hora extra"
-                                        : "Tardanza"
-                                    }
-                                    onChange={(e) => {
-                                        setValue(
-                                            "typeValue",
-                                            e.value === "Hora extra"
-                                                ? "extraHour"
-                                                : "lateness"
-                                        );
-                                    }}
-                                    options={typeValue}
-                                />
-                            </div>
+                            <h6>Tipo</h6>
+                            <SelectButton
+                                {...register("typeValue")}
+                                value={watch("typeValue") == "extraHour"
+                                    ? "Hora extra"
+                                    : "Tardanza"
+                                }
+                                onChange={(e) => {
+                                    setValue(
+                                        "typeValue",
+                                        e.value === "Hora extra"
+                                            ? "extraHour"
+                                            : "lateness"
+                                    );
+                                }}
+                                options={typeValue}
+                            />
+                        </div>
+                        <div className="field col-12 ml-3 md:col-6 lg:col-4">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("isToPay")}
+                                id="isToPay"
+                                name="isToPay"
+                                checked={isToPay}
+                                onChange={(e) => setIsToPay(e.value)}
+                            />
                         </div>
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>

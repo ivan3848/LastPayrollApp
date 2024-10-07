@@ -1,11 +1,13 @@
 "use client";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Column } from "primereact/column";
+import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import { DataTable, DataTableSortEvent } from "primereact/datatable";
 import { Card } from "primereact/card";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useExtraHourLatenessByIdEmployee from "../Hooks/useExtraHourByIdEmployee";
 import AddButton from "@/Features/Shared/Components/AddButton";
+import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
+import { TriStateCheckbox } from "primereact/tristatecheckbox";
 
 
 interface Props {
@@ -85,6 +87,50 @@ const ExtraHourLatenessTable = ({
         return <div>Loading...</div>;
     }
 
+    const verifiedFilterTemplate = (
+        options: ColumnFilterElementTemplateOptions
+    ) => {
+        return (
+            <div>
+                <TriStateCheckbox
+                    id="filter"
+                    value={options.value}
+                    onChange={(e) => {
+                        options.filterCallback(e.value);
+                        switch (e.value) {
+                            case true:
+                                setFilters([
+                                    {
+                                        column: options.field,
+                                        value: true,
+                                    },
+                                ]);
+                                break;
+                            case false:
+                                setFilters([
+                                    {
+                                        column: options.field,
+                                        value: false,
+                                    },
+                                ]);
+                                break;
+                            default:
+                                clearFilters();
+                                break;
+                        }
+                    }}
+                />
+                <label className="ml-2" htmlFor="filter">
+                    {options.value === true
+                        ? "Si"
+                        : options.value === false
+                            ? "No"
+                            : "Sin filtro"}
+                </label>
+            </div>
+        );
+    };
+
     return (
         <Card className="m-2">
             <DataTable
@@ -137,6 +183,21 @@ const ExtraHourLatenessTable = ({
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
+                <Column
+                    field="isToPay"
+                    header="Para pagar"
+                    dataType="boolean"
+                    bodyClassName="text-center"
+                    style={{ minWidth: "8rem" }}
+                    body={(e) => <GenericTableCheck isChecked={e.isToPay} />}
+                    filter
+                    showAddButton={false}
+                    showApplyButton={false}
+                    showClearButton={false}
+                    showFilterMatchModes={false}
+                    showFilterMenuOptions={false}
+                    filterElement={verifiedFilterTemplate}
+                />
                 <Column
                     header="Acciones"
                     body={(rowData: IExtraHourLateness) => (

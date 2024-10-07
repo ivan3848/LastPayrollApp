@@ -1,6 +1,6 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
@@ -11,6 +11,7 @@ import { SelectButton } from "primereact/selectbutton";
 import useEditExtraHourLateness from "../Hooks/useEditExtraHourLateness";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
+import { InputSwitch } from "primereact/inputswitch";
 
 interface Props {
     entity: IExtraHourLateness;
@@ -28,6 +29,7 @@ const EdiExtraHourLateness = ({
     editEntityDialog,
 }: Props) => {
     const { editEntityFormSchema } = ExtraHourLatenessFormSchema();
+    const [isToPay, setIsToPay] = useState(entity.isToPay ?? false);
 
     const {
         handleSubmit,
@@ -73,6 +75,7 @@ const EdiExtraHourLateness = ({
         data.hourAmount = data.hourAmount ?? entity.hourAmount;
         data.description = data.description;
         data.typeValue = data.typeValue ?? entity.typeValue;
+        data.isToPay = isToPay;
 
         editEntity.mutate(data);
     };
@@ -155,6 +158,17 @@ const EdiExtraHourLateness = ({
                                     options={typeValue}
                                 />
                             </div>
+                        </div>
+                        <div className="field col-12 ml-3 md:col-6 lg:col-4">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("isToPay")}
+                                id="isToPay"
+                                defaultChecked={entity.isToPay}
+                                name="isToPay"
+                                checked={isToPay}
+                                onChange={(e) => setIsToPay(e.value)}
+                            />
                         </div>
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>
