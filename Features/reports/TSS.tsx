@@ -3,14 +3,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ExcelJS from "exceljs";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
+import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
-    getEmployeeForDGT12,
-    getEmployeeForDGT2,
-    getEmployeeForDGT3,
-    getEmployeeForDGT4,
     getTemplateForAutodetermination,
     getTemplateForBonus,
     getTemplateForNewsFile,
@@ -20,9 +19,6 @@ import {
 } from "../employee/Services/employeeService";
 import IFilterTSS from "./Types/IFilterTSS";
 import FilterTSSFormSchema from "./Validations/FilterTSSFormSchema";
-import { Dialog } from "primereact/dialog";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { Toast } from "primereact/toast";
 
 const TSS = () => {
     const { filterTSSFormSchema } = FilterTSSFormSchema();
@@ -826,7 +822,7 @@ const TSS = () => {
         { key: 4, name: "Plantilla de novedades" },
         { key: 5, name: "Reporte de autodeterminación mensual" },
     ];
-    
+
     return (
         <>
             <Toast ref={toast} />
