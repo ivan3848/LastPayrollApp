@@ -8,6 +8,9 @@ import { IDGT2View } from "@/Features/reports/Types/IDGT2View";
 import IDGT5View from "@/Features/reports/Types/IDGT5View";
 import IDGT3View from "@/Features/reports/Types/IDGT3View";
 import IDGT12View from "@/Features/reports/Types/IDGT12View";
+import { IBonusTemplate } from "@/Features/reports/Types/IBonusTemplate";
+import { IRectifyTemplate } from "@/Features/reports/Types/IRectifyTemplate";
+import { ITemplateForNewsFileView } from "@/Features/reports/Types/ITemplateForNewsFileView";
 
 const employeeService = new ApiService<IEmployee, IEmployee>(
     "employee/employee/"
@@ -44,6 +47,25 @@ const getEmployeeForDGT3 = new ApiService<IDGT3View, IDGT3View>(
 const getEmployeeForDGT12 = new ApiService<IDGT12View, IDGT12View>(
     "employee/employee/getEmployeeForDGT12"
 );
+const getTemplateForBonus = new ApiService<IBonusTemplate, IBonusTemplate>(
+    "employee/employee/getTemplateForBonus"
+);
+const getTemplateForRectify = new ApiService<IRectifyTemplate, IRectifyTemplate>(
+    "employee/employee/getTemplateForRectify"
+);
+const getTemplateForNewsFile = new ApiService<ITemplateForNewsFileView, ITemplateForNewsFileView>(
+    "employee/employee/getTemplateForNewsFile"
+);
+const getTemplateForAutodetermination = new ApiService<IRectifyTemplate, IRectifyTemplate>(
+    "employee/employee/getTemplateForAutodetermination"
+);
+const getTemplateForRawNewsFile = new ApiService<ITemplateForNewsFileView, ITemplateForNewsFileView>(
+    "employee/employee/getTemplateForRawNewsFile"
+);
+const getTemplateForRawAutodetermination = new ApiService<ITemplateForNewsFileView, ITemplateForNewsFileView>(
+    "employee/employee/getTemplateForRawAutodetermination"
+);
+
 export default employeeService;
 
 export {
@@ -55,5 +77,11 @@ export {
     getEmployeeForDGT2,
     getEmployeeForDGT5,
     getEmployeeForDGT3,
-    getEmployeeForDGT12
+    getEmployeeForDGT12,
+    getTemplateForBonus,
+    getTemplateForRectify,
+    getTemplateForNewsFile,
+    getTemplateForAutodetermination,
+    getTemplateForRawNewsFile,
+    getTemplateForRawAutodetermination
 };

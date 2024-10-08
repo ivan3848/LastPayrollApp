@@ -1,353 +1,726 @@
 "use client";
-import React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ExcelJS from "exceljs";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
-import { InputSwitch } from "primereact/inputswitch";
-import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import GenericDropDown from "../Shared/Components/GenericDropDown";
-import useZoneQuery from "../zone/Hooks/useZoneQuery";
-import IFilterDGT from "./Types/IFilterDGT";
-import FilterDGTFormSchema from "./Validations/FilterDGTFormSchema";
-import ExcelJS from "exceljs";
 import {
-    getEmployeeForDGT4,
+    getEmployeeForDGT12,
     getEmployeeForDGT2,
     getEmployeeForDGT3,
-    getEmployeeForDGT12,
+    getEmployeeForDGT4,
+    getTemplateForAutodetermination,
+    getTemplateForBonus,
+    getTemplateForNewsFile,
+    getTemplateForRawAutodetermination,
+    getTemplateForRawNewsFile,
+    getTemplateForRectify,
 } from "../employee/Services/employeeService";
-import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
+import IFilterTSS from "./Types/IFilterTSS";
+import FilterTSSFormSchema from "./Validations/FilterTSSFormSchema";
+import { Dialog } from "primereact/dialog";
+import { ProgressSpinner } from "primereact/progressspinner";
 
 const TSS = () => {
-    "use client";
-
-    const { filterDGTFormSchema } = FilterDGTFormSchema();
+    const { filterTSSFormSchema } = FilterTSSFormSchema();
 
     const {
         setValue,
-        watch,
         handleSubmit,
-        register,
         formState: { errors },
-    } = useForm<IFilterDGT>({
-        resolver: zodResolver(filterDGTFormSchema),
+    } = useForm<IFilterTSS>({
+        resolver: zodResolver(filterTSSFormSchema),
     });
-    const [selectedReport, setSelectedReport] = useState<number>();
 
-    const [count1, setCount1] = useState(1);
+    const [selectedReport, setSelectedReport] = useState<any>();
+    const [loading, setLoading] = useState(false);
 
     const getDateToFilter = (data: Date) => {
         if (!data) {
             return {};
         }
         const start = new Date(data.getFullYear(), data.getMonth(), 1);
-        const end = new Date(data.getFullYear(), data.getMonth() + 1, 0);
-        const year = data.getFullYear();
-        return { start, end, year };
+        const end = new Date(data.getFullYear(), data.getMonth() + 1, 1);
+        return { start, end };
     };
 
-    const executeDGTExcelTemplate = async (
-        filter: IFilterDGT,
+    const executeTSSExcelTemplate = async (
+        filter: IFilterTSS,
         filename: string,
-        ws: string[]
+        ws: string
     ) => {
-        const dirRelativeToPublicFolder = "report";
-        const fileName = filename;
-        const filePath = `/${dirRelativeToPublicFolder}/${fileName}`;
+        setLoading(true);
+        try {
+            const dirRelativeToPublicFolder = "report";
+            const fileName = filename;
+            const filePath = `/${dirRelativeToPublicFolder}/${fileName}`;
 
-        const response = await fetch(filePath);
+            const response = await fetch(filePath);
 
-        if (!response.ok) {
-            throw new Error(`File not found: ${filePath}`);
-        }
+            if (!response.ok) {
+                throw new Error(`File not found: ${filePath}`);
+            }
 
-        const fileBuffer = await response.arrayBuffer();
-        const file = new File([fileBuffer], fileName, {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
+            const fileBuffer = await response.arrayBuffer();
+            const file = new File([fileBuffer], fileName, {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
 
-        const workbook = new ExcelJS.Workbook();
-        await workbook.xlsx.load(await file.arrayBuffer());
+            const workbook = new ExcelJS.Workbook();
+            await workbook.xlsx.load(await file.arrayBuffer());
 
-        for (const sheet of ws) {
-            switch (sheet) {
-                case "Plantilla DGT2":
-                    const dataDGT2 = await getEmployeeForDGT2.getForDGT(filter);
+            switch (ws) {
+                case "Reporte de bonificación":
+                    const dataTemplateForBonus =
+                        await getTemplateForBonus.getForTSS(filter);
+                    let count1 = 15;
 
-                    const worksheet1 = workbook.getWorksheet("Plantilla DGT2")!;
-
-                    let count0DGT2 = 14;
-
-                    const employeesDGT2 = dataDGT2;
-
-                    const groupedEmployees = employeesDGT2.reduce(
-                        (acc: any, employee: any) => {
-                            (acc[employee.idEmployee] =
-                                acc[employee.idEmployee] || []).push(employee);
-                            return acc;
-                        },
-                        {}
+                    const worksheetTemplateForBonus = workbook.getWorksheet(
+                        "Plantilla de Bonificación"
                     );
 
-                    for (const key in groupedEmployees) {
-                        const item: any = groupedEmployees[key];
-                        const employee = item[0];
+                    worksheetTemplateForBonus!.getCell(`D${9}`).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
 
-                        if (employee.identification.length > 15) continue;
+                    dataTemplateForBonus.forEach((employee: any) => {
+                        const item = dataTemplateForBonus.find(
+                            (x: any) => x.idEmployee === employee.idEmployee
+                        )!;
 
-                        const zone = (() => {
-                            switch (employee.idZone) {
-                                case 1:
-                                    return "0001";
-                                case 2:
-                                    return "0002";
-                                case 3:
-                                    return "0006";
-                                case 4:
-                                    return "0003";
-                                case 5:
-                                    return "0004";
-                                default:
-                                    return "0005";
-                            }
-                        })();
-
-                        worksheet1.getCell(`D${count1}`).value =
-                            employee.Identification.replace("-", "").length ===
-                            11
+                        worksheetTemplateForBonus!.getCell(`B${count1}`).value =
+                            item.identification.replace(/-/g, "").length === 11
                                 ? "C"
                                 : "N";
-                        worksheet1.getCell(`E${count1}`).value =
-                            employee.identification.replace("-", "");
-                        worksheet1.getCell(`L${count1}`).value = zone;
-                        worksheet1.getCell(`M${count1}`).value =
-                            employee.salaryPerHour.toFixed(2);
-                        worksheet1.getCell(`CA${count1}`).value = "a";
+                        worksheetTemplateForBonus!.getCell(`C${count1}`).value =
+                            item.identification.replace(/-/g, "") ?? "N/A";
+                        worksheetTemplateForBonus!.getCell(
+                            `D${count1}`
+                        ).value = `${item.firstName} ${item.middleName} ${item.firstLastName} ${item.secondLastName}`;
+                        worksheetTemplateForBonus!.getCell(
+                            `E${count1}`
+                        ).value = `${item.firstLastName}`;
+                        worksheetTemplateForBonus!.getCell(
+                            `F${count1}`
+                        ).value = `${item.secondLastName}`;
+                        worksheetTemplateForBonus!.getCell(`G${count1}`).value =
+                            item.sex < 0 ? "F" : "M";
+                        worksheetTemplateForBonus!.getCell(`H${count1}`).value =
+                            new Date(item.birthDate!)
+                                .toLocaleDateString("en-GB")
+                                .split("/")
+                                .join("") ?? "N/A";
+                        worksheetTemplateForBonus!.getCell(`I${count1}`).value =
+                            item.totalPay ?? 0.0;
+                        count1++;
+                    });
 
-                        let countExtraHour = 15;
-                        const monthDays = new Date(
-                            filter.start!.getFullYear(),
-                            filter.start!.getMonth(),
-                            1
+                    break;
+                case "Reporte de rectificación":
+                    const dataTemplateForRectify =
+                        await getTemplateForRectify.getForTSS(filter);
+
+                    let count2 = 14;
+
+                    const worksheetTemplateForRectify = workbook.getWorksheet(
+                        "Plantilla de rectificativa"
+                    );
+
+                    worksheetTemplateForRectify!.getCell(`D${8}`).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
+
+                    dataTemplateForRectify.forEach((employee: any) => {
+                        const item = dataTemplateForRectify.find(
+                            (x: any) => x.idEmployee === employee.idEmployee
+                        )!;
+
+                        if (item.isrSalary <= 0.0 && item.otherProfit <= 0.0)
+                            return;
+
+                        worksheetTemplateForRectify!.getCell(
+                            `B${count2}`
+                        ).value = "N";
+                        worksheetTemplateForRectify!.getCell(
+                            `C${count2}`
+                        ).value =
+                            item.identification.replace(/-/g, "").length === 11
+                                ? "C"
+                                : "N";
+                        worksheetTemplateForRectify!.getCell(
+                            `D${count2}`
+                        ).value = item.identification.replace(/-/g, "");
+                        worksheetTemplateForRectify!.getCell(
+                            `E${count2}`
+                        ).value = item.names
+                            ?.replace("ü", "u")
+                            .replace(".", "")
+                            .replace(".", "");
+                        worksheetTemplateForRectify!.getCell(
+                            `F${count2}`
+                        ).value = item.firstLastName
+                            ?.replace("ü", "u")
+                            .replace(".", "");
+                        worksheetTemplateForRectify!.getCell(
+                            `G${count2}`
+                        ).value = item.secondLastName
+                            ?.replace("ü", "u")
+                            .replace(".", "");
+                        worksheetTemplateForRectify!.getCell(
+                            `H${count2}`
+                        ).value = item.sex < 0 ? "F" : "M";
+                        worksheetTemplateForRectify!.getCell(
+                            `I${count2}`
+                        ).value =
+                            new Date(item.birthDate!)
+                                .toLocaleDateString("en-GB")
+                                .split("/")
+                                .join("") ?? "N/A";
+                        worksheetTemplateForRectify!.getCell(
+                            `L${count2}`
+                        ).value =
+                            item.isrSalary !== 0.0
+                                ? item.isrSalary.toString()
+                                : "";
+                        worksheetTemplateForRectify!.getCell(
+                            `M${count2}`
+                        ).value =
+                            item.otherProfit !== 0.0
+                                ? item.otherProfit.toString()
+                                : "";
+                        worksheetTemplateForRectify!.getCell(
+                            `N${count2}`
+                        ).value = item.identification?.replace("-", "");
+                        worksheetTemplateForRectify!.getCell(
+                            `O${count2}`
+                        ).value = "";
+                        worksheetTemplateForRectify!.getCell(
+                            `P${count2}`
+                        ).value = "";
+                        worksheetTemplateForRectify!.getCell(
+                            `Q${count2}`
+                        ).value = "";
+                        worksheetTemplateForRectify!.getCell(
+                            `R${count2}`
+                        ).value = "";
+                        worksheetTemplateForRectify!.getCell(
+                            `S${count2}`
+                        ).value = "";
+
+                        count2++;
+                    });
+                    break;
+                case "Reporte de novedades":
+                    const dataTemplateForNewsFile =
+                        await getTemplateForNewsFile.getForTSS(filter);
+
+                    let count3 = 10;
+
+                    const worksheetTemplateForNewsFile =
+                        workbook.getWorksheet("Rar_Novedades.XLS");
+
+                    worksheetTemplateForNewsFile!.getCell(`B${7}`).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
+
+                    dataTemplateForNewsFile.forEach((employee: any) => {
+                        const item = dataTemplateForNewsFile.find(
+                            (x: any) => x.idEmployee === employee.idEmployee
+                        )!;
+
+                        const midName =
+                            item.middleName?.replace("ü", "u") ?? "";
+                        const firstName =
+                            item.firstName?.replace("ü", "u") ?? "";
+                        const firstLastName =
+                            item.firstLastName?.replace("ü", "u") ?? "";
+                        const secondLastName =
+                            item.secondLastName?.replace("ü", "u") ?? "";
+                        const forInDate = item.start
+                            ? new Date(item.start)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : new Date()
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("");
+
+                        worksheetTemplateForNewsFile!.getCell(
+                            `B${count3}`
+                        ).value = "N";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `C${count3}`
+                        ).value =
+                            item.identification.replace(/-/g, "").length === 11
+                                ? "C"
+                                : "N";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `D${count3}`
+                        ).value = item.identification.replace(/-/g, "");
+                        worksheetTemplateForNewsFile!.getCell(
+                            `E${count3}`
+                        ).value = `${firstName} ${midName}`;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `F${count3}`
+                        ).value = firstLastName;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `G${count3}`
+                        ).value = secondLastName;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `H${count3}`
+                        ).value = item.sex < 0 ? "F" : "M";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `I${count3}`
+                        ).value = item.birthDate
+                            ? new Date(item.birthDate)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : new Date()
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("");
+                        //worksheetTemplateForNewsFile!.getCell(`L${count3}`).value = item.isrSalary !== 0.0 ? item.isrSalary.toString() : "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `M${count3}`
+                        ).value =
+                            item.otherProfit !== 0.0
+                                ? item.otherProfit.toString()
+                                : "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `N${count3}`
+                        ).value = item.identification.replace(/-/g, "");
+                        worksheetTemplateForNewsFile!.getCell(
+                            `O${count3}`
+                        ).value = "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `P${count3}`
+                        ).value = "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `Q${count3}`
+                        ).value = "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `R${count3}`
+                        ).value = "";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `S${count3}`
+                        ).value = "";
+
+                        count3++;
+                    });
+                    break;
+                //! TRABAJANDO ESTE
+                case "Plantilla de autodeterminación mensual":
+                    const dataTemplateForAutodetermination =
+                        await getTemplateForAutodetermination.getForTSS(filter);
+
+                    let count4 = 14;
+
+                    const worksheetTemplateForAutodetermination =
+                        workbook.getWorksheet("Plantilla de Autodeterminación");
+
+                    worksheetTemplateForAutodetermination!.getCell(
+                        `B${7}`
+                    ).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
+
+                    dataTemplateForAutodetermination.forEach(
+                        (employee: any) => {
+                            const item = dataTemplateForAutodetermination.find(
+                                (x: any) => x.idEmployee === employee.idEmployee
+                            )!;
+
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `B${count4}`
+                            ).value = "N";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `C${count4}`
+                            ).value =
+                                item.identification.replace(/-/g, "").length ===
+                                11
+                                    ? "C"
+                                    : "N";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `D${count4}`
+                            ).value = item.identification.replace(/-/g, "");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `E${count4}`
+                            ).value = item.names
+                                ?.replace("ü", "u")
+                                .replace(".", "")
+                                .replace(".", "");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `F${count4}`
+                            ).value = item.firstLastName
+                                ?.replace("ü", "u")
+                                .replace(".", "");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `G${count4}`
+                            ).value = item.secondLastName
+                                ?.replace("ü", "u")
+                                .replace(".", "");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `H${count4}`
+                            ).value = item.sex;
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `I${count4}`
+                            ).value = item.birthDate
+                                ? new Date(item.birthDate)
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("")
+                                : new Date()
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `L${count4}`
+                            ).value =
+                                item.isrSalary !== 0.0
+                                    ? item.isrSalary.toString()
+                                    : "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `M${count4}`
+                            ).value =
+                                item.otherProfit !== 0.0
+                                    ? item.otherProfit.toString()
+                                    : "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `N${count4}`
+                            ).value = item.identification.replace(/-/g, "");
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `O${count4}`
+                            ).value = "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `P${count4}`
+                            ).value = "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `Q${count4}`
+                            ).value = "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `R${count4}`
+                            ).value = "";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `S${count4}`
+                            ).value = "";
+
+                            count4++;
+                        }
+                    );
+                    break;
+                //* PROBADO CON ERRORES
+                case "Plantilla de novedades":
+                    const dataTemplateForRawNewsFile =
+                        await getTemplateForRawNewsFile.getForTSS(filter);
+
+                    let count5 = 14;
+
+                    const worksheetTemplateForRawNewsFile =
+                        workbook.getWorksheet("Plantilla de archivo novedades");
+
+                    worksheetTemplateForRawNewsFile!.getCell(`B${7}`).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
+
+                    dataTemplateForRawNewsFile.forEach((employee: any) => {
+                        const item = dataTemplateForRawNewsFile.find(
+                            (x: any) => x.idEmployee === employee.idEmployee
+                        )!;
+
+                        const midName =
+                            item.middleName?.replace("ü", "u") ?? "";
+                        const firstName =
+                            item.firstName?.replace("ü", "u") ?? "";
+                        const firstLastName =
+                            item.firstLastName?.replace("ü", "u") ?? "";
+                        const secondLastName =
+                            item.secondLastName?.replace("ü", "u") ?? "";
+                        const forInDate = item.start
+                            ? new Date(item.start)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : new Date()
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("");
+                        const forInEnd = item.end
+                            ? new Date(item.end)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : "";
+
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `B${count5}`
+                        ).value = "N";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `C${count5}`
+                        ).value =
+                            item.identification.replace(/-/g, "").length === 11
+                                ? "C"
+                                : "N";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `D${count5}`
+                        ).value = item.identification.replace(/-/g, "");
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `E${count5}`
+                        ).value = `${firstName} ${midName}`;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `F${count5}`
+                        ).value = firstLastName;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `G${count5}`
+                        ).value = secondLastName;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `H${count5}`
+                        ).value = item.sex;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `I${count5}`
+                        ).value = item.birthDate
+                            ? new Date(item.birthDate)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : new Date()
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("");
+                        //worksheetTemplateForRawNewsFile!.getCell(`L${count5}`).value = item.isrSalary !== 0.0 ? item.isrSalary.toString() : "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `M${count5}`
+                        ).value =
+                            item.otherProfit !== 0.0
+                                ? item.otherProfit.toString()
+                                : "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `N${count5}`
+                        ).value = item.identification.replace(/-/g, "");
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `O${count5}`
+                        ).value = "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `P${count5}`
+                        ).value = "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `Q${count5}`
+                        ).value = "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `R${count5}`
+                        ).value = "";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `S${count5}`
+                        ).value = "";
+
+                        count5++;
+                    });
+                    break;
+                //* PROBADO CON ERRORES
+                case "Reporte de autodeterminación mensual":
+                    const dataTemplateForRawAutodetermination =
+                        await getTemplateForRawAutodetermination.getForTSS(
+                            filter
                         );
 
-                        for (let i = 0; i < 31; i++) {
-                            const extraHoursInDate = item.filter(
-                                (x: any) =>
-                                    new Date(x.Date).getTime() ===
-                                    monthDays.getTime() + i * 86400000
-                            );
+                    let count6 = 10;
 
-                            if (extraHoursInDate.length > 0) {
-                                let counter = 0;
-                                for (const extraHour of extraHoursInDate) {
-                                    worksheet1.getCell(
-                                        count1 + counter,
-                                        countExtraHour
-                                    ).value = extraHour.hourAmount;
-                                    worksheet1.getCell(
-                                        count1 + counter,
-                                        countExtraHour + 1
-                                    ).value = extraHour.percent.toFixed(2);
-                                    counter++;
-                                }
-                            }
-                            countExtraHour += 2;
+                    const worksheetTemplateForRawAutodetermination =
+                        workbook.getWorksheet("RawAutoDeterminacio");
+
+                    worksheetTemplateForRawAutodetermination!.getCell(
+                        `B${7}`
+                    ).value =
+                        new Date(filter.start!)
+                            .toLocaleDateString("en-GB", {
+                                year: "numeric",
+                                month: "2-digit",
+                            })
+                            .split("/")
+                            .join("") ?? "N/A";
+
+                    dataTemplateForRawAutodetermination.forEach(
+                        (employee: any) => {
+                            const item =
+                                dataTemplateForRawAutodetermination.find(
+                                    (x: any) =>
+                                        x.idEmployee === employee.idEmployee
+                                )!;
+                            const midName =
+                                item.middleName?.replace("ü", "u") ?? "";
+                            const firstName =
+                                item.firstName?.replace("ü", "u") ?? "";
+                            const firstLastName =
+                                item.firstLastName?.replace("ü", "u") ?? "";
+                            const secondLastName =
+                                item.secondLastName?.replace("ü", "u") ?? "";
+                            const forInDate = item.start
+                                ? new Date(item.start)
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("")
+                                : new Date()
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("");
+
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `B${count6}`
+                            ).value = "N";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `C${count6}`
+                            ).value =
+                                item.identification.replace(/-/g, "").length ===
+                                11
+                                    ? "C"
+                                    : "N";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `D${count6}`
+                            ).value = item.identification.replace(/-/g, "");
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `E${count6}`
+                            ).value = `${firstName} ${midName}`;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `F${count6}`
+                            ).value = firstLastName;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `G${count6}`
+                            ).value = secondLastName;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `H${count6}`
+                            ).value = item.sex;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `I${count6}`
+                            ).value = item.birthDate
+                                ? new Date(item.birthDate)
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("")
+                                : new Date()
+                                      .toLocaleDateString("en-GB")
+                                      .split("/")
+                                      .join("");
+                            // worksheetTemplateForRawAutodetermination!.getCell(
+                            //     `L${count6}`
+                            // ).value =
+                            //     item.isrSalary !== 0.0
+                            //         ? item.isrSalary.toString()
+                            //         : "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `M${count6}`
+                            ).value =
+                                item.otherProfit !== 0.0
+                                    ? item.otherProfit.toString()
+                                    : "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `N${count6}`
+                            ).value = item.identification.replace(/-/g, "");
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `O${count6}`
+                            ).value = "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `P${count6}`
+                            ).value = "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `Q${count6}`
+                            ).value = "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `R${count6}`
+                            ).value = "";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `S${count6}`
+                            ).value = "";
+
+                            count6++;
                         }
-                        setCount1((prevCount) => prevCount + 1);
-                    }
-
-                    break;
-                case "Plantilla DGT3":
-                    const data = await getEmployeeForDGT3.getForDGT(filter);
-
-                    const worksheet = workbook.getWorksheet("Plantilla DGT3");
-
-                    let count0 = 14;
-
-                    const employeesDGT3 = data;
-
-                    data.forEach((employee: any) => {
-                        const item = employeesDGT3.find(
-                            (x: any) => x.idEmployee === employee.idEmployee
-                        )!;
-
-                        worksheet!.getCell(`B${count0}`).value =
-                            item.description ?? "N/A";
-                        worksheet!.getCell(`C${count0}`).value =
-                            item.identification?.replace("-", "") ?? "N/A";
-                        worksheet!.getCell(`D${count0}`).value =
-                            item.identification?.replace("-", "").length === 11
-                                ? "C"
-                                : "N";
-                        worksheet!.getCell(`E${count0}`).value =
-                            item.identification?.replace("-", "") ?? "N/A";
-                        worksheet!.getCell(
-                            `F${count0}`
-                        ).value = `${item.firstName} ${item.middleName}`;
-                        worksheet!.getCell(
-                            `G${count0}`
-                        ).value = `${item.firstLastName}`;
-                        worksheet!.getCell(
-                            `H${count0}`
-                        ).value = `${item.secondLastName}`;
-                        worksheet!.getCell(`I${count0}`).value =
-                            item.sex ?? "N/A";
-                        worksheet!.getCell(`J${count0}`).value =
-                            item.nationality ?? "N/A";
-                        worksheet!.getCell(`K${count0}`).value =
-                            new Date(item.birthDate!)
-                                .toLocaleDateString("en-GB")
-                                .replace(" ", "/") ?? "N/A";
-                        worksheet!.getCell(`L${count0}`).value = item.salary;
-                        worksheet!.getCell(`M${count0}`).value =
-                            new Date(item.startDate!)
-                                .toLocaleDateString("en-GB")
-                                .replace(" ", "/") ?? "N/A";
-                        worksheet!.getCell(`N${count0}`).value = "N/A";
-                        worksheet!.getCell(`O${count0}`).value =
-                            item?.position ?? "N/A";
-                        worksheet!.getCell(`P${count0}`).value = "N/A";
-                        worksheet!.getCell(`Q${count0}`).value =
-                            item?.vacation?.start ?? "N/A";
-                        worksheet!.getCell(`R${count0}`).value =
-                            item?.vacation?.end ?? "N/A";
-                        worksheet!.getCell(`S${count0}`).value =
-                            item?.idPosition ?? "N/A";
-                        worksheet!.getCell(`T${count0}`).value = "N/A";
-                        worksheet!.getCell(`AF${count0}`).value = "N/A";
-                        worksheet!.getCell(`AG${count0}`).value = "N/A";
-                        count0++;
-                    });
-                    break;
-                case "Plantilla DGT4":
-                    const dataDGT4 = await getEmployeeForDGT4.getForDGT(filter);
-
-                    const worksheetDGT4 =
-                        workbook.getWorksheet("Plantilla DGT4");
-
-                    let count0DGT4 = 14;
-                    const employeesDGT4 = dataDGT4;
-
-                    dataDGT4.forEach((employee: any) => {
-                        const item = employeesDGT4.find(
-                            (x: any) => x.idEmployee === employee.idEmployee
-                        )!;
-
-                        worksheetDGT4!.getCell(`B${count0DGT4}`).value =
-                            item.description ?? "N/A";
-                        worksheetDGT4!.getCell(`C${count0DGT4}`).value =
-                            item.identification?.replace("-", "") ?? "N/A";
-                        worksheetDGT4!.getCell(`D${count0DGT4}`).value =
-                            item.identification?.replace("-", "").length === 11
-                                ? "C"
-                                : "N";
-                        worksheetDGT4!.getCell(`E${count0DGT4}`).value =
-                            item.identification?.replace("-", "") ?? "N/A";
-                        worksheetDGT4!.getCell(
-                            `F${count0DGT4}`
-                        ).value = `${item.firstName} ${item.middleName}`;
-                        worksheetDGT4!.getCell(
-                            `G${count0DGT4}`
-                        ).value = `${item.firstLastName}`;
-                        worksheetDGT4!.getCell(
-                            `H${count0DGT4}`
-                        ).value = `${item.secondLastName}`;
-                        worksheetDGT4!.getCell(`I${count0DGT4}`).value =
-                            item.sex ?? "N/A";
-                        worksheetDGT4!.getCell(`J${count0DGT4}`).value =
-                            item.nationality ?? "N/A";
-                        worksheetDGT4!.getCell(`K${count0DGT4}`).value =
-                            new Date(item.birthDate!)
-                                .toLocaleDateString("en-GB")
-                                .replace(" ", "/") ?? "N/A";
-                        worksheetDGT4!.getCell(`L${count0DGT4}`).value =
-                            item.salary ?? "N/A";
-                        worksheetDGT4!.getCell(`M${count0DGT4}`).value =
-                            new Date(item.startDate!)
-                                .toLocaleDateString("en-GB")
-                                .replace(" ", "/") ?? "N/A";
-                        worksheetDGT4!.getCell(`N${count0DGT4}`).value = "N/A";
-                        worksheetDGT4!.getCell(`O${count0DGT4}`).value =
-                            item.position ?? "N/A";
-                        worksheetDGT4!.getCell(`P${count0DGT4}`).value = "N/A";
-                        worksheetDGT4!.getCell(`Q${count0DGT4}`).value =
-                            item.vacation?.start ?? "N/A";
-                        worksheetDGT4!.getCell(`R${count0DGT4}`).value =
-                            item.vacation?.end ?? "N/A";
-                        worksheetDGT4!.getCell(`S${count0DGT4}`).value =
-                            item.idPosition ?? "N/A";
-                        worksheetDGT4!.getCell(`T${count0DGT4}`).value = "N/A";
-                        worksheetDGT4!.getCell(`AF${count0DGT4}`).value = "N/A";
-                        worksheetDGT4!.getCell(`AG${count0DGT4}`).value = "N/A";
-                        count0DGT4++;
-                    });
-                    break;
-                case "Plantilla DGT12":
-                    const dataDGT12 = await getEmployeeForDGT12.getForDGT(
-                        filter
                     );
-
-                    const worksheetDGT12 =
-                        workbook.getWorksheet("Plantilla DGT4");
-
-                    let count0DG12 = 14;
-                    const employeesDGT12 = dataDGT12;
-
-                    dataDGT12.forEach((employee: any) => {
-                        const item = employeesDGT12.find(
-                            (x: any) => x.idEmployee === employee.idEmployee
-                        )!;
-
-                        worksheetDGT12!.getCell(`B${count0DG12}`).value =
-                            item.identification?.replace("-", "").length === 11
-                                ? "C"
-                                : "N";
-                        worksheetDGT12!.getCell(`C${count0DG12}`).value =
-                            item.identification?.replace("-", "") ?? "N/A";
-                        worksheetDGT12!.getCell(`D${count0DG12}`).value =
-                            item.idZone ?? "N/A";
-                        worksheetDGT12!.getCell(`E${count0DG12}`).value =
-                            item.date
-                                ?.toLocaleDateString("en-GB")
-                                .replace(" ", "/") ?? "N/A";
-                        count0DG12++;
-                    });
                     break;
-                default:
-                    throw new Error(`Worksheet not found: ${sheet}`);
+                case "":
+                    throw new Error(`Worksheet not found: ${ws}`);
             }
+
+            const buffer = await workbook.xlsx.writeBuffer();
+
+            const blob = new Blob([buffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
+            a.click();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
         }
-
-        const buffer = await workbook.xlsx.writeBuffer();
-
-        const blob = new Blob([buffer], {
-            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        URL.revokeObjectURL(url);
     };
 
-    const onSubmit = async (filter: any) => {
-        const { start, end, year } = filter && getDateToFilter(filter.start!);
+    const onSubmit = async (filter: IFilterTSS) => {
+        const { start, end } = filter && getDateToFilter(filter.start!);
         filter.start = start;
         filter.end = end;
-        filter.year = year;
 
-        const workSheets = getWorksheet();
-        await executeDGTExcelTemplate(filter, "TemplateDGT.xlsx", workSheets);
+        if (selectedReport === undefined) {
+            alert("Selecciona un reporte");
+            return;
+        }
+
+        const template = getTemplateName(selectedReport.name);
+
+        await executeTSSExcelTemplate(
+            filter,
+            template === "" ? "" : template,
+            selectedReport.name
+        );
     };
 
-    const getWorksheet = () => {
-        const workSheetToAccess: string[] = [];
-
-        return workSheetToAccess;
+    const getTemplateName = (templateName: string): string => {
+        switch (templateName) {
+            case "Reporte de bonificación":
+                return "plantilla_bonificacion.xlsx";
+            case "Reporte de rectificación":
+                return "plantilla_rectificacion.xlsx";
+            case "Reporte de novedades":
+                return "Raw_Novedades.xlsx";
+            case "Plantilla de autodeterminación mensual":
+                return "plantilla_autodeterminacion_mensual.xlsx";
+            case "Plantilla de novedades":
+                return "plantilla_novedades.xlsx";
+            case "Reporte de autodeterminación mensual":
+                return "reporte_autodeterminacion_mensual.xlsx";
+            default:
+                return "";
+        }
     };
 
     const reportOptions = [
@@ -358,14 +731,20 @@ const TSS = () => {
         { key: 4, name: "Plantilla de novedades" },
         { key: 5, name: "Reporte de autodeterminación mensual" },
     ];
-
-    const getSelectedReport = (e: DropdownChangeEvent) => {
-        alert(e.value.name);
-        setSelectedReport(e.value);
-    };
-
     return (
         <>
+            <Dialog
+                visible={loading}
+                modal
+                onHide={() => setLoading(false)}
+                closable={false}
+            >
+                <div className="flex flex-column align-items-center">
+                    <ProgressSpinner />
+                    <p className="mt-3">Cargando, por favor, espere...</p>
+                </div>
+            </Dialog>
+
             <div className="text-center">
                 <h1 className="mb-4" style={{ color: "var(--primary-color)" }}>
                     TSS
@@ -374,19 +753,6 @@ const TSS = () => {
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="p-fluid formgrid grid mb-4">
-                    <div className="field col-12 md:col-6">
-                        <div className="p-inputgroup flex-1">
-                            <span className="p-inputgroup-addon">
-                                <i className="pi pi-qrcode"></i>
-                            </span>
-
-                            <InputText
-                                {...register("companyId")}
-                                disabled
-                                placeholder="RNC o Cédula de la empresa"
-                            />
-                        </div>
-                    </div>
                     <div className="field col-12 md:col-6">
                         <Calendar
                             id="date"
@@ -408,20 +774,14 @@ const TSS = () => {
                             <Dropdown
                                 className="mr-2"
                                 value={selectedReport}
-                                onChange={(e) => getSelectedReport(e)}
+                                onChange={(e) => setSelectedReport(e.value)}
                                 options={reportOptions}
                                 optionLabel="name"
                                 showClear
-                                showFilterClear
                                 placeholder="Selecciona un Reporte"
                                 filter
                             />
                         </div>
-                        {errors.idZone && (
-                            <small className="p-invalid text-red-500">
-                                {errors.idZone.message?.toString()}
-                            </small>
-                        )}
                     </div>
                 </div>
                 <div className="p-fluid formgrid grid justify-content-end">

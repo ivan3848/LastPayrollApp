@@ -1,6 +1,7 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
 import IFilterDGT from "@/Features/reports/Types/IFilterDGT";
 import IFilterReport from "@/Features/reports/Types/IFilterReport";
+import IFilterTSS from "@/Features/reports/Types/IFilterTSS";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import axios from "axios";
@@ -138,6 +139,18 @@ class ApiService<Q, R> {
     }
 
     async getForDGT(filterReport: IFilterDGT): Promise<R[]> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<R[]>(finalEndpoint, {
+                params: {
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
+    }
+
+    async getForTSS(filterReport: IFilterTSS): Promise<R[]> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         return await axiosInstance
