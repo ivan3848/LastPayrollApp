@@ -4,7 +4,7 @@ import ExcelJS from "exceljs";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
     getEmployeeForDGT12,
@@ -22,6 +22,7 @@ import IFilterTSS from "./Types/IFilterTSS";
 import FilterTSSFormSchema from "./Validations/FilterTSSFormSchema";
 import { Dialog } from "primereact/dialog";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { Toast } from "primereact/toast";
 
 const TSS = () => {
     const { filterTSSFormSchema } = FilterTSSFormSchema();
@@ -36,6 +37,7 @@ const TSS = () => {
 
     const [selectedReport, setSelectedReport] = useState<any>();
     const [loading, setLoading] = useState(false);
+    const toast = useRef<Toast | null>(null);
 
     const getDateToFilter = (data: Date) => {
         if (!data) {
@@ -264,31 +266,22 @@ const TSS = () => {
                                   .join("");
 
                         worksheetTemplateForNewsFile!.getCell(
+                            `A${count3}`
+                        ).value = item.idEmployee;
+                        worksheetTemplateForNewsFile!.getCell(
                             `B${count3}`
-                        ).value = "N";
-                        worksheetTemplateForNewsFile!.getCell(
-                            `C${count3}`
-                        ).value =
-                            item.identification.replace(/-/g, "").length === 11
-                                ? "C"
-                                : "N";
-                        worksheetTemplateForNewsFile!.getCell(
-                            `D${count3}`
                         ).value = item.identification.replace(/-/g, "");
                         worksheetTemplateForNewsFile!.getCell(
+                            `C${count3}`
+                        ).value = `${firstName} ${midName} ${firstLastName} ${secondLastName}`;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `D${count3}`
+                        ).value = `${firstLastName} ${secondLastName}`;
+                        worksheetTemplateForNewsFile!.getCell(
                             `E${count3}`
-                        ).value = `${firstName} ${midName}`;
+                        ).value = item.sex <= 0 ? "M" : "F";
                         worksheetTemplateForNewsFile!.getCell(
                             `F${count3}`
-                        ).value = firstLastName;
-                        worksheetTemplateForNewsFile!.getCell(
-                            `G${count3}`
-                        ).value = secondLastName;
-                        worksheetTemplateForNewsFile!.getCell(
-                            `H${count3}`
-                        ).value = item.sex < 0 ? "F" : "M";
-                        worksheetTemplateForNewsFile!.getCell(
-                            `I${count3}`
                         ).value = item.birthDate
                             ? new Date(item.birthDate)
                                   .toLocaleDateString("en-GB")
@@ -298,36 +291,82 @@ const TSS = () => {
                                   .toLocaleDateString("en-GB")
                                   .split("/")
                                   .join("");
-                        //worksheetTemplateForNewsFile!.getCell(`L${count3}`).value = item.isrSalary !== 0.0 ? item.isrSalary.toString() : "";
                         worksheetTemplateForNewsFile!.getCell(
-                            `M${count3}`
+                            `G${count3}`
+                        ).value =
+                            item.infotepSal !== 0.0
+                                ? item.infotepSal.toString()
+                                : "0.0";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `H${count3}`
+                        ).value =
+                            item.salarySS !== 0.0
+                                ? item.salarySS.toString()
+                                : "0.0";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `I${count3}`
+                        ).value =
+                            item.salaryIsr !== 0.0
+                                ? item.salaryIsr.toString()
+                                : "0.0";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `J${count3}`
                         ).value =
                             item.otherProfit !== 0.0
                                 ? item.otherProfit.toString()
+                                : "0.0";
+                        worksheetTemplateForNewsFile!.getCell(
+                            `L${count3}`
+                        ).value =
+                            item.isrInFavor !== 0.0
+                                ? item.isrInFavor.toString()
                                 : "";
                         worksheetTemplateForNewsFile!.getCell(
-                            `N${count3}`
+                            `K${count3}`
+                        ).value = item.idZone ?? 1;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `L${count3}`
                         ).value = item.identification.replace(/-/g, "");
                         worksheetTemplateForNewsFile!.getCell(
+                            `M${count3}`
+                        ).value = item.newsType;
+                        worksheetTemplateForNewsFile!.getCell(
+                            `N${count3}`
+                        ).value = item.start
+                            ? new Date(item.start)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : "";
+                        worksheetTemplateForNewsFile!.getCell(
                             `O${count3}`
-                        ).value = "";
+                        ).value = item.end
+                            ? new Date(item.end)
+                                  .toLocaleDateString("en-GB")
+                                  .split("/")
+                                  .join("")
+                            : "";
                         worksheetTemplateForNewsFile!.getCell(
                             `P${count3}`
-                        ).value = "";
+                        ).value =
+                            item.identification.replace(/-/g, "").length === 11
+                                ? "C"
+                                : "N";
                         worksheetTemplateForNewsFile!.getCell(
                             `Q${count3}`
-                        ).value = "";
+                        ).value =
+                            item.christmasSalary !== 0.0
+                                ? item.christmasSalary.toString()
+                                : "0.0";
                         worksheetTemplateForNewsFile!.getCell(
                             `R${count3}`
-                        ).value = "";
-                        worksheetTemplateForNewsFile!.getCell(
-                            `S${count3}`
-                        ).value = "";
-
+                        ).value =
+                            item.prevCesViat !== 0.0
+                                ? item.prevCesViat.toString()
+                                : "0.0";
                         count3++;
                     });
                     break;
-                //! TRABAJANDO ESTE
                 case "Plantilla de autodeterminación mensual":
                     const dataTemplateForAutodetermination =
                         await getTemplateForAutodetermination.getForTSS(filter);
@@ -338,7 +377,7 @@ const TSS = () => {
                         workbook.getWorksheet("Plantilla de Autodeterminación");
 
                     worksheetTemplateForAutodetermination!.getCell(
-                        `B${7}`
+                        `D${8}`
                     ).value =
                         new Date(filter.start!)
                             .toLocaleDateString("en-GB", {
@@ -356,7 +395,7 @@ const TSS = () => {
 
                             worksheetTemplateForAutodetermination!.getCell(
                                 `B${count4}`
-                            ).value = "N";
+                            ).value = item.payrollKey;
                             worksheetTemplateForAutodetermination!.getCell(
                                 `C${count4}`
                             ).value =
@@ -369,10 +408,11 @@ const TSS = () => {
                             ).value = item.identification.replace(/-/g, "");
                             worksheetTemplateForAutodetermination!.getCell(
                                 `E${count4}`
-                            ).value = item.names
-                                ?.replace("ü", "u")
-                                .replace(".", "")
-                                .replace(".", "");
+                            ).value =
+                                `${item.names} ${item.firstLastName} ${item.secondLastName}`
+                                    .replace("ü", "u")
+                                    .replace(".", "")
+                                    .replace(".", "");
                             worksheetTemplateForAutodetermination!.getCell(
                                 `F${count4}`
                             ).value = item.firstLastName
@@ -385,7 +425,7 @@ const TSS = () => {
                                 .replace(".", "");
                             worksheetTemplateForAutodetermination!.getCell(
                                 `H${count4}`
-                            ).value = item.sex;
+                            ).value = item.sex <= 0 ? "M" : "F";
                             worksheetTemplateForAutodetermination!.getCell(
                                 `I${count4}`
                             ).value = item.birthDate
@@ -398,41 +438,57 @@ const TSS = () => {
                                       .split("/")
                                       .join("");
                             worksheetTemplateForAutodetermination!.getCell(
-                                `L${count4}`
+                                `J${count4}`
+                            ).value =
+                                item.taxesSalary !== 0.0
+                                    ? item.taxesSalary.toString()
+                                    : "0.0";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `K${count4}`
                             ).value =
                                 item.isrSalary !== 0.0
                                     ? item.isrSalary.toString()
-                                    : "";
+                                    : "0.0";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `L${count4}`
+                            ).value =
+                                item.isrInFavor !== 0.0
+                                    ? item.isrInFavor.toString()
+                                    : "0.0";
                             worksheetTemplateForAutodetermination!.getCell(
                                 `M${count4}`
+                            ).value = item.contractType;
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `N${count4}`
                             ).value =
                                 item.otherProfit !== 0.0
                                     ? item.otherProfit.toString()
-                                    : "";
-                            worksheetTemplateForAutodetermination!.getCell(
-                                `N${count4}`
-                            ).value = item.identification.replace(/-/g, "");
+                                    : "0.0";
                             worksheetTemplateForAutodetermination!.getCell(
                                 `O${count4}`
                             ).value = "";
                             worksheetTemplateForAutodetermination!.getCell(
-                                `P${count4}`
-                            ).value = "";
-                            worksheetTemplateForAutodetermination!.getCell(
-                                `Q${count4}`
-                            ).value = "";
-                            worksheetTemplateForAutodetermination!.getCell(
                                 `R${count4}`
-                            ).value = "";
+                            ).value =
+                                item.christmasSalary !== 0.0
+                                    ? item.christmasSalary.toString()
+                                    : "0.0";
                             worksheetTemplateForAutodetermination!.getCell(
-                                `S${count4}`
-                            ).value = "";
-
+                                `T${count4}`
+                            ).value =
+                                item.maintenanceDiscount === 0.0
+                                    ? item.infotepSalary.toString()
+                                    : "0.0";
+                            worksheetTemplateForAutodetermination!.getCell(
+                                `U${count4}`
+                            ).value =
+                                item.infotepSalary !== 0.0
+                                    ? item.infotepSalary.toString()
+                                    : "0.0";
                             count4++;
                         }
                     );
                     break;
-                //* PROBADO CON ERRORES
                 case "Plantilla de novedades":
                     const dataTemplateForRawNewsFile =
                         await getTemplateForRawNewsFile.getForTSS(filter);
@@ -442,7 +498,7 @@ const TSS = () => {
                     const worksheetTemplateForRawNewsFile =
                         workbook.getWorksheet("Plantilla de archivo novedades");
 
-                    worksheetTemplateForRawNewsFile!.getCell(`B${7}`).value =
+                    worksheetTemplateForRawNewsFile!.getCell(`D${8}`).value =
                         new Date(filter.start!)
                             .toLocaleDateString("en-GB", {
                                 year: "numeric",
@@ -482,30 +538,39 @@ const TSS = () => {
 
                         worksheetTemplateForRawNewsFile!.getCell(
                             `B${count5}`
-                        ).value = "N";
+                        ).value = item.idEmployee;
                         worksheetTemplateForRawNewsFile!.getCell(
                             `C${count5}`
+                        ).value = item.newsType;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `D${count5}`
+                        ).value = forInDate;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `E${count5}`
+                        ).value = forInEnd;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `F${count5}`
                         ).value =
                             item.identification.replace(/-/g, "").length === 11
                                 ? "C"
                                 : "N";
                         worksheetTemplateForRawNewsFile!.getCell(
-                            `D${count5}`
+                            `G${count5}`
                         ).value = item.identification.replace(/-/g, "");
                         worksheetTemplateForRawNewsFile!.getCell(
-                            `E${count5}`
-                        ).value = `${firstName} ${midName}`;
-                        worksheetTemplateForRawNewsFile!.getCell(
-                            `F${count5}`
-                        ).value = firstLastName;
-                        worksheetTemplateForRawNewsFile!.getCell(
-                            `G${count5}`
-                        ).value = secondLastName;
-                        worksheetTemplateForRawNewsFile!.getCell(
                             `H${count5}`
-                        ).value = item.sex;
+                        ).value = `${firstName} ${midName} ${firstLastName} ${secondLastName}`;
                         worksheetTemplateForRawNewsFile!.getCell(
                             `I${count5}`
+                        ).value = firstLastName;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `J${count5}`
+                        ).value = secondLastName;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `K${count5}`
+                        ).value = item.sex <= 0 ? "M" : "F";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `L${count5}`
                         ).value = item.birthDate
                             ? new Date(item.birthDate)
                                   .toLocaleDateString("en-GB")
@@ -515,36 +580,51 @@ const TSS = () => {
                                   .toLocaleDateString("en-GB")
                                   .split("/")
                                   .join("");
-                        //worksheetTemplateForRawNewsFile!.getCell(`L${count5}`).value = item.isrSalary !== 0.0 ? item.isrSalary.toString() : "";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `M${count5}`
                         ).value =
-                            item.otherProfit !== 0.0
-                                ? item.otherProfit.toString()
-                                : "";
+                            item.salarySS !== 0.0
+                                ? item.salarySS.toString()
+                                : "0.0";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `N${count5}`
-                        ).value = item.identification.replace(/-/g, "");
+                        ).value = "0.0";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `O${count5}`
-                        ).value = "";
+                        ).value = "Normal";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `P${count5}`
-                        ).value = "";
+                        ).value =
+                            item.isrInFavor !== 0.0
+                                ? item.isrInFavor.toString()
+                                : "0.0";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `Q${count5}`
-                        ).value = "";
+                        ).value =
+                            item.otherProfit !== 0.0
+                                ? item.otherProfit.toString()
+                                : "0.0";
                         worksheetTemplateForRawNewsFile!.getCell(
                             `R${count5}`
-                        ).value = "";
+                        ).value = "0.0";
                         worksheetTemplateForRawNewsFile!.getCell(
-                            `S${count5}`
-                        ).value = "";
-
+                            `V${count5}`
+                        ).value =
+                            item.prevCesViat !== 0.0
+                                ? item.prevCesViat.toString()
+                                : "0.0";
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `W${count5}`
+                        ).value = 0.0;
+                        worksheetTemplateForRawNewsFile!.getCell(
+                            `X${count5}`
+                        ).value =
+                            item.infotepSal !== 0.0
+                                ? item.infotepSal.toString()
+                                : "0.0";
                         count5++;
                     });
                     break;
-                //* PROBADO CON ERRORES
                 case "Reporte de autodeterminación mensual":
                     const dataTemplateForRawAutodetermination =
                         await getTemplateForRawAutodetermination.getForTSS(
@@ -582,43 +662,24 @@ const TSS = () => {
                                 item.firstLastName?.replace("ü", "u") ?? "";
                             const secondLastName =
                                 item.secondLastName?.replace("ü", "u") ?? "";
-                            const forInDate = item.start
-                                ? new Date(item.start)
-                                      .toLocaleDateString("en-GB")
-                                      .split("/")
-                                      .join("")
-                                : new Date()
-                                      .toLocaleDateString("en-GB")
-                                      .split("/")
-                                      .join("");
 
                             worksheetTemplateForRawAutodetermination!.getCell(
+                                `A${count6}`
+                            ).value = item.idEmployee;
+                            worksheetTemplateForRawAutodetermination!.getCell(
                                 `B${count6}`
-                            ).value = "N";
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `C${count6}`
-                            ).value =
-                                item.identification.replace(/-/g, "").length ===
-                                11
-                                    ? "C"
-                                    : "N";
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `D${count6}`
                             ).value = item.identification.replace(/-/g, "");
                             worksheetTemplateForRawAutodetermination!.getCell(
+                                `C${count6}`
+                            ).value = `${firstName} ${midName} ${firstLastName} ${secondLastName}`;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `D${count6}`
+                            ).value = `${firstLastName} ${secondLastName}`;
+                            worksheetTemplateForRawAutodetermination!.getCell(
                                 `E${count6}`
-                            ).value = `${firstName} ${midName}`;
+                            ).value = item.sex <= 0 ? "M" : "F";
                             worksheetTemplateForRawAutodetermination!.getCell(
                                 `F${count6}`
-                            ).value = firstLastName;
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `G${count6}`
-                            ).value = secondLastName;
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `H${count6}`
-                            ).value = item.sex;
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `I${count6}`
                             ).value = item.birthDate
                                 ? new Date(item.birthDate)
                                       .toLocaleDateString("en-GB")
@@ -628,37 +689,64 @@ const TSS = () => {
                                       .toLocaleDateString("en-GB")
                                       .split("/")
                                       .join("");
-                            // worksheetTemplateForRawAutodetermination!.getCell(
-                            //     `L${count6}`
-                            // ).value =
-                            //     item.isrSalary !== 0.0
-                            //         ? item.isrSalary.toString()
-                            //         : "";
                             worksheetTemplateForRawAutodetermination!.getCell(
-                                `M${count6}`
+                                `G${count6}`
+                            ).value =
+                                item.infotepSal !== 0.0
+                                    ? item.infotepSal.toString()
+                                    : "0.0";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `H${count6}`
+                            ).value =
+                                item.salarySS !== 0.0
+                                    ? item.salarySS.toString()
+                                    : "0.0";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `I${count6}`
+                            ).value =
+                                item.salaryIsr !== 0.0
+                                    ? item.salaryIsr.toString()
+                                    : "0.0";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `J${count6}`
                             ).value =
                                 item.otherProfit !== 0.0
                                     ? item.otherProfit.toString()
-                                    : "";
+                                    : "0.0";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `K${count6}`
+                            ).value =
+                                item.isrInFavor !== 0.0
+                                    ? item.isrInFavor.toString()
+                                    : "0.0";
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `L${count6}`
+                            ).value = item.idZone ?? 1;
+                            worksheetTemplateForRawAutodetermination!.getCell(
+                                `M${count6}`
+                            ).value =
+                                item.identification.replace(/-/g, "").length ===
+                                11
+                                    ? "C"
+                                    : "N";
                             worksheetTemplateForRawAutodetermination!.getCell(
                                 `N${count6}`
-                            ).value = item.identification.replace(/-/g, "");
+                            ).value =
+                                item.christmasSalary !== 0.0
+                                    ? item.christmasSalary.toString()
+                                    : "0.0";
                             worksheetTemplateForRawAutodetermination!.getCell(
                                 `O${count6}`
-                            ).value = "";
+                            ).value =
+                                item.prevCesViat !== 0.0
+                                    ? item.prevCesViat.toString()
+                                    : "0.0";
                             worksheetTemplateForRawAutodetermination!.getCell(
                                 `P${count6}`
-                            ).value = "";
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `Q${count6}`
-                            ).value = "";
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `R${count6}`
-                            ).value = "";
-                            worksheetTemplateForRawAutodetermination!.getCell(
-                                `S${count6}`
-                            ).value = "";
-
+                            ).value =
+                                item.descPenAli !== 0.0
+                                    ? item.descPenAli.toString()
+                                    : "0.0";
                             count6++;
                         }
                     );
@@ -691,7 +779,14 @@ const TSS = () => {
         filter.end = end;
 
         if (selectedReport === undefined) {
-            alert("Selecciona un reporte");
+            toast.current &&
+                toast.current.show({
+                    severity: "warn",
+                    summary: "Aviso",
+                    detail: "Selecciona un reporte",
+                    life: 3000,
+                });
+
             return;
         }
 
@@ -731,8 +826,11 @@ const TSS = () => {
         { key: 4, name: "Plantilla de novedades" },
         { key: 5, name: "Reporte de autodeterminación mensual" },
     ];
+    
     return (
         <>
+            <Toast ref={toast} />
+
             <Dialog
                 visible={loading}
                 modal
@@ -786,7 +884,7 @@ const TSS = () => {
                 </div>
                 <div className="p-fluid formgrid grid justify-content-end">
                     <div className="field col-4 md:col-2">
-                        <Button severity="info" label="Generar" type="submit" />
+                        <Button label="Generar" type="submit" />
                     </div>
                 </div>
             </form>
