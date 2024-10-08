@@ -16,6 +16,7 @@ import useGetLeaseDetailByIdLease from "../../LeaseDetail/Hooks/useGetLeaseDetai
 import { ILeaseDetail } from "../../LeaseDetail/Types/ILeaseDetail";
 import { Card } from "primereact/card";
 import { SelectButton } from "primereact/selectbutton";
+import React from "react";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;

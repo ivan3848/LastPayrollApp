@@ -1,4 +1,5 @@
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Button } from "primereact/button";
@@ -8,20 +9,16 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import * as XLSX from "xlsx";
 import useEmployeeForReportQuery from "../Hook/useEmployeeForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
-import { PDFViewer } from "@react-pdf/renderer";
-import { Quixote } from "../Quixote";
-import { Invoice } from "./Invoice";
-import { createRoot } from "react-dom/client";
-import InvoiceViewer from "./InvoiceViewer";
 
 interface Props {
     filterValues: IFilterReport | null;
     setFilterValues: (value: IFilterReport | null) => void;
 }
+
 const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
     const {
         setPage,
