@@ -26,7 +26,7 @@ const VacationFormSchema = () => {
         totalRemain: z.number().optional(),
         enjoymentDay: z.number().optional(),
         reEntryDate: z.date().optional(),
-        payrollPayDate: z.date().optional(),
+        payrollPayDate: z.date({ message: "El campo debe de tener una fecha." }),
         absenteeism: z.number().optional(),
         dayPay: z.number().optional(),
     })

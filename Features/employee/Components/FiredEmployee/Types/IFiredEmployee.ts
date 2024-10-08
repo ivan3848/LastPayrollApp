@@ -5,7 +5,7 @@ export interface IFireEmployee {
     idEmployee: number;
     firedDate: Date;
     comment: string;
-    isTakenVacation: boolean;
+    isTakeVacation: boolean;
     isUnemployment: boolean;
     isPreview: boolean;
     isNotice: boolean;
@@ -40,4 +40,18 @@ export interface IFireEmployeeResponse {
     totalProfit: number;
     getFiredEmployeePreviewInformation: IGetFiredEmployeePreviewInformation[]
     getFiredEmployee: IGetFiredEmployee[]
+}
+
+export interface IFiredEmployeeContabilization{
+    id: string,
+    costCenterAccount: string,
+    conceptAccountNumber: string,
+    idEmployee: number,
+    firedDate: Date,
+    isProfit?: boolean,
+    IsDebit?: boolean,
+    amount: number,
+    AccountName: string,
+    name: string,
+    IsCompany?: boolean,
 }

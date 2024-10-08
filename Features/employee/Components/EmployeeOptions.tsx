@@ -61,12 +61,12 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Deduction)}
                 />
-                <Button 
-                    label="Prestamos" 
-                    icon="pi pi-search" 
-                    className="m-2" 
+                <Button
+                    label="Prestamos"
+                    icon="pi pi-search"
+                    className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Lease)}
-                    />
+                />
                 <Button
                     label="ISR A Favor"
                     icon="pi pi-sparkles"
@@ -98,6 +98,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                     label="Horas Extras"
                     icon="pi pi-hourglass"
                     className="m-2"
+                    onClick={() => setAction(EmployeeOptionsEnum.ExtraHourLateness)}
                 />
                 <Button
                     label="Plan De Horario"

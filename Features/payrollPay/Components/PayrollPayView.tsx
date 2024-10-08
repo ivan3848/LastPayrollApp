@@ -28,6 +28,7 @@ import React from "react";
 import { IGetPayrollExecution } from "../types/IGetPayrollExecution";
 import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
 import { createRoot } from "react-dom/client";
+import GenerateReceiptDialog from "./GenerateReceipt";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -80,6 +81,7 @@ const PayrollPayView = ({
     const [completed, setCompleted] = useState(false);
     const [viewEmployees, setViewEmployees] = useState(false);
     const [generatefile, setGenerateFiles] = useState(false);
+    const [generateReceipt, setGenerateReceipt] = useState(false);
 
     const payrollNumber = watch("payrollNumber");
 
@@ -102,6 +104,12 @@ const PayrollPayView = ({
     ) => {
         event.preventDefault();
         setIsVisibleDelete(true);
+    };
+
+    const handleGenerateReceipt = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    ) => {
+        event.preventDefault();
+        setGenerateReceipt(true);
     };
 
     const getLastPayroll = useCallback(async () => {
@@ -152,6 +160,9 @@ const PayrollPayView = ({
         data.employeeCodes = employees?.employees;
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
+
+        const periodForTest = new Date(entityPayrollManagement!.payrollPeriodStart);
+        data.period = `${data.payrollNumber}/${periodForTest.getFullYear()}`;
 
         setLoading(true);
 
@@ -462,8 +473,8 @@ const PayrollPayView = ({
                                                         viewEmployees
                                                             ? "Ver empleados"
                                                             : byEmployees
-                                                            ? "Agregar empleados"
-                                                            : "Excluir empleados"
+                                                                ? "Agregar empleados"
+                                                                : "Excluir empleados"
                                                     }
                                                     onClick={handleAdd}
                                                 />
@@ -664,13 +675,26 @@ const PayrollPayView = ({
                             employees={employees}
                         />
                     )}
+                    {generateReceipt && (
+                        <GenerateReceiptDialog
+                            isVisible={generateReceipt}
+                            setIsVisible={setGenerateReceipt!}
+                            handleGenerateReceipt={handleGenerateReceipt}
+                            toast={toast}
+                            setSubmitted={setSubmitted}
+                            setEmployees={setEmployees}
+                            employees={employees}
+                        />
+                    )}
                     <DialogFooterButtonPayrollPay
                         isReadOnly={
-                            entityPayrollManagement?.idPayrollManagement == 0 ||
-                            entityPayrollManagement?.idStatus !== 151 ||
-                            loading
+                            activeIndex === 0 &&
+                            (entityPayrollManagement?.idPayrollManagement == 0 ||
+                                entityPayrollManagement?.idStatus !== 151 ||
+                                loading)
                         }
                         setGenereateFiles={() => setGenerateFiles(true)}
+                        setGenereate={() => setGenerateReceipt(true)}
                     />
                 </div>
             </div>

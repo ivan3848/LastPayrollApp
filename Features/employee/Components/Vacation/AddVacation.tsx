@@ -9,6 +9,7 @@ import VacationFormSchema from "./Validation/VacationFormSchema";
 import { addVacationService, calculateVacationDayService } from "./Services/vacationService";
 import { useState } from "react";
 import { IEmployee } from "../../Types/IEmployee";
+import { InputSwitch } from "primereact/inputswitch";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
@@ -29,6 +30,7 @@ const AddVacation = ({
     const service = calculateVacationDayService;
     const { addEntityFormSchema } = VacationFormSchema();
     const [vacationData, setVacationData] = useState<ICalculateVacationDaysResult>();
+    const [paid, setPaid] = useState<boolean>(false);
 
     let employeeTime: number = 14;
     const yearsDifference = new Date().getFullYear() - new Date(entity.startDate).getFullYear();
@@ -41,6 +43,7 @@ const AddVacation = ({
         watch,
         reset,
         setValue,
+        register,
         formState: { errors },
     } = useForm<IVacation>({
         resolver: zodResolver(addEntityFormSchema),
@@ -82,11 +85,11 @@ const AddVacation = ({
         data.idEmployee = entity.idEmployee;
         data.end = data.end;
         data.start = data.start;
-        data.paid = data.paid ?? false;
+        data.paid = paid;
         data.totalRemain = data.totalRemain ?? 2;
         data.enjoymentDay = data.enjoymentDay;
         data.reEntryDate = data.end ?? new Date();
-        data.payrollPayDate = data.payrollPayDate ?? new Date();
+        data.payrollPayDate = data.payrollPayDate;
         data.absenteeism = data.absenteeism ?? 0;
         data.dayPay = data.dayPay ?? 0;
 
@@ -110,7 +113,7 @@ const AddVacation = ({
                 <div className="col-12">
                     <div className="p-fluid formgrid grid">
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="startDateTime">Fecha De incio</label>
+                            <h6>Fecha De incio</h6>
                             <Calendar
                                 id="start"
                                 onChange={(e) => setValue("start", e.value!)}
@@ -125,7 +128,7 @@ const AddVacation = ({
                         </div>
 
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="end">Fecha Final</label>
+                            <h6>Fecha Final</h6>
                             <Calendar
                                 id="end"
                                 onChange={(e) => {
@@ -152,9 +155,9 @@ const AddVacation = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="absenteeism" className="block mb-2">
+                            <h6>
                                 Dias de absentismo
-                            </label>
+                            </h6>
                             <GenericInputNumber
                                 id="absenteeism"
                                 isValid={!!errors.absenteeism}
@@ -171,9 +174,9 @@ const AddVacation = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="dayPay" className="block mb-2">
+                            <h6>
                                 Dias a pagar
-                            </label>
+                            </h6>
                             <GenericInputNumber
                                 id="dayPay"
                                 isValid={!!errors.dayPay}
@@ -190,9 +193,9 @@ const AddVacation = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="enjoymentDay" className="block mb-2">
+                            <h6>
                                 Dias de disfrute
-                            </label>
+                            </h6>
                             <GenericInputNumber
                                 id="enjoymentDay"
                                 isValid={!!errors.enjoymentDay}
@@ -207,6 +210,32 @@ const AddVacation = ({
                                     {errors.enjoymentDay.message?.toString()}
                                 </small>
                             )}
+                        </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <h6>Fecha de pago</h6>
+                            <Calendar
+                                id="payrollPayDate"
+                                onChange={(e) => setValue("payrollPayDate", e.value!)}
+                                showIcon
+                                showButtonBar
+                            />
+                            {errors.end && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.end.message?.toString()}
+                                </small>
+                            )}
+                        </div>
+                        <div className="field col-12 md:col-3">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("paid")}
+                                id="paid"
+                                name="paid"
+                                checked={paid}
+                                onChange={(e) =>
+                                    setPaid(e.value ?? false)
+                                }
+                            />
                         </div>
                     </div>
                 </div>

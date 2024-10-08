@@ -18,8 +18,6 @@ import employeeService, {
 } from "../../Services/employeeService";
 import { IEmployee } from "../../Types/IEmployee";
 import { IInsertEmployee } from "../../Types/IInsertEmployee";
-import AddEmployee from "./EditEmployee";
-import EmergencyEmployeeContact from "./EmergencyEmployeeContact";
 import EditEmployee from "./EditEmployee";
 
 interface personFormRef {

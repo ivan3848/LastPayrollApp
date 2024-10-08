@@ -6,8 +6,9 @@ import "primeflex/primeflex.css";
 import "primeicons/primeicons.css";
 import es from "primelocale/es.json";
 import { PrimeReactProvider, addLocale, locale } from "primereact/api";
+import { ProgressSpinner } from "primereact/progressspinner";
 import "primereact/resources/primereact.css";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
@@ -21,6 +22,7 @@ const queryClient = new QueryClient();
 
 const RootLayout = ({ children }: RootLayoutProps) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isCheckingAuth, setIsCheckingAuth] = useState(true);
 
     addLocale("es", es.es);
 
@@ -28,6 +30,7 @@ const RootLayout = ({ children }: RootLayoutProps) => {
         const session = async () => {
             const checkSession = await sessionCheck();
             if (checkSession) setIsLoggedIn(true);
+            setIsCheckingAuth(false);
         };
         session();
         locale("es");
@@ -45,11 +48,15 @@ const RootLayout = ({ children }: RootLayoutProps) => {
             <body>
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
-                        {isLoggedIn ? (
+                        {isCheckingAuth ? (
+                            <ProgressSpinner />
+                        ) : isLoggedIn ? (
                             <LayoutProvider>{children}</LayoutProvider>
                         ) : (
                             <>
-                                <Login />
+                                <LayoutProvider>
+                                    <Login />
+                                </LayoutProvider>
                             </>
                         )}
                     </PrimeReactProvider>

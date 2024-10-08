@@ -18,6 +18,7 @@ function useEditEntityQuery<T>({
 }: Props<T>) {
     return useMutation({
         mutationFn: (entity: T) => service.put(entity),
+
         onError: (error: any) => {
             if (toast.current) {
                 toast.current.show({
@@ -28,7 +29,17 @@ function useEditEntityQuery<T>({
                 });
             }
         },
-        onSuccess: () => {
+        onSuccess: (text: any) => {
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: text,
+                    life: 3000,
+                });
+                return;
+            }
+
             reset && reset();
             setEditEntityDialog && setEditEntityDialog(false);
             setSubmitted && setSubmitted(true);

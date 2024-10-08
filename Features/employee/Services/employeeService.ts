@@ -29,7 +29,11 @@ const employeeHistory = new ApiService<IEmployee, IEmployeeHistory>(
 );
 
 const deleteEmployeeService = new ApiService<IEmployee, IEmployee>(
-    "employee/employee/byidemployee"
+    "employee/employee"
+);
+
+const reactivateEmployeeService = new ApiService<IEmployee, IEmployee>(
+    "employee/employee/reactivateEmployee"
 );
 
 const getEmployeeForDGT4 = new ApiService<IDGT4View, IDGT4View>(
@@ -73,6 +77,7 @@ export {
     employeeHistory,
     addEmployeeService,
     deleteEmployeeService,
+    reactivateEmployeeService,
     getEmployeeForDGT4,
     getEmployeeForDGT2,
     getEmployeeForDGT5,

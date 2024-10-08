@@ -12,25 +12,18 @@ import React from "react";
 const groupByEmployee = (
     data: IGetPayrollExecution[]
 ): Record<number, IGetPayrollExecution[]> => {
-    const groupedByEmployee: Record<number, IGetPayrollExecution[]> = {};
-    const uniqueItems: Record<number, Set<string>> = {};
-
-    data.forEach((item) => {
+    return data.reduce((acc, item) => {
         const idEmployee = item.idEmployee!;
-        const itemIdentifier = JSON.stringify(item);
-
-        if (!groupedByEmployee[idEmployee]) {
-            groupedByEmployee[idEmployee] = [];
-            uniqueItems[idEmployee] = new Set();
+        if (!acc[idEmployee]) {
+            acc[idEmployee] = [];
         }
+        acc[idEmployee].push(item);
+        return acc;
+    }, {} as Record<number, IGetPayrollExecution[]>);
+};
 
-        if (!uniqueItems[idEmployee].has(itemIdentifier)) {
-            groupedByEmployee[idEmployee].push(item);
-            uniqueItems[idEmployee].add(itemIdentifier);
-        }
-    });
-
-    return groupedByEmployee;
+const formatDate = (date?: string | null, options?: Intl.DateTimeFormatOptions) => {
+    return date ? new Date(date).toLocaleDateString("en-GB", options) : "N/A";
 };
 
 interface Props {
@@ -39,423 +32,119 @@ interface Props {
 
 export const Invoice = ({ data }: Props) => {
     const groupedData = groupByEmployee(data);
+
     return (
         <Document>
-            {Object.entries(groupedData).map(([idEmployee, items], index) => (
-                <Page key={index} style={styles.body}>
-                    <View style={[styles.table]}>
-                        <View
-                            style={[
-                                styles.marginTop,
-                                styles.tableRow,
-                                styles.textColor,
-                                styles.withOurBorderRight,
-                            ]}
-                        >
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.textAlignLeft,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Recibo de Nomina
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Comprobante
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.textAlignRight,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Fecha de pago
-                            </Text>
-                        </View>
+            {Object.entries(groupedData).map(([idEmployee, items], index) => {
+                const firstItem = items[0];
+                const {
+                    payrollPeriodStart,
+                    payrollPeriodEnd,
+                    payrollPayDate,
+                    employeeName,
+                    accountNumber,
+                    departmentName,
+                    idCostCenter,
+                    totalProfit,
+                    totalDeduction,
+                    totalPay
+                } = firstItem;
 
-                        <View
-                            style={[
-                                styles.tableRow,
-                                styles.textColor,
-                                styles.withOurBorderRight,
-                                styles.lastTableCol,
-                            ]}
-                        >
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.marginBottomPositive,
-                                    styles.textAlignLeft,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Periodo{" "}
-                                {new Date(items[index].payrollPeriodStart!)
-                                    .toLocaleDateString("en-GB", {
-                                        month: "2-digit",
-                                        year: "numeric",
-                                    })
-                                    .replace(" ", "/")}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Desde{" "}
-                                {new Date(
-                                    items[index].payrollPeriodStart!
-                                ).toLocaleDateString("en-GB")}{" "}
-                                Hasta{" "}
-                                {new Date(
-                                    items[index].payrollPeriodEnd!
-                                ).toLocaleDateString("en-GB")}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.textColor,
-                                    styles.textAlignRight,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                {new Date(
-                                    items[index].payrollPayDate!
-                                ).toLocaleDateString("en-GB")}
-                            </Text>
-                        </View>
-                        <View
-                            style={[
-                                styles.marginTop,
-                                styles.tableRow,
-                                styles.textColor,
-                                styles.withOurBorderRight,
-                            ]}
-                        >
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.textAlignLeft,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Nombre : {items[index].employeeName}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            ></Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.textAlignRight,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Codigo : {idEmployee}
-                            </Text>
-                        </View>
-                        <View
-                            style={[
-                                styles.tableRow,
-                                styles.textColor,
-                                styles.withOurBorderRight,
-                                styles.lastTableCol,
-                            ]}
-                        >
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.marginBottomPositive,
-                                    styles.textAlignLeft,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                Cta : {items[index].accountNumber}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.textColor,
-                                    styles.removeRightLine,
-                                    { flexWrap: "wrap" },
-                                ]}
-                            >
-                                Ing{" "}
-                                {new Date(
-                                    items[index].startDate!
-                                ).toLocaleDateString("en-GB")}{" "}
-                                {items[index].departmentName}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.marginTopMinus,
-                                    styles.textColor,
-                                    styles.textAlignRight,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                CC : {items[index].idCostCenter}
-                            </Text>
-                        </View>
-                        <View style={styles.tableRow}>
-                            <Text
-                                style={[
-                                    styles.tableColHeader,
-                                    styles.textColor,
-                                    styles.withBorderRight,
-                                ]}
-                            >
-                                Descripción
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableColHeader,
-                                    styles.colWidthTenP,
-                                    styles.textColor,
-                                    styles.withBorderRight,
-                                ]}
-                            >
-                                Cant
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableColHeader,
-                                    styles.textColor,
-                                    styles.withBorderRight,
-                                    styles.colWidthTwentyP,
-                                ]}
-                            >
-                                Ingresos
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableColHeader,
-                                    styles.textColor,
-                                    styles.withBorderRight,
-                                    styles.colWidthTwentyP,
-                                ]}
-                            >
-                                Deducciones
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableColHeader,
-                                    styles.textColor,
-                                ]}
-                            >
-                                Bces / Acum
-                            </Text>
-                        </View>
-                        {items.map((item, itemIndex) => (
-                            <View key={itemIndex} style={styles.tableRow}>
-                                <Text
-                                    style={[
-                                        styles.tableCol,
-                                        styles.withBorderRight,
-                                        styles.textAlignLeft,
-                                        styles.textColor,
-                                    ]}
-                                >
-                                    {item.name}
+                return (
+                    <Page key={index} style={styles.body}>
+                        <View style={[styles.table]}>
+                            <View style={[styles.marginTop, styles.tableRow, styles.textColor, styles.withOurBorderRight]}>
+                                <Text style={[styles.tableCol, styles.textColor, styles.textAlignLeft, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Recibo de Nomina
                                 </Text>
-                                <Text
-                                    style={[
-                                        styles.tableCol,
-                                        styles.withBorderRight,
-                                        styles.colWidthTenP,
-                                        styles.textAlignRight,
-                                        styles.textColor,
-                                    ]}
-                                >
-                                    {item.quantity}
+                                <Text style={[styles.tableCol, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Comprobante
                                 </Text>
-                                <Text
-                                    style={[
-                                        styles.tableCol,
-                                        styles.withBorderRight,
-                                        styles.textAlignRight,
-                                        styles.textColor,
-                                        styles.colWidthTwentyP,
-                                    ]}
-                                >
-                                    {item.conceptDefinition != "false"
-                                        ? item.totalAmount?.toLocaleString(
-                                              "es-DO",
-                                              {
-                                                  style: "currency",
-                                                  currency: "DOP",
-                                              }
-                                          )
-                                        : ""}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.tableCol,
-                                        styles.withBorderRight,
-                                        styles.textAlignRight,
-                                        styles.textColor,
-                                        styles.colWidthTwentyP,
-                                    ]}
-                                >
-                                    {item.conceptDefinition === "false"
-                                        ? item.totalAmount?.toLocaleString(
-                                              "es-DO",
-                                              {
-                                                  style: "currency",
-                                                  currency: "DOP",
-                                              }
-                                          )
-                                        : ""}
-                                </Text>
-                                <Text
-                                    style={[
-                                        styles.tableCol,
-                                        styles.textAlignRight,
-                                        styles.textColor,
-                                    ]}
-                                >
-                                    {item.accrued?.toLocaleString("es-DO", {
-                                        style: "currency",
-                                        currency: "DOP",
-                                    })}
+                                <Text style={[styles.tableCol, styles.textColor, styles.textAlignRight, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Fecha de pago
                                 </Text>
                             </View>
-                        ))}
 
-                        <View style={[styles.tableRow, styles.addTopline]}>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.colWidthTwentyP,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                INGRESOS
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.colWidthTwentyP,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                {items[index].totalProfit?.toLocaleString(
-                                    "es-DO",
-                                    {
-                                        style: "currency",
-                                        currency: "DOP",
-                                    }
-                                )}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                DEDUCCIONES
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.colWidthTwentyP,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                {items[index].totalDeduction?.toLocaleString(
-                                    "es-DO",
-                                    {
-                                        style: "currency",
-                                        currency: "DOP",
-                                    }
-                                )}
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.removeRightLine,
-                                ]}
-                            >
-                                PAGO NETO
-                            </Text>
-                            <Text
-                                style={[
-                                    styles.tableCol,
-                                    styles.textColor,
-                                    styles.removeLeftLine,
-                                    styles.colWidthTwentyP,
-                                ]}
-                            >
-                                {items[index].totalPay?.toLocaleString(
-                                    "es-DO",
-                                    {
-                                        style: "currency",
-                                        currency: "DOP",
-                                    }
-                                )}
-                            </Text>
+                            <View style={[styles.tableRow, styles.textColor, styles.withOurBorderRight, styles.lastTableCol]}>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.marginBottomPositive, styles.textAlignLeft, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Periodo {formatDate(payrollPeriodStart, { month: "2-digit", year: "numeric" })}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Desde {formatDate(payrollPeriodStart)} Hasta {formatDate(payrollPeriodEnd)}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.textAlignRight, styles.removeLeftLine, styles.removeRightLine]}>
+                                    {formatDate(payrollPayDate)}
+                                </Text>
+                            </View>
+
+                            <View style={[styles.marginTop, styles.tableRow, styles.textColor, styles.withOurBorderRight]}>
+                                <Text style={[styles.tableCol, styles.textColor, styles.textAlignLeft, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Nombre: {employeeName || "N/A"}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}></Text>
+                                <Text style={[styles.tableCol, styles.textColor, styles.textAlignRight, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Codigo: {idEmployee}
+                                </Text>
+                            </View>
+
+                            <View style={[styles.tableRow, styles.textColor, styles.withOurBorderRight, styles.lastTableCol]}>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.marginBottomPositive, styles.textAlignLeft, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    Cta: {accountNumber || "N/A"}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.removeRightLine, { flexWrap: "wrap" }]}>
+                                    Ing: {formatDate(payrollPayDate)} {departmentName || "N/A"}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.textAlignRight, styles.removeLeftLine, styles.removeRightLine]}>
+                                    CC: {idCostCenter || "N/A"}
+                                </Text>
+                            </View>
+
+                            {items.map((item, itemIndex) => (
+                                <View key={itemIndex} style={styles.tableRow}>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignLeft, styles.textColor]}>
+                                        {item.name}
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.colWidthTenP, styles.textAlignRight, styles.textColor]}>
+                                        {item.quantity}
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                        {item.conceptDefinition !== "false" && item.totalAmount?.toLocaleString("es-DO", { style: "currency", currency: "DOP" })}
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                        {item.conceptDefinition === "false" && item.totalAmount?.toLocaleString("es-DO", { style: "currency", currency: "DOP" })}
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.textAlignRight, styles.textColor]}>
+                                        {item.accrued?.toLocaleString("es-DO", { style: "currency", currency: "DOP" })}
+                                    </Text>
+                                </View>
+                            ))}
+
+                            <View style={[styles.tableRow, styles.addTopline]}>
+                                <Text style={[styles.tableCol, styles.textColor, styles.colWidthTwentyP, styles.removeLeftLine, styles.removeRightLine]}>
+                                    INGRESOS
+                                </Text>
+                                <Text style={[styles.tableCol, styles.colWidthTwentyP, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    {totalProfit?.toLocaleString("es-DO", { style: "currency", currency: "DOP" }) || "N/A"}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    DEDUCCIONES
+                                </Text>
+                                <Text style={[styles.tableCol, styles.colWidthTwentyP, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    {totalDeduction?.toLocaleString("es-DO", { style: "currency", currency: "DOP" }) || "N/A"}
+                                </Text>
+                                <Text style={[styles.tableCol, styles.textColor, styles.removeLeftLine, styles.removeRightLine]}>
+                                    PAGO NETO
+                                </Text>
+                                <Text style={[styles.tableCol, styles.textColor, styles.removeLeftLine, styles.colWidthTwentyP]}>
+                                    {totalPay?.toLocaleString("es-DO", { style: "currency", currency: "DOP" }) || "N/A"}
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                    <Text
-                        style={[
-                            styles.tableRow,
-                            styles.pageNumber,
-                            styles.textColor,
-                        ]}
-                        render={({ pageNumber, totalPages }) =>
-                            `${pageNumber} / ${totalPages}`
-                        }
-                        fixed
-                    />
-                </Page>
-            ))}
+
+                        <Text style={[styles.tableRow, styles.pageNumber, styles.textColor]} render={({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}`} fixed />
+                    </Page>
+                );
+            })}
         </Document>
     );
 };
