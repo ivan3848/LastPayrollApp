@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import IFilterReport from "../Types/IFilterReport";
 import useReportStore from "../store/useReportStore";
 import FilterEntityFormSchema from "../Validations/FilterEntityFormSchema";
+import React from "react";
 
 interface Props {
     setFilter: (data: IFilterReport) => void;
