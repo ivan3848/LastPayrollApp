@@ -10,8 +10,8 @@ import Cookies from "js-cookie";
 const user = Cookies.get("auth") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5038/",
-    // baseURL: "http://specialistnomgateway.objectlink.com:5038/",
+    // baseURL: "http://localhost:5038/",
+    baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",
         IdCompany: user?.idCompany ?? "2",
@@ -107,11 +107,11 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async delete(id: number, missEndpoint?: string): Promise<string> {
+    async delete(id: number, missEndpoint?: string): Promise<R | string> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {
-            await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
-            return "Registro eliminado";
+            const response = await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
+            return response.data;
         } catch (error: any) {
             throw error;
         }
