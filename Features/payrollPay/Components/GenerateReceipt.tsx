@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import PayrollEmployeeTable from './PayrollEmployeeTable';
 import GenericDropDown from '@/Features/Shared/Components/GenericDropDown';
 import usePayrollPayQuery from '../Hook/usePayrollPayQuery';
-import useDeletePayrollPay from '../Hook/useDeletePayrollPay';
 import DialogFooterButtonDeletePayrollPay from './DialogFooterButtonDeletePayrollPay';
 import useGenerateReceiptsQuery from '../Hook/useGenerateReceiptsQuery';
 import { IGetPayrollExecution } from '../types/IGetPayrollExecution';
@@ -61,6 +60,7 @@ const GenerateReceiptDialog = ({
         executeReport(response);
 
         hideDialog();
+        return;
     };
 
     const executeReport = (data: IGetPayrollExecution[]) => {

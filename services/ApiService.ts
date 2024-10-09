@@ -107,11 +107,11 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async delete(id: number, missEndpoint?: string): Promise<string> {
+    async delete(id: number, missEndpoint?: string): Promise<R | string> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {
-            await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
-            return "Registro eliminado";
+            const response = await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
+            return response.data;
         } catch (error: any) {
             throw error;
         }
