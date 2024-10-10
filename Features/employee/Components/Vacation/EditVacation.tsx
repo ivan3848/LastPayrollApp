@@ -47,7 +47,7 @@ const EditVacation = ({
             toast.current.show({
                 severity: "warn",
                 summary: "Advertencia!",
-                detail: "Error al calcular los dias de vacaciones. Por favor intente nuevamente.",
+                detail: error.response.data,
             });
         }
     };
