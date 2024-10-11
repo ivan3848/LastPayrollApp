@@ -6,6 +6,7 @@ import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import { DefinedUseQueryResult } from "@tanstack/react-query";
 import { UseFormSetValue } from "react-hook-form";
+import React from "react";
 
 interface Props<T> {
     isValid: boolean;

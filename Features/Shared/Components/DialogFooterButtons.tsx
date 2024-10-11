@@ -8,7 +8,7 @@ const DialogFooterButtons = ({ hideDialog }: Props) => {
     return (
         <div
             className="flex justify-content-end mt-3"
-            style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+            style={{ width: "55%", gap: "5px", marginLeft: "auto" }}
         >
             <Button
                 label="Cancelar"

@@ -7,6 +7,7 @@ import BasicDemo from "./BasicDemo";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import { useParamAllData } from "@/Features/Shared/Hooks/useParamFilter";
+import React from "react";
 
 interface Props<T> {
     isValid: boolean;

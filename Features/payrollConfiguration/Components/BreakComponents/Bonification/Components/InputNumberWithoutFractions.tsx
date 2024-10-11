@@ -12,14 +12,12 @@ interface Props {
     isFocus?: boolean;
     format?: boolean;
     isReadOnly?: boolean;
-    prefix?: string;
-    suffix?: string;
     watch: (field: string) => any;
     setValue: UseFormSetValue<any>;
     fractionValue?: number;
 }
 
-const GenericInputNumber = ({
+const InputNumberWithoutFractions = ({
     id,
     currentValue,
     isValid,
@@ -27,9 +25,6 @@ const GenericInputNumber = ({
     maxValue,
     isFocus = false,
     format = true,
-    prefix = "RD$",
-    suffix = "",
-    fractionValue,
     setValue,
     watch,
     isReadOnly,
@@ -55,12 +50,8 @@ const GenericInputNumber = ({
             showButtons
             autoFocus={isFocus}
             format={format}
-            minFractionDigits={fractionValue ? fractionValue : 2}
-            maxFractionDigits={fractionValue ? 2 : 2}
-            prefix={prefix}
-            suffix={suffix}
         />
     );
 };
 
-export default GenericInputNumber;
+export default InputNumberWithoutFractions;

@@ -1,22 +1,20 @@
 "use client";
 
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IRegion } from "../Types/IRegion";
-import AddRegion from "./AddRegion";
-import EditRegion from "./EditRegion";
+import { IPayrollConfiguration } from "../Types/IPayrollConfiguration";
+import EditPayrollConfiguration from "./EditPayrollConfiguration";
 
-const RegionTable = dynamic(() => import("./RegionTable"));
+const PayrollConfigurationTable = dynamic(
+    () => import("./PayrollConfigurationTable")
+);
 
-const Region = () => {
+const PayrollConfiguration = () => {
     const {
-        deleteEntityDialog,
         setDeleteEntityDialog,
-        addEntityDialog,
         setAddEntityDialog,
         editEntityDialog,
         setEditEntityDialog,
@@ -25,38 +23,38 @@ const Region = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IRegion>();
+    } = useCrudModals<IPayrollConfiguration>();
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IRegion) => {
+    const handleEdit = (entity: IPayrollConfiguration) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IRegion) => {
+    const handleDelete = (entity: IPayrollConfiguration) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Región", "País", "Acciones"];
+    const entityProperties = ["Configuración de Nómina"];
 
     return (
         <div className="grid">
             <div className="w-full">
                 <div className="card">
                     <Toast ref={toast} />
-
                     <Suspense
                         fallback={
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <RegionTable
+                        <PayrollConfigurationTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -64,30 +62,20 @@ const Region = () => {
                         />
                     </Suspense>
 
-                    {addEntityDialog && (
-                        <AddRegion
+                    {/* {addEntityDialog && (
+                        <AddNationality
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
-                    )}
+                    )} */}
 
                     {editEntityDialog && (
-                        <EditRegion
+                        <EditPayrollConfiguration
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
-                            setSubmitted={setSubmitted}
-                            toast={toast}
-                        />
-                    )}
-                    {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idRegion ?? 0}
-                            endpoint="employee/region"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
@@ -98,4 +86,4 @@ const Region = () => {
     );
 };
 
-export default Region;
+export default PayrollConfiguration;

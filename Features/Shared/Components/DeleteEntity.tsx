@@ -4,7 +4,10 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import React from "react";
 import useExpireSessionQuery from "../Hooks/useExpireSessionQuery";
-import { CACHE_KEY_LEASE } from "@/constants/cacheKeys";
+import {
+    CACHE_KEY_LEASE,
+    CACHE_KEY_USER_CONFIGURATION,
+} from "@/constants/cacheKeys";
 
 interface Props {
     id: number;
@@ -24,7 +27,10 @@ const DeleteEntity = ({
     toast,
 }: Props) => {
     const apiService = new ApiService(endpoint);
-    const expireQuery = useExpireSessionQuery([CACHE_KEY_LEASE]);
+    const expireQuery = useExpireSessionQuery([
+        CACHE_KEY_LEASE,
+        CACHE_KEY_USER_CONFIGURATION,
+    ]);
 
     const deleteRegister = useMutation({
         mutationFn: (id: number) => apiService.delete(id),

@@ -1,0 +1,39 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));  /* Automatically create as many columns as fit */
+    gap: 10px; /* Space between the grid items */
+}
+
+.box {
+    border: 1px solid #ddd;    /* Light border */
+    border-radius: 4px;        /* Rounded corners */
+    padding: 10px;             /* Internal padding */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);  /* Light shadow */
+    background-color: #fff;    /* White background */
+    text-align: center;        /* Center text */
+    word-wrap: break-word;     /* Handle long text */
+    overflow: hidden;          /* Ensure text doesn't overflow */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.bold {
+    font-weight: bold; /* Makes the text bold */
+}
+.scrollable-container {
+    max-height: 70vh; /* Control the visible height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    padding: 20px; /* Increased padding for better spacing */
+    border: 1px solid #bebebe; /* Light border for definition */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    border-radius: 15px; /* Rounded corners */
+    background-color: #f9f9f9; /* Light background for contrast */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for depth */
+    margin: 20px 0; /* Space above and below the container */
+    transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+/* Optional: Add a hover effect */
+.scrollable-container:hover {
+    background-color: #f0f0f0; /* Slightly darker on hover */
+}

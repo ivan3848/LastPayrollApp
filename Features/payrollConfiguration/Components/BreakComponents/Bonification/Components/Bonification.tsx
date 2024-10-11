@@ -1,18 +1,18 @@
 "use client";
 
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IRegion } from "../Types/IRegion";
-import AddRegion from "./AddRegion";
-import EditRegion from "./EditRegion";
+import IBonificationBreak from "../Types/IBonificationBreak";
+import AddBonification from "./AddBonification";
+import EditBonification from "./EditBonification";
+import DeleteBonification from "./DeleteBonification";
 
-const RegionTable = dynamic(() => import("./RegionTable"));
+const BonificationTable = dynamic(() => import("./BonificationTable"));
 
-const Region = () => {
+const Bonification = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,25 +25,26 @@ const Region = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IRegion>();
+    } = useCrudModals<IBonificationBreak>();
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IRegion) => {
+    const handleEdit = (entity: IBonificationBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IRegion) => {
+    const handleDelete = (entity: IBonificationBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Región", "País", "Acciones"];
+    const entityProperties = ["Mínimo ", "Acciones"];
 
     return (
         <div className="grid">
@@ -56,7 +57,7 @@ const Region = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <RegionTable
+                        <BonificationTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -65,7 +66,7 @@ const Region = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddRegion
+                        <AddBonification
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -74,7 +75,7 @@ const Region = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditRegion
+                        <EditBonification
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -82,12 +83,12 @@ const Region = () => {
                             toast={toast}
                         />
                     )}
+
                     {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idRegion ?? 0}
-                            endpoint="employee/region"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
+                        <DeleteBonification
+                            entity={entity!}
+                            addEntityDialog={deleteEntityDialog}
+                            setAddEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
@@ -98,4 +99,4 @@ const Region = () => {
     );
 };
 
-export default Region;
+export default Bonification;

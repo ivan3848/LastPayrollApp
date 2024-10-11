@@ -1,18 +1,18 @@
 "use client";
 
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IRegion } from "../Types/IRegion";
-import AddRegion from "./AddRegion";
-import EditRegion from "./EditRegion";
+import IISRBreak from "../Types/IISRBreak";
+import EditISRBreak from "./EditISRBreak";
+import AddISRBreak from "./AddISRBreak";
+import DeleteISRBreak from "./DeleteISRBreak";
 
-const RegionTable = dynamic(() => import("./RegionTable"));
+const ISRBreakTable = dynamic(() => import("./ISRBreakTable"));
 
-const Region = () => {
+const ISRBreak = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,25 +25,26 @@ const Region = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IRegion>();
+    } = useCrudModals<IISRBreak>();
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IRegion) => {
+    const handleEdit = (entity: IISRBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IRegion) => {
+    const handleDelete = (entity: IISRBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Región", "País", "Acciones"];
+    const entityProperties = ["Minimo", "Cargo", "Porcentaje", "Acciones"];
 
     return (
         <div className="grid">
@@ -56,7 +57,7 @@ const Region = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <RegionTable
+                        <ISRBreakTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -65,7 +66,7 @@ const Region = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddRegion
+                        <AddISRBreak
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -74,7 +75,7 @@ const Region = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditRegion
+                        <EditISRBreak
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -83,11 +84,10 @@ const Region = () => {
                         />
                     )}
                     {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idRegion ?? 0}
-                            endpoint="employee/region"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
+                        <DeleteISRBreak
+                            entity={entity!}
+                            addEntityDialog={deleteEntityDialog}
+                            setAddEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
@@ -98,4 +98,4 @@ const Region = () => {
     );
 };
 
-export default Region;
+export default ISRBreak;

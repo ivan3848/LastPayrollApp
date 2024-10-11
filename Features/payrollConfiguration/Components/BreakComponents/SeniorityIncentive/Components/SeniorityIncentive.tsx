@@ -1,18 +1,20 @@
 "use client";
 
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import TableSkeletonTemplate from "@/Features/Shared/Components/TableSkeletonTemplate";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import dynamic from "next/dynamic";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
-import { IRegion } from "../Types/IRegion";
-import AddRegion from "./AddRegion";
-import EditRegion from "./EditRegion";
+import { ISeniorityIncentiveBreak } from "../Types/ISeniorityIncentive";
+import AddSeniorityIncentive from "./AddSeniorityIncentive";
+import EditSeniorityIncentive from "./EditSeniorityIncentive";
+import DeleteSeniorityIncentive from "./DeleteSeniorityIncentive";
 
-const RegionTable = dynamic(() => import("./RegionTable"));
+const SeniorityIncentiveTable = dynamic(
+    () => import("./SeniorityIncentiveTable")
+);
 
-const Region = () => {
+const SeniorityIncentive = () => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -25,25 +27,26 @@ const Region = () => {
         submitted,
         setSubmitted,
         toast,
-    } = useCrudModals<IRegion>();
+    } = useCrudModals<ISeniorityIncentiveBreak>();
+
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);
     };
 
-    const handleEdit = (entity: IRegion) => {
+    const handleEdit = (entity: ISeniorityIncentiveBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setEditEntityDialog(true);
     };
 
-    const handleDelete = (entity: IRegion) => {
+    const handleDelete = (entity: ISeniorityIncentiveBreak) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Región", "País", "Acciones"];
+    const entityProperties = ["Mínimo de años", "Dias a pagar", "Acciones"];
 
     return (
         <div className="grid">
@@ -56,7 +59,7 @@ const Region = () => {
                             <TableSkeletonTemplate items={entityProperties} />
                         }
                     >
-                        <RegionTable
+                        <SeniorityIncentiveTable
                             submitted={submitted}
                             handleAdd={handleAdd}
                             handleDelete={handleDelete}
@@ -65,7 +68,7 @@ const Region = () => {
                     </Suspense>
 
                     {addEntityDialog && (
-                        <AddRegion
+                        <AddSeniorityIncentive
                             addEntityDialog={addEntityDialog}
                             setAddEntityDialog={setAddEntityDialog}
                             setSubmitted={setSubmitted}
@@ -74,7 +77,7 @@ const Region = () => {
                     )}
 
                     {editEntityDialog && (
-                        <EditRegion
+                        <EditSeniorityIncentive
                             entity={entity!}
                             editEntityDialog={editEntityDialog}
                             setEditEntityDialog={setEditEntityDialog}
@@ -82,12 +85,12 @@ const Region = () => {
                             toast={toast}
                         />
                     )}
+
                     {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idRegion ?? 0}
-                            endpoint="employee/region"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
+                        <DeleteSeniorityIncentive
+                            entity={entity!}
+                            addEntityDialog={deleteEntityDialog}
+                            setAddEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
                             toast={toast}
                         />
@@ -98,4 +101,4 @@ const Region = () => {
     );
 };
 
-export default Region;
+export default SeniorityIncentive;
