@@ -8,6 +8,10 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
+import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InputSwitch } from "primereact/inputswitch";
+import { useState } from "react";
 import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
 
 interface Props {
@@ -26,7 +30,7 @@ const AddExtraHourLateness = ({
     toast,
     setSubmitted,
 }: Props) => {
-    // const { addEntityFormSchema } = LicensesFormSchema();
+    const { addEntityFormSchema } = ExtraHourLatenessFormSchema();
 
     const {
         handleSubmit,
@@ -35,7 +39,11 @@ const AddExtraHourLateness = ({
         reset,
         setValue,
         formState: { errors },
-    } = useForm<IExtraHourLateness>();
+    } = useForm<IExtraHourLateness>({
+        resolver: zodResolver(addEntityFormSchema),
+    });
+
+    const [isToPay, setIsToPay] = useState(false);
 
     const addEntity = useAddEntityQuery({
         toast,
@@ -52,8 +60,9 @@ const AddExtraHourLateness = ({
         data.hourAmount = data.hourAmount;
         data.description = data.description;
         data.typeValue = data.typeValue;
+        data.isToPay = isToPay;
 
-        // addEntity.mutate(data);
+        addEntity.mutate(data);
     };
 
     const hideDialog = () => {
@@ -113,6 +122,7 @@ const AddExtraHourLateness = ({
                                     isValid={!!errors.hourAmount}
                                     setValue={setValue}
                                     watch={watch}
+                                    format={false}
                                 />
                                 {errors.hourAmount && (
                                     <small className="p-invalid text-danger">
@@ -122,26 +132,33 @@ const AddExtraHourLateness = ({
                             </div>
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="isToPay">Tipo</label>
-                            <div>
-                                <SelectButton
-                                    {...register("typeValue")}
-                                    value={
-                                        watch("typeValue") == "extraHour"
-                                            ? "Hora extra"
-                                            : "Tardanza"
-                                    }
-                                    onChange={(e) => {
-                                        setValue(
-                                            "typeValue",
-                                            e.value === "Hora extra"
-                                                ? "extraHour"
-                                                : "lateness"
-                                        );
-                                    }}
-                                    options={typeValue}
-                                />
-                            </div>
+                            <h6>Tipo</h6>
+                            <SelectButton
+                                {...register("typeValue")}
+                                value={watch("typeValue") == "extraHour"
+                                    ? "Hora extra"
+                                    : "Tardanza"
+                                }
+                                onChange={(e) => {
+                                    setValue(
+                                        "typeValue",
+                                        e.value === "Hora extra"
+                                            ? "extraHour"
+                                            : "lateness"
+                                    );
+                                }}
+                                options={typeValue}
+                            />
+                        </div>
+                        <div className="field col-12 ml-3 md:col-6 lg:col-4">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("isToPay")}
+                                id="isToPay"
+                                name="isToPay"
+                                checked={isToPay}
+                                onChange={(e) => setIsToPay(e.value)}
+                            />
                         </div>
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>

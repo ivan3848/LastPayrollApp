@@ -7,6 +7,7 @@ import AddButton from "../../../Shared/Components/AddButton";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useGetVacationByIdEmployee from "./Hooks/useGetVacationByIdEmployee";
+import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 
 interface Props {
     idEmployee: number;
@@ -71,7 +72,7 @@ const VacationTable = ({
     };
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Permisos</h3>
+            <h3 className="m-0">Vacaciones</h3>
             <AddButton handleAdd={handleAdd} entity={idEmployee} />
         </div>
     );
@@ -177,6 +178,21 @@ const VacationTable = ({
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
+                <Column
+                    field="paid"
+                    header="Para pagar"
+                    dataType="boolean"
+                    bodyClassName="text-center"
+                    style={{ minWidth: "8rem" }}
+                    body={(e) => <GenericTableCheck isChecked={e.paid} />}
+                    filter
+                    showAddButton={false}
+                    showApplyButton={false}
+                    showClearButton={false}
+                    showFilterMatchModes={false}
+                    showFilterMenuOptions={false}
+                    filterElement={verifiedFilterTemplate}
+                />
                 <Column
                     field="dayPay"
                     header="Dias a pagar"

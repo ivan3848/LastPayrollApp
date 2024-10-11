@@ -1,6 +1,6 @@
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Calendar } from "primereact/calendar";
 import { Dialog } from "primereact/dialog";
@@ -10,6 +10,8 @@ import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import useEditExtraHourLateness from "../Hooks/useEditExtraHourLateness";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
+import { InputSwitch } from "primereact/inputswitch";
 
 interface Props {
     entity: IExtraHourLateness;
@@ -26,7 +28,8 @@ const EdiExtraHourLateness = ({
     toast,
     editEntityDialog,
 }: Props) => {
-    // const { editEntityFormSchema } = LicensesFormSchema();
+    const { editEntityFormSchema } = ExtraHourLatenessFormSchema();
+    const [isToPay, setIsToPay] = useState(entity.isToPay ?? false);
 
     const {
         handleSubmit,
@@ -35,7 +38,9 @@ const EdiExtraHourLateness = ({
         watch,
         setValue,
         formState: { errors },
-    } = useForm<IExtraHourLateness>();
+    } = useForm<IExtraHourLateness>({
+        resolver: zodResolver(editEntityFormSchema),
+    });
 
     const editEntity = useEditExtraHourLateness({
         toast,
@@ -70,8 +75,9 @@ const EdiExtraHourLateness = ({
         data.hourAmount = data.hourAmount ?? entity.hourAmount;
         data.description = data.description;
         data.typeValue = data.typeValue ?? entity.typeValue;
+        data.isToPay = isToPay;
 
-        // editEntity.mutate(data);
+        editEntity.mutate(data);
     };
 
     const hideDialog = () => {
@@ -96,9 +102,11 @@ const EdiExtraHourLateness = ({
                             <label htmlFor="date">Fecha</label>
                             <Calendar
                                 id="date"
+                                value={watch("date") ?? new Date(entity?.date!)}
                                 onChange={(e) => setValue("date", e.value!)}
                                 showIcon
                                 showButtonBar
+                                key={entity?.date.toString()}
                             />
                             {errors.date && (
                                 <small className="p-invalid text-red-500">
@@ -129,6 +137,7 @@ const EdiExtraHourLateness = ({
                                     isValid={!!errors.hourAmount}
                                     setValue={setValue}
                                     watch={watch}
+                                    format={false}
                                 />
                                 {errors.hourAmount && (
                                     <small className="p-invalid text-danger">
@@ -149,6 +158,17 @@ const EdiExtraHourLateness = ({
                                     options={typeValue}
                                 />
                             </div>
+                        </div>
+                        <div className="field col-12 ml-3 md:col-6 lg:col-4">
+                            <h6>Para pago</h6>
+                            <InputSwitch
+                                {...register("isToPay")}
+                                id="isToPay"
+                                defaultChecked={entity.isToPay}
+                                name="isToPay"
+                                checked={isToPay}
+                                onChange={(e) => setIsToPay(e.value)}
+                            />
                         </div>
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>

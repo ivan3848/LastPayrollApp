@@ -109,12 +109,12 @@ const AppMenu = () => {
                 {
                     label: "Reportes DGT",
                     icon: "pi pi-fw pi-book",
-                    to: "",
+                    to: "/reports/dgt",
                 },
                 {
                     label: "Reportes TSS",
                     icon: "pi pi-fw pi-book",
-                    to: "",
+                    to: "/reports/tss",
                 },
             ],
         },

@@ -1,5 +1,7 @@
 import IUser from "@/app/(full-page)/auth/types/IUser";
+import IFilterDGT from "@/Features/reports/Types/IFilterDGT";
 import IFilterReport from "@/Features/reports/Types/IFilterReport";
+import IFilterTSS from "@/Features/reports/Types/IFilterTSS";
 import IParamsApi from "@/types/IParamApi";
 import IResponse from "@/types/IResponse";
 import axios from "axios";
@@ -8,7 +10,7 @@ import Cookies from "js-cookie";
 const user = Cookies.get("auth") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    // baseURL: "http://localhost:5038/",
+    //baseURL: "http://localhost:5038/",
     baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",
@@ -105,11 +107,11 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async delete(id: number, missEndpoint?: string): Promise<string> {
+    async delete(id: number, missEndpoint?: string): Promise<R | string> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {
-            await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
-            return "Registro eliminado";
+            const response = await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
+            return response.data;
         } catch (error: any) {
             throw error;
         }
@@ -123,16 +125,37 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async getForReport(
-        params: IParamsApi,
-        filterReport: IFilterReport
-    ): Promise<IResponse<R>> {
+    async getForReport(params: IParamsApi, filterReport: IFilterReport): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         return await axiosInstance
             .get<IResponse<R>>(finalEndpoint, {
                 params: {
                     ...params.filter,
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
+    }
+
+    async getForDGT(filterReport: IFilterDGT): Promise<R[]> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<R[]>(finalEndpoint, {
+                params: {
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
+    }
+
+    async getForTSS(filterReport: IFilterTSS): Promise<R[]> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<R[]>(finalEndpoint, {
+                params: {
                     ...filterReport,
                 },
             })

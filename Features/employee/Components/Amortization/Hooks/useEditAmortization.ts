@@ -24,7 +24,19 @@ const useEditAmortization = ({
                 life: 3000,
             });
         },
-        onSuccess: () => {
+        onSuccess: (data: any) => {
+
+            if (data.toString().includes("Hay")) {
+                toast?.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: data,
+                    life: 3000,
+                });
+                reset();
+                return;
+            }
+
             reset();
             setEditEntityDialog(false);
             setSubmitted(true);

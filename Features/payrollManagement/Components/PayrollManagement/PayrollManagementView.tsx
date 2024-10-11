@@ -157,7 +157,6 @@ const PayrollManagement = ({
         return;
     };
 
-    let options: string[] = ["Mensual", "Quincenal"];
     let process = `${watch("process") ?? 0}`;
 
     return (
@@ -170,19 +169,16 @@ const PayrollManagement = ({
                             <strong>Area de Nómina</strong>
                         </label>
                         <SelectButton
-                            value={
-                                watch("idPayrollArea") === 2
-                                    ? "Mensual"
-                                    : "Quincenal"
-                            }
+                            {...register("idPayrollArea")}
+                            value={watch("idPayrollArea")}
                             onChange={(e) => {
-                                setValue(
-                                    "idPayrollArea",
-                                    e.value === "Mensual" ? 2 : 1
-                                );
-                                getLastRecord(e.value === "Mensual" ? 2 : 1);
+                                setValue("idPayrollArea", e.value)
+                                getLastRecord(e.value);
                             }}
-                            options={options}
+                            options={[
+                                { label: "Mensual", value: 2 },
+                                { label: "Quincenal", value: 1 },
+                            ]}
                         />
                         {errors.idPayrollArea && (
                             <small className="p-invalid text-danger">

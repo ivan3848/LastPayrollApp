@@ -62,9 +62,17 @@ const CommissionTable = ({
                 <Column
                     field="date"
                     key={"date"}
-                    header="Fecha Final"
+                    header="Fecha de Comisión"
                     body={(rowData: ICommission) =>
                         formatDate(rowData.date?.toString()!)
+                    }
+                />
+                <Column
+                    field="chargeDate"
+                    key={"chargeDate"}
+                    header="Fecha de pago"
+                    body={(rowData: ICommission) =>
+                        formatDate(rowData.chargeDate?.toString()!)
                     }
                 />
                 <Column

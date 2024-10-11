@@ -44,7 +44,19 @@ const DeleteEntity = ({
                 life: 3000,
             });
         },
-        onSuccess: () => {
+        onSuccess: (data: any) => {
+
+            if (data.toString().includes("Hay")) {
+                toast?.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: data,
+                    life: 3000,
+                });
+                expireQuery();
+                return;
+            }
+
             setDeleteEntityDialog(false);
             setSubmitted(true);
             expireQuery();

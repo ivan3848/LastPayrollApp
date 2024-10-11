@@ -58,8 +58,9 @@ const AddCommission = ({
         data.payDate = data.payDate;
         data.isExcecuted = false;
         data.idCommission = data.idCommission;
+        data.isCommissionPayroll = data.isCommissionPayroll;
         data.conceptCode = data.conceptCode;
-        data.chargeDate = new Date();
+        data.chargeDate = data.payDate;
         data.date = new Date();
         data.commissionDetail = [{ ...data }];
         addEntity.mutate(data);

@@ -5,6 +5,7 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import ExtraHourLatenessTable from "./ExtraHourLatenessTable";
+import EdiExtraHourLateness from "./EditExtraHourLateness";
 import AddExtraHourLateness from "./AddExtraHourLateness";
 
 interface props {
@@ -67,16 +68,16 @@ const ExtraHourLateness = ({ id }: props) => {
                         idEmployee={id}
                     />
                 </Suspense>
-                {/*                 
+
                 {editEntityDialog && (
-                    <EditLicense
+                    <EdiExtraHourLateness
                         setEditEntityDialog={setEditEntityDialog}
                         setSubmitted={setSubmitted}
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={editEntityDialog}
                     />
-                )} */}
+                )}
 
                 {addEntityDialog && (
                     <AddExtraHourLateness
