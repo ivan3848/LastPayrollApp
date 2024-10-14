@@ -108,7 +108,27 @@ const PayrollPayExpenseForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const payrollPayWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = payrollPayWithoutIdentifier.map((payrollPay) => {
+            return {
+                "Código Empleado": payrollPay.idEmployee ?? "N/A",
+                "Nombre Completo": payrollPay.name ?? "N/A",
+                Nomina: payrollPay.payrollName ?? "N/A",
+                Concepto: payrollPay.concept ?? "N/A",
+                "Centro de Costo": payrollPay.costCenter ?? "N/A",
+                "Cuenta contable": payrollPay.accountNumber ?? "N/A",
+                Monto:
+                    payrollPay.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PayrollPayExpenseForReport.xlsx");

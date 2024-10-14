@@ -44,9 +44,11 @@ const FiredEmployeeForReportTable = ({
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -131,7 +133,34 @@ const FiredEmployeeForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const fireEmployeeWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = fireEmployeeWithoutIdentifier.map((fireEmployee) => {
+            return {
+                "Código Empleado": fireEmployee.idEmployee ?? "N/A",
+                Empleado: fireEmployee.employeeName ?? "N/A",
+                "Código Empleado Desvinculado":
+                    fireEmployee.idFiredEmployee ?? "N/A",
+                Cédula: fireEmployee.identification ?? "N/A",
+                Salario: fireEmployee.employeeSalary ?? "N/A",
+                Departamento: fireEmployee.departmentName ?? "N/A",
+                Concepto: fireEmployee.conceptName ?? "N/A",
+                "Salario Diario": fireEmployee.dailySalary ?? "N/A",
+                Navidad: fireEmployee.royaltiesDay ?? "N/A",
+                Cesantía: fireEmployee.unemploymentDay ?? "N/A",
+                "Pre-Aviso": fireEmployee.noticeDay ?? "N/A",
+                Vacaciones: fireEmployee.vacationDay ?? "N/A",
+                "Deuda Préstamo": fireEmployee.missLease ?? "N/A",
+                "Tiempo trabajado": fireEmployee.timeWork ?? "N/A",
+                Cantidad: fireEmployee.amount ?? "N/A",
+                Ingreso: fireEmployee.totalProfit ?? "N/A",
+                Resumen: fireEmployee.resume ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "FiredEmployeeForReport.xlsx");

@@ -1,5 +1,4 @@
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Button } from "primereact/button";
@@ -85,78 +84,38 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código de empleado",
                     "Número de cuenta",
                     "Nombre Completo",
-                    "Código Posición Jerárquica",
-                    "Primer Apellido",
-                    "Segundo Apellido",
-                    "Sexo",
                     "Cédula",
                     "Fecha de inicio",
-                    "Fecha de nacimiento",
                     "Salario",
                     "Posición",
-                    "Código de posición",
                     "Departamento",
-                    "Supervisor",
-                    "Código de Departamento",
                     "Función",
-                    "Código de grupo",
                     "Sindicato",
-                    "Código de horario",
                     "Horario Laboral",
-                    "Código Area de nómina",
-                    "Discapacidad",
-                    "Código zona",
                     "Zona",
-                    "Código Nacionalidad",
-                    "Código Educación",
                     "Fecha de Desvinculación",
-                    "Status Ocupación",
                     "Area de nómina",
-                    "Centro de Costo",
-                    "Correo",
-                    "Labor Directa",
                     "Banco",
                     "Método de pago",
-                    "Número de cuenta",
                 ],
             ],
             body: data?.items.map((item) => [
                 item.idEmployee,
                 item.accountNumberCC,
                 item.name,
-                item.idHierarchyPosition,
-                item.firstLastName,
-                item.secondLastName,
-                item.idGender,
                 item.idPerson,
                 item.employeeStartDate,
-                item.birthDate,
                 item.salary,
                 item.posicion,
-                item.idPosition,
                 item.departamento,
-                item.supervisor,
-                item.idDepartment,
                 item.functionDescription,
-                item.idGroupManager,
                 item.sindicate,
-                item.idWorkScheduler,
                 item.workScheduler,
-                item.idPayrollArea,
-                item.idDisability,
-                item.idZone,
                 item.zone,
-                item.idNationality,
-                item.idEducation,
                 item.firedDate,
-                item.isOccupied,
                 item.payrollArea,
-                item.costCenter,
-                item.email,
-                item.isWorkRelation,
                 item.bankName,
                 item.paymentMethod,
-                item.accountNumber,
             ]),
             startY: 20,
         });
@@ -168,60 +127,48 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
             ({ identifier, ...rest }) => rest
         );
 
-        const header = [
-            "Código de empleado",
-            "Número de cuenta",
-            "Nombre Completo",
-            "Código Posición Jerárquica",
-            "Primer Apellido",
-            "Segundo Apellido",
-            "Sexo",
-            "Cédula",
-            "Fecha de inicio",
-            "Fecha de nacimiento",
-            "Salario",
-            "Posición",
-            "Código de posición",
-            "Departamento",
-            "Supervisor",
-            "Código de Departamento",
-            "Función",
-            "Código de grupo",
-            "Sindicato",
-            "Código de horario",
-            "Horario Laboral",
-            "Código Area de nómina",
-            "Discapacidad",
-            "Código zona",
-            "Zona",
-            "Código Nacionalidad",
-            "Código Educación",
-            "Fecha de Desvinculación",
-            "Status Ocupación",
-            "Area de nómina",
-            "Centro de Costo",
-            "Correo",
-            "Labor Directa",
-            "Banco",
-            "Método de pago",
-            "Número de cuenta",
-        ];
+        const renamed = employeesWithoutIdentifier.map((employee) => {
+            return {
+                "Código de empleado": employee.idEmployee ?? "N/A",
+                "Número de cuenta": employee.accountNumber ?? "N/A",
+                "Nombre Completo": employee.name ?? "N/A",
+                "Código Posición Jerárquica": employee.idHierarchyPosition ?? "N/A",
+                "Primer Apellido": employee.firstLastName ?? "N/A",
+                "Segundo Apellido": employee.secondLastName ?? "N/A",
+                Sexo: employee.idGender ?? "N/A",
+                Cédula: employee.idPerson ?? "N/A",
+                "Fecha de inicio": new Date(employee.employeeStartDate).toLocaleDateString("en-GB").replace("-", "/") ?? "N/A",
+                "Fecha de nacimiento": new Date(employee.birthDate).toLocaleDateString("en-GB").replace("-", "/") ?? "N/A",
+                Salario: employee.salary.toLocaleString("es-DO", { style: "currency", currency: "DOP", }) ?? "N/A",
+                Posición: employee.posicion ?? "N/A",
+                "Código de posición": employee.idPosition ?? "N/A",
+                Departamento: employee.departamento ?? "N/A",
+                Supervisor: employee.supervisor ?? "N/A",
+                "Código de Departamento": employee.idDepartment ?? "N/A",
+                Función: employee.functionDescription ?? "N/A",
+                "Código de grupo": employee.idGroupManager ?? "N/A",
+                Sindicato: employee.sindicate ? "Si" : "No",
+                "Código de horario": employee.idWorkScheduler ?? "N/A",
+                "Horario Laboral": employee.workScheduler ?? "N/A",
+                "Código Area de nómina": employee.idPayrollArea ?? "N/A",
+                Discapacidad: employee.idDisability ?? "N/A",
+                "Código zona": employee.idZone ?? "N/A",
+                Zona: employee.zone ?? "N/A",
+                "Código Nacionalidad": employee.idNationality ?? "N/A",
+                "Código Educación": employee.idEducation ?? "N/A",
+                "Fecha de Desvinculación": employee.firedDate ?? "N/A",
+                "Status Ocupación": employee.isOccupied ?? "N/A",
+                "Area de nómina": employee.payrollArea ?? "N/A",
+                "Centro de Costo": employee.costCenter ?? "N/A",
+                Correo: employee.email ?? "N/A",
+                "Labor Directa": employee.isWorkRelation ?? "N/A",
+                Banco: employee.bankName ?? "N/A",
+                "Método de pago": employee.paymentMethod ?? "N/A",
+                "Número de cuenta CC": employee.accountNumberCC ?? "N/A",
+            };
+        });
 
-        const mapObjectToHeader = (item: any, header: any) => {
-            const mappedObject = {} as any;
-            header.forEach((key: any, index: any) => {
-                const originalKey = Object.keys(item)[index];
-                mappedObject[key] = item[originalKey];
-            });
-            return mappedObject;
-        };
-
-        const renamedEmployees = employeesWithoutIdentifier.map((item) =>
-            mapObjectToHeader(item, header)
-        );
-
-        const worksheetData = [header, ...renamedEmployees.map(Object.values)];
-        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "EmployeeForReport.xlsx");

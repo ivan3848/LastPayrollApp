@@ -123,7 +123,44 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const vacationWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = vacationWithoutIdentifier.map((vacation) => {
+            return {
+                "Código de empleado": vacation.idEmployee,
+                Empleado: vacation.employeeName,
+                "Fecha inicio":
+                    new Date(vacation.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+
+                "Fecha fin":
+                    new Date(vacation.endDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+
+                Pago: vacation.paid,
+                Pagado: vacation.isPaid,
+                "Días de disfrute": vacation.enjoymentDay,
+                Absentismos: vacation.absenteeism,
+                "Fecha de pago":
+                    new Date(vacation.payDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Días a pagar": vacation.dayToPay,
+                Nomina: vacation.payrollName,
+                "Número de nómina": vacation.payrollNumber,
+                Posición: vacation.position,
+                Departamento: vacation.department,
+                Importe: vacation.amount,
+                "Código de concepto": vacation.conceptCode,
+                Concepto: vacation.concept,
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "VacationForReport.xlsx");

@@ -120,7 +120,34 @@ const ConsolidatedDataForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const consolidatedWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = consolidatedWithoutIdentifier.map((consolidate) => {
+            return {
+                "Código Centro Costo": consolidate.idCostCenter ?? "N/A",
+                "Código Empleado": consolidate.idEmployee ?? "N/A",
+                Empleado: consolidate.employeeName ?? "N/A",
+                Fecha:
+                    new Date(consolidate.extraHourDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Nomina: consolidate.payrollName ?? "N/A",
+                "Centro de Costo": consolidate.costCenterName ?? "N/A",
+                Concepto: consolidate.concept ?? "N/A",
+                "ID Cuenta contable": consolidate.idAccountingAccount ?? "N/A",
+                "Numero de cuenta": consolidate.accountNumber ?? "N/A",
+                "Cuenta contable": consolidate.name ?? "N/A",
+                Monto:
+                    consolidate.extraHourAmount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "ConsolidatedDataForReport.xlsx");

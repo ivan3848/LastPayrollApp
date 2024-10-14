@@ -129,7 +129,36 @@ const RetroactiveHoursForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const retroactiveWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = retroactiveWithoutIdentifier.map((retroactive) => {
+            return {
+                "Código Centro Costo": retroactive.idCostCenter,
+                "Código Empleado": retroactive.idEmployee,
+                Empleado: retroactive.fullName,
+                Fecha: retroactive.date,
+                "ID Nomina": retroactive.idPayrollPay,
+                Nomina: retroactive.payrollName,
+                "Centro de Costo": retroactive.costCenter,
+                "ID Concepto": retroactive.idConcept,
+                Concepto: retroactive.concept,
+                "ID Cuenta contable": retroactive.idAccountingAccount,
+                Departamento: retroactive.department,
+                "Cuenta contable": retroactive.name,
+                "Numero de cuenta": retroactive.accountingAccountNumber,
+                "Tipo de Hora": retroactive.concept,
+                Posición: retroactive.position,
+                Salario: retroactive.salary.toLocaleString("es-DO", {
+                    style: "currency",
+                    currency: "DOP",
+                }),
+                Monto: `${retroactive.hourAmount}h`,
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "RetroactiveHoursForReport.xlsx");

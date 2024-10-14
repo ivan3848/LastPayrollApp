@@ -106,7 +106,39 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const leaseWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = leaseWithoutIdentifier.map((lease) => {
+            return {
+                "Código Empleado": lease.idEmployee ?? "N/A",
+                Nombre: lease.employeeName ?? "N/A",
+                "Fecha Inicio":
+                    new Date(lease.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Fecha de solicitud":
+                    new Date(lease.requestDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Código de banco": lease.bankKey ?? "N/A",
+                Banco: lease.bankName ?? "N/A",
+                "Cantidad de Cuotas": lease.amountFee ?? "N/A",
+                "Total pago":
+                    lease.amountPay.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Total préstamo":
+                    lease.totalAmount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "LeaseForReport.xlsx");

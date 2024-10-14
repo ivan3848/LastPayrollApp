@@ -40,9 +40,11 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -101,7 +103,22 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const departmentWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = departmentWithoutIdentifier.map((department) => {
+            return {
+
+                "Código Departamento": department.idDepartment ?? "N/A",
+                "Nombre Departamento": department.departmentName ?? "N/A",
+                "Centro de Costo": department.costCenter ?? "N/A",
+                "Localización": department.location ?? "N/A",
+                "Posición": department.position ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "DepartmentForReport.xlsx");

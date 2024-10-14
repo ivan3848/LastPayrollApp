@@ -40,6 +40,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -102,7 +103,22 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const dependantWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = dependantWithoutIdentifier.map((dependant) => {
+            return {
+                "Código Empleado": dependant.idEmployee ?? "N/A",
+                "Nombre Completo": dependant.employeeName ?? "N/A",
+                "ID Dependiente": dependant.dependantIdentification ?? "N/A",
+                Estado: dependant.statusDescription ?? "N/A",
+                "Nombre Completo del Dependiente":
+                    dependant.fullNameDependant ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "DependantForReport.xlsx");

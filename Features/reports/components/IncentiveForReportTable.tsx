@@ -117,7 +117,46 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const incentiveWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = incentiveWithoutIdentifier.map((incentive) => {
+            return {
+                "Código de Empleado": incentive.idEmployee ?? "N/A",
+                Nombre: incentive.employee ?? "N/A",
+                Posición: incentive.position ?? "N/A",
+                Departamento: incentive.department ?? "N/A",
+                Nómina: incentive.payrollName ?? "N/A",
+                Incentivo: incentive.description ?? "N/A",
+                "Fecha de carga":
+                    new Date(incentive.chargeDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Fecha de ejecución":
+                    new Date(incentive.dateExecuted)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Fecha de pago":
+                    new Date(incentive.payDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Se efectuó": incentive.isExecuted ?? "N/A",
+                Monto:
+                    incentive.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Impuesto:
+                    incentive.tax.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Pago: incentive.isPaid ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "IncentiveForReport.xlsx");

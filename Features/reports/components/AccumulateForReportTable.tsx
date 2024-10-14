@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useAccumulateForReportQuery from "../Hook/useAccumulateForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IAccumulateForReport } from "../Types/IAccumulateForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -40,9 +41,11 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -105,7 +108,26 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const accumulateWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = accumulateWithoutIdentifier.map((accumulate) => {
+            return {
+                "Código Acumulado": accumulate.idAccumulate ?? "N/A",
+                "Código Empleado": accumulate.idEmployee ?? "N/A",
+                Nomina: accumulate.payrollName ?? "N/A",
+                Concepto: accumulate.concept ?? "N/A",
+                "Nombre Completo": accumulate.employeeName ?? "N/A",
+                Fecha:
+                    new Date(accumulate.date)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Cantidad: accumulate.amount ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "AccumulateForReport.xlsx");
@@ -242,6 +264,11 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IAccumulateForReport) =>
+                        new Date(rowData.date)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/")
+                    }
                 ></Column>
                 <Column
                     field="amount"
@@ -254,6 +281,12 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IAccumulateForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
             </DataTable>
         </div>

@@ -116,7 +116,35 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const permitWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = permitWithoutIdentifier.map((permit) => {
+            return {
+                "Código Permiso": permit.idPermit ?? "N/A",
+                "Código de Posición": permit.idPosition ?? "N/A",
+                Posición: permit.position ?? "N/A",
+                "Código de Departamento": permit.idDepartment ?? "N/A",
+                Departamento: permit.department ?? "N/A",
+                Empleado: permit.employeeName ?? "N/A",
+                Inicio:
+                    new Date(permit.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Final:
+                    new Date(permit.endDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Código Concepto": permit.conceptCode ?? "N/A",
+                Concepto: permit.conceptName ?? "N/A",
+                Horas: permit.hourAmount ?? "N/A",
+                Pago: permit.isPaid ?? "N/A",
+                "A Pagar": permit.isToPay ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PermitForReport.xlsx");

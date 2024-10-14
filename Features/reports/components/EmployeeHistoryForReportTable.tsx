@@ -118,7 +118,40 @@ const EmployeeHistoryForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const employeeHistoryWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = employeeHistoryWithoutIdentifier.map(
+            (employeeHistory) => {
+                return {
+                    Código: employeeHistory.idEmployee ?? "N/A",
+                    Empleado: employeeHistory.employeeName ?? "N/A",
+                    Departamento: employeeHistory.department ?? "N/A",
+                    Posición: employeeHistory.position ?? "N/A",
+                    Salario:
+                        employeeHistory.salaryHistory.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        }) ?? "N/A",
+                    Dependientes: employeeHistory.numberOfDependant ?? "N/A",
+                    Cambio: employeeHistory.changeType ?? "N/A",
+                    "Hora extra": employeeHistory.extraHour ?? "N/A",
+                    "Area de Nomina": employeeHistory.payrollArea ?? "N/A",
+                    Inicio:
+                        new Date(employeeHistory.startDateChange)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/") ?? "N/A",
+                    Final:
+                        new Date(employeeHistory.endDateChange)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/") ?? "N/A",
+                    Estatus: employeeHistory.employeeStatus ?? "N/A",
+                };
+            }
+        );
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "EmployeeHistoryForReport.xlsx");

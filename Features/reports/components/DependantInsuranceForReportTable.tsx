@@ -120,7 +120,35 @@ const DependantInsuranceForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const dependantInsuranceWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = dependantInsuranceWithoutIdentifier.map(
+            (dependantInsurance) => {
+                return {
+                    "Código Empleado": dependantInsurance.idEmployee ?? "N/A",
+                    Empleado: dependantInsurance.employeeName ?? "N/A",
+                    "Cedula Dependiente":
+                        dependantInsurance.dependantIdentification ?? "N/A",
+                    Dependiente: dependantInsurance.fullNameDependant ?? "N/A",
+                    Parentesco: dependantInsurance.statusDescription ?? "N/A",
+                    "Código Empleado Asegurado":
+                        dependantInsurance.idPersonInsurance ?? "N/A",
+                    "Código Seguro": dependantInsurance.idInsurance ?? "N/A",
+                    Seguro: dependantInsurance.description ?? "N/A",
+                    "% a descontar":
+                        dependantInsurance.percentDiscount ?? "N/A",
+                    Cantidad: dependantInsurance.amount ?? "N/A",
+                    "Código de Concepto":
+                        dependantInsurance.conceptCode ?? "N/A",
+                    Inicio: dependantInsurance.startDate ?? "N/A",
+                    Final: dependantInsurance.endDate ?? "N/A",
+                };
+            }
+        );
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "DependantInsuranceForReport.xlsx");

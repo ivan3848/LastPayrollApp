@@ -93,8 +93,19 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
-        const workbook = XLSX.utils.book_new();
+        const plantPunchWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = plantPunchWithoutIdentifier.map((plantPunch) => {
+            return {
+                "Planta": plantPunch.plant ?? "N/A", 
+                "Fecha": new Date(plantPunch.date).toLocaleDateString().replace("-", "/") ?? "N/A",
+                "Total de ponches": plantPunch.totalPlantPunch ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);        const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PlantPunchForReport.xlsx");
     };

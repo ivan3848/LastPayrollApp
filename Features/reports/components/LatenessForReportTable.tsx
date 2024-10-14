@@ -126,7 +126,42 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const latenessWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = latenessWithoutIdentifier.map((lateness) => {
+            return {
+                "Código Empleado": lateness.idEmployee ?? "N/A",
+                "Código Tardanza": lateness.idLateness ?? "N/A",
+                Empleado: lateness.fullName ?? "N/A",
+                "Centro de Costo": lateness.costCenter ?? "N/A",
+                Salario:
+                    lateness.salary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Porcentaje: `${lateness.percentage}%`,
+                "Tipo de Hora": lateness.concept ?? "N/A",
+                "Cantidad de Hora": lateness.hourAmount ?? "N/A",
+                "Valor de Hora": lateness.amount ?? "N/A",
+                Fecha:
+                    new Date(lateness.date)
+                        .toLocaleDateString()
+                        .replace("-", "/") ?? "N/A",
+                Nomina: lateness.payrollName ?? "N/A",
+                "Código Nomina": lateness.idPayrollPay ?? "N/A",
+                Pago: lateness.isPaid ?? "N/A",
+                "Código Posición": lateness.idPosition ?? "N/A",
+                Posición: lateness.position ?? "N/A",
+                "Código Departamento": lateness.idDepartment ?? "N/A",
+                Departamento: lateness.department ?? "N/A",
+                "Numero de Cuenta": lateness.accountNumber ?? "N/A",
+                "Código Centro de Costo": lateness.idCostCenter ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "LatenessForReport.xlsx");

@@ -124,7 +124,40 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const licencesWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = licencesWithoutIdentifier.map((licences) => {
+            return {
+                "Código Empleado": licences.idEmployee ?? "N/A",
+                "Código de Posición": licences.idPosition ?? "N/A",
+                Posición: licences.position ?? "N/A",
+                "Código de Departamento": licences.idDepartment ?? "N/A",
+                Departamento: licences.department ?? "N/A",
+                "Código Licencia": licences.idLicences ?? "N/A",
+                Empleado: licences.employeeName ?? "N/A",
+                "Nombre de Doctor": licences.doctorName ?? "N/A",
+                "Código de Concepto": licences.idConcept ?? "N/A",
+                Concepto: licences.conceptName ?? "N/A",
+                "Dias no laborados": licences.workDayOff ?? "N/A",
+                "A Pagar": licences.isToPay ?? "N/A",
+                "Código Nomina": licences.idPayrollPay ?? "N/A",
+                Nomina: licences.payrollPay ?? "N/A",
+                Descripción: licences.description ?? "N/A",
+                Inicio:
+                    new Date(licences.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Fin:
+                    new Date(licences.endDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Pago: licences.isPaid ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "LicencesForReport.xlsx");
