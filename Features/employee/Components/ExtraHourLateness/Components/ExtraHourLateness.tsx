@@ -5,8 +5,8 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import ExtraHourLatenessTable from "./ExtraHourLatenessTable";
-import AddExtraHourLateness from "./AddExtraHourLateness";
 import EdiExtraHourLateness from "./EditExtraHourLateness";
+import AddExtraHourLateness from "./AddExtraHourLateness";
 
 interface props {
     id: number;

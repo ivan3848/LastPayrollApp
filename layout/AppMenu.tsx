@@ -133,6 +133,11 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-bullseye",
                     to: "/userConfiguration/rol",
                 },
+                {
+                    label: "Configuracion de Nomina",
+                    icon: "pi pi-fw pi-calculator",
+                    to: "/payrollConfiguration",
+                },
             ],
         },
     ];

@@ -26,7 +26,6 @@ const Region = () => {
         setSubmitted,
         toast,
     } = useCrudModals<IRegion>();
-
     const handleAdd = () => {
         setSubmitted(false);
         setAddEntityDialog(true);

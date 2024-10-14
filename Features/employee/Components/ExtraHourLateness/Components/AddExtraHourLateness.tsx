@@ -8,11 +8,11 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { SelectButton } from "primereact/selectbutton";
 import { useForm } from "react-hook-form";
-import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
 import ExtraHourLatenessFormSchema from "../Validations/ExtraHourLatenessFormSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { InputSwitch } from "primereact/inputswitch";
 import { useState } from "react";
+import { addExtraHourLatenessService } from "../Services/extraHourLatenessServices";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;

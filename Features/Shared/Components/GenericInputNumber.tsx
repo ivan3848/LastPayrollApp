@@ -16,6 +16,7 @@ interface Props {
     suffix?: string;
     watch: (field: string) => any;
     setValue: UseFormSetValue<any>;
+    fractionValue?: number;
 }
 
 const GenericInputNumber = ({
@@ -28,6 +29,7 @@ const GenericInputNumber = ({
     format = true,
     prefix = "RD$",
     suffix = "",
+    fractionValue,
     setValue,
     watch,
     isReadOnly,
@@ -41,8 +43,7 @@ const GenericInputNumber = ({
     return (
         <InputNumber
             value={watch(id)}
-            onChange={(e) => setValue(id, e.value!)
-            }
+            onChange={(e) => setValue(id, e.value!)}
             disabled={isReadOnly}
             id={id}
             className={classNames({
@@ -54,8 +55,8 @@ const GenericInputNumber = ({
             showButtons
             autoFocus={isFocus}
             format={format}
-            minFractionDigits={2}
-            maxFractionDigits={2}
+            minFractionDigits={fractionValue ? fractionValue : 2}
+            maxFractionDigits={fractionValue ? 2 : 2}
             prefix={prefix}
             suffix={suffix}
         />

@@ -5,12 +5,12 @@ import { useForm } from 'react-hook-form';
 import PayrollEmployeeTable from './PayrollEmployeeTable';
 import GenericDropDown from '@/Features/Shared/Components/GenericDropDown';
 import usePayrollPayQuery from '../Hook/usePayrollPayQuery';
-import useDeletePayrollPay from '../Hook/useDeletePayrollPay';
 import DialogFooterButtonDeletePayrollPay from './DialogFooterButtonDeletePayrollPay';
 import useGenerateReceiptsQuery from '../Hook/useGenerateReceiptsQuery';
 import { IGetPayrollExecution } from '../types/IGetPayrollExecution';
 import InvoiceViewer from '@/Features/reports/components/InvoiceViewer';
 import { createRoot } from 'react-dom/client';
+import { Button } from 'primereact/button';
 
 export interface IAddEmployee {
     employees: number[];
@@ -61,6 +61,7 @@ const GenerateReceiptDialog = ({
         executeReport(response);
 
         hideDialog();
+        return;
     };
 
     const executeReport = (data: IGetPayrollExecution[]) => {
@@ -141,7 +142,25 @@ const GenerateReceiptDialog = ({
                         byPayroll={false}
                     />
                 </div>
-                <DialogFooterButtonDeletePayrollPay hideDialog={hideDialog} />
+                <div
+                    className="flex justify-content-end mt-3"
+                    style={{ width: "30%", gap: "5px", marginLeft: "auto" }}
+                >
+                    <Button
+                        label="Cancelar"
+                        icon="pi pi-times"
+                        raised
+                        type="button"
+                        onClick={hideDialog}
+                        severity="danger"
+                    />
+                    <Button
+                        label="Generar"
+                        icon="pi pi-check"
+                        type="submit"
+                        raised
+                    />
+                </div>
             </form>
         </Dialog>
     )

@@ -1,4 +1,5 @@
 import { Button } from "primereact/button";
+import React from "react";
 
 interface Props<T> {
     entity: T;

@@ -19,6 +19,7 @@ import { IUser } from "../Types/IUser";
 import EditUser from "./EditUser";
 import ResetUserPassword from "./ResetUserPassword";
 import ResetUserStatus from "./ResetUserStatus";
+import React from "react";
 interface Props {
     submitted: boolean;
 }
@@ -71,7 +72,6 @@ export default function UserTableWithLogin({ submitted }: Props) {
         userServiceWithLogin
     );
 
-    const expireQuery = useExpireSessionQuery([CACHE_KEY_USER_CONFIGURATION]);
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -246,18 +246,14 @@ export default function UserTableWithLogin({ submitted }: Props) {
                 />
             )}
             {deleteUser && (
-                <>
-                    <DeleteEntity
-                        id={user!.users[0].userId!}
-                        endpoint="employee/user"
-                        deleteEntityDialog={deleteEntityDialog}
-                        setDeleteEntityDialog={setDeleteEntityDialog}
-                        setSubmitted={setSubmitted}
-                        toast={toast}
-                    />
-
-                    {expireQuery()}
-                </>
+                <DeleteEntity
+                    id={user!.users[0].userId!}
+                    endpoint="employee/user"
+                    deleteEntityDialog={deleteEntityDialog}
+                    setDeleteEntityDialog={setDeleteEntityDialog}
+                    setSubmitted={setSubmitted}
+                    toast={toast}
+                />
             )}
             {userResetPassword && (
                 <>

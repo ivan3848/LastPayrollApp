@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useRolModuleByIdRol from "@/Features/rolModule/Hooks/useRolModuleByIdRol";
+import { ScrollPanel } from "primereact/scrollpanel";
 import { Tag } from "primereact/tag";
 import { classNames } from "primereact/utils";
-import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import IRol from "@/Features/rol/Types/IRol";
-import useRolModuleByIdRol from "@/Features/rolModule/Hooks/useRolModuleByIdRol";
+import { useEffect } from "react";
 import { UseFormSetValue } from "react-hook-form";
-import { ScrollPanel } from "primereact/scrollpanel";
-import { Card } from "primereact/card";
 
 interface Product<T> {
     id: string;
@@ -43,9 +41,7 @@ export default function BasicDemo<T>({ idValue, id, setValue }: Product<T>) {
                         className={classNames("col-12 md:col-4 p-4")}
                     >
                         <div className="card flex flex-column align-items-center   gap-3">
-                            <text className="text-1xl font-bold text-700 flex-wrap">
-                                {data.module}
-                            </text>
+                            <div>{data.module}</div>
                             <div className="flex align-items-center gap-3">
                                 <Tag
                                     value={

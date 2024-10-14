@@ -107,3 +107,4 @@ export const CACHE_KEY_EXTRAHOUR_LATENESS = "extraHourLateness";
 export const CACHE_KEY_FIREDEMPLOYEE = "firedEmployee";
 export const CACHE_KEY_FIREDEMPLOYEE_CONTABILIZATION =
     "firedEmployeeContabilization";
+export const CACHE_KEY_PAYROLL_CONFIGURATION = "payrollConfiguration";
