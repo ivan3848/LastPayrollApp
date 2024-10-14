@@ -12,6 +12,8 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useInsuranceForReportQuery from "../Hook/useInsuranceForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IIncentiveForReport } from "../Types/IIncentiveForReport";
+import { IInsuranceForReport } from "../Types/IInsuranceForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -125,7 +127,37 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const insuranceWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = insuranceWithoutIdentifier.map((insurance) => {
+            return {
+                "Código Seguro": insurance.idInsurance ?? "N/A",
+                "Código Empleado": insurance.idEmployee ?? "N/A",
+                Titular: insurance.employeeName ?? "N/A",
+                Dependiente: insurance.fullNameDependant ?? "N/A",
+                "Cédula dependiente": insurance.identificationDisplay ?? "N/A",
+                "ID Concepto": insurance.idConcept ?? "N/A",
+                "Código de Concepto": insurance.conceptCode ?? "N/A",
+                Concepto: insurance.conceptName ?? "N/A",
+                Seguro: insurance.description ?? "N/A",
+                Plan: insurance.planType ?? "N/A",
+                "Centro de Costo": insurance.costCenter ?? "N/A",
+                "ID Cuenta contable": insurance.idAccountingAccount ?? "N/A",
+                "ID Centro costo": insurance.idCostCenter ?? "N/A",
+                "Numero de cuenta": insurance.accountNumber ?? "N/A",
+                "Cuenta contable": insurance.accountingAccount ?? "N/A",
+                "Porcentaje a Descontar": `${insurance.percentDiscount}%`,
+                Monto:
+                    insurance.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "InsuranceForReport.xlsx");
@@ -383,6 +415,11 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IInsuranceForReport) =>
+                        rowData.percentDiscount
+                            ? `${rowData.percentDiscount}%`
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -396,6 +433,12 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IInsuranceForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        }) ?? "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

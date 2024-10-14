@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useProfitForReportQuery from "../Hook/useProfitForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IProfitForReport } from "../Types/IProfitForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -40,6 +41,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -104,7 +106,31 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const profitWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = profitWithoutIdentifier.map((profit) => {
+            return {
+                "Código Beneficio": profit.idProfit,
+                "Nombre Completo": profit.employeeName,
+                "Nombre de Concepto": profit.conceptName,
+                Monto: profit.amount.toLocaleString("es-DO", {
+                    style: "currency",
+                    currency: "DOP",
+                }),
+                "Es posición": profit.isPosition,
+                Pagado: profit.isPaid,
+                Inicio: new Date(profit.start)
+                    .toLocaleDateString("en-GB")
+                    .replace("-", "/"),
+                Fin: new Date(profit.end)
+                    .toLocaleDateString("en-GB")
+                    .replace("-", "/"),
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "ProfitForReport.xlsx");
@@ -216,6 +242,14 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IProfitForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isPosition"
@@ -252,6 +286,13 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IProfitForReport) =>
+                        rowData.start
+                            ? new Date(rowData.start)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="end"
@@ -264,6 +305,13 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IProfitForReport) =>
+                        rowData.end
+                            ? new Date(rowData.end)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

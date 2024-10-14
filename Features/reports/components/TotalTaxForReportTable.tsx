@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useTotalTaxForReportQuery from "../Hook/useTotalTaxForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ITotalTaxForReport } from "../Types/ITotalTaxForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -96,7 +97,27 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const totalTaxWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = totalTaxWithoutIdentifier.map((totalTax) => {
+            return {
+                "Código Empleado": totalTax.idEmployee,
+                "Nombre Completo": totalTax.employeeName,
+                "Total impuesto": totalTax.totalTax.toLocaleString("es-DO", {
+                    style: "currency",
+                    currency: "DOP",
+                }),
+                "Total impuesto nomina":
+                    totalTax.payrollPayTotalTax.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }),
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "TotalTaxForReport.xlsx");
@@ -196,6 +217,14 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ITotalTaxForReport) =>
+                        rowData.totalTax
+                            ? rowData.totalTax.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payrollPayTotalTax"
@@ -208,6 +237,17 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ITotalTaxForReport) =>
+                        rowData.payrollPayTotalTax
+                            ? rowData.payrollPayTotalTax.toLocaleString(
+                                  "es-DO",
+                                  {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  }
+                              )
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

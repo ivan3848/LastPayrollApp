@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useVacationForReportQuery from "../Hook/useVacationForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IVacationForReport } from "../Types/IVacationForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -123,7 +124,44 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const vacationWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = vacationWithoutIdentifier.map((vacation) => {
+            return {
+                "Código de empleado": vacation.idEmployee,
+                Empleado: vacation.employeeName,
+                "Fecha inicio":
+                    new Date(vacation.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+
+                "Fecha fin":
+                    new Date(vacation.endDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+
+                Pago: vacation.paid,
+                Pagado: vacation.isPaid,
+                "Días de disfrute": vacation.enjoymentDay,
+                Absentismos: vacation.absenteeism,
+                "Fecha de pago":
+                    new Date(vacation.payDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Días a pagar": vacation.dayToPay,
+                Nomina: vacation.payrollName,
+                "Número de nómina": vacation.payrollNumber,
+                Posición: vacation.position,
+                Departamento: vacation.department,
+                Importe: vacation.amount,
+                "Código de concepto": vacation.conceptCode,
+                Concepto: vacation.concept,
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "VacationForReport.xlsx");
@@ -223,6 +261,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -235,6 +280,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.endDate
+                            ? new Date(rowData.endDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="paid"
@@ -295,6 +347,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.payDate
+                            ? new Date(rowData.payDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="dayToPay"
@@ -367,6 +426,14 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"

@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useCostForReportQuery from "../Hook/useCostForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ICostForReport } from "../Types/ICostForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -73,7 +74,7 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
     const exportPDF = () => {
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
-        const text = "Reporte de Gastos de Nomina";
+        const text = "Reporte de Costo";
         const textWidth = doc.getTextWidth(text);
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
@@ -104,11 +105,32 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
             ]),
             startY: 20,
         });
-        doc.save("ReporteGastosNomina.pdf");
+        doc.save("ReporteCosto.pdf");
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const costWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = costWithoutIdentifier.map((cost) => {
+            return {
+                "Codigo de Centro de costo": cost.idCostCenter ?? "N/A",
+                "Centro de costo": cost.costCenter ?? "N/A",
+                "Numero de cuenta": cost.accountNumber ?? "N/A",
+                Departamento: cost.department ?? "N/A",
+                Concepto: cost.concept ?? "N/A",
+                "Horas Normales": cost.normalHour ?? "N/A",
+                "Cantidad de Horas Extras": cost.extraHourAmount ?? "N/A",
+                "Valor de Horas Extras": cost.extraHourValue ?? "N/A",
+                Mes:
+                    new Date(cost.month)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "CostForReport.xlsx");
@@ -120,7 +142,7 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de Gastos de Nomina
+                Reporte de Costo
             </h2>
             <Button
                 type="button"
@@ -268,6 +290,12 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ICostForReport) =>
+                        rowData.extraHourValue.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
                 <Column
                     field="month"

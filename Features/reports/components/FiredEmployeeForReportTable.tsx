@@ -14,6 +14,7 @@ import useFiredEmployeeForReportQuery from "../Hook/useFiredEmployeeForReportQue
 import IFilterReport from "../Types/IFilterReport";
 import { createRoot } from "react-dom/client";
 import FiredEmployeeInvoiceViewer from "./FiredEmployeeInvoiceViewer";
+import { IFiredEmployeeForReport } from "../Types/IFiredEmployeeForReport";
 interface Props {
     filterValues: IFilterReport | null;
     setFilterValues: (value: IFilterReport | null) => void;
@@ -44,9 +45,11 @@ const FiredEmployeeForReportTable = ({
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -131,7 +134,34 @@ const FiredEmployeeForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const fireEmployeeWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = fireEmployeeWithoutIdentifier.map((fireEmployee) => {
+            return {
+                "Código Empleado": fireEmployee.idEmployee ?? "N/A",
+                Empleado: fireEmployee.employeeName ?? "N/A",
+                "Código Empleado Desvinculado":
+                    fireEmployee.idFiredEmployee ?? "N/A",
+                Cédula: fireEmployee.identification ?? "N/A",
+                Salario: fireEmployee.employeeSalary ?? "N/A",
+                Departamento: fireEmployee.departmentName ?? "N/A",
+                Concepto: fireEmployee.conceptName ?? "N/A",
+                "Salario Diario": fireEmployee.dailySalary ?? "N/A",
+                Navidad: fireEmployee.royaltiesDay ?? "N/A",
+                Cesantía: fireEmployee.unemploymentDay ?? "N/A",
+                "Pre-Aviso": fireEmployee.noticeDay ?? "N/A",
+                Vacaciones: fireEmployee.vacationDay ?? "N/A",
+                "Deuda Préstamo": fireEmployee.missLease ?? "N/A",
+                "Tiempo trabajado": fireEmployee.timeWork ?? "N/A",
+                Cantidad: fireEmployee.amount ?? "N/A",
+                Ingreso: fireEmployee.totalProfit ?? "N/A",
+                Resumen: fireEmployee.resume ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "FiredEmployeeForReport.xlsx");
@@ -257,6 +287,17 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.employeeSalary
+                                ? rowData.employeeSalary.toLocaleString(
+                                      "es-DO",
+                                      {
+                                          style: "currency",
+                                          currency: "DOP",
+                                      }
+                                  )
+                                : "N/A"
+                        }
                     ></Column>
                     <Column
                         field="departmentName"
@@ -293,6 +334,14 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.dailySalary
+                                ? rowData.dailySalary.toLocaleString("es-DO", {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  })
+                                : "N/A"
+                        }
                     ></Column>
                     <Column
                         field="royaltiesDay"
@@ -353,6 +402,14 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.missLease
+                                ? rowData.missLease.toLocaleString("es-DO", {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  })
+                                : "N/A"
+                        }
                     ></Column>
                     <Column
                         field="timeWork"
@@ -377,6 +434,14 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.amount
+                                ? rowData.amount.toLocaleString("es-DO", {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  })
+                                : "N/A"
+                        }
                     ></Column>
                     <Column
                         field="totalProfit"
@@ -389,6 +454,14 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.totalProfit
+                                ? rowData.totalProfit.toLocaleString("es-DO", {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  })
+                                : "N/A"
+                        }
                     ></Column>
                     <Column
                         field="resume"
@@ -402,7 +475,7 @@ const FiredEmployeeForReportTable = ({
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
                     ></Column>
-                    <Column
+                    {/* <Column
                         field="netPay"
                         header="Pago neto"
                         headerStyle={{ minWidth: "15rem" }}
@@ -413,7 +486,15 @@ const FiredEmployeeForReportTable = ({
                         showFilterMenuOptions
                         onFilterApplyClick={(e) => onFilter(e.field)}
                         onFilterClear={clearFilters}
-                    ></Column>
+                        body={(rowData: IFiredEmployeeForReport) =>
+                            rowData.netPay
+                                ? rowData.netPay.toLocaleString("es-DO", {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  })
+                                : "N/A"
+                        }
+                    ></Column> */}
                 </DataTable>
             </div>
         )

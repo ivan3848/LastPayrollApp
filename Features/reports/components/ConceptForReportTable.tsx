@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useConceptForReportQuery from "../Hook/useConceptForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IConceptForReport } from "../Types/IConceptForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -37,6 +38,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
     }
 
     const { data, isLoading } = useConceptForReportQuery(filterReport, params);
+
     const reset = () => {
         setFilterValues({});
     };
@@ -76,20 +78,11 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
         autoTable(doc, {
-            head: [
-                [
-                    "CC-nómina",
-                    "Concepto",
-                    "Código de empleado",
-                    "Nombre",
-                    "Importe actual",
-                ],
-            ],
+            head: [["CC-nómina", "Concepto", "Beneficio", "Importe actual"]],
             body: data?.items.map((item) => [
                 item.conceptCode,
                 item.concept,
-                item.idEmployee,
-                item.employeeName,
+                item.isProfit ? "Si" : "No",
                 item.amount,
             ]),
             startY: 20,
@@ -98,7 +91,24 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const conceptWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = conceptWithoutIdentifier.map((concept) => {
+            return {
+                "CC-nómina": concept.conceptCode ?? "N/A",
+                Concepto: concept.concept ?? "N/A",
+                "Importe actual":
+                    concept.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Beneficio: concept.isProfit ? "Si" : "No",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "ConceptForReport.xlsx");
@@ -187,7 +197,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
-                <Column
+                {/* <Column
                     field="idEmployee"
                     header="Código de empleado"
                     headerStyle={{ minWidth: "15rem" }}
@@ -210,7 +220,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
-                ></Column>
+                ></Column> */}
                 <Column
                     field="amount"
                     header="Importe"
@@ -222,6 +232,25 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IConceptForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
+                ></Column>
+                <Column
+                    field="isProfit"
+                    header="Beneficio"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="isProfit"
+                    filterPlaceholder="Buscar por beneficio"
+                    showFilterMenuOptions={false}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                    body={(rowData) => (rowData.isProfit ? "Si" : "No")}
                 ></Column>
             </DataTable>
         </div>

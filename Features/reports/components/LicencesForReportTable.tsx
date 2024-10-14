@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useLicencesForReportQuery from "../Hook/useLicencesForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ILicencesForReport } from "../Types/ILicencesForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -37,9 +38,11 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     }
 
     const { data, isLoading } = useLicencesForReportQuery(filterReport, params);
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -124,7 +127,40 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const licencesWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = licencesWithoutIdentifier.map((licences) => {
+            return {
+                "Código Empleado": licences.idEmployee ?? "N/A",
+                "Código de Posición": licences.idPosition ?? "N/A",
+                Posición: licences.position ?? "N/A",
+                "Código de Departamento": licences.idDepartment ?? "N/A",
+                Departamento: licences.department ?? "N/A",
+                "Código Licencia": licences.idLicences ?? "N/A",
+                Empleado: licences.employeeName ?? "N/A",
+                "Nombre de Doctor": licences.doctorName ?? "N/A",
+                "Código de Concepto": licences.idConcept ?? "N/A",
+                Concepto: licences.conceptName ?? "N/A",
+                "Dias no laborados": licences.workDayOff ?? "N/A",
+                "A Pagar": licences.isToPay ?? "N/A",
+                "Código Nomina": licences.idPayrollPay ?? "N/A",
+                Nomina: licences.payrollPay ?? "N/A",
+                Descripción: licences.description ?? "N/A",
+                Inicio:
+                    new Date(licences.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Fin:
+                    new Date(licences.endDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Pago: licences.isPaid ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "LicencesForReport.xlsx");
@@ -167,6 +203,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     return (
         <div className="card">
             <DataTable
+                className="datatable-responsive"
                 id="LicencesForReport-Table"
                 dataKey="identifier"
                 value={data?.items}
@@ -179,7 +216,6 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
                 sortMode="single"
                 totalRecords={data?.totalCount}
-                className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 emptyMessage="No hay registros para mostrar."
                 header={header}
@@ -380,6 +416,13 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILicencesForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -392,6 +435,13 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILicencesForReport) =>
+                        rowData.endDate
+                            ? new Date(rowData.endDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isPaid"

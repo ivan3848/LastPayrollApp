@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useBankPaymentForReportQuery from "../Hook/useBankPaymentForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IBankPaymentForReport } from "../Types/IBankPaymentForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -104,7 +105,25 @@ const BankPaymentForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const bankWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = bankWithoutIdentifier.map((bank) => {
+            return {
+                "Código Empleado": bank.idEmployee,
+                Nombre: bank.employeeName,
+                "Método de pago": bank.paymentMethod,
+                Banco: bank.bankName,
+                Importe:
+                    bank.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "BankPaymentForReport.xlsx");
@@ -228,6 +247,12 @@ const BankPaymentForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IBankPaymentForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
             </DataTable>
         </div>

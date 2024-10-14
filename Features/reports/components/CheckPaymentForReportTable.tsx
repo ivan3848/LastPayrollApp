@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useCheckPaymentForReportQuery from "../Hook/useCheckPaymentForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ICheckPaymentForReport } from "../Types/ICheckPaymentForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -106,7 +107,28 @@ const CheckPaymentForReportTable = ({
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const checkPayWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = checkPayWithoutIdentifier.map((checkPay) => {
+            return {
+                "Código Empleado": checkPay.idEmployee ?? "N/A",
+                Nombre: checkPay.employeeName ?? "N/A",
+                "Método de pago": checkPay.paymentMethod ?? "N/A",
+                Importe:
+                    checkPay.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Fecha de Nomina":
+                    new Date(checkPay.payrollPayDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "CheckPaymentForReport.xlsx");
@@ -218,6 +240,12 @@ const CheckPaymentForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ICheckPaymentForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
                 <Column
                     field="payrollPayDate"
@@ -230,6 +258,11 @@ const CheckPaymentForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ICheckPaymentForReport) =>
+                        new Date(rowData.payrollPayDate)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/")
+                    }
                 ></Column>
             </DataTable>
         </div>

@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePlantPunchForReportQuery from "../Hook/usePlantPunchForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPlantPunchForReport } from "../Types/IPlantPunchForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -93,7 +94,22 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const plantPunchWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = plantPunchWithoutIdentifier.map((plantPunch) => {
+            return {
+                Planta: plantPunch.plant ?? "N/A",
+                Fecha:
+                    new Date(plantPunch.date)
+                        .toLocaleDateString()
+                        .replace("-", "/") ?? "N/A",
+                "Total de ponches": plantPunch.totalPlantPunch ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PlantPunchForReport.xlsx");
@@ -181,6 +197,13 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPlantPunchForReport) =>
+                        rowData.date
+                            ? new Date(rowData.date)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="totalPlantPunch"
