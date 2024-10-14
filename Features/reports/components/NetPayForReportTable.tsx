@@ -329,6 +329,13 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.isProfit
+                            ? rowData.isProfit
+                                ? "Si"
+                                : "No"
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payrollPayDate"
