@@ -5,4 +5,5 @@ export interface IProfitInsert {
     idEmployee?: number;
     start: Date;
     end: Date;
+    temporaryDays?: number;
 }
