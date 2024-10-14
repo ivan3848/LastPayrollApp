@@ -183,7 +183,7 @@ const PayrollPayView = ({
             });
     };
 
-    let options: string[] = ["Mensual", "Quincenal"];
+    let options: string[] = ["Mensual", "Quincenal", 'Temporeros'];
 
     const getLastRecord = async (idPayrollArea: number) => {
         const result = (await lastPayrollManagementService.getById(
@@ -318,36 +318,17 @@ const PayrollPayView = ({
                                                     </strong>
                                                 </label>
                                                 <SelectButton
-                                                    {...register(
-                                                        "idPayrollArea",
-                                                        {
-                                                            required: true,
-                                                        }
-                                                    )}
-                                                    value={
-                                                        watch(
-                                                            "idPayrollArea"
-                                                        ) === 2
-                                                            ? "Mensual"
-                                                            : "Quincenal"
-                                                    }
+                                                    {...register("idPayrollArea")}
+                                                    value={watch("idPayrollArea")}
                                                     onChange={(e) => {
-                                                        setValue(
-                                                            "idPayrollArea",
-                                                            e.value ===
-                                                                "Mensual"
-                                                                ? 2
-                                                                : 1
-                                                        );
-                                                        getLastRecord(
-                                                            e.value ===
-                                                                "Mensual"
-                                                                ? 2
-                                                                : 1
-                                                        );
+                                                        setValue("idPayrollArea", e.value)
+                                                        getLastRecord(e.value);
                                                     }}
-                                                    id="idPayrollArea"
-                                                    options={options}
+                                                    options={[
+                                                        { label: "Mensual", value: 2 },
+                                                        { label: "Quincenal", value: 1 },
+                                                        { label: "Temporeros", value: 4 },
+                                                    ]}
                                                     className={classNames(
                                                         {
                                                             "p-invalid":
