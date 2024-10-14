@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useTotalTaxForReportQuery from "../Hook/useTotalTaxForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ITotalTaxForReport } from "../Types/ITotalTaxForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -216,6 +217,14 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ITotalTaxForReport) =>
+                        rowData.totalTax
+                            ? rowData.totalTax.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payrollPayTotalTax"
@@ -228,6 +237,17 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ITotalTaxForReport) =>
+                        rowData.payrollPayTotalTax
+                            ? rowData.payrollPayTotalTax.toLocaleString(
+                                  "es-DO",
+                                  {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  }
+                              )
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

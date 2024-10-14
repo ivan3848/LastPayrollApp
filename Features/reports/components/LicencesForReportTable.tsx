@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useLicencesForReportQuery from "../Hook/useLicencesForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ILicencesForReport } from "../Types/ILicencesForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -37,9 +38,11 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     }
 
     const { data, isLoading } = useLicencesForReportQuery(filterReport, params);
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -200,6 +203,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
     return (
         <div className="card">
             <DataTable
+                className="datatable-responsive"
                 id="LicencesForReport-Table"
                 dataKey="identifier"
                 value={data?.items}
@@ -212,7 +216,6 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
                 sortMode="single"
                 totalRecords={data?.totalCount}
-                className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 emptyMessage="No hay registros para mostrar."
                 header={header}
@@ -413,6 +416,13 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILicencesForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -425,6 +435,13 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILicencesForReport) =>
+                        rowData.endDate
+                            ? new Date(rowData.endDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isPaid"

@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useConsolidatedDataForReportQuery from "../Hook/useConsolidatedDataForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IConsolidatedDataForReport } from "../Types/IConsolidatedDataForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -259,6 +260,11 @@ const ConsolidatedDataForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IConsolidatedDataForReport) =>
+                        new Date(rowData.extraHourDate)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/")
+                    }
                 ></Column>
                 <Column
                     field="idPayrollPay"
@@ -367,6 +373,12 @@ const ConsolidatedDataForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IConsolidatedDataForReport) =>
+                        rowData.extraHourAmount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
             </DataTable>
         </div>

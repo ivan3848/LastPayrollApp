@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useCostForReportQuery from "../Hook/useCostForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ICostForReport } from "../Types/ICostForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -289,6 +290,12 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ICostForReport) =>
+                        rowData.extraHourValue.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
                 <Column
                     field="month"

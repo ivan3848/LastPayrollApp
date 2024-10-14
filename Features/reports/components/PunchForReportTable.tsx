@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePunchForReportQuery from "../Hook/usePunchForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPunchForReport } from "../Types/IPunchForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -300,6 +301,13 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPunchForReport) =>
+                        rowData.punchDate
+                            ? new Date(rowData.punchDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column

@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useVacationForReportQuery from "../Hook/useVacationForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IVacationForReport } from "../Types/IVacationForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -260,6 +261,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -272,6 +280,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.endDate
+                            ? new Date(rowData.endDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="paid"
@@ -332,6 +347,13 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.payDate
+                            ? new Date(rowData.payDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="dayToPay"
@@ -404,6 +426,14 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IVacationForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"

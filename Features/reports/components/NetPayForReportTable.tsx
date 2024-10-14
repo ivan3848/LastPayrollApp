@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useNetPayForReportQuery from "../Hook/useNetPayForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { INetPayForReport } from "../Types/INetPayForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -240,6 +241,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="idConcept"
@@ -276,6 +285,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="idPayrollPay"
@@ -324,6 +341,13 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.payrollPayDate
+                            ? new Date(rowData.payrollPayDate)
+                                  .toLocaleDateString()
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

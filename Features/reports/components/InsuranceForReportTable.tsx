@@ -12,6 +12,8 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useInsuranceForReportQuery from "../Hook/useInsuranceForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IIncentiveForReport } from "../Types/IIncentiveForReport";
+import { IInsuranceForReport } from "../Types/IInsuranceForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -413,6 +415,11 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IInsuranceForReport) =>
+                        rowData.percentDiscount
+                            ? `${rowData.percentDiscount}%`
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -426,6 +433,12 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IInsuranceForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        }) ?? "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

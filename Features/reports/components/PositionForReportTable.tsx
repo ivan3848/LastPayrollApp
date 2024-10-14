@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePositionForReportQuery from "../Hook/usePositionForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPositionForReport } from "../Types/IPositionForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -229,6 +230,14 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPositionForReport) =>
+                        rowData.minSalary
+                            ? rowData.minSalary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="maxSalary"
@@ -241,6 +250,14 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPositionForReport) =>
+                        rowData.maxSalary
+                            ? rowData.maxSalary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="departmentName"

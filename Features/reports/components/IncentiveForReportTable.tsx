@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useIncentiveForReportQuery from "../Hook/useIncentiveForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IIncentiveForReport } from "../Types/IIncentiveForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -40,9 +41,11 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -304,6 +307,13 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IIncentiveForReport) =>
+                        rowData.chargeDate
+                            ? new Date(rowData.chargeDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="dateExecuted"
@@ -316,6 +326,13 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IIncentiveForReport) =>
+                        rowData.dateExecuted
+                            ? new Date(rowData.dateExecuted)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payDate"
@@ -328,6 +345,13 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IIncentiveForReport) =>
+                        rowData.payDate
+                            ? new Date(rowData.payDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isExecuted"
@@ -352,6 +376,14 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IIncentiveForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="tax"
@@ -364,6 +396,14 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IIncentiveForReport) =>
+                        rowData.tax
+                            ? rowData.tax.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isPaid"

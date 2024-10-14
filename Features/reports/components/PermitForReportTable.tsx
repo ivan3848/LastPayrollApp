@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePermitForReportQuery from "../Hook/usePermitForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPermitForReport } from "../Types/IPermitForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -292,6 +293,13 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPermitForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -304,6 +312,13 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPermitForReport) =>
+                        rowData.endDate
+                            ? new Date(rowData.endDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"

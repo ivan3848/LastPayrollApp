@@ -12,6 +12,8 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePayrollPayExpenseForReportQuery from "../Hook/usePayrollPayExpenseForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
+import { IPayrollPayExpenseForReport } from "../Types/IPayrollPayExpenseForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -43,9 +45,11 @@ const PayrollPayExpenseForReportTable = ({
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -276,6 +280,14 @@ const PayrollPayExpenseForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPayrollPayExpenseForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

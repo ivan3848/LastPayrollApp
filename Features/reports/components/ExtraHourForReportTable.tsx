@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useExtraHourForReportQuery from "../Hook/useExtraHourForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IExtraHourForReport } from "../Types/IExtraHourForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -315,6 +316,14 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="percentValue"
@@ -327,6 +336,11 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.percentValue
+                            ? `${rowData.percentValue}%`
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"
@@ -375,6 +389,14 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -388,6 +410,13 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.date
+                            ? new Date(rowData.date)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column

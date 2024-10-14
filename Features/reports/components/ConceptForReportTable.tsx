@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useConceptForReportQuery from "../Hook/useConceptForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IConceptForReport } from "../Types/IConceptForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -231,6 +232,12 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IConceptForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
                 <Column
                     field="isProfit"

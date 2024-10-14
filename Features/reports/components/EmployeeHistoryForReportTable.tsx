@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useEmployeeHistoryForReportQuery from "../Hook/useEmployeeHistoryForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IEmployeeHistoryForReport } from "../Types/IEmployeeHistoryForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -43,9 +44,11 @@ const EmployeeHistoryForReportTable = ({
         filterReport,
         params
     );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -287,6 +290,14 @@ const EmployeeHistoryForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeHistoryForReport) =>
+                        rowData.salaryHistory
+                            ? rowData.salaryHistory.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="numberOfDependant"
@@ -347,6 +358,13 @@ const EmployeeHistoryForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeHistoryForReport) =>
+                        rowData.startDateChange
+                            ? new Date(rowData.startDateChange)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="endDateChange"
@@ -359,6 +377,13 @@ const EmployeeHistoryForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeHistoryForReport) =>
+                        rowData.endDateChange
+                            ? new Date(rowData.endDateChange)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

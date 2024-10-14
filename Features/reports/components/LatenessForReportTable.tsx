@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useLatenessForReportQuery from "../Hook/useLatenessForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ILatenessForReport } from "../Types/ILatenessForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -37,9 +38,11 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
     }
 
     const { data, isLoading } = useLatenessForReportQuery(filterReport, params);
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -285,6 +288,14 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILatenessForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="percentage"
@@ -297,6 +308,9 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILatenessForReport) =>
+                        rowData.percentage ? `${rowData.percentage}%` : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="concept"
@@ -333,6 +347,14 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILatenessForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="date"
@@ -345,6 +367,13 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILatenessForReport) =>
+                        rowData.date
+                            ? new Date(rowData.date)
+                                  .toLocaleDateString()
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payrollName"

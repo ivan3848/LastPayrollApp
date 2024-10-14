@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useRetroactiveHoursForReportQuery from "../Hook/useRetroactiveHoursForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IRetroactiveHoursForReport } from "../Types/IRetroactiveHoursForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -270,6 +271,13 @@ const RetroactiveHoursForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IRetroactiveHoursForReport) =>
+                        rowData.date
+                            ? new Date(rowData.date)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="idPayrollPay"
@@ -414,6 +422,14 @@ const RetroactiveHoursForReportTable = ({
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IRetroactiveHoursForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="hourAmount"

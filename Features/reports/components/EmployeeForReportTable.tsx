@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useEmployeeForReportQuery from "../Hook/useEmployeeForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IEmployeeForReport } from "../Types/IEmployeeForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -132,14 +133,25 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 "Código de empleado": employee.idEmployee ?? "N/A",
                 "Número de cuenta": employee.accountNumber ?? "N/A",
                 "Nombre Completo": employee.name ?? "N/A",
-                "Código Posición Jerárquica": employee.idHierarchyPosition ?? "N/A",
+                "Código Posición Jerárquica":
+                    employee.idHierarchyPosition ?? "N/A",
                 "Primer Apellido": employee.firstLastName ?? "N/A",
                 "Segundo Apellido": employee.secondLastName ?? "N/A",
                 Sexo: employee.idGender ?? "N/A",
                 Cédula: employee.idPerson ?? "N/A",
-                "Fecha de inicio": new Date(employee.employeeStartDate).toLocaleDateString("en-GB").replace("-", "/") ?? "N/A",
-                "Fecha de nacimiento": new Date(employee.birthDate).toLocaleDateString("en-GB").replace("-", "/") ?? "N/A",
-                Salario: employee.salary.toLocaleString("es-DO", { style: "currency", currency: "DOP", }) ?? "N/A",
+                "Fecha de inicio":
+                    new Date(employee.employeeStartDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Fecha de nacimiento":
+                    new Date(employee.birthDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Salario:
+                    employee.salary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
                 Posición: employee.posicion ?? "N/A",
                 "Código de posición": employee.idPosition ?? "N/A",
                 Departamento: employee.departamento ?? "N/A",
@@ -343,6 +355,13 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.employeeStartDate
+                            ? new Date(rowData.employeeStartDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -356,6 +375,13 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.birthDate
+                            ? new Date(rowData.birthDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -369,6 +395,14 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -472,6 +506,9 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.sindicate ? "Si" : "No"
+                    }
                 ></Column>
 
                 <Column
@@ -582,6 +619,13 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.firedDate
+                            ? new Date(rowData.firedDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="isOccupied"

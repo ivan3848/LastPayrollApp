@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useDependantInsuranceForReportQuery from "../Hook/useDependantInsuranceForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IDependantInsuranceForReport } from "../Types/IDependantInsuranceForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -333,6 +334,12 @@ const DependantInsuranceForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IDependantInsuranceForReport) =>
+                        rowData.amount.toLocaleString("es-DO", {
+                            style: "currency",
+                            currency: "DOP",
+                        })
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"
@@ -357,6 +364,11 @@ const DependantInsuranceForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IDependantInsuranceForReport) =>
+                        new Date(rowData.startDate)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/")
+                    }
                 ></Column>
                 <Column
                     field="endDate"
@@ -369,6 +381,11 @@ const DependantInsuranceForReportTable = ({
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IDependantInsuranceForReport) =>
+                        new Date(rowData.endDate)
+                            .toLocaleDateString("en-GB")
+                            .replace("-", "/")
+                    }
                 ></Column>
             </DataTable>
         </div>
