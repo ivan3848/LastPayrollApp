@@ -1,16 +1,11 @@
+import usePayrollConfigurationQuery from "@/Features/payrollConfiguration/Hooks/usePayrollConfigurationQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Button } from "primereact/button";
 import { Column } from "primereact/column";
-import {
-    DataTable,
-    DataTablePageEvent,
-    DataTableSortEvent,
-} from "primereact/datatable";
-import usePayrollConfigurationQuery from "@/Features/payrollConfiguration/Hooks/usePayrollConfigurationQuery";
+import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
 import IISRBreak from "../Types/IISRBreak";
-import { idText } from "typescript";
 
 interface Props {
     submitted: boolean;
@@ -79,12 +74,16 @@ const ISRBreakTable = ({
                 header="Minimo"
                 headerStyle={{ minWidth: "15rem" }}
                 body={(rowData) => `$${rowData.From}`}
+                sortable
+                filter
+                filterField="absenFromteeism"
+                showFilterMenuOptions={false}
             />
             <Column
                 field="Fee"
                 header="Cargo"
                 headerStyle={{ minWidth: "15rem" }}
-                body={(rowData) => `${rowData.Fee} %`}
+                body={(rowData) => `$${rowData.Fee}`}
             />
 
             <Column
