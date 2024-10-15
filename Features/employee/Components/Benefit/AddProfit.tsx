@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Dialog } from "primereact/dialog";
 import DialogFooterButtons from "@/Features/Shared/Components/DialogFooterButtons";
 import { Calendar } from "primereact/calendar";
@@ -11,11 +11,12 @@ import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import { IProfitInsert } from "./Types/IProfitInsert";
 import GenericConceptDropDown from "@/Features/Shared/Components/GenericConceptDropDown";
 import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
+import { IEmployee } from "../../Types/IEmployee";
 
 interface Props {
     setAddEntityDialog: (value: boolean) => void;
     addEntityDialog: boolean;
-    id: number;
+    employee: IEmployee;
     handleAdd: () => void;
     setSubmitted: (value: boolean) => void;
     toast: React.MutableRefObject<any>;
@@ -24,7 +25,7 @@ interface Props {
 const AddProfit = ({
     setAddEntityDialog,
     addEntityDialog,
-    id,
+    employee,
     toast,
     setSubmitted,
 }: Props) => {
@@ -32,6 +33,7 @@ const AddProfit = ({
 
     const {
         handleSubmit,
+        control,
         register,
         watch,
         reset,
@@ -39,6 +41,10 @@ const AddProfit = ({
         formState: { errors },
     } = useForm<IProfitInsert>({
         resolver: zodResolver(addEntityFormSchema),
+        defaultValues: {
+            start: new Date(),
+            end: new Date(),
+        },
     });
 
     const addEntity = useAddEntityQuery({
@@ -50,7 +56,7 @@ const AddProfit = ({
     });
 
     const onSubmit = (data: IProfit) => {
-        data.idEmployee = id;
+        data.idEmployee = employee.idEmployee;
         data.idConcept = data.idConcept;
         addEntity.mutate(data);
     };
@@ -85,14 +91,35 @@ const AddProfit = ({
                                 </small>
                             )}
                         </div>
+                        {
+                            watch('idConcept') == 691 && (
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="temporaryDays">Dias Temporales</label>
+                                    <GenericInputNumber
+                                        id="temporaryDays"
+                                        isValid={!!errors.temporaryDays}
+                                        setValue={setValue}
+                                        watch={watch}
+                                        format={false}
+                                    />
+                                    {errors.temporaryDays && (
+                                        <small className="p-invalid text-danger">
+                                            {errors.temporaryDays.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                            )
+                        }
 
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="amount">Monto</label>
                             <GenericInputNumber
                                 id="amount"
+                                currentValue={watch('idConcept') == 691 ? watch('temporaryDays')! * (employee.salary / 23.83) : 0}
                                 isValid={!!errors.amount}
                                 setValue={setValue}
                                 watch={watch}
+                                isReadOnly={watch('idConcept') == 691}
                             />
                             {errors.amount && (
                                 <small className="p-invalid text-danger">
@@ -100,35 +127,59 @@ const AddProfit = ({
                                 </small>
                             )}
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="start">Fecha De incio</label>
-                            <Calendar
-                                id="start"
-                                onChange={(e) => setValue("start", e.value!)}
-                                showIcon
-                                showButtonBar
-                            />
-                            {errors.start && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.start.message?.toString()}
-                                </small>
-                            )}
-                        </div>
+                        {watch('idConcept') != 691 && (
+                            <>
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="start">Fecha De incio</label>
+                                    <Controller
+                                        name="start"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Calendar
+                                                id="start"
+                                                value={watch("idConcept") == 691 ? field.value || new Date() : field.value}
+                                                onChange={(e) => {
+                                                    field.onChange(e.value);
+                                                    setValue("start", e.value!);
+                                                }}
+                                                showIcon
+                                                showButtonBar
+                                            />
+                                        )}
+                                    />
+                                    {errors.start && (
+                                        <small className="p-invalid text-red-500">
+                                            {errors.start.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
 
-                        <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="start">Fecha Final</label>
-                            <Calendar
-                                id="end"
-                                onChange={(e) => setValue("end", e.value!)}
-                                showIcon
-                                showButtonBar
-                            />
-                            {errors.end && (
-                                <small className="p-invalid text-red-500">
-                                    {errors.end.message?.toString()}
-                                </small>
-                            )}
-                        </div>
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="start">Fecha Final</label>
+                                    <Controller
+                                        name="end"
+                                        control={control}
+                                        render={({ field }) => (
+                                            <Calendar
+                                                id="end"
+                                                value={watch("idConcept") == 691 ? field.value || new Date() : field.value}
+                                                onChange={(e) => {
+                                                    field.onChange(e.value);
+                                                    setValue("end", e.value!);
+                                                }}
+                                                showIcon
+                                                showButtonBar
+                                            />
+                                        )}
+                                    />
+                                    {errors.end && (
+                                        <small className="p-invalid text-red-500">
+                                            {errors.end.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
                 <DialogFooterButtons hideDialog={hideDialog} />

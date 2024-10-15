@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePunchForReportQuery from "../Hook/usePunchForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPunchForReport } from "../Types/IPunchForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -112,7 +113,28 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const punchWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = punchWithoutIdentifier.map((punch) => {
+            return {
+                "Código Empleado": punch.idEmployee,
+                Empleado: punch.employeeName,
+                Horario: punch.workScheduler,
+                "Código Posición": punch.idPosition,
+                "Código Departamento": punch.idDepartment,
+                Posición: punch.position,
+                Departamento: punch.department,
+                "Fecha de ponche": new Date(punch.punchDate)
+                    .toLocaleDateString("en-GB")
+                    .replace("-", "/"),
+                Entrada: punch.hourIn,
+                Salida: punch.hourOut,
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PunchForReport.xlsx");
@@ -279,6 +301,13 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPunchForReport) =>
+                        rowData.punchDate
+                            ? new Date(rowData.punchDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column

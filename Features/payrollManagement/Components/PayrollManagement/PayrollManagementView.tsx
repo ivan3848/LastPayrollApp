@@ -178,6 +178,7 @@ const PayrollManagement = ({
                             options={[
                                 { label: "Mensual", value: 2 },
                                 { label: "Quincenal", value: 1 },
+                                { label: "Temporeros", value: 4 },
                             ]}
                         />
                         {errors.idPayrollArea && (

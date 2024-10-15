@@ -9,12 +9,13 @@ import { IProfit } from "./Types/IProfit";
 import ProfitTable from "./ProfitTable";
 import EditProfit from "./EditProfit";
 import AddProfit from "./AddProfit";
+import { IEmployee } from "../../Types/IEmployee";
 
 interface props {
-    id: number;
+    employee: IEmployee;
 }
 
-const Profit = ({ id }: props) => {
+const Profit = ({ employee }: props) => {
     const {
         deleteEntityDialog,
         setDeleteEntityDialog,
@@ -63,7 +64,7 @@ const Profit = ({ id }: props) => {
                         handleAdd={handleAdd}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
-                        idEmployee={id}
+                        idEmployee={employee.idEmployee!}
                     />
                 </Suspense>
 
@@ -74,13 +75,13 @@ const Profit = ({ id }: props) => {
                         toast={toast}
                         entity={entity!}
                         editEntityDialog={editEntityDialog}
-                        id={id}
+                        id={employee.idEmployee!}
                     />
                 )}
 
                 {addEntityDialog && (
                     <AddProfit
-                        id={id}
+                        employee={employee!}
                         addEntityDialog={addEntityDialog}
                         setAddEntityDialog={setAddEntityDialog}
                         handleAdd={handleAdd}

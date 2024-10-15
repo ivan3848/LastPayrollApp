@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePositionForReportQuery from "../Hook/usePositionForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IPositionForReport } from "../Types/IPositionForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -104,7 +105,32 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const positionWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = positionWithoutIdentifier.map((position) => {
+            return {
+                "ID Posición": position.idPosition ?? "N/A",
+                "Nombre de la Posición": position.positionName ?? "N/A",
+                "Salario Mínimo":
+                    position.minSalary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Salario Máximo":
+                    position.maxSalary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Nombre del Departamento": position.departmentName ?? "N/A",
+                "Posiciones Ocupadas": position.filledPositions ?? "N/A",
+                "Posiciones Disponibles": position.availablePositions ?? "N/A",
+                "Numero de Posiciones": position.numberOfPositions ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "PositionForReport.xlsx");
@@ -204,6 +230,14 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPositionForReport) =>
+                        rowData.minSalary
+                            ? rowData.minSalary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="maxSalary"
@@ -216,6 +250,14 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IPositionForReport) =>
+                        rowData.maxSalary
+                            ? rowData.maxSalary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="departmentName"

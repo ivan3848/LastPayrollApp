@@ -6,4 +6,5 @@ export interface IProfit {
     start: Date;
     end: Date;
     conceptName?: string;
+    temporaryDays?: number;
 }

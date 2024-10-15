@@ -44,6 +44,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -75,7 +76,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
     const exportPDF = () => {
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
-        const text = "Reporte de Gastos de Nomina";
+        const text = "Reporte de Centro de Costo";
         const textWidth = doc.getTextWidth(text);
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
@@ -98,7 +99,20 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const costCenterWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = costCenterWithoutIdentifier.map((costCenter) => {
+            return {
+                "Código centro de costo": costCenter.idCostCenter ?? "N/A",
+                "Nombre de centro de costo": costCenter.costCenterName ?? "N/A",
+                "Numero de cuenta": costCenter.accountNumber ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
+
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "CostCenterForReport.xlsx");
@@ -110,7 +124,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de Gastos de Nomina
+                Reporte de Centro de Costo
             </h2>
             <Button
                 type="button"

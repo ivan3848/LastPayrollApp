@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useNetPayForReportQuery from "../Hook/useNetPayForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { INetPayForReport } from "../Types/INetPayForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -110,7 +111,37 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const netPayWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = netPayWithoutIdentifier.map((netPay) => {
+            return {
+                "Código de Empleado": netPay.idEmployee ?? "N/A",
+                Empleado: netPay.employeeName ?? "N/A",
+                Salario:
+                    netPay.salary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Código de concepto": netPay.idConcept ?? "N/A",
+                Concepto: netPay.conceptCode ?? "N/A",
+                Importe:
+                    netPay.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Código de nomina": netPay.idPayrollPay ?? "N/A",
+                Nomina: netPay.payrollName ?? "N/A",
+                Beneficio: netPay.isProfit ?? "N/A",
+                "Fecha de pago":
+                    new Date(netPay.payrollPayDate)
+                        .toLocaleDateString()
+                        .replace("-", "/") ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "NetPayForReport.xlsx");
@@ -210,6 +241,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="idConcept"
@@ -246,6 +285,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="idPayrollPay"
@@ -282,6 +329,13 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.isProfit
+                            ? rowData.isProfit
+                                ? "Si"
+                                : "No"
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="payrollPayDate"
@@ -294,6 +348,13 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: INetPayForReport) =>
+                        rowData.payrollPayDate
+                            ? new Date(rowData.payrollPayDate)
+                                  .toLocaleDateString()
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

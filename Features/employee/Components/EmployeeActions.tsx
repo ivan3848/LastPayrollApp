@@ -89,7 +89,7 @@ const EmployeeActions = ({
                         <ToolWorkDefinitionEmployee id={employee.idEmployee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.Benefit && (
-                        <Profit id={employee.idEmployee!} />
+                        <Profit employee={employee!} />
                     )}
                     {openAction === EmployeeOptionsEnum.PersonInsurance && (
                         <PersonInsurance employee={employee} />
@@ -114,8 +114,8 @@ const EmployeeActions = ({
                     )}
                     {openAction ===
                         EmployeeOptionsEnum.WorkSchedulerSubstitute && (
-                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
-                    )}
+                            <WorkSchedulerSubstitute id={employee.idEmployee!} />
+                        )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />
                     )}

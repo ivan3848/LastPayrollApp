@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useLeaseForReportQuery from "../Hook/useLeaseForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { ILeaseForReport } from "../Types/ILeaseForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -106,7 +107,39 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const leaseWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = leaseWithoutIdentifier.map((lease) => {
+            return {
+                "Código Empleado": lease.idEmployee ?? "N/A",
+                Nombre: lease.employeeName ?? "N/A",
+                "Fecha Inicio":
+                    new Date(lease.startDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Fecha de solicitud":
+                    new Date(lease.requestDate)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                "Código de banco": lease.bankKey ?? "N/A",
+                Banco: lease.bankName ?? "N/A",
+                "Cantidad de Cuotas": lease.amountFee ?? "N/A",
+                "Total pago":
+                    lease.amountPay.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                "Total préstamo":
+                    lease.totalAmount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "LeaseForReport.xlsx");
@@ -208,6 +241,13 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILeaseForReport) =>
+                        rowData.startDate
+                            ? new Date(rowData.startDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -221,6 +261,13 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILeaseForReport) =>
+                        rowData.requestDate
+                            ? new Date(rowData.requestDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -273,9 +320,17 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILeaseForReport) =>
+                        rowData.amountPay
+                            ? rowData.amountPay.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
 
-                <Column
+                {/* <Column
                     field="missToPay"
                     header="Deuda"
                     headerStyle={{ minWidth: "15rem" }}
@@ -286,7 +341,15 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
-                ></Column>
+                    body={(rowData: ILeaseForReport) =>
+                        rowData.missToPay
+                            ? rowData.missToPay.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
+                ></Column> */}
 
                 <Column
                     field="totalAmount"
@@ -299,6 +362,14 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: ILeaseForReport) =>
+                        rowData.totalAmount
+                            ? rowData.totalAmount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
             </DataTable>
         </div>

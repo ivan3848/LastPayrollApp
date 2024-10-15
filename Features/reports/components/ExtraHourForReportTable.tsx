@@ -12,6 +12,7 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import useExtraHourForReportQuery from "../Hook/useExtraHourForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
+import { IExtraHourForReport } from "../Types/IExtraHourForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -125,7 +126,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.idDepartment,
                 item.position,
                 item.department,
-                // item.totalHour,
+                //item.totalHour,
                 // item.totalAmount,
                 item.idCostCenter,
             ]),
@@ -135,7 +136,51 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
     };
 
     const exportXLSX = () => {
-        const worksheet = XLSX.utils.json_to_sheet(data?.items);
+        const extraHourWithoutIdentifier = data.items.map(
+            ({ identifier, ...rest }) => rest
+        );
+
+        const renamed = extraHourWithoutIdentifier.map((extraHour) => {
+            return {
+                "Numero de Cuenta": extraHour.accountNumber ?? "N/A",
+                "Código Empleado": extraHour.idEmployee ?? "N/A",
+                "Código horas no Laboradas":
+                    extraHour.idExtraHourLateness ?? "N/A",
+                Empleado: extraHour.fullName ?? "N/A",
+                "Centro de Costo": extraHour.costCenter ?? "N/A",
+                Salario:
+                    extraHour.salary.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Porcentaje:
+                    extraHour.percentValue != null
+                        ? `${extraHour.percentValue}%`
+                        : "N/A",
+                "Código Concepto": extraHour.conceptCode ?? "N/A",
+                "Tipo de hora": extraHour.concept ?? "N/A",
+                "Cantidad de horas": extraHour.hourAmount ?? "N/A",
+                "Valor de hora":
+                    extraHour.amount.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
+                Fecha:
+                    new Date(extraHour.date)
+                        .toLocaleDateString("en-GB")
+                        .replace("-", "/") ?? "N/A",
+                Pago: extraHour.isPaid ?? "N/A",
+                Nomina: extraHour.payrollName ?? "N/A",
+                "Código Nomina": extraHour.idPayrollPay ?? "N/A",
+                "Código Posición": extraHour.idPosition ?? "N/A",
+                "Código Departamento": extraHour.idDepartment ?? "N/A",
+                Posición: extraHour.position ?? "N/A",
+                Departamento: extraHour.department ?? "N/A",
+                "Código Centro de Costo": extraHour.idCostCenter ?? "N/A",
+            };
+        });
+
+        const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
         XLSX.writeFile(workbook, "ExtraHourForReport.xlsx");
@@ -271,6 +316,14 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.salary
+                            ? rowData.salary.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="percentValue"
@@ -283,6 +336,11 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.percentValue
+                            ? `${rowData.percentValue}%`
+                            : "N/A"
+                    }
                 ></Column>
                 <Column
                     field="conceptCode"
@@ -331,6 +389,14 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.amount
+                            ? rowData.amount.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
@@ -344,6 +410,13 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                    body={(rowData: IExtraHourForReport) =>
+                        rowData.date
+                            ? new Date(rowData.date)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
                 ></Column>
 
                 <Column
