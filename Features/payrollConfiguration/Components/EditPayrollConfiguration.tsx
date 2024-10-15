@@ -76,7 +76,7 @@ const EditPayrollConfiguration: React.FC<Props> = ({
         data.idPayrollConfiguration = entity.idPayrollConfiguration;
         data.bonificationBreak = entity.bonificationBreak;
         data.seniorityIncentiveBreak = entity.seniorityIncentiveBreak;
-
+        data.end = new Date();
         editEntity.mutate(data);
     };
 
