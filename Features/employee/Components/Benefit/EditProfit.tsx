@@ -81,6 +81,22 @@ const EditBankEmployeeHistory = ({
         setEditEntityDialog(false);
     };
 
+    const validTemporaryDays = entity.temporaryDays ?? 0;
+
+    const employeeSalary = entity.amount > 0 && validTemporaryDays > 0
+        ? (entity.amount / validTemporaryDays) * 23.83 : 0;
+
+    const calculateCurrentValue = (idConcept: number, amount: number) => {
+        if (idConcept === 691) {
+            return watch("temporaryDays")! * (employeeSalary / 23.83);
+        }
+        return amount;
+    };
+
+    const isReadOnly = (idConcept: number) => {
+        return idConcept === 691;
+    };
+
     return (
         <Dialog
             visible={editEntityDialog}
@@ -104,14 +120,35 @@ const EditBankEmployeeHistory = ({
                                 setValue={setValue}
                             />
                         </div>
+                        {
+                            entity.idConcept == 691 && (
+                                <div className="field col-12 md:col-6 lg:col-4">
+                                    <label htmlFor="temporaryDays">Dias Temporales</label>
+                                    <GenericInputNumber
+                                        id="temporaryDays"
+                                        isValid={!!errors.temporaryDays}
+                                        setValue={setValue}
+                                        watch={watch}
+                                        format={false}
+                                        currentValue={entity.temporaryDays ?? 0}
+                                    />
+                                    {errors.temporaryDays && (
+                                        <small className="p-invalid text-danger">
+                                            {errors.temporaryDays.message?.toString()}
+                                        </small>
+                                    )}
+                                </div>
+                            )
+                        }
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="amount">Monto</label>
                             <GenericInputNumber
                                 id="amount"
+                                currentValue={calculateCurrentValue(entity.idConcept, watch('temporaryDays')!)}
                                 isValid={!!errors.amount}
                                 setValue={setValue}
                                 watch={watch}
-                                currentValue={entity.amount}
+                                isReadOnly={isReadOnly(watch('idConcept'))}
                             />
                             {errors.amount && (
                                 <small className="p-invalid text-danger">
