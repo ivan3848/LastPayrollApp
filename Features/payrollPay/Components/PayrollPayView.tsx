@@ -25,7 +25,7 @@ import { classNames } from "primereact/utils";
 import Link from "next/link";
 import GenerateFiles from "./GenerateFiles";
 import React from "react";
-import { IGetPayrollExecution } from "../types/IGetPayrollExecution";
+import { IGetPayrollExecution, IGetPayrollExecutionTest } from "../types/IGetPayrollExecution";
 import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
 import { createRoot } from "react-dom/client";
 import GenerateReceiptDialog from "./GenerateReceipt";
@@ -179,7 +179,9 @@ const PayrollPayView = ({
                 },
             })
             .then((res: IPayrollPay) => {
-                executeReport(res.getPayrollExecution!);
+                activeIndex === 1
+                    ? executeReport(res.getPayrollExecutionTest! as IGetPayrollExecutionTest[])
+                    : executeReport(res.getPayrollExecution! as IGetPayrollExecution[]);
             });
     };
 
@@ -192,31 +194,32 @@ const PayrollPayView = ({
         setEntityPayrollManagement(result);
     };
 
-    const executeReport = (data: IGetPayrollExecution[]) => {
-        if (data?.length) {
-            const getPayrollExecutionWithoutIdentifier = data!.map(
-                ({ identifier, ...rest }) => rest
-            );
+    const executeReport = async (data: IGetPayrollExecution[] | IGetPayrollExecutionTest[]) => {
+        if (!data?.length) return;
 
-            const newTab = window.open("", "_blank");
-            if (newTab) {
-                newTab.document.write('<div id="invoice-viewer-root"></div>');
-                newTab.document.close();
+        const isRegularExecution = activeIndex === 0;
 
-                const rootElement = newTab.document.getElementById(
-                    "invoice-viewer-root"
-                );
-                if (rootElement) {
-                    const root = createRoot(rootElement);
-                    root.render(
-                        <InvoiceViewer
-                            data={getPayrollExecutionWithoutIdentifier}
-                        />
-                    );
-                }
+        const getPayrollExecutionWithoutIdentifier = isRegularExecution
+            ? (data as IGetPayrollExecution[]).map(({ identifier, ...rest }) => rest)
+            : (data as IGetPayrollExecutionTest[]).map(({ idPayrollTestCode, ...rest }) => rest);
+
+        openNewTabWithInvoiceViewer(getPayrollExecutionWithoutIdentifier);
+    };
+
+    const openNewTabWithInvoiceViewer = (payrollData: Omit<IGetPayrollExecution | IGetPayrollExecutionTest, 'identifier' | 'idPayrollTestCode'>[]) => {
+        const newTab = window.open("", "_blank");
+        if (newTab) {
+            newTab.document.write('<div id="invoice-viewer-root"></div>');
+            newTab.document.close();
+
+            const rootElement = newTab.document.getElementById("invoice-viewer-root");
+            if (rootElement) {
+                const root = createRoot(rootElement);
+                root.render(<InvoiceViewer data={payrollData} />);
             }
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -311,7 +314,7 @@ const PayrollPayView = ({
                                                 width: "100%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-3">
+                                            <div className="field col-12 md:col-4">
                                                 <label htmlFor="idPayrollArea">
                                                     <strong>
                                                         Area de Nómina
@@ -354,7 +357,7 @@ const PayrollPayView = ({
                                                     }
                                                 />
                                             </div>
-                                            <div className="field col-12 md:col-1">
+                                            <div className="field col-12 md:col-2">
                                                 <label>
                                                     {!period ? (
                                                         <strong>
@@ -423,16 +426,16 @@ const PayrollPayView = ({
                                                 marginTop: "20px",
                                                 display: "flex",
                                                 justifyContent: "space-around",
-                                                width: "92%",
+                                                width: "98%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-3 mt-2">
+                                            <div className="field col-12 md:col-4 mt-2">
                                                 <Button
                                                     label="Eliminar nomina"
                                                     onClick={handleDelete}
                                                 />
                                             </div>
-                                            <div className="field col-12 md:col-3">
+                                            <div className="field col-12 md:col-4">
                                                 <h6>
                                                     {byEmployees
                                                         ? "Por empleado"
@@ -477,7 +480,7 @@ const PayrollPayView = ({
                                                 width: "100%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-3">
+                                            <div className="field col-12 md:col-4">
                                                 <label htmlFor="idPayrollArea">
                                                     <strong>
                                                         Area de Nómina

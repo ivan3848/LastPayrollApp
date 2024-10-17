@@ -63,7 +63,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 />
                 <Button
                     label="Prestamos"
-                    icon="pi pi-search"
+                    icon="pi pi-money-bill"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Lease)}
                 />
@@ -75,7 +75,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 />
                 <Button
                     label="Comisiones"
-                    icon="pi pi-search"
+                    icon="pi pi-wallet"
                     className="m-2"
                     onClick={() => setAction(EmployeeOptionsEnum.Commission)}
                 />

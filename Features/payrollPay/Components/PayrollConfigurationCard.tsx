@@ -10,17 +10,19 @@ interface Props {
 
 const PayrollConfigurationCard = ({ entity, isTest }: Props) => {
 
+    if (isTest) {
+        return <div className='card'>
+            <h4 className='flex' style={{ justifyContent: 'center' }}> Nómina por simulación</h4>
+        </div>
+    }
+
     if (entity?.idPayrollManagement == 0
         || entity?.idPayrollManagement == undefined
         || entity.idStatus !== 151)
         return <div className='card'>
             <h4 className='flex' style={{ justifyContent: 'center' }}> No hay configuración de nómina</h4>
         </div>
-    else if (isTest) {
-        return <div className='card'>
-            <h4 className='flex' style={{ justifyContent: 'center' }}> Nómina por simulación</h4>
-        </div>
-    }
+
 
     return (
         <div className="card">
