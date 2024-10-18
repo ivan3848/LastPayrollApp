@@ -203,10 +203,11 @@ const PayrollPayView = ({
             ? (data as IGetPayrollExecution[]).map(({ identifier, ...rest }) => rest)
             : (data as IGetPayrollExecutionTest[]).map(({ idPayrollTestCode, ...rest }) => rest);
 
-        openNewTabWithInvoiceViewer(getPayrollExecutionWithoutIdentifier);
+
+        await openNewTabWithInvoiceViewer(getPayrollExecutionWithoutIdentifier);
     };
 
-    const openNewTabWithInvoiceViewer = (payrollData: Omit<IGetPayrollExecution | IGetPayrollExecutionTest, 'identifier' | 'idPayrollTestCode'>[]) => {
+    const openNewTabWithInvoiceViewer = async (payrollData: Omit<IGetPayrollExecution | IGetPayrollExecutionTest, 'identifier' | 'idPayrollTestCode'>[]) => {
         const newTab = window.open("", "_blank");
         if (newTab) {
             newTab.document.write('<div id="invoice-viewer-root"></div>');
