@@ -40,11 +40,7 @@ const AddProfit = ({
         setValue,
         formState: { errors },
     } = useForm<IProfitInsert>({
-        resolver: zodResolver(addEntityFormSchema),
-        defaultValues: {
-            start: new Date(),
-            end: new Date(),
-        },
+        resolver: zodResolver(addEntityFormSchema)
     });
 
     const addEntity = useAddEntityQuery({
@@ -127,59 +123,35 @@ const AddProfit = ({
                                 </small>
                             )}
                         </div>
-                        {watch('idConcept') != 691 && (
-                            <>
-                                <div className="field col-12 md:col-6 lg:col-4">
-                                    <label htmlFor="start">Fecha De incio</label>
-                                    <Controller
-                                        name="start"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Calendar
-                                                id="start"
-                                                value={watch("idConcept") == 691 ? field.value || new Date() : field.value}
-                                                onChange={(e) => {
-                                                    field.onChange(e.value);
-                                                    setValue("start", e.value!);
-                                                }}
-                                                showIcon
-                                                showButtonBar
-                                            />
-                                        )}
-                                    />
-                                    {errors.start && (
-                                        <small className="p-invalid text-red-500">
-                                            {errors.start.message?.toString()}
-                                        </small>
-                                    )}
-                                </div>
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="start">Fecha De incio</label>
+                            <Calendar
+                                id="start"
+                                onChange={(e) => setValue("start", e.value!)}
+                                showIcon
+                                showButtonBar
+                            />
+                            {errors.start && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.start.message?.toString()}
+                                </small>
+                            )}
+                        </div>
 
-                                <div className="field col-12 md:col-6 lg:col-4">
-                                    <label htmlFor="start">Fecha Final</label>
-                                    <Controller
-                                        name="end"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <Calendar
-                                                id="end"
-                                                value={watch("idConcept") == 691 ? field.value || new Date() : field.value}
-                                                onChange={(e) => {
-                                                    field.onChange(e.value);
-                                                    setValue("end", e.value!);
-                                                }}
-                                                showIcon
-                                                showButtonBar
-                                            />
-                                        )}
-                                    />
-                                    {errors.end && (
-                                        <small className="p-invalid text-red-500">
-                                            {errors.end.message?.toString()}
-                                        </small>
-                                    )}
-                                </div>
-                            </>
-                        )}
+                        <div className="field col-12 md:col-6 lg:col-4">
+                            <label htmlFor="start">Fecha Final</label>
+                            <Calendar
+                                id="end"
+                                onChange={(e) => setValue("end", e.value!)}
+                                showIcon
+                                showButtonBar
+                            />
+                            {errors.end && (
+                                <small className="p-invalid text-red-500">
+                                    {errors.end.message?.toString()}
+                                </small>
+                            )}
+                        </div>
                     </div>
                 </div>
                 <DialogFooterButtons hideDialog={hideDialog} />

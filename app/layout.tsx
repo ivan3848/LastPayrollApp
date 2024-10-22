@@ -49,7 +49,9 @@ const RootLayout = ({ children }: RootLayoutProps) => {
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
                         {isCheckingAuth ? (
-                            <ProgressSpinner />
+                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                                <ProgressSpinner />
+                            </div>
                         ) : isLoggedIn ? (
                             <LayoutProvider>{children}</LayoutProvider>
                         ) : (
