@@ -27,3 +27,28 @@ export interface IGetPayrollExecution {
     idCompany?: number;
     employeeC?: string;
 }
+
+export interface IGetPayrollExecutionTest {
+    idPayrollTestCode?: number;
+    payrollPayDate?: string;
+    departmentName?: string;
+    position?: string;
+    employeeName?: string;
+    idEmployee?: number;
+    startDate?: string;
+    name?: string;
+    conceptDefinition?: string;
+    quantity?: number;
+    totalAmount?: number;
+    totalTax?: number;
+    totalProfit?: number;
+    totalDeduction?: number;
+    totalPay?: number;
+    idCostCenter?: number;
+    payrollTestNumber?: number;
+    payrollPeriodStart?: string;
+    payrollPeriodEnd?: string;
+    accrued?: number;
+    averageCommission?: number;
+    idCompany?: number;
+}

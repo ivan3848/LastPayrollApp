@@ -3,5 +3,9 @@ export default interface IFilterDGT {
     year?: number;
     start?: Date;
     end?: Date;
-    companyId?: string;
+    identification?: string;
+    isDGT2?: boolean;
+    isDGT3?: boolean;
+    isDGT4?: boolean;
+    isDGT12?: boolean;
 }

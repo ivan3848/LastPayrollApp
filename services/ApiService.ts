@@ -10,15 +10,15 @@ import Cookies from "js-cookie";
 export const user = Cookies.get("session") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    // baseURL: "http://localhost:5038/",
-    baseURL: "http://specialistnomgateway.objectlink.com:5038/",
+    baseURL: "http://localhost:5038/",
+    // baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",
         IdCompany: user?.idCompany ?? "2",
         IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
     },
 });
-
+type FileResponse = Blob;
 class ApiService<Q, R> {
     endpoint: string;
     params?: IParamsApi;
@@ -179,6 +179,74 @@ class ApiService<Q, R> {
         } catch (error: any) {
             throw error;
         }
+    }
+
+    async getFileTSS(filterReport: IFilterTSS): Promise<any> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        return await axiosInstance
+            .get<any>(finalEndpoint, {
+                params: {
+                    ...filterReport,
+                },
+            })
+            .then((res) => res.data);
+    }
+
+    async downloadTSS(
+        filterReport: IFilterTSS,
+        filename: string,
+        contentType: string
+    ): Promise<void> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        const response = await axiosInstance.get<FileResponse>(finalEndpoint, {
+            params: {
+                ...filterReport,
+            },
+            responseType: "blob",
+        });
+
+        const blob = new Blob([response.data], {
+            type: response.headers["content-type"] || contentType,
+        });
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+    }
+
+    async downloadDGT(
+        filterReport: IFilterDGT,
+        filename: string,
+        contentType: string
+    ): Promise<void> {
+        const finalEndpoint = concatEndpoint(this.endpoint);
+
+        const response = await axiosInstance.get<FileResponse>(finalEndpoint, {
+            params: {
+                ...filterReport,
+            },
+            responseType: "blob",
+        });
+
+        const blob = new Blob([response.data], {
+            type: response.headers["content-type"] || contentType,
+        });
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
     }
 }
 

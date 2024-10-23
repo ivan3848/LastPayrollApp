@@ -6,7 +6,11 @@ const FilterDGTFormSchema = () => {
         year: z.any().optional(),
         start: z.date({ required_error: "El campo es requerido" }),
         end: z.any().optional(),
-        companyId: z.any().optional(),
+        identification: z.any().optional(),
+        isDgt2: z.boolean().optional(),
+        isDgt3: z.boolean().optional(),
+        isDgt4: z.boolean().optional(),
+        isDgt12: z.boolean().optional()
     });
 
     return { filterDGTFormSchema };

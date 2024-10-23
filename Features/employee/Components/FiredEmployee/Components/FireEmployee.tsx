@@ -94,7 +94,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
         }
     };
 
-    const executeReportAfterInsert = (data: IGetFiredEmployee[]) => {
+    const executeReportAfterInsert = async (data: IGetFiredEmployee[]) => {
         if (data?.length) {
             const newTab = window.open("", "_blank");
             if (newTab) {
@@ -155,6 +155,7 @@ const FireEmployee = ({ employee, setCloseDialog }: Props) => {
         });
 
         if (!test.toString().includes("Hay")) {
+            console.log("No hay errores");
             setCompleted(true);
         }
     };

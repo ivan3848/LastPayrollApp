@@ -69,6 +69,7 @@ const getTemplateForRawNewsFile = new ApiService<ITemplateForNewsFileView, ITemp
 const getTemplateForRawAutodetermination = new ApiService<ITemplateForNewsFileView, ITemplateForNewsFileView>(
     "employee/employee/getTemplateForRawAutodetermination"
 );
+const getTemplateForDGT = new ApiService("employee/employee/getTemplateForDGT");
 
 export default employeeService;
 
@@ -88,5 +89,6 @@ export {
     getTemplateForNewsFile,
     getTemplateForAutodetermination,
     getTemplateForRawNewsFile,
-    getTemplateForRawAutodetermination
+    getTemplateForRawAutodetermination,
+    getTemplateForDGT
 };

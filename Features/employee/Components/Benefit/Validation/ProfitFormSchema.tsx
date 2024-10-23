@@ -7,7 +7,7 @@ const ProfitFormSchema = () => {
             start: z.date({ message: "El campo debe de tener una fecha." }),
             amount: z.number({ message: "El campo tiene que tener un monto." }),
             end: z.date({ message: "El campo debe de tener una fecha." }),
-            temporaryDays: z.number().optional(),
+            temporaryDays: z.any().optional(),
         })
         .refine(
             (data) => {
@@ -34,7 +34,6 @@ const ProfitFormSchema = () => {
 
     const addEntityFormSchema = z.object({
         idConcept: z.number({ message: "Debe de elegir un concepto." }),
-
         start: z.date({ message: "El campo debe de tener una fecha." }),
         amount: z.number({ message: "El campo tiene que tener un monto." }),
         end: z.date({ message: "El campo debe de tener una fecha." }),

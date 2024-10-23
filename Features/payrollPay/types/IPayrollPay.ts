@@ -1,4 +1,4 @@
-import { IGetPayrollExecution } from "./IGetPayrollExecution";
+import { IGetPayrollExecution, IGetPayrollExecutionTest } from "./IGetPayrollExecution";
 
 export interface IPayrollPay {
     idPayrollPay: number;
@@ -15,6 +15,7 @@ export interface IPayrollPay {
     toExclude?: boolean;
     isTest?: boolean;
     getPayrollExecution?: IGetPayrollExecution[];
+    getPayrollExecutionTest?: IGetPayrollExecutionTest[];
     isRetroactive?: boolean;
     period?: string;
 }
