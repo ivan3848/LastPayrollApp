@@ -29,7 +29,7 @@ const useDeletePayrollPay = ({
 
             toast.current?.show({
                 severity: "success",
-                summary: "Editado!",
+                summary: "Eliminado!",
                 detail: "Registro eliminado correctamente",
                 life: 3000,
             });
