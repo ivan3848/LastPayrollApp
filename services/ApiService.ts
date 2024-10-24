@@ -218,6 +218,7 @@ class ApiService<Q, R> {
                 ...filterReport
             },
             responseType: 'blob',
+            timeout: 300000,
         });
 
         const blob = new Blob([response.data], {
