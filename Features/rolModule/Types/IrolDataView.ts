@@ -41,4 +41,6 @@ export const predefinedModules: IRolDataView[] = [
     { module: "PERMISOS_LICENCIAS", canWrite: true },
     { module: "DATA_EXTRAHOURLATENESS", canWrite: true },
     { module: "CONFIGURACION", canWrite: true },
+    { module: "INFORMACION_PERSONAL", canWrite: true },
+    { module: "CAMBIOS_MASIVOS", canWrite: true },
 ];

@@ -7,11 +7,11 @@ import IResponse from "@/types/IResponse";
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const user = Cookies.get("auth") as IUser | undefined;
+export const user = Cookies.get("session") as IUser | undefined;
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:5038/",
-    // baseURL: "http://specialistnomgateway.objectlink.com:5038/",
+    //baseURL: "http://localhost:5038/",
+    baseURL: "http://specialistnomgateway.objectlink.com:5038/",
     headers: {
         "Content-Type": "application/json",
         IdCompany: user?.idCompany ?? "2",
@@ -65,6 +65,8 @@ class ApiService<Q, R> {
 
         try {
             const response = await axiosInstance.post<R>(finalEndpoint, body);
+
+            console.log(response.data);
             return response.data;
         } catch (error: any) {
             return error.response.data;
@@ -110,7 +112,9 @@ class ApiService<Q, R> {
     async delete(id: number, missEndpoint?: string): Promise<R | string> {
         const finalEndpoint = concatEndpoint(this.endpoint, missEndpoint);
         try {
-            const response = await axiosInstance.delete<R>(`${finalEndpoint}/${id}`);
+            const response = await axiosInstance.delete<R>(
+                `${finalEndpoint}/${id}`
+            );
             return response.data;
         } catch (error: any) {
             throw error;
@@ -125,7 +129,10 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async getForReport(params: IParamsApi, filterReport: IFilterReport): Promise<IResponse<R>> {
+    async getForReport(
+        params: IParamsApi,
+        filterReport: IFilterReport
+    ): Promise<IResponse<R>> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         return await axiosInstance
@@ -186,22 +193,26 @@ class ApiService<Q, R> {
             .then((res) => res.data);
     }
 
-    async downloadTSS(filterReport: IFilterTSS, filename: string, contentType: string): Promise<void> {
+    async downloadTSS(
+        filterReport: IFilterTSS,
+        filename: string,
+        contentType: string
+    ): Promise<void> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         const response = await axiosInstance.get<FileResponse>(finalEndpoint, {
             params: {
-                ...filterReport
+                ...filterReport,
             },
-            responseType: 'blob',
+            responseType: "blob",
         });
 
         const blob = new Blob([response.data], {
-            type: response.headers['content-type'] || contentType,
+            type: response.headers["content-type"] || contentType,
         });
 
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = filename;
         document.body.appendChild(a);
@@ -210,23 +221,27 @@ class ApiService<Q, R> {
         URL.revokeObjectURL(url);
     }
 
-    async downloadDGT(filterReport: IFilterDGT, filename: string, contentType: string): Promise<void> {
+    async downloadDGT(
+        filterReport: IFilterDGT,
+        filename: string,
+        contentType: string
+    ): Promise<void> {
         const finalEndpoint = concatEndpoint(this.endpoint);
 
         const response = await axiosInstance.get<FileResponse>(finalEndpoint, {
             params: {
-                ...filterReport
+                ...filterReport,
             },
-            responseType: 'blob',
+            responseType: "blob",
             timeout: 300000,
         });
 
         const blob = new Blob([response.data], {
-            type: response.headers['content-type'] || contentType,
+            type: response.headers["content-type"] || contentType,
         });
 
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
         a.download = filename;
         document.body.appendChild(a);
