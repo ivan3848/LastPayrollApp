@@ -20,7 +20,7 @@ const NotFound: Page = () => {
                     Acceso Denegado
                 </div>
                 <p className="z-1 text-center text-xl text-gray-200 px-4">
-                    "Por favor contacte su administrador "
+                    Por favor contacte su administrador
                 </p>
                 <Link href={"/"}>
                     <button
