@@ -8,6 +8,7 @@ interface MainLayoutProps {
 export const metadata: Metadata = {
     title: "SPECIALISTNOM",
     description: "Sistema de gestión de especialistas en el área de nómina.",
+    keywords: "especialistas, nómina, gestión",
     robots: { index: false, follow: false },
     viewport: { initialScale: 1, width: "device-width" },
     openGraph: {

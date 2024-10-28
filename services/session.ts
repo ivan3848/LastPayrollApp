@@ -45,7 +45,7 @@ export async function verifySession() {
     const cookieSession: any = cookies().get(cookie.name)?.value;
     const session = await decrypt(cookieSession);
 
-    if (!session) return redirect("/auth/login");
+    if (!session) return redirect("/");
 
     return { userId: session.userId, expires: session.expires };
 }

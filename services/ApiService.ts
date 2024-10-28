@@ -18,6 +18,7 @@ const axiosInstance = axios.create({
         IdUser: user?.userId ?? "E110ED35-9677-43AD-9075-781720C1C847",
     },
 });
+
 type FileResponse = Blob;
 class ApiService<Q, R> {
     endpoint: string;
@@ -65,8 +66,6 @@ class ApiService<Q, R> {
 
         try {
             const response = await axiosInstance.post<R>(finalEndpoint, body);
-
-            console.log(response.data);
             return response.data;
         } catch (error: any) {
             return error.response.data;
