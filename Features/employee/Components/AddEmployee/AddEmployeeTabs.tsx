@@ -43,7 +43,7 @@ const AddEmployeeTabs = () => {
             label: "Información Personal",
         },
         {
-            label: "Información Del Empleado",
+            label: "Información del Empleado",
             disabled: !!!person?.identification,
         },
     ];

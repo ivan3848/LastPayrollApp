@@ -15,6 +15,7 @@ import { forwardRef, useImperativeHandle } from "react";
 import { useForm } from "react-hook-form";
 import { IPerson } from "../Types/IPerson";
 import personFormSchemas from "../Validations/PersonFormSchemas";
+import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 
 interface Props {
     setPerson: (value: IPerson) => void;
@@ -260,6 +261,24 @@ const AddPerson = forwardRef(({ setPerson, setStep, person }: Props, ref) => {
                         {errors.idStatusMarital && (
                             <small className="p-invalid text-red-500">
                                 {errors.idStatusMarital.message?.toString()}
+                            </small>
+                        )}
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="idZone" className="w-full">
+                            Localidad
+                        </label>
+                        <GenericDropDown
+                            id="idZone"
+                            isValid={!!errors.idZone}
+                            text="name"
+                            useQuery={useZoneQuery}
+                            setValue={setValue}
+                            watch={watch}
+                        />
+                        {errors.idZone && (
+                            <small className="p-invalid text-red-500">
+                                {errors.idZone.message?.toString()}
                             </small>
                         )}
                     </div>

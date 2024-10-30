@@ -18,4 +18,5 @@ export interface IPerson {
     idEducation?: number;
     idGender?: number;
     gender?: string;
+    idZone?: number;
 }

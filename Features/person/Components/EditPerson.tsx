@@ -17,6 +17,7 @@ import personFormSchemas from "../Validations/PersonFormSchemas";
 import personService from "../Services/personService";
 import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
 import { useEffect } from "react";
+import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
 
 interface Props {
     person?: IPerson;
@@ -25,7 +26,6 @@ interface Props {
 
 const EditPerson = ({ person, toast }: Props) => {
     const { editEntityFormSchema } = personFormSchemas();
-
     const {
         handleSubmit,
         register,
@@ -282,6 +282,25 @@ const EditPerson = ({ person, toast }: Props) => {
                         {errors.idStatusMarital && (
                             <small className="p-invalid text-red-500">
                                 {errors.idStatusMarital.message?.toString()}
+                            </small>
+                        )}
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="idZone" className="w-full">
+                            Localidad
+                        </label>
+                        <GenericDropDown
+                            id="idZone"
+                            isValid={!!errors.idZone}
+                            text="name"
+                            idValueEdit={person?.idZone}
+                            useQuery={useZoneQuery}
+                            setValue={setValue}
+                            watch={watch}
+                        />
+                        {errors.idZone && (
+                            <small className="p-invalid text-red-500">
+                                {errors.idZone.message?.toString()}
                             </small>
                         )}
                     </div>
