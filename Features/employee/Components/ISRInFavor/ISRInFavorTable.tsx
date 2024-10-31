@@ -14,6 +14,7 @@ import "animate.css";
 import { IISRInFavor } from "./Types/ISRInFavor";
 import useISRInFavorByIdEmployee from "./Hooks/useISRInFavorByIdEmployee";
 import { Card } from "primereact/card";
+import AddButton from "@/Features/Shared/Components/AddButton";
 
 interface Props {
     id: number;
@@ -51,6 +52,8 @@ const ISRInFavorTable = ({
         listOfDependencies,
         id
     );
+
+    console.log(data);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -118,12 +121,10 @@ const ISRInFavorTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">ISR a favor</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddButton
+                handleAdd={handleAdd}
+                entity={id}
+                accessName="ISR_A_FAVOR"
             />
         </div>
     );
@@ -208,6 +209,7 @@ const ISRInFavorTable = ({
                             entity={rowData}
                             handleDelete={handleDelete}
                             handleEdit={handleEdit}
+                            accessName="ISR_A_FAVOR"
                         />
                     )}
                     headerStyle={{ minWidth: "10rem" }}

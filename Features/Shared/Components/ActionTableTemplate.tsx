@@ -1,11 +1,13 @@
 import { Button } from "primereact/button";
 import React from "react";
+import { useModuleAccess } from "../Hooks/useModuleAccess";
 
 interface Props<T> {
     entity: T;
     handleEdit?: (entity: T) => void;
     handleDelete: (entity: T) => void;
     isCustomDelete?: boolean;
+    accessName?: string;
 }
 
 function ActionTableTemplate<T>({
@@ -13,10 +15,13 @@ function ActionTableTemplate<T>({
     handleEdit,
     handleDelete,
     isCustomDelete,
+    accessName,
 }: Props<T>) {
+    const canWrite = useModuleAccess(accessName!);
+
     return (
         <>
-            {handleEdit && (
+            {canWrite && handleEdit && (
                 <Button
                     icon="pi pi-pencil"
                     className="mr-2"
@@ -25,7 +30,7 @@ function ActionTableTemplate<T>({
                     onClick={() => handleEdit(entity)}
                 />
             )}
-            {handleDelete && (
+            {canWrite && handleDelete && (
                 <>
                     {isCustomDelete ? (
                         <Button

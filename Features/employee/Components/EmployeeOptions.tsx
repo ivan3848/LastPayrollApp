@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
 import IRolModule from "@/Features/rolModule/Types/IRolModule";
-import { AnyARecord } from "dns";
 
 interface Props {
     setAction: (action: EmployeeOptionsEnum) => void;
@@ -16,12 +15,12 @@ const EmployeeOptions = ({ setAction }: Props) => {
 
     useEffect(() => {
         sessionCheck().then((res) => {
-            setModule(res!.rolModule);
+            setModule(res!.rolModule ?? [""]);
         });
     }, []);
 
     const hasModuleAccess = (moduleName: any) =>
-        module?.some((mod) => mod.module === moduleName && mod.canWrite);
+        module?.some((mod) => mod.module === moduleName);
 
     return (
         <div>
@@ -91,7 +90,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         onClick={() => setAction(EmployeeOptionsEnum.Deduction)}
                     />
                 )}
-                {hasModuleAccess("PRESTAMOS") && (
+                {hasModuleAccess("PRESTAMO") && (
                     <Button
                         label="Prestamos"
                         icon="pi pi-money-bill"
@@ -99,9 +98,9 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         onClick={() => setAction(EmployeeOptionsEnum.Lease)}
                     />
                 )}
-                {hasModuleAccess("ISR A Favor") && (
+                {hasModuleAccess("ISR_A_FAVOR") && (
                     <Button
-                        label="ISR_A_FAVOR"
+                        label="ISR A Favor"
                         icon="pi pi-sparkles"
                         className="m-2"
                         onClick={() =>

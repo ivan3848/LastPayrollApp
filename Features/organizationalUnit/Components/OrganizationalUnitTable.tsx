@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IOrganizationalUnit } from "../Types/IOrganizationalUnit";
 import useOrganizationalUnitQuery from "../Hooks/useOrganizationalUnitQuery";
+import { IOrganizationalUnit } from "../Types/IOrganizationalUnit";
 
 interface Props {
     submitted: boolean;
@@ -71,13 +71,7 @@ const OrganizationalUnitTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Unidad Organizacional</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
         </div>
     );
 
@@ -124,6 +118,7 @@ const OrganizationalUnitTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="DEPARTAMENTOS"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

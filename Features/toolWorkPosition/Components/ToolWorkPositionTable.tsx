@@ -1,11 +1,10 @@
-import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useParamFilter, {
     useParamAllData,
 } from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -74,13 +73,7 @@ const ToolWorkPositionTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Herramientas De Posiciones</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="ASIGNACION" />
         </div>
     );
 
@@ -138,15 +131,15 @@ const ToolWorkPositionTable = ({
                 filter
                 filterField="idToolWorkDefinition"
                 filterPlaceholder="Buscar por herramienta"
-                filterElement={ 
+                filterElement={
                     <TableDropDownFilter
-                    useQuery={useToolWorkPositionQuery}
+                        useQuery={useToolWorkPositionQuery}
                         text="name"
                         column="idToolWorkDefinition"
                         setFilters={setFilters}
                         clearFilters={clearFilters}
                     />
-                 }
+                }
                 showFilterMenuOptions={false}
                 showApplyButton={false}
                 showClearButton={false}
@@ -160,6 +153,7 @@ const ToolWorkPositionTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="ASIGNACION"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

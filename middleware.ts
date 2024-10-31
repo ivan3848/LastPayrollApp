@@ -17,7 +17,7 @@ export async function middleware(request: NextRequest) {
     if (!module) return NextResponse.next();
 
     const hasAccess = session?.rolModule?.some(
-        (roleModule) => roleModule.module === module && roleModule.canWrite
+        (roleModule) => roleModule.module === module
     );
 
     if (!hasAccess) {

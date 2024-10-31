@@ -23,17 +23,6 @@ export const IModuleDictionary: Readonly<{ [key: string]: string }> = {
     "/reports/dgt": "REPORTES_DGT",
     "/reports/tss": "REPORTES_TSS",
 
-    //EMPLOYEE ACTIONS
-    "/massiveIncrease": "AUMENTO_MASIVO",
-    "/reverseIncrease": "REVERTIR_AUMENTO",
-    "/schedulePlan": "PLAN_DE_HORARIO",
-    "/terminateEmployee": "DESVINCULAR_EMPLEADO",
-    "/bankHistory": "HISTORIAL_BANCARIO",
-    "/complementaryData": "DATA_COMPLEMENTARIA",
-    "/benefitDeduction": "BENEFICIO_DEDUCCION",
-    "/commissions": "COMISIONES",
-    "/vacations": "VACACIONES",
-
     //USERS
     "/userConfiguration/rol": "ROL",
     "/userConfiguration": "CONFIGURACION_USUARIO",
@@ -70,7 +59,6 @@ export const IModuleAccess: Readonly<{ [key: string]: string }> = {
     AUMENTO_MASIVO: "/massiveIncrease",
     REVERTIR_AUMENTO: "/reverseIncrease",
     PLAN_DE_HORARIO: "/schedulePlan",
-    DESVINCULAR_EMPLEADO: "/terminateEmployee",
     HISTORIAL_BANCARIO: "/bankHistory",
     DATA_COMPLEMENTARIA: "/complementaryData",
     BENEFICIO_DEDUCCION: "/benefitDeduction",
@@ -79,6 +67,12 @@ export const IModuleAccess: Readonly<{ [key: string]: string }> = {
     VACACIONES: "/vacations",
     NOMINA_REAL: "/realPayroll",
     ISRINFAVOR: "/isrInFavor",
+    PRESTAMO: "/PRESTAMO",
+    DEPENDIENTES: "/dependants",
+    GESTION_BANCARIA: "/vacationManagement",
+    HERRAMIENTAS: "/toolWorkDefinitionEmployee",
+    ISR_A_FAVOR: "/isrInFavor",
+    PERMISOS: "/permit",
 
     //USERS
     CONFIGURACION_USUARIO: "/userConfiguration",

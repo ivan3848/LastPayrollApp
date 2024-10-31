@@ -1,8 +1,7 @@
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import {
-    useParamFilterByTableName,
-} from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -11,7 +10,6 @@ import {
 } from "primereact/datatable";
 import useStatusQuery from "../../Hooks/useStatusQuery";
 import { IStatus } from "../../Types/IStatus";
-import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -73,13 +71,7 @@ const PaymentMethodStatusTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Método de pago</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
         </div>
     );
 
@@ -126,6 +118,7 @@ const PaymentMethodStatusTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

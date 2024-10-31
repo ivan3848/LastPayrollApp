@@ -2,11 +2,11 @@ import { CACHE_KEY_BENEFIT_POSITION } from "@/constants/cacheKeys";
 import { CONCEPT_TYPE_BENEFIT } from "@/constants/conceptTypes";
 import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import TableDropDownConceptFilter from "@/Features/Shared/Components/TableDropDownConceptFilter";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -79,13 +79,7 @@ const BenefitPositionTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Beneficios De Posiciones</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="ASIGNACION" />
         </div>
     );
 
@@ -176,6 +170,7 @@ const BenefitPositionTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="ASIGNACION"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

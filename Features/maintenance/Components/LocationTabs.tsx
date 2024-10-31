@@ -48,7 +48,7 @@ const LocationTabs = () => {
                             <Zone />
                         </Suspense>
                     </TabPanel>
-                    <TabPanel header="Ubicación" leftIcon="pi pi-link mr-2">
+                    <TabPanel header="Ubicación" leftIcon="pi pi-map mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Location />
                         </Suspense>

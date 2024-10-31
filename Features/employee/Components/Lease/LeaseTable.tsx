@@ -11,6 +11,7 @@ import Amortization from "../Amortization/Amortization";
 import LeasePauseActionTableTemplate from "../LeasePause/Components/LeasePauseActionTableTemplate";
 import LeaseActionTableTemplate from "./Components/LeaseActionTableTemplate";
 import useGetLeaseByIdEmployee from "./Hooks/useGetLeaseByIdEmployee";
+import { access } from "fs";
 
 interface Props {
     idEmployee: number;
@@ -110,6 +111,7 @@ const LeaseTable = ({
                         <AddButton
                             handleAdd={() => handleAddLeasePause}
                             entity={idEmployee}
+                            accessName="PRESTAMO"
                         />
                     )}
                 </div>
@@ -119,6 +121,7 @@ const LeaseTable = ({
                     <AddButton
                         handleAdd={() => handleAdd!()}
                         entity={idEmployee}
+                        accessName="PRESTAMO"
                     />
                 </div>
             )}
@@ -244,6 +247,7 @@ const LeaseTable = ({
                                         handleAddLeasePause &&
                                         handleAddLeasePause(rowData!)
                                     }
+                                    accessName="PRESTAMO"
                                 />
                             ) : (
                                 <LeaseActionTableTemplate
@@ -256,6 +260,7 @@ const LeaseTable = ({
                                     handleAmortize={() =>
                                         handleAmortize(rowData)
                                     }
+                                    accessName="PRESTAMO"
                                 />
                             )
                         }

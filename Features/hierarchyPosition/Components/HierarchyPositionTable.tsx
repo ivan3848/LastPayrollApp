@@ -1,20 +1,20 @@
+import { CACHE_KEY_HIERARCHY_POSITION } from "@/constants/cacheKeys";
+import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
+import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column, ColumnFilterElementTemplateOptions } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IHierarchyPosition } from "../Types/IHierarchyPosition";
-import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
-import { CACHE_KEY_HIERARCHY_POSITION } from "@/constants/cacheKeys";
-import hierarchyPositionService from "../Services/hierarchyPositionService";
-import usePositionQuery from "@/Features/position/Hooks/usePositionQuery";
-import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
+import hierarchyPositionService from "../Services/hierarchyPositionService";
+import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 
 interface Props {
     submitted: boolean;
@@ -123,13 +123,7 @@ const HierarchyPositionTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Vacantes</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
         </div>
     );
 
@@ -228,6 +222,7 @@ const HierarchyPositionTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="DEPARTAMENTOS"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

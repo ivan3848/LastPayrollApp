@@ -73,7 +73,11 @@ const LeasePauseTable = ({
     const header = showAddLeasePauseBtn && (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Lista de suspensiones</h3>
-            <AddButton handleAdd={handleAdd} entity={idEmployee} />
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="PRESTAMO"
+            />
         </div>
     );
 

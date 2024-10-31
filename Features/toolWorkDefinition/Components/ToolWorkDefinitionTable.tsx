@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IToolWorkDefinition } from "../Types/IToolWorkDefinition";
 import useToolWorkDefinitionQuery from "../Hooks/useToolWorkDefinitionQuery";
+import { IToolWorkDefinition } from "../Types/IToolWorkDefinition";
 
 interface Props {
     submitted: boolean;
@@ -71,13 +71,7 @@ const ToolWorkDefinitionTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Herramientas De Trabajo</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="ASIGNACION" />
         </div>
     );
 
@@ -148,6 +142,7 @@ const ToolWorkDefinitionTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="ASIGNACION"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

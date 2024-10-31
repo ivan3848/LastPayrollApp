@@ -41,7 +41,11 @@ const CommissionTable = ({
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Comisión </h3>
-            <AddButton handleAdd={handleAdd} entity={idEmployee} />
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="COMISIONES"
+            />
         </div>
     );
 
@@ -90,6 +94,7 @@ const CommissionTable = ({
                             entity={rowData}
                             handleEdit={handleEdit}
                             handleDelete={handleDelete}
+                            accessName="COMISIONES"
                         />
                     )}
                 />

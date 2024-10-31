@@ -19,11 +19,7 @@ interface Props {
     handleDelete: (entity: IPayrollConfiguration) => void;
 }
 
-const PayrollConfigurationTable = ({
-    submitted,
-    handleAdd,
-    handleEdit,
-}: Props) => {
+const PayrollConfigurationTable = ({ submitted, handleEdit }: Props) => {
     const [payrollConfiguration, setSelectedPayrollConfig] =
         useState<IPayrollConfiguration | null>(null);
 
@@ -90,6 +86,7 @@ const PayrollConfigurationTable = ({
             <EditButton
                 handleEdit={() => handleEdit(payrollConfiguration!)}
                 entity={payrollConfiguration}
+                accessName="CONFIGURACION_NOMINA"
             />
         </div>
     );

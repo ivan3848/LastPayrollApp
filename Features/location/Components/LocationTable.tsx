@@ -1,10 +1,8 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -72,13 +70,7 @@ const LocationTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Ubicaciones</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
         </div>
     );
 
@@ -175,6 +167,7 @@ const LocationTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="UBICACION"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

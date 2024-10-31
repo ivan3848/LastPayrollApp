@@ -10,19 +10,21 @@ import { IEmployee } from "../Types/IEmployee";
 import DeleteEmploye from "./DeleteEmployee/Components/DeleteEmploye";
 import ReactivateEmployee from "./DeleteEmployee/Components/ReactivateEmployee";
 import React from "react";
+import { useModuleAccess } from "@/Features/Shared/Hooks/useModuleAccess";
 
 interface Props {
     employee: IEmployee;
     setShowEmployeeActions: (value: boolean) => void;
 }
 
+const haveAccess = "EMPLEADO";
 const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
     const { setDeleteEntityDialog, deleteEntityDialog, setSubmitted, toast } =
         useCrudModals<IEmployee>();
 
     const [reactivateEntityDialog, setReactivateEntity] = useState(false);
     const [deactivateEntityDialog, setDeactivateEntityDialog] = useState(false);
-
+    const canWrite = useModuleAccess(haveAccess);
     const getSeverity = (employee: IEmployee) => {
         switch (employee.isActive) {
             case false:
@@ -84,7 +86,7 @@ const EmployeeProfile = ({ employee, setShowEmployeeActions }: Props) => {
                         </div>
                         <div className="flex sm:flex-row align-items-center my-auto sm:align-items-center gap-3 sm:gap-2">
                             <Toast ref={toast} />
-                            {employee.isActive && (
+                            {canWrite && employee.isActive && (
                                 <>
                                     <>
                                         <Button

@@ -46,14 +46,6 @@ export default function PickUpList<T extends { canWrite: boolean }>({
         });
     };
 
-    const onSourcePageChange = (e: PaginatorPageChangeEvent) => {
-        setSourcePage(e.page);
-    };
-
-    const onTargetPageChange = (e: PaginatorPageChangeEvent) => {
-        setTargetPage(e.page);
-    };
-
     const handleToggleCanWrite = (item: T) => {
         const updatedSource = source.map((sourceItem) =>
             sourceItem === item

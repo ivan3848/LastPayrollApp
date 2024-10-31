@@ -1,6 +1,7 @@
 import { Button } from "primereact/button";
 import React from "react";
 import Amortization from "../../Amortization/Amortization";
+import { useModuleAccess } from "@/Features/Shared/Hooks/useModuleAccess";
 
 interface Props<T> {
     entity: T;
@@ -9,6 +10,7 @@ interface Props<T> {
     isCustomDelete?: boolean;
     handlePayment?: (entity: T) => void;
     handleAmortize?: (entity: T) => void;
+    accessName?: string;
 }
 
 function LeaseActionTableTemplate<T>({
@@ -17,11 +19,14 @@ function LeaseActionTableTemplate<T>({
     handleDelete,
     handlePayment,
     handleAmortize,
+    accessName,
 }: Props<T>) {
     var lease = entity as ILease;
+    const canWrite = useModuleAccess(accessName!);
+
     return (
         <>
-            {handleEdit && (
+            {handleEdit && canWrite && (
                 <Button
                     icon="pi pi-pencil"
                     className="mr-2"
@@ -31,7 +36,7 @@ function LeaseActionTableTemplate<T>({
                 />
             )}
 
-            {handlePayment && (
+            {handlePayment && canWrite && (
                 <Button
                     className="mr-2 bg-blue-500 text-white"
                     text
@@ -41,7 +46,7 @@ function LeaseActionTableTemplate<T>({
                     onClick={() => handlePayment(entity)}
                 />
             )}
-            {handleAmortize && (
+            {handleAmortize && canWrite && (
                 <>
                     <Button
                         className="mr-2 bg-blue-500 text-white"
@@ -54,7 +59,7 @@ function LeaseActionTableTemplate<T>({
                 </>
             )}
 
-            {handleDelete && (
+            {handleDelete && canWrite && (
                 <>
                     <Button
                         icon="pi pi-trash"

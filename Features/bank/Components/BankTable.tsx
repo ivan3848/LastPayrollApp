@@ -1,10 +1,8 @@
-import useRegionQuery from "@/Features/region/Hooks/useRegionQuery";
+import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import TableDropDownFilter from "@/Features/Shared/Components/TableDropDownFilter";
-import useParamFilter, {
-    useParamAllData,
-} from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -13,9 +11,6 @@ import {
 } from "primereact/datatable";
 import useBankQuery from "../Hooks/useBankQuery";
 import { IBank } from "../Types/IBank";
-import TableDropDownStatusFilter from "@/Features/Shared/Components/TableDropDownStatusFilter";
-import { useStatusByTableNameQuery } from "@/Features/status/Hooks/useStatusQuery";
-import { TABLE_NAME_BANK_PAYMENT_METHOD } from "@/constants/StatusTableName";
 
 interface Props {
     submitted: boolean;
@@ -75,13 +70,7 @@ const BankTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Bancos</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
         </div>
     );
 
@@ -176,6 +165,7 @@ const BankTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

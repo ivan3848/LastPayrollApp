@@ -1,9 +1,8 @@
-import { useMemo, useCallback, useState } from "react";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_ROL } from "@/constants/cacheKeys";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -12,6 +11,7 @@ import {
     DataTableSortEvent,
     DataTableValueArray,
 } from "primereact/datatable";
+import { useCallback, useMemo, useState } from "react";
 import rolService from "../Service/rolService";
 import IRol from "../Types/IRol";
 
@@ -92,13 +92,7 @@ const RolTable = ({
         () => (
             <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                 <h3 className="m-0">Roles</h3>
-                <Button
-                    label="Agregar"
-                    icon="pi pi-plus"
-                    severity="info"
-                    className="mr-2"
-                    onClick={handleAdd}
-                />
+                <AddSingleButton handleAdd={handleAdd} accessName="ROL" />
             </div>
         ),
         [handleAdd]
@@ -156,6 +150,7 @@ const RolTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="ROL"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
