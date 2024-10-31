@@ -9,9 +9,7 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-    getTemplateForDGT
-} from "../employee/Services/employeeService";
+import { getTemplateForDGT } from "../employee/Services/employeeService";
 import GenericDropDown from "../Shared/Components/GenericDropDown";
 import useZoneQuery from "../zone/Hooks/useZoneQuery";
 import IFilterDGT from "./Types/IFilterDGT";
@@ -55,12 +53,20 @@ const DGT = () => {
         setIsDgt12(!isDgt12);
     };
 
+    const daysInMonth = (year: number, month: number) => {
+        return new Date(year, month + 1, 0).getDate();
+    };
+
     const getDateToFilter = (data: Date) => {
         if (!data) {
             return {};
         }
         const start = new Date(data.getFullYear(), data.getMonth(), 1);
-        const end = new Date(data.getFullYear(), data.getMonth() + 1, 0);
+        const end = new Date(
+            data.getFullYear(),
+            data.getMonth(),
+            daysInMonth(data.getFullYear(), data.getMonth())
+        );
         const year = data.getFullYear();
         return { start, end, year };
     };
