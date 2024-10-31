@@ -1,7 +1,18 @@
 import { AppMenuItem } from "@/types/layout";
 import AppSubMenu from "./AppSubMenu";
+import { useEffect, useState } from "react";
+import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
+import { IModuleAccess } from "@/types/IModuleDictionary";
+import IRolModule from "@/Features/rolModule/Types/IRolModule";
 
 const AppMenu = () => {
+    const [module, setModule] = useState<IRolModule[] | null>(null);
+
+    useEffect(() => {
+        sessionCheck().then((res) => {
+            setModule(res!.rolModule);
+        });
+    }, []);
     const model: AppMenuItem[] = [
         {
             label: "Mantenimientos",
@@ -65,7 +76,7 @@ const AppMenu = () => {
                     to: "/massiveChange",
                 },
                 {
-                    label: `Cambios Masivos / Aumento Masivo`,
+                    label: "Cambios Masivos / Aumento Masivo",
                     icon: "pi pi-user-plus",
                     visible: false,
                 },
@@ -101,11 +112,7 @@ const AppMenu = () => {
             label: "REPORTES",
             icon: "pi pi-fw pi-users",
             items: [
-                {
-                    label: "Reportes",
-                    icon: "pi pi-fw pi-book",
-                    to: "/reports",
-                },
+                { label: "Reportes", icon: "pi pi-fw pi-book", to: "/reports" },
                 {
                     label: "Reportes DGT",
                     icon: "pi pi-fw pi-book",
@@ -127,7 +134,6 @@ const AppMenu = () => {
                     icon: "pi pi-fw pi-users",
                     to: "/userConfiguration",
                 },
-
                 {
                     label: "Roles",
                     icon: "pi pi-fw pi-bullseye",
@@ -142,7 +148,17 @@ const AppMenu = () => {
         },
     ];
 
-    return <AppSubMenu model={model} />;
+    const filteredModel = model
+        .map((item) => ({
+            ...item,
+            items: item.items?.filter((subItem) =>
+                module?.some(
+                    (mod) => IModuleAccess[`${mod.module}`] === subItem.to
+                )
+            ),
+        }))
+        .filter((item) => item.items && item.items.length > 0);
+    return <AppSubMenu model={filteredModel} />;
 };
 
 export default AppMenu;

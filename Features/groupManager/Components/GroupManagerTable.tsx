@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IGroupManager } from "../Types/IGroupManager";
 import useGroupManagerQuery from "../Hooks/useGroupManagerQuery";
+import { IGroupManager } from "../Types/IGroupManager";
 
 interface Props {
     submitted: boolean;
@@ -71,12 +71,9 @@ const GroupManagerTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Grupos</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="EMPLEADO_MANTENIMIENTO"
             />
         </div>
     );
@@ -124,6 +121,7 @@ const GroupManagerTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="EMPLEADO_MANTENIMIENTO"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

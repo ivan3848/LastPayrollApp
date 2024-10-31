@@ -61,7 +61,6 @@ const EditRol = ({
             setSource(initialSource);
         }
     }, [data, target]);
-
     useEffect(() => {
         if (entity && data?.items) {
             reset({ description: entity.description });
@@ -78,7 +77,7 @@ const EditRol = ({
             setSource(filteredSource);
         }
     }, [entity, data, reset]);
-
+    console.log(target, "target");
     const onChange = (e: { source: IRol[]; target: IRol[] }) => {
         setSource(e.source);
         setTarget(e.target);
@@ -88,7 +87,18 @@ const EditRol = ({
         formData.idRol = entity.idRol;
         formData.rolModule = target;
         formData.description = entity.description;
-
+        if (
+            entity.idRol === 1 &&
+            !target.some((item) => item.module === "ROL")
+        ) {
+            toast.current.show({
+                severity: "error",
+                summary: "Error",
+                detail: "El módulo 'Rol' es obligatorio para este Administrador",
+                life: 3000,
+            });
+            return;
+        }
         if (target.length === 0) {
             toast.current.show({
                 severity: "error",

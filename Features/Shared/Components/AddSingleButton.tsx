@@ -2,28 +2,27 @@ import { Button } from "primereact/button";
 import React from "react";
 import { useModuleAccess } from "../Hooks/useModuleAccess";
 
-interface Props<T> {
-    entity: T;
-    handleEdit: (entity: T) => void;
+interface Props {
+    handleAdd?: () => void;
     accessName?: string;
 }
 
-function EditButton<T>({ handleEdit, entity, accessName }: Props<T>) {
+function AddSingleButton({ handleAdd, accessName }: Props) {
     const canWrite = useModuleAccess(accessName!);
 
     return (
         <>
             {canWrite && (
                 <Button
-                    icon="pi pi-edit"
+                    icon="pi pi-plus"
                     rounded
                     severity="info"
-                    label="Editar"
-                    onClick={() => handleEdit(entity)}
+                    label="Agregar"
+                    onClick={() => handleAdd!()}
                 />
             )}
         </>
     );
 }
 
-export default EditButton;
+export default AddSingleButton;

@@ -1,6 +1,5 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -9,6 +8,7 @@ import {
 } from "primereact/datatable";
 import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
 import useToolWorkDefinitionEmployeeQuery from "../Hooks/useToolWorkDefinitionEmployeeQuery";
+import AddButton from "@/Features/Shared/Components/AddButton";
 
 interface Props {
     idEmployee: number;
@@ -79,14 +79,12 @@ const ToolWorkDefinitionEmployeeTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Herramientas De Trabajo</h3>
+            <h3 className="m-0">Herramientas A ASDe Trabajo</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="HERRAMIENTAS"
             />
         </div>
     );
@@ -158,6 +156,7 @@ const ToolWorkDefinitionEmployeeTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="HERRAMIENTAS"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { INationality } from "../Types/INationality";
 import useNationalityQuery from "../Hooks/useNationalityQuery";
+import { INationality } from "../Types/INationality";
 
 interface Props {
     submitted: boolean;
@@ -68,12 +68,9 @@ const NationalityTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Nacionalidad</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="INFORMACION_PERSONAL"
             />
         </div>
     );
@@ -121,6 +118,7 @@ const NationalityTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="INFORMACION_PERSONAL"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

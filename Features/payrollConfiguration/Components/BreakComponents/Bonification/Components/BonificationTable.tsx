@@ -1,7 +1,7 @@
 import usePayrollConfigurationQuery from "@/Features/payrollConfiguration/Hooks/usePayrollConfigurationQuery";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { useEffect, useState } from "react";
@@ -49,13 +49,9 @@ const BonificationTabe = ({
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Configurar Bonificación</h3>
-
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="CONFIGURACION_NOMINA"
             />
         </div>
     );
@@ -87,6 +83,7 @@ const BonificationTabe = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="CONFIGURACION_NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

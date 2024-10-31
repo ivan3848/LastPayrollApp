@@ -71,7 +71,11 @@ const WorkSchedulerSubstituteTable = ({
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Suplencias</h3>
-            <AddButton handleAdd={handleAdd} entity={idEmployee} />
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="SUPLENCIA"
+            />
         </div>
     );
 
@@ -139,6 +143,7 @@ const WorkSchedulerSubstituteTable = ({
                             entity={rowData}
                             handleEdit={handleEdit}
                             handleDelete={handleDelete}
+                            accessName="SUPLENCIA"
                         />
                     )}
                 />

@@ -9,7 +9,6 @@ import AddButton from "@/Features/Shared/Components/AddButton";
 import GenericTableCheck from "@/Features/Shared/Components/GenericTableCheck";
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 
-
 interface Props {
     idEmployee: number;
     submitted: boolean;
@@ -63,7 +62,6 @@ const ExtraHourLatenessTable = ({
         }
     };
 
-
     const onFilter = (event: any) => {
         setFilters([
             {
@@ -75,7 +73,11 @@ const ExtraHourLatenessTable = ({
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Horas Extras / Tardanza </h3>
-            <AddButton handleAdd={handleAdd} entity={idEmployee} />
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="HORAS_EXTRAS"
+            />
         </div>
     );
 
@@ -124,8 +126,8 @@ const ExtraHourLatenessTable = ({
                     {options.value === true
                         ? "Si"
                         : options.value === false
-                            ? "No"
-                            : "Sin filtro"}
+                        ? "No"
+                        : "Sin filtro"}
                 </label>
             </div>
         );
@@ -170,7 +172,9 @@ const ExtraHourLatenessTable = ({
                     key="idConcept"
                     field="idConcept"
                     header="Monto"
-                    body={(rowData: IPersonInsurance) => formatMoney(rowData.amount)}
+                    body={(rowData: IPersonInsurance) =>
+                        formatMoney(rowData.amount)
+                    }
                 />
                 <Column
                     field="hourAmount"
@@ -205,6 +209,7 @@ const ExtraHourLatenessTable = ({
                             entity={rowData}
                             handleEdit={handleEdit}
                             handleDelete={handleDelete}
+                            accessName="HORAS_EXTRAS"
                         />
                     )}
                 />

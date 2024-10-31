@@ -11,6 +11,7 @@ import {
 import { IDepartment } from "../Types/IDepartment";
 import useDepartmentQuery from "../Hooks/useDepartmentQuery";
 import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 
 interface Props {
     submitted: boolean;
@@ -70,13 +71,7 @@ const DepartmentTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Departamento</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
         </div>
     );
 
@@ -159,6 +154,7 @@ const DepartmentTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="DEPARTAMENTOS"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

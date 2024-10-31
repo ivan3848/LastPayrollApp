@@ -4,7 +4,6 @@ import AppMenu from "./AppMenu";
 import { LayoutContext } from "./context/layoutcontext";
 import { MenuProvider } from "./context/menucontext";
 import { LayoutState } from "../types/layout";
-import { Button } from "primereact/button";
 
 const AppSidebar = () => {
     const { setLayoutState } = useContext(LayoutContext);

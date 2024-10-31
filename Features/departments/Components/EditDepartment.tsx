@@ -96,7 +96,7 @@ const EditLocation = ({
                     <GenericDropDown
                         id="idCostCenter"
                         isValid={!!errors.idCostCenter}
-                        text="name"
+                        text="description"
                         useQuery={useCostCenterQuery}
                         setValue={setValue}
                         watch={watch}

@@ -1,15 +1,15 @@
+import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
-import useParamFilter, { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { useParamFilterByTableName } from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IStatus } from "../../Types/IStatus";
 import useStatusQuery from "../../Hooks/useStatusQuery";
-import { TABLE_NAME_CONTRACT } from "@/constants/StatusTableName";
+import { IStatus } from "../../Types/IStatus";
 
 interface Props {
     submitted: boolean;
@@ -71,12 +71,9 @@ const ContractStatusTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Medida De Contratación</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="EMPLEADO_MANTENIMIENTO"
             />
         </div>
     );
@@ -124,6 +121,7 @@ const ContractStatusTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="EMPLEADO_MANTENIMIENTO"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

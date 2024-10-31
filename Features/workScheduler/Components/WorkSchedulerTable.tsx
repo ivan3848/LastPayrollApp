@@ -2,7 +2,6 @@ import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplat
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -16,6 +15,7 @@ import workSchedulerService from "../Services/workSchedulerService";
 import "animate.css";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import { IWorkSchedulerDetail } from "@/Features/workSchedulerDetail/Types/IWorkSchedulerDetail";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 
 interface Props {
     submitted: boolean;
@@ -117,12 +117,9 @@ const WorkSchedulerTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Horarios</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="EMPLEADO_MANTENIMIENTO"
             />
         </div>
     );
@@ -190,6 +187,7 @@ const WorkSchedulerTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="EMPLEADO_MANTENIMIENTO"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

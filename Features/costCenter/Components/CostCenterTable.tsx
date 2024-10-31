@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import { ICostCenter } from "../Types/ICostCenter";
 import useCostCenterQuery from "../Hooks/useCostCenterQuery";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 
 interface Props {
     submitted: boolean;
@@ -68,13 +69,7 @@ const CostCenterTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Centros De Costos</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
         </div>
     );
 
@@ -133,6 +128,7 @@ const CostCenterTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

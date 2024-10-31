@@ -30,10 +30,16 @@ const DependantTable = ({
         listOfDependencies,
         idEmployee
     );
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Dependientes </h3>
-            <AddButton handleAdd={handleAdd} entity={idEmployee} />
+            <h3 className="m-0">Dependientes</h3>
+
+            <AddButton
+                handleAdd={handleAdd}
+                entity={idEmployee}
+                accessName="DEPENDIENTES"
+            />
         </div>
     );
 
@@ -60,6 +66,7 @@ const DependantTable = ({
                             entity={rowData}
                             handleEdit={handleEdit}
                             handleDelete={handleDelete}
+                            accessName="DEPENDIENTES"
                         />
                     )}
                 />

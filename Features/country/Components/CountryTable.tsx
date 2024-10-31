@@ -1,6 +1,5 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -9,6 +8,7 @@ import {
 } from "primereact/datatable";
 import { ICountry } from "../Types/ICountry";
 import useCountryQuery from "../Hooks/useCountryQuery";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 
 interface Props {
     submitted: boolean;
@@ -63,18 +63,11 @@ const CountryTable = ({
             },
         ]);
     };
-
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Países</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
         </div>
     );
 
@@ -121,6 +114,7 @@ const CountryTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="UBICACION"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

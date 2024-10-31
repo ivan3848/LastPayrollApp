@@ -15,6 +15,7 @@ import React, { ChangeEvent, useState } from "react";
 import employeeService from "../Services/employeeService";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeActions from "./EmployeeActions";
+import { useModuleAccess } from "@/Features/Shared/Hooks/useModuleAccess";
 
 interface Props {
     submitted: boolean;
@@ -38,6 +39,7 @@ export default function EmployeeTable({ submitted }: Props) {
         setGlobalFilter,
         params,
     } = useParamFilter(6);
+    const haveAccess = "EMPLEADO";
 
     const [layout, setLayout] = useState<
         "list" | "grid" | (string & Record<string, unknown>)
@@ -46,7 +48,7 @@ export default function EmployeeTable({ submitted }: Props) {
     const [sortKey, setSortKey] = useState(null);
     const [employee, setEmployee] = useState<IEmployee | null>(null);
     const [showEmployeeActions, setShowEmployeeActions] = useState(false);
-
+    const canWrite = useModuleAccess(haveAccess);
     const listOfDependencies: boolean[] = [submitted];
     const { data, isLoading } = useEntityQuery(
         params,
@@ -185,13 +187,14 @@ export default function EmployeeTable({ submitted }: Props) {
                         query: { id: employeeSelected.idEmployee },
                     }}
                 >
-                    {" "}
-                    <Button
-                        size="small"
-                        className="min-w-min"
-                        label="Editar"
-                        icon="pi pi-pencil"
-                    />
+                    {canWrite && (
+                        <Button
+                            size="small"
+                            className="min-w-min"
+                            label="Editar"
+                            icon="pi pi-pencil"
+                        />
+                    )}
                 </Link>
                 <Button
                     size="small"

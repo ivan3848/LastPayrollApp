@@ -13,6 +13,7 @@ import {
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useConceptQuery from "../Hooks/useConceptQuery";
 import { IConcept } from "../Types/IConcept";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 
 interface Props {
     submitted: boolean;
@@ -116,13 +117,7 @@ const ConceptTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Conceptos</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
         </div>
     );
 
@@ -469,6 +464,7 @@ const ConceptTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

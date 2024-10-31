@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IAccountingAccount } from "../Types/IAccountingAccount";
 import useAccountingAccountQuery from "../Hooks/useAccountingAccountQuery";
+import { IAccountingAccount } from "../Types/IAccountingAccount";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +34,10 @@ const AccountingAccountTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useAccountingAccountQuery(params, listOfDependencies);
+    const { data, isLoading } = useAccountingAccountQuery(
+        params,
+        listOfDependencies
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,13 +71,7 @@ const AccountingAccountTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Cuentas Contables</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
         </div>
     );
 
@@ -133,6 +130,7 @@ const AccountingAccountTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="NOMINA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}

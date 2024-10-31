@@ -1,14 +1,14 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
+import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { IContractType } from "../Types/IContractType";
 import useContractTypeQuery from "../Hooks/useContractTypeQuery";
+import { IContractType } from "../Types/IContractType";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +34,10 @@ const ContractTypeTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useContractTypeQuery(params, listOfDependencies);
+    const { data, isLoading } = useContractTypeQuery(
+        params,
+        listOfDependencies
+    );
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,12 +71,9 @@ const ContractTypeTable = ({
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Tipos de contratos</h3>
 
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
+            <AddSingleButton
+                handleAdd={handleAdd}
+                accessName="EMPLEADO_MANTENIMIENTO"
             />
         </div>
     );
@@ -121,6 +121,7 @@ const ContractTypeTable = ({
                         entity={rowData}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        accessName="EMPLEADO_MANTENIMIENTO"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
