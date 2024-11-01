@@ -56,7 +56,7 @@ const AddLicense = ({
         data.description = data.description;
         data.start = data.start;
         data.end = data.end;
-        data.isToPay = data.isToPay;
+        data.isToPay = true;
 
         addEntity.mutate(data);
     };
@@ -150,7 +150,7 @@ const AddLicense = ({
                                 </small>
                             )}
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
+                        {/* <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="isToPay">Para pago</label>
                             <div>
                                 <SelectButton
@@ -162,7 +162,7 @@ const AddLicense = ({
                                     options={isToPay}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>
                             <InputText
