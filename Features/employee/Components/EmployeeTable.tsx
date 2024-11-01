@@ -265,10 +265,12 @@ export default function EmployeeTable({ submitted }: Props) {
                         <h3>Empleados</h3>
 
                         <Link href="/employee/addEmployee">
-                            <Button
-                                label="Agregar Empleado"
-                                icon="pi pi-user-plus"
-                            />
+                            {canWrite && (
+                                <Button
+                                    label="Agregar Empleado"
+                                    icon="pi pi-user-plus"
+                                />
+                            )}
                         </Link>
                     </div>
 
