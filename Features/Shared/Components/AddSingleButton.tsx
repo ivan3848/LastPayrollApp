@@ -5,9 +5,10 @@ import { useModuleAccess } from "../Hooks/useModuleAccess";
 interface Props {
     handleAdd?: () => void;
     accessName?: string;
+    labelButton?: string;
 }
 
-function AddSingleButton({ handleAdd, accessName }: Props) {
+function AddSingleButton({ handleAdd, accessName, labelButton }: Props) {
     const canWrite = useModuleAccess(accessName!);
 
     return (
@@ -17,7 +18,7 @@ function AddSingleButton({ handleAdd, accessName }: Props) {
                     icon="pi pi-plus"
                     rounded
                     severity="info"
-                    label="Agregar"
+                    label={labelButton ? labelButton : "Agregar"}
                     onClick={() => handleAdd!()}
                 />
             )}
