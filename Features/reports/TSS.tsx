@@ -34,12 +34,20 @@ const TSS = () => {
     const [loading, setLoading] = useState(false);
     const toast = useRef<Toast | null>(null);
 
+    const daysInMonth = (year: number, month: number) => {
+        return new Date(year, month + 1, 0).getDate();
+    };
+
     const getDateToFilter = (data: Date) => {
         if (!data) {
             return {};
         }
         const start = new Date(data.getFullYear(), data.getMonth(), 1);
-        const end = new Date(data.getFullYear(), data.getMonth() + 1, 1);
+        const end = new Date(
+            data.getFullYear(),
+            data.getMonth(),
+            daysInMonth(data.getFullYear(), data.getMonth())
+        );
         return { start, end };
     };
 

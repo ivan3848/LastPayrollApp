@@ -43,6 +43,7 @@ const personFormSchemas = () => {
         email: z.string().optional(),
         phoneNumber: z.string().optional(),
         cellphoneNumber: z.string({ message: "El campo es requerido" }),
+        idZone: z.number({ required_error: "El campo es requerido" })
     });
 
     const addEntityFormSchema = z.object({
@@ -86,6 +87,7 @@ const personFormSchemas = () => {
         email: z.string().optional(),
         phoneNumber: z.string().optional(),
         cellphoneNumber: z.string({ message: "El campo es requerido" }),
+        idZone: z.number({ required_error: "El campo es requerido" })
     });
 
     return { editEntityFormSchema, addEntityFormSchema };
