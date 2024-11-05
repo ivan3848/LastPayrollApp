@@ -1,6 +1,5 @@
 import { CACHE_KEY_WORK_SCHEDULER } from "@/constants/cacheKeys";
 import IParamsApi from "@/types/IParamApi";
-
 import { useQuery } from "@tanstack/react-query";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import workSchedulerService from "../Services/workSchedulerService";

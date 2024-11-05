@@ -58,7 +58,7 @@ export const IModuleAccess: Readonly<{ [key: string]: string }> = {
     //EMPLOYEE ACTIONS
     AUMENTO_MASIVO: "/massiveIncrease",
     REVERTIR_AUMENTO: "/reverseIncrease",
-    PLAN_DE_HORARIO: "/schedulePlan",
+    PLAN_DE_HORARIO: "/employee/workSchedulerPlan",
     HISTORIAL_BANCARIO: "/bankHistory",
     DATA_COMPLEMENTARIA: "/complementaryData",
     BENEFICIO_DEDUCCION: "/benefitDeduction",

@@ -80,6 +80,11 @@ const AppMenu = () => {
                     icon: "pi pi-user-plus",
                     visible: false,
                 },
+                {
+                    label: "Plan de Horario",
+                    icon: "pi pi-fw pi-chart-bar",
+                    to: "/employee/workSchedulerPlan",
+                },
             ],
         },
         {
