@@ -74,7 +74,7 @@ const EditLicense = ({
         data.description = data.description;
         data.start = data.start;
         data.end = data.end;
-        data.isToPay = data.isToPay;
+        data.isToPay = true;
 
         editEntity.mutate(data);
     };
@@ -176,7 +176,7 @@ const EditLicense = ({
                                 </small>
                             )}
                         </div>
-                        <div className="field col-12 md:col-6 lg:col-4">
+                        {/* <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="isToPay">Para pago</label>
                             <div>
                                 <SelectButton
@@ -188,7 +188,7 @@ const EditLicense = ({
                                     options={isToPay}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <div className="field col-12 md:col-12 lg:4">
                             <label htmlFor="description">Descripción</label>
                             <InputText
