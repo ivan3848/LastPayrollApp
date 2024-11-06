@@ -2,6 +2,7 @@ export interface IEmployeeForReport {
     identifier: string;
     idEmployee: number;
     idHierarchyPosition: number;
+    identification: string;
     firstName: string;
     middleName: string;
     firstLastName: string;

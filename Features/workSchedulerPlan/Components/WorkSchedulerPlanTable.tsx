@@ -1,8 +1,11 @@
 "use client";
+import useEmployeeForReportQuery from "@/Features/reports/Hook/useEmployeeForReportQuery";
+import { IEmployeeForReport } from "@/Features/reports/Types/IEmployeeForReport";
+import IFilterReport from "@/Features/reports/Types/IFilterReport";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
-import { Button } from "primereact/button";
+import workSchedulerPlanService from "@/Features/workSchedulerPlan/Services/workSchedulerPlanService";
+import { IWorkSchedulerPlanRequest } from "@/Features/workSchedulerPlan/Types/IWorkSchedulerPlanRequest";
+import { Calendar } from "primereact/calendar";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -12,16 +15,10 @@ import {
     DataTableSortEvent,
     DataTableValueArray,
 } from "primereact/datatable";
-import { useRef, useState } from "react";
-import * as XLSX from "xlsx";
+import { InputNumber } from "primereact/inputnumber";
 import { Toast } from "primereact/toast";
+import { useRef, useState } from "react";
 import { IWorkSchedulerPlan } from "../../workSchedulerPlan/Types/IWorkSchedulerPlan";
-import { IWorkSchedulerPlanRequest } from "@/Features/workSchedulerPlan/Types/IWorkSchedulerPlanRequest";
-import workSchedulerPlanService from "@/Features/workSchedulerPlan/Services/workSchedulerPlanService";
-import IFilterReport from "@/Features/reports/Types/IFilterReport";
-import useAccumulateForReportQuery from "@/Features/reports/Hook/useAccumulateForReportQuery";
-import { IAccumulateForReport } from "@/Features/reports/Types/IAccumulateForReport";
-import useEmployeeForReportQuery from "@/Features/reports/Hook/useEmployeeForReportQuery";
 
 const WorkSchedulerPlanTable = () => {
     const {
@@ -34,10 +31,15 @@ const WorkSchedulerPlanTable = () => {
         params,
     } = useParamFilter();
 
-    const { data, isLoading } = useAccumulateForReportQuery(
-        "accumulateForReport" as IFilterReport,
-        params
-    );
+    const [idEmployee, idEmployeeSet] = useState<number | null>(null);
+    const [startDate, startDateSet] = useState<Date | null>(null);
+    const [endDate, endDateSet] = useState<Date | null>(null);
+
+    const filterReport: IFilterReport = {
+        idsEmployee: idEmployee ? [idEmployee] : [],
+    };
+
+    const { data, isLoading } = useEmployeeForReportQuery(filterReport, params);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -67,6 +69,7 @@ const WorkSchedulerPlanTable = () => {
         ]);
     };
 
+    //?TO FIX
     // const exportPDF = () => {
     //     const doc = new jsPDF();
     //     const pageWidth = doc.internal.pageSize.getWidth();
@@ -126,36 +129,31 @@ const WorkSchedulerPlanTable = () => {
     //     XLSX.writeFile(workbook, "AccumulateForReport.xlsx");
     // };
 
+    //?TO FIX
     const header = (
         <div className="flex align-items-center justify-content-end gap-2">
-            <h2
-                className="m-0 mx-auto text-center"
-                style={{ color: "#334155" }}
-            >
-                Plan de horario
-            </h2>
             {/* <Button
-                type="button"
-                icon="pi pi-refresh"
-                severity="help"
-                rounded
-                onClick={reset}
+            type="button"
+            icon="pi pi-refresh"
+            severity="help"
+            rounded
+            onClick={reset}
             /> */}
             {/* <Button
-                type="button"
-                icon="pi pi-file-excel"
-                severity="success"
-                rounded
-                onClick={exportXLSX}
-                data-pr-tooltip="XLSX"
+            type="button"
+            icon="pi pi-file-excel"
+            severity="success"
+            rounded
+            onClick={exportXLSX}
+            data-pr-tooltip="XLSX"
             />
             <Button
-                type="button"
-                icon="pi pi-file-pdf"
-                severity="danger"
-                rounded
-                onClick={exportPDF}
-                data-pr-tooltip="PDF"
+            type="button"
+            icon="pi pi-file-pdf"
+            severity="danger"
+            rounded
+            onClick={exportPDF}
+            data-pr-tooltip="PDF"
             /> */}
         </div>
     );
@@ -167,18 +165,13 @@ const WorkSchedulerPlanTable = () => {
     const [workSchedulerPlan, setWorkSchedulerPlan] = useState<
         IWorkSchedulerPlan[] | null
     >(null);
-    const onRowExpand = (event: DataTableRowEvent) => {
-        toast.current?.show({
-            severity: "info",
-            summary: "Table Expanded",
-            detail: event.data.name,
-            life: 3000,
-        });
 
+    const onRowExpand = (event: DataTableRowEvent) => {
         const newWorkSchedulerPlan: IWorkSchedulerPlanRequest = {
-            from: new Date("2020-05-01T08:00:00.000Z"),
-            to: new Date("2020-05-29T17:00:00.000Z"),
-            idEmployee: event.data.idEmployee,
+            from: startDate ?? new Date(Math.min(new Date().getTime())),
+            to: endDate ?? new Date(Math.max(new Date().getTime())),
+            idEmployee:
+                idEmployee !== null ? idEmployee : event.data.idEmployee,
         };
 
         workSchedulerPlanService.post(newWorkSchedulerPlan).then((res) => {
@@ -187,18 +180,35 @@ const WorkSchedulerPlanTable = () => {
             }
         });
     };
-    const onRowCollapse = (event: DataTableRowEvent) => {
-        toast.current?.show({
-            severity: "success",
-            summary: "Table Collapsed",
-            detail: event.data.name,
-            life: 3000,
-        });
+    //const rowsPerPageOptions = [5, 10, 25];
+    const [option, setOption] = useState(5);
+
+    const updateOption = (newOption: number) => {
+        if ([5, 10, 25].includes(newOption)) {
+            setOption(newOption);
+        }
     };
+
     const rowExpansionTemplate = () => {
         return (
             <div className="p-3">
-                <DataTable value={workSchedulerPlan!}>
+                <DataTable
+                    value={workSchedulerPlan!}
+                    id="EmployeeForReport-Table-WorkSchedulerPlan"
+                    // dataKey="identifier"
+                    // lazy
+                    // paginator
+                    // sortMode="single"
+                    // totalRecords={workSchedulerPlan?.length!}
+                    // className="datatable-responsive"
+                    // paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                    // emptyMessage="No hay registros para mostrar."
+                    // onPage={onPage}
+                    // rowsPerPageOptions={[5, 10, 25]}
+                    // rows={option}
+                    // first={option}
+                    // currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                >
                     <Column field="id" header="Id" hidden sortable></Column>
                     <Column
                         field="date"
@@ -228,12 +238,59 @@ const WorkSchedulerPlanTable = () => {
         );
     };
 
-    const allowExpansion = (rowData: IAccumulateForReport) => {
+    const allowExpansion = () => {
         return data.items!.length > 0;
     };
+
     return (
         <div>
             <Toast ref={toast} />
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    gap: "10px",
+                    marginTop: "35px",
+                    marginBottom: "10px",
+                }}
+            >
+                <div className="p-inputgroup flex-1"></div>
+                <div className="p-inputgroup flex-1"></div>
+                <div className="p-inputgroup flex-1"></div>
+
+                <div className="p-inputgroup flex-1">
+                    <span
+                        className="p-inputgroup-addon"
+                        style={{
+                            backgroundColor: "var(--primary-color)",
+                            color: "white",
+                        }}
+                    >
+                        <i className="pi pi-user"></i>
+                    </span>
+                    <InputNumber
+                        onValueChange={(e) => idEmployeeSet(e.value ?? null)}
+                        placeholder="Código Empleado"
+                    />
+                </div>
+
+                <Calendar
+                    placeholder="Fecha Inicio"
+                    showIcon
+                    showButtonBar
+                    onChange={(e) => {
+                        startDateSet(e.value ?? null);
+                    }}
+                />
+                <Calendar
+                    placeholder="Fecha Fin"
+                    showIcon
+                    showButtonBar
+                    onChange={(e) => {
+                        endDateSet(e.value ?? null);
+                    }}
+                />
+            </div>
             <DataTable
                 id="AccumulateForReport-Table"
                 dataKey="identifier"
@@ -241,7 +298,6 @@ const WorkSchedulerPlanTable = () => {
                 expandedRows={expandedRows}
                 onRowToggle={(e) => setExpandedRows(e.data)}
                 onRowExpand={onRowExpand}
-                onRowCollapse={onRowCollapse}
                 rowExpansionTemplate={rowExpansionTemplate}
                 lazy
                 paginator
@@ -255,7 +311,6 @@ const WorkSchedulerPlanTable = () => {
                 className="datatable-responsive"
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 emptyMessage="No hay registros para mostrar."
-                //header={header}
                 onPage={onPage}
                 rowsPerPageOptions={[5, 10, 25]}
                 rows={data?.pageSize!}
@@ -263,6 +318,18 @@ const WorkSchedulerPlanTable = () => {
                 currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
             >
                 <Column expander={allowExpansion} style={{ width: "5rem" }} />
+                <Column
+                    field="identification"
+                    header="Cedula"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="identification"
+                    filterPlaceholder="Buscar por cédula"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterClear={clearFilters}
+                ></Column>
                 <Column
                     field="idEmployee"
                     header="Código Empleado"
@@ -276,89 +343,67 @@ const WorkSchedulerPlanTable = () => {
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idAccumulate"
-                    header="Código Acumulado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idAccumulate"
-                    filterPlaceholder="Buscar por código acumulado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
-                    field="payrollName"
-                    header="Nomina"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
-                    field="concept"
-                    header="Concepto"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="concept"
-                    filterPlaceholder="Buscar por Concepto"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="employeeName"
+                    field="name"
                     header="Nombre Completo"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="employeeName"
-                    filterPlaceholder="Buscar por nombre completo"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
+                    filterField="name"
+                    filterPlaceholder="Buscar por nombre"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="date"
-                    header="Fecha"
+                    field="sindicate"
+                    header="Sindicato"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="date"
-                    filterPlaceholder="Buscar por Fecha"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
+                    filterField="sindicate"
+                    filterPlaceholder="Buscar por sindicato"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
-                    body={(rowData: IAccumulateForReport) =>
-                        new Date(rowData.date)
-                            .toLocaleDateString("en-GB")
-                            .replace("-", "/")
+                    body={(rowData: IEmployeeForReport) =>
+                        rowData.sindicate ? "Si" : "No"
                     }
                 ></Column>
                 <Column
-                    field="amount"
-                    header="Monto"
+                    field="posicion"
+                    header="Posicion"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="amount"
-                    filterPlaceholder="Buscar por monto"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
+                    filterField="posicion"
+                    filterPlaceholder="Buscar por posición"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
-                    body={(rowData: IAccumulateForReport) =>
-                        rowData.amount.toLocaleString("es-DO", {
-                            style: "currency",
-                            currency: "DOP",
-                        })
-                    }
+                ></Column>
+                <Column
+                    field="departamento"
+                    header="Departamento"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="departamento"
+                    filterPlaceholder="Buscar por departamento"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="workScheduler"
+                    header="Horario"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="workScheduler"
+                    filterPlaceholder="Buscar por horario laboral"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterClear={clearFilters}
                 ></Column>
             </DataTable>
         </div>
