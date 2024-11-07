@@ -13,9 +13,10 @@ const AppMenu = () => {
             setModule(res!.rolModule);
         });
     }, []);
+
     const model: AppMenuItem[] = [
         {
-            label: "Mantenimientos",
+            label: "MANTENIMIENTOS",
             icon: "pi pi-fw pi-cog",
             items: [
                 {
@@ -56,7 +57,7 @@ const AppMenu = () => {
             ],
         },
         {
-            label: "Empleados",
+            label: "EMPLEADOS",
             icon: "pi pi-fw pi-users",
             items: [
                 {
