@@ -77,7 +77,6 @@ const EditRol = ({
             setSource(filteredSource);
         }
     }, [entity, data, reset]);
-    console.log(target, "target");
     const onChange = (e: { source: IRol[]; target: IRol[] }) => {
         setSource(e.source);
         setTarget(e.target);
