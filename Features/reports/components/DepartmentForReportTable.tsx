@@ -86,7 +86,6 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código Departamento",
                     "Nombre Departamento",
                     "Centro de Costo",
-                    "Localización",
                     "Posición",
                 ],
             ],
@@ -94,7 +93,6 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.idDepartment,
                 item.departmentName,
                 item.costCenter,
-                item.location,
                 item.position,
             ]),
             startY: 20,
@@ -109,12 +107,10 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = departmentWithoutIdentifier.map((department) => {
             return {
-
                 "Código Departamento": department.idDepartment ?? "N/A",
                 "Nombre Departamento": department.departmentName ?? "N/A",
                 "Centro de Costo": department.costCenter ?? "N/A",
-                "Localización": department.location ?? "N/A",
-                "Posición": department.position ?? "N/A",
+                Posición: department.position ?? "N/A",
             };
         });
 
@@ -215,18 +211,6 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="location"
-                    header="Localización"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="location"
-                    filterPlaceholder="Buscar por localización"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

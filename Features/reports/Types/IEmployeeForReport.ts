@@ -14,9 +14,9 @@ export interface IEmployeeForReport {
     employeeStartDate: string;
     birthDate: string;
     salary: number;
-    posicion: string;
+    position: string;
     idPosition: number;
-    departamento: string;
+    department: string;
     supervisor: string;
     idDepartment: number;
     functionDescription: string;

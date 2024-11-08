@@ -251,24 +251,24 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     }
                 ></Column>
                 <Column
-                    field="idConcept"
+                    field="conceptCode"
                     header="Código Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idConcept"
+                    filterField="conceptCode"
                     filterPlaceholder="Buscar por código concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="conceptCode"
+                    field="concept"
                     header="Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="conceptCode"
+                    filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}

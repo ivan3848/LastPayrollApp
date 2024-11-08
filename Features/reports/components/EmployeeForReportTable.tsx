@@ -107,8 +107,8 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.idPerson,
                 item.employeeStartDate,
                 item.salary,
-                item.posicion,
-                item.departamento,
+                item.position,
+                item.department,
                 item.functionDescription,
                 item.sindicate,
                 item.workScheduler,
@@ -152,9 +152,9 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         style: "currency",
                         currency: "DOP",
                     }) ?? "N/A",
-                Posición: employee.posicion ?? "N/A",
+                Posición: employee.position ?? "N/A",
                 "Código de posición": employee.idPosition ?? "N/A",
-                Departamento: employee.departamento ?? "N/A",
+                Departamento: employee.department ?? "N/A",
                 Supervisor: employee.supervisor ?? "N/A",
                 "Código de Departamento": employee.idDepartment ?? "N/A",
                 Función: employee.functionDescription ?? "N/A",
@@ -393,12 +393,12 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="posicion"
-                    header="Posicion"
+                    field="position"
+                    header="Posición"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="posicion"
+                    filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -406,12 +406,12 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="departamento"
+                    field="department"
                     header="Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="departamento"
+                    filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
