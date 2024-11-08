@@ -8,6 +8,7 @@ export interface IEmployeeForReport {
     firstLastName: string;
     secondLastName: string;
     idGender: number;
+    sex: string;
     name: string;
     idPerson: number;
     employeeStartDate: string;
@@ -32,10 +33,13 @@ export interface IEmployeeForReport {
     payrollArea: string;
     email: string;
     idDisability: number;
+    disability: string;
     idZone: number;
     zone: string;
     idNationality: number;
+    nationality: string;
     idEducation: number;
+    education: string;
     firedDate: string;
     isOccupied: string;
     isWorkRelation: string;

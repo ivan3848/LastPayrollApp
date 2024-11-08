@@ -332,19 +332,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="zipCode"
-                    header="Codigo Postal"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="zipCode"
-                    filterPlaceholder="Buscar por código postal"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
                     field="employeeStartDate"
                     header="Fecha de inicio"
                     headerStyle={{ minWidth: "15rem" }}
@@ -419,25 +406,12 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="idPosition"
-                    header="Codigo de posicion"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idPosition"
-                    filterPlaceholder="Buscar por código de posición"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
-                    field="departament"
+                    field="departamento"
                     header="Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="Departamento!"
+                    filterField="departamento"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -458,44 +432,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="idDepartment"
-                    header="Codigo de Departamento"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idDepartment"
-                    filterPlaceholder="Buscar por código de departamento"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="functionDescription"
-                    header="Funcion"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="functionDescription"
-                    filterPlaceholder="Buscar por función"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
-                    field="idGroupManager"
-                    header="Codigo de grupo"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idGroupManager"
-                    filterPlaceholder="Buscar por código de grupo"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-
-                <Column
                     field="sindicate"
                     header="Sindicato"
                     headerStyle={{ minWidth: "15rem" }}
@@ -510,19 +446,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         rowData.sindicate ? "Si" : "No"
                     }
                 ></Column>
-
-                <Column
-                    field="idWorkScheduler"
-                    header="Codigo de horario"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idWorkScheduler"
-                    filterPlaceholder="Buscar por código de horario"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
                 <Column
                     field="workScheduler"
                     header="Horario Laboral"
@@ -536,37 +459,13 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idPayrollArea"
-                    header="Codigo Area de nómina"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idPayrollArea"
-                    filterPlaceholder="Buscar por código de área de nómina"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="idDisability"
+                    field="disability"
                     header="Discapacidad"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idDisability"
+                    filterField="disability"
                     filterPlaceholder="Buscar por discapacidad"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="idZone"
-                    header="Codigo zona"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idZone"
-                    filterPlaceholder="Buscar por código de zona"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
@@ -585,25 +484,25 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="idNationality"
-                    header="Codigo Nacionalidad"
+                    field="nationality"
+                    header="Nacionalidad"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idNationality"
-                    filterPlaceholder="Buscar por código de nacionalidad"
+                    filterField="nationality"
+                    filterPlaceholder="Buscar nacionalidad"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idEducation"
-                    header="Codigo Educacion"
+                    field="education"
+                    header="Educación"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idEducation"
-                    filterPlaceholder="Buscar por código de educación"
+                    filterField="education"
+                    filterPlaceholder="Buscar por educación"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
@@ -626,18 +525,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                                   .replace("-", "/")
                             : "N/A"
                     }
-                ></Column>
-                <Column
-                    field="isOccupied"
-                    header="Status Ocupacion"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="isOccupied"
-                    filterPlaceholder="Buscar por status de ocupación"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
                 ></Column>
                 <Column
                     field="payrollArea"
