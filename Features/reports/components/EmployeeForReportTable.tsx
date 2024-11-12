@@ -138,7 +138,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 "Primer Apellido": employee.firstLastName ?? "N/A",
                 "Segundo Apellido": employee.secondLastName ?? "N/A",
                 Sexo: employee.idGender ?? "N/A",
-                Cédula: employee.idPerson ?? "N/A",
+                Cédula: employee.identification ?? "N/A",
                 "Fecha de inicio":
                     new Date(employee.employeeStartDate)
                         .toLocaleDateString("en-GB")
@@ -534,6 +534,19 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="payrollArea"
                     filterPlaceholder="Buscar por área de nómina"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="idCostCenter"
+                    header="Código Centro de Costo"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    hidden
+                    filterField="idCostCenter"
+                    filterPlaceholder="Buscar por código centro de costo"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

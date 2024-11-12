@@ -87,7 +87,6 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código de concepto",
                     "Concepto",
                     "Importe",
-                    "Código de nomina",
                     "Nomina",
                     "Beneficio",
                     "Fecha de pago",
@@ -100,7 +99,6 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.idConcept,
                 item.conceptCode,
                 item.amount,
-                item.idPayrollPay,
                 item.payrollName,
                 item.isProfit,
                 item.payrollPayDate,
@@ -131,7 +129,6 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         style: "currency",
                         currency: "DOP",
                     }) ?? "N/A",
-                "Código de nomina": netPay.idPayrollPay ?? "N/A",
                 Nomina: netPay.payrollName ?? "N/A",
                 Beneficio: netPay.isProfit ?? "N/A",
                 "Fecha de pago":
@@ -300,6 +297,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por código nomina"
                     showFilterMenuOptions

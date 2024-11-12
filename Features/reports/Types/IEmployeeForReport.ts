@@ -28,6 +28,7 @@ export interface IEmployeeForReport {
     idWorkScheduler: number;
     workScheduler: string;
     idStatusActionClass: number;
+    idCostCenter: number;
     costCenter: string;
     idPayrollArea: number;
     payrollArea: string;

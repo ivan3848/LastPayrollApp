@@ -184,6 +184,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código departamento"
