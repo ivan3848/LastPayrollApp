@@ -30,6 +30,9 @@ const ReportToolkit = ({ setFilter }: Props) => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedCostCenters, setSelectedCostCenters] = useState([]);
     const { filterEntityFormSchema } = FilterEntityFormSchema();
+    const [selectedFilters, setSelectedFilters] = useState<string[] | null>(
+        null
+    );
 
     const {
         handleSubmit,
@@ -59,7 +62,11 @@ const ReportToolkit = ({ setFilter }: Props) => {
     };
 
     const reportOptions = [
-        { key: 12, name: "Acumulados" },
+        {
+            key: 12,
+            name: "Acumulados",
+            filters: ["department", "employee", "conceptCode"],
+        },
         // { key: 2, name: "Comparativo de Nomina" },
         { key: 11, name: "Conceptos de Nómina" },
         { key: 17, name: "Costo" },
@@ -99,6 +106,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
     } = useReportStore();
 
     const getSelectedReport = (e: DropdownChangeEvent) => {
+        setSelectedFilters(e.value?.filters);
         setSelectedReport(e.value);
         if (e.value === undefined) {
             setSelectedReportFromToolKit("");
@@ -106,7 +114,6 @@ const ReportToolkit = ({ setFilter }: Props) => {
         }
         setSelectedReportFromToolKit(e.target.value.name);
     };
-
     const onSubmit = (data: any) => {
         data.position = selectedPositions;
         data.conceptCode = selectedConcepts;
@@ -161,7 +168,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="col-12">
                         <div className="p-fluid formgrid grid">
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("startDate")}
+                            >
                                 <label htmlFor="start">Fecha de Inicio</label>
                                 <Calendar
                                     id="start"
@@ -172,7 +182,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     showButtonBar
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("endDate")}
+                            >
                                 <label htmlFor="end">Fecha Final</label>
                                 <Calendar
                                     id="end"
@@ -181,7 +194,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     showButtonBar
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("payrollpay")
+                                }
+                            >
                                 <label
                                     htmlFor="idPayrollPay"
                                     className="w-full"
@@ -198,7 +216,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     watch={watch}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("position")}
+                            >
                                 <label htmlFor="position" className="w-full">
                                     Posición
                                 </label>
@@ -210,7 +231,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handlePositionChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("conceptCode")
+                                }
+                            >
                                 <label htmlFor="conceptCode" className="w-full">
                                     Concepto
                                 </label>
@@ -223,7 +249,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleConceptChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("employee")}
+                            >
                                 <label
                                     htmlFor="idsEmployees"
                                     className="w-full"
@@ -239,7 +268,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleEmployeeChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("costCenter")
+                                }
+                            >
                                 <label
                                     htmlFor="idCostCenter"
                                     className="w-full"
@@ -255,7 +289,14 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleCostCenterChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes(
+                                        "accountingAccount"
+                                    )
+                                }
+                            >
                                 <label
                                     htmlFor="idAccountingAccount"
                                     className="w-full"
@@ -273,7 +314,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     watch={watch}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("department")
+                                }
+                            >
                                 <label
                                     htmlFor="idDepartment"
                                     className="w-full"
