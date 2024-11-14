@@ -1,34 +1,35 @@
 "use client";
+import usePayrollAreaQuery from "@/Features/payrollArea/Hooks/usePayrollAreaQuery";
 import {
     lastPayrollManagementService,
     payrollManagementByPayrollNumberService,
 } from "@/Features/payrollManagement/payrollManagementService";
+import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
+import GenericDropDown from "@/Features/Shared/Components/GenericDropDown";
 import useAddEntityQuery from "@/Features/Shared/Hooks/useAddEntityQuery";
+import Link from "next/link";
+import { Button } from "primereact/button";
+import { ConfirmPopup } from "primereact/confirmpopup";
 import { InputNumber } from "primereact/inputnumber";
 import { InputSwitch } from "primereact/inputswitch";
 import { InputText } from "primereact/inputtext";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { SelectButton } from "primereact/selectbutton";
 import { TabPanel, TabView } from "primereact/tabview";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Toast } from "primereact/toast";
+import { classNames } from "primereact/utils";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { createRoot } from "react-dom/client";
 import { useForm } from "react-hook-form";
 import { generatePayrollPayService } from "../Services/payrollPayService";
-import { IPayrollPay } from "../types/IPayrollPay";
-import DialogFooterButtonPayrollPay from "./DialogFooterButtonPayrollPay";
-import PayrollConfigurationCard from "./PayrollConfigurationCard";
-import { Toast } from "primereact/toast";
-import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
-import { Button } from "primereact/button";
-import DeletePayrollDialog from "./DeletePayrollDialog";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { ConfirmPopup } from "primereact/confirmpopup";
-import { classNames } from "primereact/utils";
-import Link from "next/link";
-import GenerateFiles from "./GenerateFiles";
-import React from "react";
 import { IGetPayrollExecution, IGetPayrollExecutionTest } from "../types/IGetPayrollExecution";
-import InvoiceViewer from "@/Features/reports/components/InvoiceViewer";
-import { createRoot } from "react-dom/client";
+import { IPayrollPay } from "../types/IPayrollPay";
+import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
+import DeletePayrollDialog from "./DeletePayrollDialog";
+import DialogFooterButtonPayrollPay from "./DialogFooterButtonPayrollPay";
+import GenerateFiles from "./GenerateFiles";
 import GenerateReceiptDialog from "./GenerateReceipt";
+import PayrollConfigurationCard from "./PayrollConfigurationCard";
 
 interface Props {
     setSubmitted: (value: boolean) => void;
@@ -203,7 +204,6 @@ const PayrollPayView = ({
             ? (data as IGetPayrollExecution[]).map(({ identifier, ...rest }) => rest)
             : (data as IGetPayrollExecutionTest[]).map(({ idPayrollTestCode, ...rest }) => rest);
 
-
         await openNewTabWithInvoiceViewer(getPayrollExecutionWithoutIdentifier);
     };
 
@@ -315,32 +315,21 @@ const PayrollPayView = ({
                                                 width: "100%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-4">
+                                            <div className="field col-12 md:col-3">
                                                 <label htmlFor="idPayrollArea">
                                                     <strong>
                                                         Area de Nómina
                                                     </strong>
                                                 </label>
-                                                <SelectButton
-                                                    {...register("idPayrollArea")}
-                                                    value={watch("idPayrollArea")}
-                                                    onChange={(e) => {
-                                                        setValue("idPayrollArea", e.value)
-                                                        getLastRecord(e.value);
-                                                    }}
-                                                    options={[
-                                                        { label: "Mensual", value: 2 },
-                                                        { label: "Quincenal", value: 1 },
-                                                        { label: "Temporeros", value: 4 },
-                                                        { label: "Regalía", value: 5 }
-                                                    ]}
-                                                    className={classNames(
-                                                        {
-                                                            "p-invalid":
-                                                                errors.idPayrollArea,
-                                                        },
-                                                        "w-full"
-                                                    )}
+                                                <GenericDropDown
+                                                    id="idPayrollArea"
+                                                    isValid={!!errors.idPayrollArea}
+                                                    setValue={setValue}
+                                                    watch={watch}
+                                                    text="name"
+                                                    useQuery={usePayrollAreaQuery}
+                                                    idValueEdit={entityPayrollManagement?.idPayrollArea}
+                                                // getLastRecord(e.value);
                                                 />
                                             </div>
                                             <div className="field col-12 md:col-2">
@@ -431,7 +420,7 @@ const PayrollPayView = ({
                                                 width: "98%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-4 mt-2">
+                                            <div className="field col-12 md:col-3 mt-2">
                                                 <Button
                                                     label="Eliminar nomina"
                                                     onClick={handleDelete}
@@ -453,7 +442,7 @@ const PayrollPayView = ({
                                                     }
                                                 />
                                             </div>
-                                            <div className="field col-12 md:col-3 mt-2 mr-1">
+                                            <div className="field col-12 md:col-3 mt-2 mr-5">
                                                 <Button
                                                     label={
                                                         viewEmployees
