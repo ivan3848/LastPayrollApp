@@ -81,19 +81,19 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
-                    "Código de Posición",
+                    //"Código Empleado",
+                    //"Código de Posición",
                     "Posición",
-                    "Código de Departamento",
+                    //"Código de Departamento",
                     "Departamento",
-                    "Código Licencia",
+                    //"Código Licencia",
                     "Empleado",
                     "Nombre de Doctor",
                     "Código de Concepto",
                     "Concepto",
                     "Dias no laborados",
                     "A Pagar",
-                    "Código Nomina",
+                    //"Código Nomina",
                     "Nomina",
                     "Descripción",
                     "Inicio",
@@ -102,19 +102,19 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
-                item.idPosition,
+                //item.idEmployee,
+                //item.idPosition,
                 item.position,
-                item.idDepartment,
+                //item.idDepartment,
                 item.department,
-                item.idLicences,
+                //item.idLicences,
                 item.employeeName,
                 item.doctorName,
-                item.idConcept,
+                item.conceptCode,
                 item.conceptName,
                 item.workDayOff,
                 item.isToPay,
-                item.idPayrollPay,
+                //item.idPayrollPay,
                 item.payrollPay,
                 item.description,
                 item.startDate,
@@ -133,19 +133,19 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = licencesWithoutIdentifier.map((licences) => {
             return {
-                "Código Empleado": licences.idEmployee ?? "N/A",
-                "Código de Posición": licences.idPosition ?? "N/A",
+                //"Código Empleado": licences.idEmployee ?? "N/A",
+                //"Código de Posición": licences.idPosition ?? "N/A",
                 Posición: licences.position ?? "N/A",
-                "Código de Departamento": licences.idDepartment ?? "N/A",
+                //"Código de Departamento": licences.idDepartment ?? "N/A",
                 Departamento: licences.department ?? "N/A",
-                "Código Licencia": licences.idLicences ?? "N/A",
+                //"Código Licencia": licences.idLicences ?? "N/A",
                 Empleado: licences.employeeName ?? "N/A",
                 "Nombre de Doctor": licences.doctorName ?? "N/A",
-                "Código de Concepto": licences.idConcept ?? "N/A",
+                "Código de Concepto": licences.conceptCode ?? "N/A",
                 Concepto: licences.conceptName ?? "N/A",
                 "Dias no laborados": licences.workDayOff ?? "N/A",
                 "A Pagar": licences.isToPay ?? "N/A",
-                "Código Nomina": licences.idPayrollPay ?? "N/A",
+                //"Código Nomina": licences.idPayrollPay ?? "N/A",
                 Nomina: licences.payrollPay ?? "N/A",
                 Descripción: licences.description ?? "N/A",
                 Inicio:
@@ -231,6 +231,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -243,6 +244,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código de posición"
                     showFilterMenuOptions
@@ -267,6 +269,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código de departamento"
                     showFilterMenuOptions
@@ -291,6 +294,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idLicences"
                     filterPlaceholder="Buscar por código de licencia"
                     showFilterMenuOptions
@@ -322,12 +326,12 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idConcept"
+                    field="conceptCode"
                     header="Código de Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idConcept"
+                    filterField="conceptCode"
                     filterPlaceholder="Buscar por código de concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -375,6 +379,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por código de nómina"
                     showFilterMenuOptions

@@ -81,7 +81,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código de Empleado",
+                    //"Código de Empleado",
                     "Empleado",
                     "Salario",
                     "Código de concepto",
@@ -93,7 +93,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.salary,
                 item.idConcept,
@@ -115,7 +115,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = netPayWithoutIdentifier.map((netPay) => {
             return {
-                "Código de Empleado": netPay.idEmployee ?? "N/A",
+                //"Código de Empleado": netPay.idEmployee ?? "N/A",
                 Empleado: netPay.employeeName ?? "N/A",
                 Salario:
                     netPay.salary.toLocaleString("es-DO", {
@@ -209,6 +209,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

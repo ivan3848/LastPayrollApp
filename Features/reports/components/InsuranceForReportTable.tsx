@@ -83,19 +83,19 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Seguro",
-                    "Código Empleado",
+                    //"Código Seguro",
+                    //"Código Empleado",
                     "Titular",
                     "Dependiente",
                     "Cédula dependiente",
-                    "ID Concepto",
+                    //"ID Concepto",
                     "Código de Concepto",
                     "Concepto",
                     "Seguro",
                     "Plan",
                     "Centro de Costo",
-                    "ID Cuenta contable",
-                    "ID Centro costo",
+                    //"ID Cuenta contable",
+                    //"ID Centro costo",
                     "Numero de cuenta",
                     "Cuenta contable",
                     "Porcentaje a Descontar",
@@ -103,19 +103,19 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idInsurance,
-                item.idEmployee,
+                //item.idInsurance,
+                //item.idEmployee,
                 item.employeeName,
                 item.fullNameDependant,
                 item.identificationDisplay,
-                item.idConcept,
+                //item.idConcept,
                 item.conceptCode,
                 item.conceptName,
                 item.description,
                 item.planType,
                 item.costCenter,
-                item.idAccountingAccount,
-                item.idCostCenter,
+                //item.idAccountingAccount,
+                //item.idCostCenter,
                 item.accountNumber,
                 item.accountingAccount,
                 item.percentDiscount,
@@ -133,19 +133,19 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = insuranceWithoutIdentifier.map((insurance) => {
             return {
-                "Código Seguro": insurance.idInsurance ?? "N/A",
-                "Código Empleado": insurance.idEmployee ?? "N/A",
+                //"Código Seguro": insurance.idInsurance ?? "N/A",
+                //"Código Empleado": insurance.idEmployee ?? "N/A",
                 Titular: insurance.employeeName ?? "N/A",
                 Dependiente: insurance.fullNameDependant ?? "N/A",
                 "Cédula dependiente": insurance.identificationDisplay ?? "N/A",
-                "ID Concepto": insurance.idConcept ?? "N/A",
+                //"ID Concepto": insurance.idConcept ?? "N/A",
                 "Código de Concepto": insurance.conceptCode ?? "N/A",
                 Concepto: insurance.conceptName ?? "N/A",
                 Seguro: insurance.description ?? "N/A",
                 Plan: insurance.planType ?? "N/A",
                 "Centro de Costo": insurance.costCenter ?? "N/A",
-                "ID Cuenta contable": insurance.idAccountingAccount ?? "N/A",
-                "ID Centro costo": insurance.idCostCenter ?? "N/A",
+                //"ID Cuenta contable": insurance.idAccountingAccount ?? "N/A",
+                //"ID Centro costo": insurance.idCostCenter ?? "N/A",
                 "Numero de cuenta": insurance.accountNumber ?? "N/A",
                 "Cuenta contable": insurance.accountingAccount ?? "N/A",
                 "Porcentaje a Descontar": `${insurance.percentDiscount}%`,
@@ -227,6 +227,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Seguro"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idInsurance"
                     filterPlaceholder="Buscar por código seguro"
@@ -240,6 +241,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -288,6 +290,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idConcept"
                     filterPlaceholder="Buscar por ID Concepto"
                     showFilterMenuOptions
@@ -359,6 +362,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="ID Cuenta contable"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idAccountingAccount"
                     filterPlaceholder="Buscar por ID Cuenta contable"
@@ -371,6 +375,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="ID Centro costo"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idCostCenter"
                     filterPlaceholder="Buscar por ID Centro costo"

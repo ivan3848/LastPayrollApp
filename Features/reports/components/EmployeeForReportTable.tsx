@@ -130,14 +130,11 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = employeesWithoutIdentifier.map((employee) => {
             return {
-                "Código de empleado": employee.idEmployee ?? "N/A",
                 "Número de cuenta": employee.accountNumber ?? "N/A",
                 "Nombre Completo": employee.name ?? "N/A",
-                "Código Posición Jerárquica":
-                    employee.idHierarchyPosition ?? "N/A",
                 "Primer Apellido": employee.firstLastName ?? "N/A",
                 "Segundo Apellido": employee.secondLastName ?? "N/A",
-                Sexo: employee.idGender ?? "N/A",
+                Sexo: employee.sex ?? "N/A",
                 Cédula: employee.identification ?? "N/A",
                 "Fecha de inicio":
                     new Date(employee.employeeStartDate)
@@ -153,30 +150,22 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         currency: "DOP",
                     }) ?? "N/A",
                 Posición: employee.position ?? "N/A",
-                "Código de posición": employee.idPosition ?? "N/A",
                 Departamento: employee.department ?? "N/A",
                 Supervisor: employee.supervisor ?? "N/A",
-                "Código de Departamento": employee.idDepartment ?? "N/A",
                 Función: employee.functionDescription ?? "N/A",
                 "Código de grupo": employee.idGroupManager ?? "N/A",
                 Sindicato: employee.sindicate ? "Si" : "No",
-                "Código de horario": employee.idWorkScheduler ?? "N/A",
                 "Horario Laboral": employee.workScheduler ?? "N/A",
-                "Código Area de nómina": employee.idPayrollArea ?? "N/A",
-                Discapacidad: employee.idDisability ?? "N/A",
-                "Código zona": employee.idZone ?? "N/A",
+                Discapacidad: employee.disability ?? "N/A",
                 Zona: employee.zone ?? "N/A",
-                "Código Nacionalidad": employee.idNationality ?? "N/A",
-                "Código Educación": employee.idEducation ?? "N/A",
+                Nacionalidad: employee.nationality ?? "N/A",
                 "Fecha de Desvinculación": employee.firedDate ?? "N/A",
-                "Status Ocupación": employee.isOccupied ?? "N/A",
                 "Area de nómina": employee.payrollArea ?? "N/A",
                 "Centro de Costo": employee.costCenter ?? "N/A",
                 Correo: employee.email ?? "N/A",
                 "Labor Directa": employee.isWorkRelation ?? "N/A",
                 Banco: employee.bankName ?? "N/A",
                 "Método de pago": employee.paymentMethod ?? "N/A",
-                "Número de cuenta CC": employee.accountNumberCC ?? "N/A",
             };
         });
 
@@ -254,18 +243,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="accountNumberCC"
-                    header="Número de cuenta"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="accountNumberCC"
-                    filterPlaceholder="Buscar por número de cuenta"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
@@ -607,6 +584,18 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="paymentMethod"
                     filterPlaceholder="Buscar por método de pago"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="accountNumberCC"
+                    header="Número de cuenta Cnt.Cos."
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="accountNumberCC"
+                    filterPlaceholder="Buscar por número de cuenta"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

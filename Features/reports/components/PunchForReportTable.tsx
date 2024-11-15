@@ -81,11 +81,11 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Empleado",
                     "Horario",
-                    "Código Posición",
-                    "Código Departamento",
+                    //"Código Posición",
+                    //"Código Departamento",
                     "Posición",
                     "Departamento",
                     "Fecha de ponche",
@@ -95,11 +95,11 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.workScheduler,
-                item.idPosition,
-                item.idDepartment,
+                //item.idPosition,
+                //item.idDepartment,
                 item.position,
                 item.department,
                 item.punchDate,
@@ -119,11 +119,11 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = punchWithoutIdentifier.map((punch) => {
             return {
-                "Código Empleado": punch.idEmployee,
+                //"Código Empleado": punch.idEmployee,
                 Empleado: punch.employeeName,
                 Horario: punch.workScheduler,
-                "Código Posición": punch.idPosition,
-                "Código Departamento": punch.idDepartment,
+                //"Código Posición": punch.idPosition,
+                //"Código Departamento": punch.idDepartment,
                 Posición: punch.position,
                 Departamento: punch.department,
                 "Fecha de ponche": new Date(punch.punchDate)
@@ -204,6 +204,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -244,6 +245,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código posición"
                     showFilterMenuOptions
@@ -257,6 +259,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código departamento"
                     showFilterMenuOptions

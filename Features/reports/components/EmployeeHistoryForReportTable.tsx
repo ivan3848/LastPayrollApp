@@ -87,7 +87,7 @@ const EmployeeHistoryForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código",
+                    //"Código",
                     "Empleado",
                     "Estatus",
                     "Departamento",
@@ -102,7 +102,7 @@ const EmployeeHistoryForReportTable = ({
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.employeeStatus,
                 item.department,
@@ -128,7 +128,7 @@ const EmployeeHistoryForReportTable = ({
         const renamed = employeeHistoryWithoutIdentifier.map(
             (employeeHistory) => {
                 return {
-                    Código: employeeHistory.idEmployee ?? "N/A",
+                    //Código: employeeHistory.idEmployee ?? "N/A",
                     Empleado: employeeHistory.employeeName ?? "N/A",
                     Departamento: employeeHistory.department ?? "N/A",
                     Posición: employeeHistory.position ?? "N/A",
@@ -224,6 +224,7 @@ const EmployeeHistoryForReportTable = ({
                     header="Código"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código"

@@ -79,11 +79,11 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Nombre",
                     "Fecha Inicio",
                     "Fecha de solicitud",
-                    "Código de banco",
+                    //"Código de banco",
                     "Banco",
                     "Cantidad de Cuotas",
                     "Total pago",
@@ -91,11 +91,11 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.startDate,
                 item.requestDate,
-                item.bankKey,
+                //item.bankKey,
                 item.bankName,
                 item.amountFee,
                 item.amountPay,
@@ -113,7 +113,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = leaseWithoutIdentifier.map((lease) => {
             return {
-                "Código Empleado": lease.idEmployee ?? "N/A",
+                //"Código Empleado": lease.idEmployee ?? "N/A",
                 Nombre: lease.employeeName ?? "N/A",
                 "Fecha Inicio":
                     new Date(lease.startDate)
@@ -123,7 +123,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     new Date(lease.requestDate)
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
-                "Código de banco": lease.bankKey ?? "N/A",
+                //"Código de banco": lease.bankKey ?? "N/A",
                 Banco: lease.bankName ?? "N/A",
                 "Cantidad de Cuotas": lease.amountFee ?? "N/A",
                 "Total pago":
@@ -210,6 +210,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -276,6 +277,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="bankKey"
                     filterPlaceholder="Buscar por código de banco"
                     showFilterMenuOptions

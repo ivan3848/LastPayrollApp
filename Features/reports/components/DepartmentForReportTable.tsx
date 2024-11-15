@@ -83,14 +83,14 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Departamento",
+                    //"Código Departamento",
                     "Nombre Departamento",
                     "Centro de Costo",
                     "Posición",
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idDepartment,
+                //item.idDepartment,
                 item.departmentName,
                 item.costCenter,
                 item.position,
@@ -107,7 +107,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = departmentWithoutIdentifier.map((department) => {
             return {
-                "Código Departamento": department.idDepartment ?? "N/A",
+                //"Código Departamento": department.idDepartment ?? "N/A",
                 "Nombre Departamento": department.departmentName ?? "N/A",
                 "Centro de Costo": department.costCenter ?? "N/A",
                 Posición: department.position ?? "N/A",

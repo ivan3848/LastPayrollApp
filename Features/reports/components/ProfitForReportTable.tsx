@@ -80,22 +80,18 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Beneficio",
                     "Nombre Completo",
                     "Nombre de Concepto",
                     "Monto",
-                    "es Posición",
                     "Pagado",
                     "Inicio",
                     "Fin",
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idProfit,
                 item.employeeName,
                 item.conceptName,
                 item.amount,
-                item.isPosition,
                 item.isPaid,
                 item.start,
                 item.end,
@@ -112,14 +108,12 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = profitWithoutIdentifier.map((profit) => {
             return {
-                "Código Beneficio": profit.idProfit,
                 "Nombre Completo": profit.employeeName,
                 "Nombre de Concepto": profit.conceptName,
                 Monto: profit.amount.toLocaleString("es-DO", {
                     style: "currency",
                     currency: "DOP",
                 }),
-                "Es posición": profit.isPosition,
                 Pagado: profit.isPaid,
                 Inicio: new Date(profit.start)
                     .toLocaleDateString("en-GB")
@@ -201,6 +195,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idProfit"
                     filterPlaceholder="Buscar por código beneficio"
                     showFilterMenuOptions
@@ -254,6 +249,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 <Column
                     field="isPosition"
                     header="es Posición"
+                    hidden
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter

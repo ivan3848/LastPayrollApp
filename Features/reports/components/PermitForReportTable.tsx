@@ -81,10 +81,10 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Permiso",
-                    "Código de Posición",
+                    //"Código Permiso",
+                    //"Código de Posición",
                     "Posición",
-                    "Código de Departamento",
+                    //"Código de Departamento",
                     "Departamento",
                     "Empleado",
                     "Inicio",
@@ -97,10 +97,10 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idPermit,
-                item.idPosition,
+                //item.idPermit,
+                //item.idPosition,
                 item.position,
-                item.idDepartment,
+                //item.idDepartment,
                 item.department,
                 item.employeeName,
                 item.startDate,
@@ -123,10 +123,10 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = permitWithoutIdentifier.map((permit) => {
             return {
-                "Código Permiso": permit.idPermit ?? "N/A",
-                "Código de Posición": permit.idPosition ?? "N/A",
+                //"Código Permiso": permit.idPermit ?? "N/A",
+                //"Código de Posición": permit.idPosition ?? "N/A",
                 Posición: permit.position ?? "N/A",
-                "Código de Departamento": permit.idDepartment ?? "N/A",
+                //"Código de Departamento": permit.idDepartment ?? "N/A",
                 Departamento: permit.department ?? "N/A",
                 Empleado: permit.employeeName ?? "N/A",
                 Inicio:
@@ -215,6 +215,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Permiso"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idPermit"
                     filterPlaceholder="Buscar por código permiso"
@@ -228,6 +229,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código de posición"
                     showFilterMenuOptions
@@ -251,6 +253,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código de Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código de departamento"

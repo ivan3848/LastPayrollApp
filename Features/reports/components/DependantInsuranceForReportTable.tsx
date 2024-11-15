@@ -85,13 +85,13 @@ const DependantInsuranceForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Empleado",
                     "Cedula Dependiente",
                     "Dependiente",
                     "Parentesco",
-                    "Código Empleado Asegurado",
-                    "Código Seguro",
+                    //"Código Empleado Asegurado",
+                    //"Código Seguro",
                     "Seguro",
                     "% a descontar",
                     "Cantidad",
@@ -101,13 +101,13 @@ const DependantInsuranceForReportTable = ({
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.dependantIdentification,
                 item.fullNameDependant,
                 item.statusDescription,
-                item.idPersonInsurance,
-                item.idInsurance,
+                //item.idPersonInsurance,
+                //item.idInsurance,
                 item.description,
                 item.percentDiscount,
                 item.amount,
@@ -128,15 +128,15 @@ const DependantInsuranceForReportTable = ({
         const renamed = dependantInsuranceWithoutIdentifier.map(
             (dependantInsurance) => {
                 return {
-                    "Código Empleado": dependantInsurance.idEmployee ?? "N/A",
+                    //"Código Empleado": dependantInsurance.idEmployee ?? "N/A",
                     Empleado: dependantInsurance.employeeName ?? "N/A",
                     "Cedula Dependiente":
                         dependantInsurance.dependantIdentification ?? "N/A",
                     Dependiente: dependantInsurance.fullNameDependant ?? "N/A",
                     Parentesco: dependantInsurance.statusDescription ?? "N/A",
-                    "Código Empleado Asegurado":
-                        dependantInsurance.idPersonInsurance ?? "N/A",
-                    "Código Seguro": dependantInsurance.idInsurance ?? "N/A",
+                    //"Código Empleado Asegurado":
+                        //dependantInsurance.idPersonInsurance ?? "N/A",
+                    //"Código Seguro": dependantInsurance.idInsurance ?? "N/A",
                     Seguro: dependantInsurance.description ?? "N/A",
                     "% a descontar":
                         dependantInsurance.percentDiscount ?? "N/A",
@@ -220,6 +220,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -281,6 +282,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPersonInsurance"
                     filterPlaceholder="Buscar por código empleado asegurado"
                     showFilterMenuOptions={false}
@@ -293,6 +295,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idInsurance"
                     filterPlaceholder="Buscar por código seguro"
                     showFilterMenuOptions={false}

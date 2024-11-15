@@ -83,13 +83,13 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código centro de costo",
+                    //"Código centro de costo",
                     "Nombre de centro de costo",
                     "Numero de cuenta",
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idCostCenter,
+                //item.idCostCenter,
                 item.costCenterName,
                 item.accountNumber,
             ]),
@@ -105,7 +105,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = costCenterWithoutIdentifier.map((costCenter) => {
             return {
-                "Código centro de costo": costCenter.idCostCenter ?? "N/A",
+                //"Código centro de costo": costCenter.idCostCenter ?? "N/A",
                 "Nombre de centro de costo": costCenter.costCenterName ?? "N/A",
                 "Numero de cuenta": costCenter.accountNumber ?? "N/A",
             };
@@ -182,6 +182,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código de Centro de Costo"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código centro de Costo"

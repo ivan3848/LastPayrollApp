@@ -79,14 +79,14 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Nombre Completo",
                     "Total impuesto",
                     "Total impuesto nomina",
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.totalTax,
                 item.payrollPayTotalTax,
@@ -103,7 +103,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = totalTaxWithoutIdentifier.map((totalTax) => {
             return {
-                "Código Empleado": totalTax.idEmployee,
+                //"Código Empleado": totalTax.idEmployee,
                 "Nombre Completo": totalTax.employeeName,
                 "Total impuesto": totalTax.totalTax.toLocaleString("es-DO", {
                     style: "currency",
@@ -188,6 +188,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

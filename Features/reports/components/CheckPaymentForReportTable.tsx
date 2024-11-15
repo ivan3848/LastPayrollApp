@@ -87,7 +87,7 @@ const CheckPaymentForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Nombre",
                     "Método de pago",
                     "Importe",
@@ -95,7 +95,7 @@ const CheckPaymentForReportTable = ({
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
+                //item.idEmployee,
                 item.employeeName,
                 item.paymentMethod,
                 item.amount,
@@ -113,7 +113,7 @@ const CheckPaymentForReportTable = ({
 
         const renamed = checkPayWithoutIdentifier.map((checkPay) => {
             return {
-                "Código Empleado": checkPay.idEmployee ?? "N/A",
+                //"Código Empleado": checkPay.idEmployee ?? "N/A",
                 Nombre: checkPay.employeeName ?? "N/A",
                 "Método de pago": checkPay.paymentMethod ?? "N/A",
                 Importe:
@@ -199,6 +199,7 @@ const CheckPaymentForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

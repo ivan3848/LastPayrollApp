@@ -81,8 +81,6 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
-                    "Código Tardanza",
                     "Empleado",
                     "Centro de Costo",
                     "Salario",
@@ -92,19 +90,13 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Valor de Hora",
                     "Fecha",
                     "Nomina",
-                    "Código Nomina",
                     "Pago",
-                    "Código Posición",
                     "Posición",
-                    "Código Departamento",
                     "Departamento",
                     "Numero de Cuenta",
-                    "Código Centro de Costo",
                 ],
             ],
             body: data?.items.map((item) => [
-                item.idEmployee,
-                item.idLateness,
                 item.fullName,
                 item.costCenter,
                 item.salary,
@@ -114,14 +106,10 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.amount,
                 item.date,
                 item.payrollName,
-                item.idPayrollPay,
                 item.isPaid,
-                item.idPosition,
                 item.position,
-                item.idDepartment,
                 item.department,
                 item.accountNumber,
-                item.idCostCenter,
             ]),
             startY: 20,
         });
@@ -135,8 +123,8 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = latenessWithoutIdentifier.map((lateness) => {
             return {
-                "Código Empleado": lateness.idEmployee ?? "N/A",
-                "Código Tardanza": lateness.idLateness ?? "N/A",
+                //"Código Empleado": lateness.idEmployee ?? "N/A",
+                //"Código Tardanza": lateness.idLateness ?? "N/A",
                 Empleado: lateness.fullName ?? "N/A",
                 "Centro de Costo": lateness.costCenter ?? "N/A",
                 Salario:
@@ -153,14 +141,14 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .toLocaleDateString()
                         .replace("-", "/") ?? "N/A",
                 Nomina: lateness.payrollName ?? "N/A",
-                "Código Nomina": lateness.idPayrollPay ?? "N/A",
+                //"Código Nomina": lateness.idPayrollPay ?? "N/A",
                 Pago: lateness.isPaid ?? "N/A",
-                "Código Posición": lateness.idPosition ?? "N/A",
+                //"Código Posición": lateness.idPosition ?? "N/A",
                 Posición: lateness.position ?? "N/A",
-                "Código Departamento": lateness.idDepartment ?? "N/A",
+                //"Código Departamento": lateness.idDepartment ?? "N/A",
                 Departamento: lateness.department ?? "N/A",
                 "Numero de Cuenta": lateness.accountNumber ?? "N/A",
-                "Código Centro de Costo": lateness.idCostCenter ?? "N/A",
+                //"Código Centro de Costo": lateness.idCostCenter ?? "N/A",
             };
         });
 
@@ -235,6 +223,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -247,6 +236,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idLateness"
                     filterPlaceholder="Buscar por código tardanza"
                     showFilterMenuOptions
@@ -392,6 +382,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Nomina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por código nomina"
@@ -416,6 +407,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Posición"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código posición"
@@ -441,6 +433,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código departamento"
                     showFilterMenuOptions
@@ -477,6 +470,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idCostCenter"
                     filterPlaceholder="Buscar por código centro de costo"
                     showFilterMenuOptions

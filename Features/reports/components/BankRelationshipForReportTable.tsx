@@ -145,7 +145,7 @@ const PayrollPayExpenseForReportTable = ({
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de Gastos de Nomina
+                Reporte de Relación Bancaria
             </h2>
             <Button
                 type="button"
@@ -204,6 +204,7 @@ const PayrollPayExpenseForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

@@ -143,9 +143,9 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
         const renamed = extraHourWithoutIdentifier.map((extraHour) => {
             return {
                 "Numero de Cuenta": extraHour.accountNumber ?? "N/A",
-                "Código Empleado": extraHour.idEmployee ?? "N/A",
-                "Código horas no Laboradas":
-                    extraHour.idExtraHourLateness ?? "N/A",
+                //"Código Empleado": extraHour.idEmployee ?? "N/A",
+                //"Código horas no Laboradas":
+                //extraHour.idExtraHourLateness ?? "N/A",
                 Empleado: extraHour.fullName ?? "N/A",
                 "Centro de Costo": extraHour.costCenter ?? "N/A",
                 Salario:
@@ -171,12 +171,12 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .replace("-", "/") ?? "N/A",
                 Pago: extraHour.isPaid ?? "N/A",
                 Nomina: extraHour.payrollName ?? "N/A",
-                "Código Nomina": extraHour.idPayrollPay ?? "N/A",
-                "Código Posición": extraHour.idPosition ?? "N/A",
-                "Código Departamento": extraHour.idDepartment ?? "N/A",
+                //"Código Nomina": extraHour.idPayrollPay ?? "N/A",
+                //"Código Posición": extraHour.idPosition ?? "N/A",
+                //"Código Departamento": extraHour.idDepartment ?? "N/A",
                 Posición: extraHour.position ?? "N/A",
                 Departamento: extraHour.department ?? "N/A",
-                "Código Centro de Costo": extraHour.idCostCenter ?? "N/A",
+                //"Código Centro de Costo": extraHour.idCostCenter ?? "N/A",
             };
         });
 
@@ -263,6 +263,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar código de empleado"
                     showFilterMenuOptions
@@ -275,6 +276,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idExtraHourLateness"
                     filterPlaceholder="Buscar código de horas no laboradas"
                     showFilterMenuOptions
@@ -451,6 +453,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar código de nomina"
                     showFilterMenuOptions
@@ -464,6 +467,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar código de posición"
                     showFilterMenuOptions
@@ -476,6 +480,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idDepartment"
                     filterPlaceholder="Buscar código de departamento"
@@ -541,6 +546,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Centro de Costo"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idCostCenter"
                     filterPlaceholder="Buscar código de centro de costo"
