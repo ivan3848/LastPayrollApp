@@ -1,7 +1,7 @@
 "use client";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
-import { DataTable, DataTableSortEvent } from "primereact/datatable";
+import { DataTable, DataTablePageEvent, DataTableSortEvent } from "primereact/datatable";
 import { Card } from "primereact/card";
 import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
@@ -17,12 +17,19 @@ const PayrollHistoryTable = ({
     handleDetails,
 }: Props) => {
     const {
+        setPage,
         setFilters,
+        setPageSize,
         setSorts,
         clearSorts,
         clearFilters,
         params,
-    } = useParamFilter();
+    } = useParamFilter(5);
+
+    const onPage = (event: DataTablePageEvent) => {
+        setPage(event.page! + 1);
+        setPageSize(event.rows);
+    };
 
     const listOfDependencies: boolean[] = [submitted];
 
@@ -77,15 +84,20 @@ const PayrollHistoryTable = ({
                 className="p-datatable-sm"
                 dataKey="idPayrollPay"
                 paginator
-                onSort={onSort}
-                removableSort
+                loading={isLoading}
+                lazy
                 sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
-                sortMode="single"
-                rows={5}
-                rowsPerPageOptions={[5, 10, 15]}
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-            >
+                sortOrder={
+                    params.filter?.sorts?.[0]?.isAsc ? 1 : -1
+                }
+                totalRecords={data?.totalCount}
+                paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                emptyMessage="No hay registros para mostrar."
+                onPage={onPage}
+                rowsPerPageOptions={[5, 10, 25]}
+                rows={data?.pageSize!}
+                first={data.firstRow!}
+                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}">
                 <Column
                     field="payrollName"
                     header="Descripción"

@@ -5,12 +5,14 @@ import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
 import React from 'react';
 
 const PayrollDetailPage = () => {
-    const { params } = useParamFilter();
+    const { params } = useParamFilter(25);
     const { data } = usePayrollPayQuery(params, []);
 
     const [isVisible, setIsVisible] = React.useState(true);
 
-    const payrollItem = React.useMemo(() => data?.items?.findLast((item) => item), [data]);
+    const payrollItem = React.useMemo(() => {
+        return data.items[data.items.length - 1];
+    }, [data]);
 
     return (
         <div>
