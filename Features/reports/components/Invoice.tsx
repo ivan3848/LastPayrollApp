@@ -47,7 +47,9 @@ export const Invoice = ({ data }: Props) => {
                     idCostCenter,
                     totalProfit,
                     totalDeduction,
-                    totalPay
+                    totalPay,
+                    creditIsrRemain,
+                    creditIsrSustracted
                 } = firstItem;
 
                 return (
@@ -98,13 +100,29 @@ export const Invoice = ({ data }: Props) => {
                                     CC: {idCostCenter || "N/A"}
                                 </Text>
                             </View>
-
+                            <View style={[styles.tableRow]}>
+                                <Text style={[styles.tableCol, styles.addBottomline, styles.withBorderRight, styles.textAlignLeft, styles.textColor]}>
+                                    Nombre
+                                </Text>
+                                <Text style={[styles.tableCol, styles.addBottomline, styles.withBorderRight, styles.colWidthTenP, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                    Cantidad
+                                </Text>
+                                <Text style={[styles.tableCol, styles.addBottomline, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                    Ingresos
+                                </Text>
+                                <Text style={[styles.tableCol, styles.addBottomline, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                    Deducciones
+                                </Text>
+                                <Text style={[styles.tableCol, styles.addBottomline, styles.textAlignRight, styles.textColor]}>
+                                    Acumulados
+                                </Text>
+                            </View>
                             {items.map((item, itemIndex) => (
                                 <View key={itemIndex} style={styles.tableRow}>
                                     <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignLeft, styles.textColor]}>
                                         {item.name}
                                     </Text>
-                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.colWidthTenP, styles.textAlignRight, styles.textColor]}>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.colWidthTenP, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
                                         {item.quantity}
                                     </Text>
                                     <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
@@ -118,7 +136,23 @@ export const Invoice = ({ data }: Props) => {
                                     </Text>
                                 </View>
                             ))}
-
+                            {creditIsrSustracted && (<>
+                                <View style={styles.tableRow}>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignLeft, styles.textColor]}>
+                                        ISR a favor
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.colWidthTenP, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.withBorderRight, styles.textAlignRight, styles.textColor, styles.colWidthTwentyP]}>
+                                        {creditIsrSustracted?.toLocaleString("es-DO", { style: "currency", currency: "DOP" }) || "N/A"}
+                                    </Text>
+                                    <Text style={[styles.tableCol, styles.textAlignRight, styles.textColor]}>
+                                        {creditIsrRemain?.toLocaleString("es-DO", { style: "currency", currency: "DOP" }) || "N/A"}
+                                    </Text>
+                                </View>
+                            </>)}
                             <View style={[styles.tableRow, styles.addTopline]}>
                                 <Text style={[styles.tableCol, styles.textColor, styles.colWidthTwentyP, styles.removeLeftLine, styles.removeRightLine]}>
                                     INGRESOS
@@ -178,6 +212,9 @@ const styles = StyleSheet.create({
     },
     addTopline: {
         borderTopWidth: 1,
+    },
+    addBottomline: {
+        borderBottomWidth: 1,
     },
     marginBottom: {
         marginBottom: 0,
