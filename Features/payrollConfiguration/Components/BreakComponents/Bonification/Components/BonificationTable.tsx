@@ -28,7 +28,7 @@ const BonificationTabe = ({
         listOfDependencies
     );
     const [bonification, setBonification] = useState<IBonificationBreak[]>();
-    console.log(data.items);
+
     useEffect(() => {
         if (data?.items && data.items.length > 0) {
             try {
