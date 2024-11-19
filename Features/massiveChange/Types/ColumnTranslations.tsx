@@ -14,6 +14,7 @@ const columnTranslations: { [key: string]: string } = {
     Date: "Fecha",
     IdConcept: "Código Concepto",
     ConceptCode: "Codigo Concepto Normal",
+    DateExecuted: "Fecha de carga",
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;

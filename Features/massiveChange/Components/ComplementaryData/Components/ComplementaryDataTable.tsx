@@ -6,14 +6,14 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import { ICommissionArchive } from "../Types/ICommission";
-import useCommissionArchiveQuery from "../Hooks/useCommissionArchiveQuery";
+import { IComplementaryData } from "../Types/IComplementaryData";
+import useComplementaryDataQuery from "../Hooks/useComplementaryDataQuery";
 interface Props {
     submitted: boolean;
-    handleRevert: (entity: ICommissionArchive) => void;
+    handleRevert: (entity: IComplementaryData) => void;
 }
 
-const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
+const ComplementaryDataTable = ({ submitted, handleRevert }: Props) => {
     const {
         setPage,
         setPageSize,
@@ -25,7 +25,7 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCommissionArchiveQuery(
+    const { data, isLoading } = useComplementaryDataQuery(
         params,
         listOfDependencies
     );
@@ -60,8 +60,8 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
 
     return (
         <DataTable
-            id="CommissionArchive-Table"
-            dataKey="idCommission"
+            id="ComplementaryData-Table"
+            dataKey="idComplementaryData"
             value={data?.items}
             lazy
             paginator
@@ -94,18 +94,18 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
                 onFilterClear={clearFilters}
             ></Column>
             <Column
-                field="chargeDate"
+                field="dateExecuted"
                 header="Fecha de carga"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                filterField="chargeDate"
+                filterField="dateExecuted"
                 filterPlaceholder="Buscar por Fecha de carga"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
                 body={(rowData) => {
-                    const date = new Date(rowData.chargeDate);
+                    const date = new Date(rowData.dateExecuted);
                     return date.toLocaleDateString();
                 }}
             ></Column>
@@ -125,11 +125,11 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
             <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<ICommissionArchive>
+                    <ActionTableTemplate<IComplementaryData>
                         isCustomDelete={true}
                         entity={rowData}
                         handleDelete={handleRevert}
-                        accessName="GESTION_BANCARIA"
+                        accessName="DATA_COMPLEMENTARIA"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
@@ -138,4 +138,4 @@ const CommissionArchiveTable = ({ submitted, handleRevert }: Props) => {
     );
 };
 
-export default CommissionArchiveTable;
+export default ComplementaryDataTable;

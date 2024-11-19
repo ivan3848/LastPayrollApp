@@ -8,6 +8,7 @@ import {
 } from "primereact/datatable";
 import useMassiveIncreaseQuery from "../Hooks/useMassiveIncreaseQuery";
 import { IMassiveIncrease } from "../Types/IMassiveIncrease";
+import { access } from "fs";
 interface Props {
     submitted: boolean;
     handleRevert: (entity: IMassiveIncrease) => void;
@@ -129,6 +130,7 @@ const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
                         isCustomDelete={true}
                         entity={rowData}
                         handleDelete={handleRevert}
+                        accessName="CAMBIOS_MASIVOS"
                     />
                 )}
                 headerStyle={{ minWidth: "10rem" }}
