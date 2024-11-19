@@ -18,6 +18,7 @@ import personService from "../Services/personService";
 import useEditEntityQuery from "@/Features/Shared/Hooks/useEditEntityQuery";
 import { useEffect } from "react";
 import useZoneQuery from "@/Features/zone/Hooks/useZoneQuery";
+import useOccupationQuery from "@/Features/occupation/Hooks/useOccupationQuery";
 
 interface Props {
     person?: IPerson;
@@ -301,6 +302,25 @@ const EditPerson = ({ person, toast }: Props) => {
                         {errors.idZone && (
                             <small className="p-invalid text-red-500">
                                 {errors.idZone.message?.toString()}
+                            </small>
+                        )}
+                    </div>
+                    <div className="field col-12 md:col-6 lg:col-4">
+                        <label htmlFor="idOccupation" className="w-full">
+                            Ocupación
+                        </label>
+                        <GenericDropDown
+                            id="idOccupation"
+                            isValid={!!errors.idOccupation}
+                            text="name"
+                            idValueEdit={person?.idOccupation}
+                            useQuery={useOccupationQuery}
+                            setValue={setValue}
+                            watch={watch}
+                        />
+                        {errors.idOccupation && (
+                            <small className="p-invalid text-red-500">
+                                {errors.idOccupation.message?.toString()}
                             </small>
                         )}
                     </div>

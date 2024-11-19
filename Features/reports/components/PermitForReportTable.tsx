@@ -37,7 +37,20 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = usePermitForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = usePermitForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = usePermitForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de permiso";
@@ -81,10 +95,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Permiso",
-                    "Código de Posición",
                     "Posición",
-                    "Código de Departamento",
                     "Departamento",
                     "Empleado",
                     "Inicio",
@@ -96,11 +107,8 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "A Pagar",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idPermit,
-                item.idPosition,
+            body: excelData?.items.map((item) => [
                 item.position,
-                item.idDepartment,
                 item.department,
                 item.employeeName,
                 item.startDate,
@@ -116,17 +124,15 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePermiso.pdf");
     };
 
-    const exportXLSX = () => {
-        const permitWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const permitWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = permitWithoutIdentifier.map((permit) => {
             return {
-                "Código Permiso": permit.idPermit ?? "N/A",
-                "Código de Posición": permit.idPosition ?? "N/A",
                 Posición: permit.position ?? "N/A",
-                "Código de Departamento": permit.idDepartment ?? "N/A",
                 Departamento: permit.department ?? "N/A",
                 Empleado: permit.employeeName ?? "N/A",
                 Inicio:
@@ -215,6 +221,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Permiso"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idPermit"
                     filterPlaceholder="Buscar por código permiso"
@@ -228,6 +235,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código de posición"
                     showFilterMenuOptions
@@ -251,6 +259,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código de Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código de departamento"

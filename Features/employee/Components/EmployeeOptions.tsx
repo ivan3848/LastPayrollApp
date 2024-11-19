@@ -147,18 +147,6 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         }
                     />
                 )}
-                {hasModuleAccess("PLAN_DE_HORARIO") && (
-                    <Button
-                        label="Plan De Horario"
-                        icon="pi pi-calendar-times"
-                        className="m-2"
-                        onClick={() =>
-                            setAction(
-                                EmployeeOptionsEnum.WorkSchedulerSubstitute
-                            )
-                        }
-                    />
-                )}
                 {hasModuleAccess("VACACIONES") && (
                     <Button
                         label="Vacaciones"

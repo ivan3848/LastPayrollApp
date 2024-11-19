@@ -36,9 +36,19 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useDepartmentForReportQuery(
+    const { data, isLoading, refetch } = useDepartmentForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useDepartmentForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -73,7 +83,8 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Departamento";
@@ -83,18 +94,16 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Departamento",
+                    //"Código Departamento",
                     "Nombre Departamento",
                     "Centro de Costo",
-                    "Localización",
                     "Posición",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idDepartment,
+            body: excelData?.items.map((item) => [
+                //item.idDepartment,
                 item.departmentName,
                 item.costCenter,
-                item.location,
                 item.position,
             ]),
             startY: 20,
@@ -102,19 +111,18 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteCentroCosto.pdf");
     };
 
-    const exportXLSX = () => {
-        const departmentWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const departmentWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = departmentWithoutIdentifier.map((department) => {
             return {
-
-                "Código Departamento": department.idDepartment ?? "N/A",
+                //"Código Departamento": department.idDepartment ?? "N/A",
                 "Nombre Departamento": department.departmentName ?? "N/A",
                 "Centro de Costo": department.costCenter ?? "N/A",
-                "Localización": department.location ?? "N/A",
-                "Posición": department.position ?? "N/A",
+                Posición: department.position ?? "N/A",
             };
         });
 
@@ -188,6 +196,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código departamento"
@@ -215,18 +224,6 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filter
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="location"
-                    header="Localización"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="location"
-                    filterPlaceholder="Buscar por localización"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

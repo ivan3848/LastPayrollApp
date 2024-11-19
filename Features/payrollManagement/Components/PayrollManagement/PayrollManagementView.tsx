@@ -180,6 +180,7 @@ const PayrollManagement = ({
                                 { label: "Quincenal", value: 1 },
                                 { label: "Temporeros", value: 4 },
                                 { label: "Regalía", value: 5 },
+                                { label: "Especial", value: 3 },
                             ]}
                         />
                         {errors.idPayrollArea && (
@@ -313,7 +314,7 @@ const PayrollManagement = ({
                                                         )
                                                     }
                                                     showIcon
-                                                    disabled
+                                                    disabled={watch("idPayrollArea") != 3}
                                                 />
                                                 {errors.payrollPeriodStart && (
                                                     <small className="p-invalid text-danger">
@@ -342,7 +343,7 @@ const PayrollManagement = ({
                                                         )
                                                     }
                                                     showIcon
-                                                    disabled
+                                                    disabled={watch("idPayrollArea") != 3}
                                                 />
                                                 {errors.payrollPeriodEnd && (
                                                     <small className="p-invalid text-danger">

@@ -40,10 +40,21 @@ const RetroactiveHoursForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useRetroactiveHoursForReportQuery(
+    const { data, isLoading, refetch } = useRetroactiveHoursForReportQuery(
         filterReport,
         params
     );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useRetroactiveHoursForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -76,7 +87,8 @@ const RetroactiveHoursForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de horas retroactivas";
@@ -86,16 +98,11 @@ const RetroactiveHoursForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Centro Costo",
-                    "Código Empleado",
                     "Empleado",
                     "Fecha",
-                    "ID Nomina",
                     "Nomina",
                     "Centro de Costo",
-                    "ID Concepto",
                     "Concepto",
-                    "ID Cuenta contable",
                     "Departamento",
                     "Cuenta contable",
                     "Numero de cuenta",
@@ -105,17 +112,12 @@ const RetroactiveHoursForReportTable = ({
                     "Monto",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idCostCenter,
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.fullName,
                 item.date,
-                item.idPayrollPay,
                 item.payrollName,
                 item.costCenter,
-                item.idConcept,
                 item.concept,
-                item.idAccountingAccount,
                 item.department,
                 item.name,
                 item.accountingAccountNumber,
@@ -129,23 +131,19 @@ const RetroactiveHoursForReportTable = ({
         doc.save("ReporteHorasRetroactivas.pdf");
     };
 
-    const exportXLSX = () => {
-        const retroactiveWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const retroactiveWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = retroactiveWithoutIdentifier.map((retroactive) => {
             return {
-                "Código Centro Costo": retroactive.idCostCenter,
-                "Código Empleado": retroactive.idEmployee,
                 Empleado: retroactive.fullName,
                 Fecha: retroactive.date,
-                "ID Nomina": retroactive.idPayrollPay,
                 Nomina: retroactive.payrollName,
                 "Centro de Costo": retroactive.costCenter,
-                "ID Concepto": retroactive.idConcept,
                 Concepto: retroactive.concept,
-                "ID Cuenta contable": retroactive.idAccountingAccount,
                 Departamento: retroactive.department,
                 "Cuenta contable": retroactive.name,
                 "Numero de cuenta": retroactive.accountingAccountNumber,
@@ -171,7 +169,7 @@ const RetroactiveHoursForReportTable = ({
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de horas retroactivas
+                Reporte de Horas Retroactivas
             </h2>
             <Button
                 type="button"
@@ -230,6 +228,7 @@ const RetroactiveHoursForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código centro costo"
                     showFilterMenuOptions
@@ -241,6 +240,7 @@ const RetroactiveHoursForReportTable = ({
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -285,6 +285,7 @@ const RetroactiveHoursForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por ID nomina"
                     showFilterMenuOptions
@@ -321,6 +322,7 @@ const RetroactiveHoursForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idConcept"
                     filterPlaceholder="Buscar por ID concepto"
                     showFilterMenuOptions
@@ -345,6 +347,7 @@ const RetroactiveHoursForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idAccountingAccount"
                     filterPlaceholder="Buscar por ID cuenta contable"
                     showFilterMenuOptions

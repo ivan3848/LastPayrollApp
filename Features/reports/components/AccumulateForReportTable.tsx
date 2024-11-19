@@ -37,9 +37,19 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useAccumulateForReportQuery(
+    const { data, isLoading, refetch } = useAccumulateForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useAccumulateForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -74,7 +84,8 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Acumulados";
@@ -83,19 +94,9 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.text(text, textX, 16);
         autoTable(doc, {
             head: [
-                [
-                    "Código Acumulado",
-                    "Código Empleado",
-                    "Nomina",
-                    "Concepto",
-                    "Nombre Completo",
-                    "Fecha",
-                    "Cantidad",
-                ],
+                ["Nomina", "Concepto", "Nombre Completo", "Fecha", "Cantidad"],
             ],
-            body: data?.items.map((item) => [
-                item.idAccumulate,
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.payrollName,
                 item.concept,
                 item.employeeName,
@@ -107,15 +108,14 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteAcumulados.pdf");
     };
 
-    const exportXLSX = () => {
-        const accumulateWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const accumulateWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = accumulateWithoutIdentifier.map((accumulate) => {
             return {
-                "Código Acumulado": accumulate.idAccumulate ?? "N/A",
-                "Código Empleado": accumulate.idEmployee ?? "N/A",
                 Nomina: accumulate.payrollName ?? "N/A",
                 Concepto: accumulate.concept ?? "N/A",
                 "Nombre Completo": accumulate.employeeName ?? "N/A",
@@ -197,6 +197,7 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Acumulado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idAccumulate"
                     filterPlaceholder="Buscar por código acumulado"
@@ -209,6 +210,7 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"

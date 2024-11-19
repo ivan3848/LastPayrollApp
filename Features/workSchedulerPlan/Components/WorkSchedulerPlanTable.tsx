@@ -3,8 +3,10 @@ import useEmployeeForReportQuery from "@/Features/reports/Hook/useEmployeeForRep
 import { IEmployeeForReport } from "@/Features/reports/Types/IEmployeeForReport";
 import IFilterReport from "@/Features/reports/Types/IFilterReport";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import { workSchedulerDetailByIdService } from "@/Features/workSchedulerDetail/Services/workSchedulerServiceDetail";
 import workSchedulerPlanService from "@/Features/workSchedulerPlan/Services/workSchedulerPlanService";
 import { IWorkSchedulerPlanRequest } from "@/Features/workSchedulerPlan/Types/IWorkSchedulerPlanRequest";
+import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Column } from "primereact/column";
 import {
@@ -15,9 +17,11 @@ import {
     DataTableSortEvent,
     DataTableValueArray,
 } from "primereact/datatable";
+import { Dialog } from "primereact/dialog";
 import { InputNumber } from "primereact/inputnumber";
 import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
+import { IWorkSchedulerDetail } from "../../workSchedulerDetail/Types/IWorkSchedulerDetail";
 import { IWorkSchedulerPlan } from "../../workSchedulerPlan/Types/IWorkSchedulerPlan";
 
 const WorkSchedulerPlanTable = () => {
@@ -37,6 +41,25 @@ const WorkSchedulerPlanTable = () => {
 
     const filterReport: IFilterReport = {
         idsEmployee: idEmployee ? [idEmployee] : [],
+    };
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [workSchedulerDetails, setWorkSchedulerDetails] = useState<
+        IWorkSchedulerDetail[] | null
+    >(null);
+
+    const showModal = (idWorkScheduler: number) => {
+        workSchedulerDetailByIdService
+            .getEntitiesById(idWorkScheduler)
+            .then((res) => {
+                res && setWorkSchedulerDetails(res);
+            });
+        setIsModalVisible(true);
+    };
+
+    const hideModal = () => {
+        setIsModalVisible(false);
+        setWorkSchedulerDetails(null);
     };
 
     const { data, isLoading } = useEmployeeForReportQuery(filterReport, params);
@@ -117,7 +140,7 @@ const WorkSchedulerPlanTable = () => {
     //             "Nombre Completo": accumulate.employeeName ?? "N/A",
     //             Fecha:
     //                 new Date(accumulate.date)
-    //                     .toLocaleDateString("en-GB")
+    //                     .toLocaleDateString("es-DO")
     //                     .replace("-", "/") ?? "N/A",
     //             Cantidad: accumulate.amount ?? "N/A",
     //         };
@@ -174,6 +197,21 @@ const WorkSchedulerPlanTable = () => {
                 idEmployee !== null ? idEmployee : event.data.idEmployee,
         };
 
+        if (!startDate && !endDate) {
+            const currentDate = new Date();
+            const firstDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth(),
+                1
+            );
+            const lastDayOfMonth = new Date(
+                currentDate.getFullYear(),
+                currentDate.getMonth() + 1,
+                0
+            );
+            newWorkSchedulerPlan.from = firstDayOfMonth;
+            newWorkSchedulerPlan.to = lastDayOfMonth;
+        }
         workSchedulerPlanService.post(newWorkSchedulerPlan).then((res) => {
             if (typeof res !== "string") {
                 setWorkSchedulerPlan(res);
@@ -188,35 +226,44 @@ const WorkSchedulerPlanTable = () => {
             setOption(newOption);
         }
     };
-
+    const formatDate = (value: Date) => {
+        return value.toLocaleDateString("en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+        });
+    };
     const rowExpansionTemplate = () => {
         return (
             <div className="p-3">
                 <DataTable
                     value={workSchedulerPlan!}
                     id="EmployeeForReport-Table-WorkSchedulerPlan"
-                    // dataKey="identifier"
-                    // lazy
-                    // paginator
-                    // sortMode="single"
-                    // totalRecords={workSchedulerPlan?.length!}
-                    // className="datatable-responsive"
-                    // paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-                    // emptyMessage="No hay registros para mostrar."
-                    // onPage={onPage}
-                    // rowsPerPageOptions={[5, 10, 25]}
-                    // rows={option}
-                    // first={option}
-                    // currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                    dataKey="id"
+                    lazy
+                    paginator
+                    totalRecords={workSchedulerPlan?.length}
+                    className="datatable-responsive"
+                    paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                    emptyMessage="No hay registros para mostrar."
+                    rows={workSchedulerPlan?.length!}
+                    first={workSchedulerPlan?.length!}
+                    currentPageReportTemplate=""
                 >
                     <Column field="id" header="Id" hidden sortable></Column>
                     <Column
                         field="date"
-                        body={(rowData) =>
-                            new Date(rowData.date)
-                                .toLocaleDateString("en-GB")
-                                .replace("-", "/")
-                        }
+                        body={(rowData: IWorkSchedulerPlan) => {
+                            const date = new Date(rowData.date);
+                            date.setDate(date.getDate() + 1);
+
+                            return date.toLocaleDateString("es-DO", {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                                timeZone: "America/Santo_Domingo",
+                            });
+                        }}
                         header="Fecha"
                         sortable
                     ></Column>
@@ -226,7 +273,7 @@ const WorkSchedulerPlanTable = () => {
                     <Column
                         field="absenteeism"
                         header="Absentismo"
-                        body={(rowData) =>
+                        body={(rowData: IWorkSchedulerPlan) =>
                             rowData.absenteeism !== null
                                 ? rowData.absenteeism
                                 : ""
@@ -244,6 +291,60 @@ const WorkSchedulerPlanTable = () => {
 
     return (
         <div>
+            <Dialog
+                header="Detalles de Horario"
+                visible={isModalVisible}
+                style={{ width: "50vw" }}
+                onHide={hideModal}
+            >
+                {workSchedulerDetails && (
+                    <DataTable
+                        value={workSchedulerDetails}
+                        id="DetailsFromSchedulers-Table"
+                        dataKey="idWorkSchedulerDetail"
+                        lazy
+                        paginator
+                        totalRecords={workSchedulerDetails?.length}
+                        className="datatable-responsive"
+                        paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+                        emptyMessage="No hay registros para mostrar."
+                        rows={workSchedulerDetails?.length!}
+                        first={workSchedulerDetails?.length!}
+                        currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+                    >
+                        <Column field="week" header="Turno" />
+                        <Column field="days" header="Dias laborables" />
+                        <Column
+                            field="start"
+                            header="Hora de entrada"
+                            body={(rowData: IWorkSchedulerDetail) =>
+                                new Date(rowData.start).toLocaleTimeString(
+                                    "es-DO",
+                                    {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        timeZone: "America/Santo_Domingo",
+                                    }
+                                )
+                            }
+                        />
+                        <Column
+                            field="end"
+                            header="Hora de salida"
+                            body={(rowData: IWorkSchedulerDetail) =>
+                                new Date(rowData.end).toLocaleTimeString(
+                                    "es-DO",
+                                    {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        timeZone: "America/Santo_Domingo",
+                                    }
+                                )
+                            }
+                        />
+                    </DataTable>
+                )}
+            </Dialog>
             <Toast ref={toast} />
             <div
                 style={{
@@ -404,6 +505,21 @@ const WorkSchedulerPlanTable = () => {
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    header="Acciones"
+                    body={(rowData: IEmployeeForReport) => (
+                        <Button
+                            rounded
+                            style={{
+                                backgroundColor: "var(--primary-color)",
+                                width: "185px",
+                            }}
+                            label="Detalles de Horario"
+                            onClick={() => showModal(rowData.idWorkScheduler)}
+                        />
+                    )}
+                    headerStyle={{ minWidth: "10rem" }}
                 ></Column>
             </DataTable>
         </div>

@@ -37,7 +37,20 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useCostForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useCostForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useCostForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Costo";
@@ -81,7 +95,6 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Codigo de Centro de costo",
                     "Centro de costo",
                     "Numero de cuenta",
                     "Departamento",
@@ -92,8 +105,7 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Mes",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idCostCenter,
+            body: excelData?.items.map((item) => [
                 item.costCenter,
                 item.accountNumber,
                 item.department,
@@ -108,14 +120,14 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteCosto.pdf");
     };
 
-    const exportXLSX = () => {
-        const costWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const costWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = costWithoutIdentifier.map((cost) => {
             return {
-                "Codigo de Centro de costo": cost.idCostCenter ?? "N/A",
                 "Centro de costo": cost.costCenter ?? "N/A",
                 "Numero de cuenta": cost.accountNumber ?? "N/A",
                 Departamento: cost.department ?? "N/A",
@@ -201,6 +213,7 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idCostCenter"
                     filterPlaceholder="Buscar por código centro de costo"
                     showFilterMenuOptions={false}

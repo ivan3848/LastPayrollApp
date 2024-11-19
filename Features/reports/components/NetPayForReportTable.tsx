@@ -37,7 +37,20 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useNetPayForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useNetPayForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useNetPayForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de pago neto";
@@ -81,26 +95,22 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código de Empleado",
                     "Empleado",
                     "Salario",
                     "Código de concepto",
                     "Concepto",
                     "Importe",
-                    "Código de nomina",
                     "Nomina",
                     "Beneficio",
                     "Fecha de pago",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.salary,
                 item.idConcept,
                 item.conceptCode,
                 item.amount,
-                item.idPayrollPay,
                 item.payrollName,
                 item.isProfit,
                 item.payrollPayDate,
@@ -110,14 +120,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePagoNeto.pdf");
     };
 
-    const exportXLSX = () => {
-        const netPayWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const netPayWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = netPayWithoutIdentifier.map((netPay) => {
             return {
-                "Código de Empleado": netPay.idEmployee ?? "N/A",
                 Empleado: netPay.employeeName ?? "N/A",
                 Salario:
                     netPay.salary.toLocaleString("es-DO", {
@@ -131,7 +141,6 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         style: "currency",
                         currency: "DOP",
                     }) ?? "N/A",
-                "Código de nomina": netPay.idPayrollPay ?? "N/A",
                 Nomina: netPay.payrollName ?? "N/A",
                 Beneficio: netPay.isProfit ?? "N/A",
                 "Fecha de pago":
@@ -212,6 +221,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -251,24 +261,24 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     }
                 ></Column>
                 <Column
-                    field="idConcept"
+                    field="conceptCode"
                     header="Código Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idConcept"
+                    filterField="conceptCode"
                     filterPlaceholder="Buscar por código concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="conceptCode"
+                    field="concept"
                     header="Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="conceptCode"
+                    filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -300,6 +310,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por código nomina"
                     showFilterMenuOptions

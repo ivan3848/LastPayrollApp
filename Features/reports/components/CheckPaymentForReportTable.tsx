@@ -40,11 +40,19 @@ const CheckPaymentForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useCheckPaymentForReportQuery(
+    const { data, isLoading, refetch } = useCheckPaymentForReportQuery(
         filterReport,
         params
     );
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
 
+    const { data: excelData } = useCheckPaymentForReportQuery(
+        filterReport,
+        updatedParams
+    );
     const reset = () => {
         setFilterValues({});
     };
@@ -77,7 +85,8 @@ const CheckPaymentForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de pago por cheque";
@@ -87,15 +96,15 @@ const CheckPaymentForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
+                    //"Código Empleado",
                     "Nombre",
                     "Método de pago",
                     "Importe",
                     "Fecha de Nomina",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
+                //item.idEmployee,
                 item.employeeName,
                 item.paymentMethod,
                 item.amount,
@@ -106,14 +115,15 @@ const CheckPaymentForReportTable = ({
         doc.save("ReportePagoPorCheque.pdf");
     };
 
-    const exportXLSX = () => {
-        const checkPayWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const checkPayWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = checkPayWithoutIdentifier.map((checkPay) => {
             return {
-                "Código Empleado": checkPay.idEmployee ?? "N/A",
+                //"Código Empleado": checkPay.idEmployee ?? "N/A",
                 Nombre: checkPay.employeeName ?? "N/A",
                 "Método de pago": checkPay.paymentMethod ?? "N/A",
                 Importe:
@@ -199,6 +209,7 @@ const CheckPaymentForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

@@ -40,10 +40,21 @@ const ConsolidatedDataForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useConsolidatedDataForReportQuery(
+    const { data, isLoading, refetch } = useConsolidatedDataForReportQuery(
         filterReport,
         params
     );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useConsolidatedDataForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -75,7 +86,8 @@ const ConsolidatedDataForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de data consolidada";
@@ -85,32 +97,24 @@ const ConsolidatedDataForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Centro Costo",
-                    "Código Empleado",
                     "Empleado",
                     "Fecha",
-                    "ID Nomina",
                     "Nomina",
                     "Centro de Costo",
                     "ID Concepto",
                     "Concepto",
-                    "ID Cuenta contable",
                     "Numero de cuenta",
                     "Cuenta contable",
                     "Monto",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idCostCenter,
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.extraHourDate,
-                item.idPayrollPay,
                 item.payrollName,
                 item.costCenterName,
-                item.idConcept,
+                item.conceptCode,
                 item.concept,
-                item.idAccountingAccount,
                 item.accountNumber,
                 item.name,
                 item.extraHourAmount,
@@ -120,15 +124,14 @@ const ConsolidatedDataForReportTable = ({
         doc.save("ReporteDataConsolidada.pdf");
     };
 
-    const exportXLSX = () => {
-        const consolidatedWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const consolidatedWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = consolidatedWithoutIdentifier.map((consolidate) => {
             return {
-                "Código Centro Costo": consolidate.idCostCenter ?? "N/A",
-                "Código Empleado": consolidate.idEmployee ?? "N/A",
                 Empleado: consolidate.employeeName ?? "N/A",
                 Fecha:
                     new Date(consolidate.extraHourDate)
@@ -136,8 +139,8 @@ const ConsolidatedDataForReportTable = ({
                         .replace("-", "/") ?? "N/A",
                 Nomina: consolidate.payrollName ?? "N/A",
                 "Centro de Costo": consolidate.costCenterName ?? "N/A",
+                "ID Concepto": consolidate.conceptCode ?? "N/A",
                 Concepto: consolidate.concept ?? "N/A",
-                "ID Cuenta contable": consolidate.idAccountingAccount ?? "N/A",
                 "Numero de cuenta": consolidate.accountNumber ?? "N/A",
                 "Cuenta contable": consolidate.name ?? "N/A",
                 Monto:
@@ -218,6 +221,7 @@ const ConsolidatedDataForReportTable = ({
                     header="Código Centro Costo"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idCostCenter"
                     filterPlaceholder="Buscar por código Centro Costo"
@@ -231,6 +235,7 @@ const ConsolidatedDataForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -271,6 +276,7 @@ const ConsolidatedDataForReportTable = ({
                     header="ID Nomina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idPayrollPay"
                     filterPlaceholder="Buscar por ID Nomina"
@@ -303,12 +309,12 @@ const ConsolidatedDataForReportTable = ({
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="idConcept"
+                    field="conceptCode"
                     header="ID Concepto"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="idConcept"
+                    filterField="conceptCode"
                     filterPlaceholder="Buscar por ID Concepto"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -332,6 +338,7 @@ const ConsolidatedDataForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idAccountingAccount"
                     filterPlaceholder="Buscar por ID Cuenta contable"
                     showFilterMenuOptions

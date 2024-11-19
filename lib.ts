@@ -66,7 +66,7 @@ export async function updateSession(request: NextRequest) {
 
     // Refresh the session so it doesn't expire
     const parsed = await decrypt(session);
-    parsed.expires = new Date(Date.now() + 1000 * 1000);
+    parsed.expires = new Date(Date.now() + 1000 * 60 * 60 * 24);
     const res = NextResponse.next();
     res.cookies.set({
         name: "session",

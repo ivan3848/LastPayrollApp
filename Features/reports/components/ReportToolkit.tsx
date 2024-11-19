@@ -30,6 +30,9 @@ const ReportToolkit = ({ setFilter }: Props) => {
     const [selectedEmployees, setSelectedEmployees] = useState([]);
     const [selectedCostCenters, setSelectedCostCenters] = useState([]);
     const { filterEntityFormSchema } = FilterEntityFormSchema();
+    const [selectedFilters, setSelectedFilters] = useState<string[] | null>(
+        null
+    );
 
     const {
         handleSubmit,
@@ -59,38 +62,255 @@ const ReportToolkit = ({ setFilter }: Props) => {
     };
 
     const reportOptions = [
-        { key: 12, name: "Acumulados" },
+        {
+            key: 12,
+            name: "Acumulados",
+            filters: [
+                "employee",
+                "conceptCode",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
         // { key: 2, name: "Comparativo de Nomina" },
-        { key: 11, name: "Conceptos de Nómina" },
-        { key: 17, name: "Costo" },
-        { key: 15, name: "Data Consolidada" },
-        { key: 19, name: "Dependientes" },
-        { key: 23, name: "Desvinculados" },
-        { key: 6, name: "Empleados" },
-        { key: 13, name: "Gastos de Nomina" },
+        {
+            key: 11,
+            name: "Conceptos de Nómina",
+            filters: ["conceptCode", "payrollpay"],
+        },
+        {
+            key: 17,
+            name: "Costo",
+            filters: ["department", "costCenter", "conceptCode"],
+        },
+        {
+            key: 15,
+            name: "Data Consolidada",
+            filters: [
+                "accountingAccount",
+                "costCenter",
+                "employee",
+                "conceptCode",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 19,
+            name: "Dependientes",
+            filters: ["employee"],
+        },
+        {
+            key: 23,
+            name: "Desvinculados",
+            filters: ["department", "employee", "conceptCode"],
+        },
+        {
+            key: 6,
+            name: "Empleados",
+            filters: [
+                "department",
+                "costCenter",
+                "employee",
+                "position",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 13,
+            name: "Gastos de Nomina",
+            filters: [
+                "accountingAccount",
+                "costCenter",
+                "employee",
+                "conceptCode",
+                "payrollpay",
+            ],
+        },
         // { key: 9, name: "Horas Extras Resumen" },
         // { key: 10, name: "Horas Extras Detalle" },
-        { key: 16, name: "Horas Retroactivas" },
-        { key: 20, name: "Horas Extras" },
-        { key: 21, name: "Horas no laboradas" },
-        { key: 26, name: "Historial de Empleados" },
-        { key: 8, name: "Incentivos" },
-        { key: 18, name: "Licencias" },
-        { key: 1, name: "Pago por cheque" },
-        { key: 4, name: "Pago por banco" },
-        { key: 5, name: "Prestamos" },
-        { key: 22, name: "Ponches" },
-        { key: 27, name: "Permiso" },
-        { key: 14, name: "Seguro Medico" },
-        { key: 24, name: "Seguro de Dependiente" },
-        { key: 7, name: "Vacaciones" },
+        {
+            key: 16,
+            name: "Horas Retroactivas",
+            filters: [
+                "department",
+                "accountingAccount",
+                "costCenter",
+                "employee",
+                "conceptCode",
+                "position",
+                "payrollpay",
+            ],
+        },
+        {
+            key: 20,
+            name: "Horas Extras",
+            filters: [
+                "department",
+                "costCenter",
+                "employee",
+                "conceptCode",
+                "position",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 21,
+            name: "Horas no laboradas",
+            filters: [
+                "department",
+                "costCenter",
+                "employee",
+                "position",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 26,
+            name: "Historial de Empleados",
+            filters: [
+                "department",
+                "employee",
+                "position",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 8,
+            name: "Incentivos",
+            filters: [
+                "department",
+                "employee",
+                "position",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 18,
+            name: "Licencias",
+            filters: [
+                "department",
+                "employee",
+                "conceptCode",
+                "position",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 1,
+            name: "Pago por cheque",
+            filters: ["employee", "endDate", "startDate"],
+        },
+        {
+            key: 4,
+            name: "Pago por banco",
+            filters: ["employee"],
+        },
+        {
+            key: 5,
+            name: "Prestamos",
+            filters: ["employee", "endDate", "startDate"],
+        },
+        {
+            key: 22,
+            name: "Ponches",
+            filters: [
+                "department",
+                "employee",
+                "position",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 27,
+            name: "Permiso",
+            filters: [
+                "department",
+                "employee",
+                "conceptCode",
+                "position",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 14,
+            name: "Seguro Medico",
+            filters: [
+                "accountingAccount",
+                "costCenter",
+                "employee",
+                "conceptCode",
+            ],
+        },
+        {
+            key: 24,
+            name: "Seguro de Dependiente",
+            filters: ["employee", "conceptCode", "endDate", "startDate"],
+        },
+        {
+            key: 7,
+            name: "Vacaciones",
+            filters: [
+                "department",
+                "employee",
+                "conceptCode",
+                "position",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
         // { key: 28, name: "Sabana Reporte de Nómina" },
-        { key: 108, name: "Centro de Costo" },
-        { key: 109, name: "Total de Impuesto" },
-        { key: 110, name: "Beneficios" },
-        { key: 111, name: "Pago Neto" },
-        { key: 112, name: "Departamentos" },
-        { key: 113, name: "Posiciones" },
+        {
+            key: 108,
+            name: "Centro de Costo",
+            filters: ["costCenter"],
+        },
+        {
+            key: 109,
+            name: "Total de Impuesto",
+            filters: ["employee"],
+        },
+        {
+            key: 110,
+            name: "Beneficios",
+            filters: ["employee", "conceptCode", "endDate", "startDate"],
+        },
+        {
+            key: 111,
+            name: "Pago Neto",
+            filters: [
+                "employee",
+                "conceptCode",
+                "payrollpay",
+                "endDate",
+                "startDate",
+            ],
+        },
+        {
+            key: 112,
+            name: "Departamentos",
+            filters: ["department", "costCenter", "position"],
+        },
+        {
+            key: 113,
+            name: "Posiciones",
+            filters: ["department", "position"],
+        },
     ];
 
     const {
@@ -99,6 +319,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
     } = useReportStore();
 
     const getSelectedReport = (e: DropdownChangeEvent) => {
+        setSelectedFilters(e.value?.filters);
         setSelectedReport(e.value);
         if (e.value === undefined) {
             setSelectedReportFromToolKit("");
@@ -106,7 +327,6 @@ const ReportToolkit = ({ setFilter }: Props) => {
         }
         setSelectedReportFromToolKit(e.target.value.name);
     };
-
     const onSubmit = (data: any) => {
         data.position = selectedPositions;
         data.conceptCode = selectedConcepts;
@@ -161,7 +381,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="col-12">
                         <div className="p-fluid formgrid grid">
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("startDate")}
+                            >
                                 <label htmlFor="start">Fecha de Inicio</label>
                                 <Calendar
                                     id="start"
@@ -172,7 +395,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     showButtonBar
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("endDate")}
+                            >
                                 <label htmlFor="end">Fecha Final</label>
                                 <Calendar
                                     id="end"
@@ -181,7 +407,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     showButtonBar
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("payrollpay")
+                                }
+                            >
                                 <label
                                     htmlFor="idPayrollPay"
                                     className="w-full"
@@ -198,7 +429,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     watch={watch}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("position")}
+                            >
                                 <label htmlFor="position" className="w-full">
                                     Posición
                                 </label>
@@ -210,7 +444,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handlePositionChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("conceptCode")
+                                }
+                            >
                                 <label htmlFor="conceptCode" className="w-full">
                                     Concepto
                                 </label>
@@ -223,7 +462,10 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleConceptChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("employee")}
+                            >
                                 <label
                                     htmlFor="idsEmployees"
                                     className="w-full"
@@ -239,7 +481,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleEmployeeChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("costCenter")
+                                }
+                            >
                                 <label
                                     htmlFor="idCostCenter"
                                     className="w-full"
@@ -255,7 +502,14 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     onChange={handleCostCenterChange}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes(
+                                        "accountingAccount"
+                                    )
+                                }
+                            >
                                 <label
                                     htmlFor="idAccountingAccount"
                                     className="w-full"
@@ -273,7 +527,12 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     watch={watch}
                                 />
                             </div>
-                            <div className="field col-12 md:col-6">
+                            <div
+                                className="field col-12 md:col-6"
+                                hidden={
+                                    !selectedFilters?.includes("department")
+                                }
+                            >
                                 <label
                                     htmlFor="idDepartment"
                                     className="w-full"

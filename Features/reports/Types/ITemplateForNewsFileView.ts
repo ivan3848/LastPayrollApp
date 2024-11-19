@@ -8,7 +8,7 @@ export interface ITemplateForNewsFileView {
     birthDate: Date;
     sex: number;
     salary: number;
-    idPayrollPay: number;
+    payrollCode: string;
     totalProfit: number;
     payrollPayDate: Date;
     type: string;

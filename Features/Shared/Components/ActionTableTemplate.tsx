@@ -5,9 +5,10 @@ import { useModuleAccess } from "../Hooks/useModuleAccess";
 interface Props<T> {
     entity: T;
     handleEdit?: (entity: T) => void;
-    handleDelete: (entity: T) => void;
+    handleDelete?: (entity: T) => void;
     isCustomDelete?: boolean;
     accessName?: string;
+    icon?: string | undefined;
 }
 
 function ActionTableTemplate<T>({
@@ -16,6 +17,7 @@ function ActionTableTemplate<T>({
     handleDelete,
     isCustomDelete,
     accessName,
+    icon,
 }: Props<T>) {
     const canWrite = useModuleAccess(accessName!);
 
@@ -23,7 +25,7 @@ function ActionTableTemplate<T>({
         <>
             {canWrite && handleEdit && (
                 <Button
-                    icon="pi pi-pencil"
+                    icon={icon !== undefined ? icon : "pi pi-pencil"}
                     className="mr-2"
                     rounded
                     severity="info"
@@ -34,14 +36,14 @@ function ActionTableTemplate<T>({
                 <>
                     {isCustomDelete ? (
                         <Button
-                            icon="pi pi-undo"
+                            icon={icon !== undefined ? icon : "pi pi-undo"}
                             rounded
                             severity="secondary"
                             onClick={() => handleDelete(entity)}
                         />
                     ) : (
                         <Button
-                            icon="pi pi-trash"
+                            icon={icon !== undefined ? icon : "pi pi-trash"}
                             rounded
                             severity="secondary"
                             onClick={() => handleDelete(entity)}

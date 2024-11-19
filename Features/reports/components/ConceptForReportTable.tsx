@@ -37,7 +37,20 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useConceptForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useConceptForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useConceptForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -70,7 +83,8 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Conceptos de nomina";
@@ -79,7 +93,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.text(text, textX, 16);
         autoTable(doc, {
             head: [["CC-nómina", "Concepto", "Beneficio", "Importe actual"]],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.conceptCode,
                 item.concept,
                 item.isProfit ? "Si" : "No",
@@ -90,8 +104,9 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteConceptoNomina.pdf");
     };
 
-    const exportXLSX = () => {
-        const conceptWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const conceptWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

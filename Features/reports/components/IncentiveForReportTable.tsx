@@ -37,9 +37,19 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useIncentiveForReportQuery(
+    const { data, isLoading, refetch } = useIncentiveForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useIncentiveForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -74,7 +84,8 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de incentivos";
@@ -84,7 +95,6 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código de Empleado",
                     "Nombre",
                     "Posición",
                     "Departamento",
@@ -99,8 +109,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Pago",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employee,
                 item.position,
                 item.department,
@@ -119,14 +128,14 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteIncentivos.pdf");
     };
 
-    const exportXLSX = () => {
-        const incentiveWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const incentiveWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = incentiveWithoutIdentifier.map((incentive) => {
             return {
-                "Código de Empleado": incentive.idEmployee ?? "N/A",
                 Nombre: incentive.employee ?? "N/A",
                 Posición: incentive.position ?? "N/A",
                 Departamento: incentive.department ?? "N/A",
@@ -229,6 +238,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"

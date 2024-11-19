@@ -40,13 +40,25 @@ const DependantInsuranceForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useDependantInsuranceForReportQuery(
+    const { data, isLoading, refetch } = useDependantInsuranceForReportQuery(
         filterReport,
         params
     );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useDependantInsuranceForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -75,7 +87,8 @@ const DependantInsuranceForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de seguros dependientes";
@@ -85,13 +98,10 @@ const DependantInsuranceForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
                     "Empleado",
                     "Cedula Dependiente",
                     "Dependiente",
                     "Parentesco",
-                    "Código Empleado Asegurado",
-                    "Código Seguro",
                     "Seguro",
                     "% a descontar",
                     "Cantidad",
@@ -100,14 +110,11 @@ const DependantInsuranceForReportTable = ({
                     "Final",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.dependantIdentification,
                 item.fullNameDependant,
                 item.statusDescription,
-                item.idPersonInsurance,
-                item.idInsurance,
                 item.description,
                 item.percentDiscount,
                 item.amount,
@@ -120,23 +127,20 @@ const DependantInsuranceForReportTable = ({
         doc.save("ReporteSegurosDependiente.pdf");
     };
 
-    const exportXLSX = () => {
-        const dependantInsuranceWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const dependantInsuranceWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = dependantInsuranceWithoutIdentifier.map(
             (dependantInsurance) => {
                 return {
-                    "Código Empleado": dependantInsurance.idEmployee ?? "N/A",
                     Empleado: dependantInsurance.employeeName ?? "N/A",
                     "Cedula Dependiente":
                         dependantInsurance.dependantIdentification ?? "N/A",
                     Dependiente: dependantInsurance.fullNameDependant ?? "N/A",
                     Parentesco: dependantInsurance.statusDescription ?? "N/A",
-                    "Código Empleado Asegurado":
-                        dependantInsurance.idPersonInsurance ?? "N/A",
-                    "Código Seguro": dependantInsurance.idInsurance ?? "N/A",
                     Seguro: dependantInsurance.description ?? "N/A",
                     "% a descontar":
                         dependantInsurance.percentDiscount ?? "N/A",
@@ -220,6 +224,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -281,6 +286,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPersonInsurance"
                     filterPlaceholder="Buscar por código empleado asegurado"
                     showFilterMenuOptions={false}
@@ -293,6 +299,7 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idInsurance"
                     filterPlaceholder="Buscar por código seguro"
                     showFilterMenuOptions={false}

@@ -37,7 +37,20 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = usePunchForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = usePunchForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = usePunchForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de ponche";
@@ -81,11 +95,8 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
                     "Empleado",
                     "Horario",
-                    "Código Posición",
-                    "Código Departamento",
                     "Posición",
                     "Departamento",
                     "Fecha de ponche",
@@ -94,12 +105,9 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Manual",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.workScheduler,
-                item.idPosition,
-                item.idDepartment,
                 item.position,
                 item.department,
                 item.punchDate,
@@ -112,18 +120,16 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePonche.pdf");
     };
 
-    const exportXLSX = () => {
-        const punchWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const punchWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = punchWithoutIdentifier.map((punch) => {
             return {
-                "Código Empleado": punch.idEmployee,
                 Empleado: punch.employeeName,
                 Horario: punch.workScheduler,
-                "Código Posición": punch.idPosition,
-                "Código Departamento": punch.idDepartment,
                 Posición: punch.position,
                 Departamento: punch.department,
                 "Fecha de ponche": new Date(punch.punchDate)
@@ -204,6 +210,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -244,6 +251,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idPosition"
                     filterPlaceholder="Buscar por código posición"
                     showFilterMenuOptions
@@ -257,6 +265,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idDepartment"
                     filterPlaceholder="Buscar por código departamento"
                     showFilterMenuOptions

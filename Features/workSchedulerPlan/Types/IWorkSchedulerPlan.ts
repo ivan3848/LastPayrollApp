@@ -2,7 +2,7 @@ export interface IWorkSchedulerPlan {
     id: string;
     idEmployee: number;
     employeeName: string;
-    date: Date;
+    date: string;
     day: string;
     schedule: string;
     hourAmount: number;

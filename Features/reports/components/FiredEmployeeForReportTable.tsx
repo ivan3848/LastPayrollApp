@@ -21,7 +21,6 @@ const FiredEmployeeForReportTable = ({
     filterValues,
     setFilterValues,
 }: Props) => {
-    
     const {
         setPage,
         setPageSize,
@@ -40,9 +39,19 @@ const FiredEmployeeForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useFiredEmployeeForReportQuery(
+    const { data, isLoading, refetch } = useFiredEmployeeForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useFiredEmployeeForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -77,7 +86,8 @@ const FiredEmployeeForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte Desvinculados";
@@ -87,9 +97,8 @@ const FiredEmployeeForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
                     "Empleado",
-                    "Código Empleado Desvinculado",
+                    //"Código Empleado Desvinculado",
                     "Cédula",
                     "Salario",
                     "Departamento",
@@ -107,11 +116,10 @@ const FiredEmployeeForReportTable = ({
                     // "Pago neto",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
-                item.idFiredEmployee,
-                item.idPerson,
+                //item.idFiredEmployee,
+                //item.idPerson,
                 item.employeeSalary,
                 item.departmentName,
                 item.conceptName,
@@ -132,17 +140,17 @@ const FiredEmployeeForReportTable = ({
         doc.save("ReporteDesvinculados.pdf");
     };
 
-    const exportXLSX = () => {
-        const fireEmployeeWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const fireEmployeeWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = fireEmployeeWithoutIdentifier.map((fireEmployee) => {
             return {
-                "Código Empleado": fireEmployee.idEmployee ?? "N/A",
                 Empleado: fireEmployee.employeeName ?? "N/A",
-                "Código Empleado Desvinculado":
-                    fireEmployee.idFiredEmployee ?? "N/A",
+                // "Código Empleado Desvinculado":
+                //     fireEmployee.idFiredEmployee ?? "N/A",
                 Cédula: fireEmployee.identification ?? "N/A",
                 Salario: fireEmployee.employeeSalary ?? "N/A",
                 Departamento: fireEmployee.departmentName ?? "N/A",
@@ -230,6 +238,7 @@ const FiredEmployeeForReportTable = ({
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -255,6 +264,7 @@ const FiredEmployeeForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idFiredEmployee"
                     filterPlaceholder="Buscar por código empleado desvinculado"
                     showFilterMenuOptions
