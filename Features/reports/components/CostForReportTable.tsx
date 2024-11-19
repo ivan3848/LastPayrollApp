@@ -37,7 +37,20 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useCostForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useCostForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useCostForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Costo";
@@ -91,7 +105,7 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Mes",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.costCenter,
                 item.accountNumber,
                 item.department,
@@ -106,8 +120,9 @@ const CostForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteCosto.pdf");
     };
 
-    const exportXLSX = () => {
-        const costWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const costWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

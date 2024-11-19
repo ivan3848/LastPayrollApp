@@ -37,7 +37,21 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useProfitForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useProfitForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useProfitForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -70,7 +84,8 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Beneficio";
@@ -88,7 +103,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Fin",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.conceptName,
                 item.amount,
@@ -101,8 +116,9 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteBeneficio.pdf");
     };
 
-    const exportXLSX = () => {
-        const profitWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const profitWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

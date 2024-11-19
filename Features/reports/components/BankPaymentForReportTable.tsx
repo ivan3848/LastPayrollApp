@@ -40,10 +40,21 @@ const BankPaymentForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useBankPaymentForReportQuery(
+    const { data, isLoading, refetch } = useBankPaymentForReportQuery(
         filterReport,
         params
     );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useBankPaymentForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -75,7 +86,8 @@ const BankPaymentForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de pago por banco";
@@ -92,8 +104,7 @@ const BankPaymentForReportTable = ({
                     "Importe",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.paymentMethod,
                 item.bankName,
@@ -104,14 +115,14 @@ const BankPaymentForReportTable = ({
         doc.save("ReportePagoPorBanco.pdf");
     };
 
-    const exportXLSX = () => {
-        const bankWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const bankWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = bankWithoutIdentifier.map((bank) => {
             return {
-                //"Código Empleado": bank.idEmployee,
                 Nombre: bank.employeeName,
                 "Método de pago": bank.paymentMethod,
                 Banco: bank.bankName,

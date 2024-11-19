@@ -37,7 +37,21 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useVacationForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useVacationForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useVacationForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -70,7 +84,8 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Vacaciones";
@@ -99,7 +114,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Concepto",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.idEmployee,
                 item.employeeName,
                 item.startDate,
@@ -123,8 +138,9 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteVacaciones.pdf");
     };
 
-    const exportXLSX = () => {
-        const vacationWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const vacationWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

@@ -36,9 +36,19 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useCostCenterForReportQuery(
+    const { data, isLoading, refetch } = useCostCenterForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useCostCenterForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -73,7 +83,8 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Centro de Costo";
@@ -81,15 +92,8 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
         autoTable(doc, {
-            head: [
-                [
-                    //"Código centro de costo",
-                    "Nombre de centro de costo",
-                    "Numero de cuenta",
-                ],
-            ],
-            body: data?.items.map((item) => [
-                //item.idCostCenter,
+            head: [["Nombre de centro de costo", "Numero de cuenta"]],
+            body: excelData?.items.map((item) => [
                 item.costCenterName,
                 item.accountNumber,
             ]),
@@ -98,14 +102,14 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteGastosNomina.pdf");
     };
 
-    const exportXLSX = () => {
-        const costCenterWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const costCenterWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = costCenterWithoutIdentifier.map((costCenter) => {
             return {
-                //"Código centro de costo": costCenter.idCostCenter ?? "N/A",
                 "Nombre de centro de costo": costCenter.costCenterName ?? "N/A",
                 "Numero de cuenta": costCenter.accountNumber ?? "N/A",
             };

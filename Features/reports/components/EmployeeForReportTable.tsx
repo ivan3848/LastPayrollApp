@@ -38,7 +38,20 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useEmployeeForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useEmployeeForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useEmployeeForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -72,7 +85,8 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Empleados";
@@ -100,7 +114,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Método de pago",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.idEmployee,
                 item.accountNumberCC,
                 item.name,
@@ -123,11 +137,11 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteEmpleados.pdf");
     };
 
-    const exportXLSX = () => {
-        const employeesWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const employeesWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
-
         const renamed = employeesWithoutIdentifier.map((employee) => {
             return {
                 "Número de cuenta": employee.accountNumber ?? "N/A",
@@ -168,7 +182,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 "Método de pago": employee.paymentMethod ?? "N/A",
             };
         });
-
         const worksheet = XLSX.utils.json_to_sheet(renamed);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");

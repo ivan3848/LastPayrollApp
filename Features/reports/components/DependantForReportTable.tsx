@@ -36,9 +36,19 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useDependantForReportQuery(
+    const { data, isLoading, refetch } = useDependantForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useDependantForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -73,7 +83,8 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte Dependiente";
@@ -83,15 +94,13 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    "Código Empleado",
                     "Nombre Completo",
                     "ID Dependiente",
                     "Estado",
                     "Nombre Completo del Dependiente",
                 ],
             ],
-            body: data?.items.map((item) => [
-                item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.dependantIdentification,
                 item.statusDescription,
@@ -102,14 +111,14 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteDeDependiente.pdf");
     };
 
-    const exportXLSX = () => {
-        const dependantWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const dependantWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = dependantWithoutIdentifier.map((dependant) => {
             return {
-                "Código Empleado": dependant.idEmployee ?? "N/A",
                 "Nombre Completo": dependant.employeeName ?? "N/A",
                 "ID Dependiente": dependant.dependantIdentification ?? "N/A",
                 Estado: dependant.statusDescription ?? "N/A",
@@ -189,6 +198,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

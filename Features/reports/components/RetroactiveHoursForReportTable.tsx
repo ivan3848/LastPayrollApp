@@ -40,10 +40,21 @@ const RetroactiveHoursForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useRetroactiveHoursForReportQuery(
+    const { data, isLoading, refetch } = useRetroactiveHoursForReportQuery(
         filterReport,
         params
     );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useRetroactiveHoursForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -76,7 +87,8 @@ const RetroactiveHoursForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de horas retroactivas";
@@ -100,7 +112,7 @@ const RetroactiveHoursForReportTable = ({
                     "Monto",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.fullName,
                 item.date,
                 item.payrollName,
@@ -119,8 +131,9 @@ const RetroactiveHoursForReportTable = ({
         doc.save("ReporteHorasRetroactivas.pdf");
     };
 
-    const exportXLSX = () => {
-        const retroactiveWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const retroactiveWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

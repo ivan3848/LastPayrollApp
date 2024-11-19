@@ -38,9 +38,18 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useInsuranceForReportQuery(
+    const { data, isLoading, refetch } = useInsuranceForReportQuery(
         filterReport,
         params
+    );
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useInsuranceForReportQuery(
+        filterReport,
+        updatedParams
     );
     const reset = () => {
         setFilterValues({});
@@ -73,7 +82,8 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Seguro Medico";
@@ -83,39 +93,29 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    //"Código Seguro",
-                    //"Código Empleado",
                     "Titular",
                     "Dependiente",
                     "Cédula dependiente",
-                    //"ID Concepto",
                     "Código de Concepto",
                     "Concepto",
                     "Seguro",
                     "Plan",
                     "Centro de Costo",
-                    //"ID Cuenta contable",
-                    //"ID Centro costo",
                     "Numero de cuenta",
                     "Cuenta contable",
                     "Porcentaje a Descontar",
                     "Monto",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idInsurance,
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.fullNameDependant,
                 item.identificationDisplay,
-                //item.idConcept,
                 item.conceptCode,
                 item.conceptName,
                 item.description,
                 item.planType,
                 item.costCenter,
-                //item.idAccountingAccount,
-                //item.idCostCenter,
                 item.accountNumber,
                 item.accountingAccount,
                 item.percentDiscount,
@@ -126,26 +126,22 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteSeguroMedico.pdf");
     };
 
-    const exportXLSX = () => {
-        const insuranceWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const insuranceWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = insuranceWithoutIdentifier.map((insurance) => {
             return {
-                //"Código Seguro": insurance.idInsurance ?? "N/A",
-                //"Código Empleado": insurance.idEmployee ?? "N/A",
                 Titular: insurance.employeeName ?? "N/A",
                 Dependiente: insurance.fullNameDependant ?? "N/A",
                 "Cédula dependiente": insurance.identificationDisplay ?? "N/A",
-                //"ID Concepto": insurance.idConcept ?? "N/A",
                 "Código de Concepto": insurance.conceptCode ?? "N/A",
                 Concepto: insurance.conceptName ?? "N/A",
                 Seguro: insurance.description ?? "N/A",
                 Plan: insurance.planType ?? "N/A",
                 "Centro de Costo": insurance.costCenter ?? "N/A",
-                //"ID Cuenta contable": insurance.idAccountingAccount ?? "N/A",
-                //"ID Centro costo": insurance.idCostCenter ?? "N/A",
                 "Numero de cuenta": insurance.accountNumber ?? "N/A",
                 "Cuenta contable": insurance.accountingAccount ?? "N/A",
                 "Porcentaje a Descontar": `${insurance.percentDiscount}%`,

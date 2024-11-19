@@ -12,7 +12,6 @@ import { useState } from "react";
 import * as XLSX from "xlsx";
 import usePayrollPayExpenseForReportQuery from "../Hook/usePayrollPayExpenseForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
-import { IBankRelationshipForReport } from "../Types/IBankRelationshipForReport";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -40,9 +39,19 @@ const PayrollPayExpenseForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = usePayrollPayExpenseForReportQuery(
+    const { data, isLoading, refetch } = usePayrollPayExpenseForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = usePayrollPayExpenseForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -77,7 +86,8 @@ const PayrollPayExpenseForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Gastos de Nomina";
@@ -96,7 +106,7 @@ const PayrollPayExpenseForReportTable = ({
                     "Monto",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.idEmployee,
                 item.name,
                 item.payrollName,
@@ -110,8 +120,9 @@ const PayrollPayExpenseForReportTable = ({
         doc.save("ReporteGastosNomina.pdf");
     };
 
-    const exportXLSX = () => {
-        const bankRelationshipWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const bankRelationshipWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

@@ -37,7 +37,20 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useLicencesForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useLicencesForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useLicencesForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Licencias";
@@ -81,19 +95,14 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    //"Código Empleado",
-                    //"Código de Posición",
                     "Posición",
-                    //"Código de Departamento",
                     "Departamento",
-                    //"Código Licencia",
                     "Empleado",
                     "Nombre de Doctor",
                     "Código de Concepto",
                     "Concepto",
                     "Dias no laborados",
                     "A Pagar",
-                    //"Código Nomina",
                     "Nomina",
                     "Descripción",
                     "Inicio",
@@ -101,20 +110,15 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Pago",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
-                //item.idPosition,
+            body: excelData?.items.map((item) => [
                 item.position,
-                //item.idDepartment,
                 item.department,
-                //item.idLicences,
                 item.employeeName,
                 item.doctorName,
                 item.conceptCode,
                 item.conceptName,
                 item.workDayOff,
                 item.isToPay,
-                //item.idPayrollPay,
                 item.payrollPay,
                 item.description,
                 item.startDate,
@@ -126,26 +130,22 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteDeLicencias.pdf");
     };
 
-    const exportXLSX = () => {
-        const licencesWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const licencesWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = licencesWithoutIdentifier.map((licences) => {
             return {
-                //"Código Empleado": licences.idEmployee ?? "N/A",
-                //"Código de Posición": licences.idPosition ?? "N/A",
                 Posición: licences.position ?? "N/A",
-                //"Código de Departamento": licences.idDepartment ?? "N/A",
                 Departamento: licences.department ?? "N/A",
-                //"Código Licencia": licences.idLicences ?? "N/A",
                 Empleado: licences.employeeName ?? "N/A",
                 "Nombre de Doctor": licences.doctorName ?? "N/A",
                 "Código de Concepto": licences.conceptCode ?? "N/A",
                 Concepto: licences.conceptName ?? "N/A",
                 "Dias no laborados": licences.workDayOff ?? "N/A",
                 "A Pagar": licences.isToPay ?? "N/A",
-                //"Código Nomina": licences.idPayrollPay ?? "N/A",
                 Nomina: licences.payrollPay ?? "N/A",
                 Descripción: licences.description ?? "N/A",
                 Inicio:

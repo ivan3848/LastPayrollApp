@@ -37,7 +37,21 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useTotalTaxForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useTotalTaxForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useTotalTaxForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -69,7 +83,8 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Impuesto";
@@ -78,15 +93,9 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.text(text, textX, 16);
         autoTable(doc, {
             head: [
-                [
-                    //"Código Empleado",
-                    "Nombre Completo",
-                    "Total impuesto",
-                    "Total impuesto nomina",
-                ],
+                ["Nombre Completo", "Total impuesto", "Total impuesto nomina"],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.totalTax,
                 item.payrollPayTotalTax,
@@ -96,14 +105,14 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteImpuesto.pdf");
     };
 
-    const exportXLSX = () => {
-        const totalTaxWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const totalTaxWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = totalTaxWithoutIdentifier.map((totalTax) => {
             return {
-                //"Código Empleado": totalTax.idEmployee,
                 "Nombre Completo": totalTax.employeeName,
                 "Total impuesto": totalTax.totalTax.toLocaleString("es-DO", {
                     style: "currency",

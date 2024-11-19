@@ -40,11 +40,19 @@ const CheckPaymentForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useCheckPaymentForReportQuery(
+    const { data, isLoading, refetch } = useCheckPaymentForReportQuery(
         filterReport,
         params
     );
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
 
+    const { data: excelData } = useCheckPaymentForReportQuery(
+        filterReport,
+        updatedParams
+    );
     const reset = () => {
         setFilterValues({});
     };
@@ -77,7 +85,8 @@ const CheckPaymentForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de pago por cheque";
@@ -94,7 +103,7 @@ const CheckPaymentForReportTable = ({
                     "Fecha de Nomina",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 //item.idEmployee,
                 item.employeeName,
                 item.paymentMethod,
@@ -106,8 +115,9 @@ const CheckPaymentForReportTable = ({
         doc.save("ReportePagoPorCheque.pdf");
     };
 
-    const exportXLSX = () => {
-        const checkPayWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const checkPayWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

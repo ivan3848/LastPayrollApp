@@ -37,10 +37,25 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = usePositionForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = usePositionForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = usePositionForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -69,7 +84,8 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Posiciones";
@@ -79,7 +95,6 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    //"ID Posición",
                     "Nombre de la Posición",
                     "Salario Mínimo",
                     "Salario Máximo",
@@ -89,8 +104,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Numero de Posiciones",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idPosition,
+            body: excelData?.items.map((item) => [
                 item.positionName,
                 item.minSalary,
                 item.maxSalary,
@@ -104,14 +118,14 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePosiciones.pdf");
     };
 
-    const exportXLSX = () => {
-        const positionWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const positionWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = positionWithoutIdentifier.map((position) => {
             return {
-                //"ID Posición": position.idPosition ?? "N/A",
                 "Nombre de la Posición": position.positionName ?? "N/A",
                 "Salario Mínimo":
                     position.minSalary.toLocaleString("es-DO", {

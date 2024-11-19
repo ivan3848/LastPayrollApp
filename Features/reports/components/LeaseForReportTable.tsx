@@ -37,7 +37,21 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useLeaseForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useLeaseForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useLeaseForReportQuery(
+        filterReport,
+        updatedParams
+    );
+
     const reset = () => {
         setFilterValues({});
     };
@@ -69,7 +83,8 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Préstamo";
@@ -79,23 +94,19 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    //"Código Empleado",
                     "Nombre",
                     "Fecha Inicio",
                     "Fecha de solicitud",
-                    //"Código de banco",
                     "Banco",
                     "Cantidad de Cuotas",
                     "Total pago",
                     "Total préstamo",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.startDate,
                 item.requestDate,
-                //item.bankKey,
                 item.bankName,
                 item.amountFee,
                 item.amountPay,
@@ -106,14 +117,14 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePrestamo.pdf");
     };
 
-    const exportXLSX = () => {
-        const leaseWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const leaseWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = leaseWithoutIdentifier.map((lease) => {
             return {
-                //"Código Empleado": lease.idEmployee ?? "N/A",
                 Nombre: lease.employeeName ?? "N/A",
                 "Fecha Inicio":
                     new Date(lease.startDate)
@@ -123,7 +134,6 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     new Date(lease.requestDate)
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
-                //"Código de banco": lease.bankKey ?? "N/A",
                 Banco: lease.bankName ?? "N/A",
                 "Cantidad de Cuotas": lease.amountFee ?? "N/A",
                 "Total pago":

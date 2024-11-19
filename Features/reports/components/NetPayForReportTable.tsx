@@ -37,7 +37,20 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useNetPayForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useNetPayForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useNetPayForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de pago neto";
@@ -81,7 +95,6 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
-                    //"Código de Empleado",
                     "Empleado",
                     "Salario",
                     "Código de concepto",
@@ -92,8 +105,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Fecha de pago",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.salary,
                 item.idConcept,
@@ -108,14 +120,14 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePagoNeto.pdf");
     };
 
-    const exportXLSX = () => {
-        const netPayWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const netPayWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = netPayWithoutIdentifier.map((netPay) => {
             return {
-                //"Código de Empleado": netPay.idEmployee ?? "N/A",
                 Empleado: netPay.employeeName ?? "N/A",
                 Salario:
                     netPay.salary.toLocaleString("es-DO", {

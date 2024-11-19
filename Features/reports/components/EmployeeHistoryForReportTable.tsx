@@ -40,11 +40,21 @@ const EmployeeHistoryForReportTable = ({
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useEmployeeHistoryForReportQuery(
+    const { data, isLoading, refetch } = useEmployeeHistoryForReportQuery(
         filterReport,
         params
     );
 
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useEmployeeHistoryForReportQuery(
+        filterReport,
+        updatedParams
+    );
+    
     const reset = () => {
         setFilterValues({});
     };
@@ -77,7 +87,8 @@ const EmployeeHistoryForReportTable = ({
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte historial de empleados";
@@ -87,7 +98,6 @@ const EmployeeHistoryForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    //"Código",
                     "Empleado",
                     "Estatus",
                     "Departamento",
@@ -101,8 +111,7 @@ const EmployeeHistoryForReportTable = ({
                     "Final",
                 ],
             ],
-            body: data?.items.map((item) => [
-                //item.idEmployee,
+            body: excelData?.items.map((item) => [
                 item.employeeName,
                 item.employeeStatus,
                 item.department,
@@ -120,8 +129,9 @@ const EmployeeHistoryForReportTable = ({
         doc.save("ReporteHistorialEmpleado.pdf");
     };
 
-    const exportXLSX = () => {
-        const employeeHistoryWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const employeeHistoryWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

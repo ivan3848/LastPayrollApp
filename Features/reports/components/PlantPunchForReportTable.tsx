@@ -37,9 +37,19 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = usePlantPunchForReportQuery(
+    const { data, isLoading, refetch } = usePlantPunchForReportQuery(
         filterReport,
         params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = usePlantPunchForReportQuery(
+        filterReport,
+        updatedParams
     );
 
     const reset = () => {
@@ -74,7 +84,8 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte ponches por planta";
@@ -83,7 +94,7 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.text(text, textX, 16);
         autoTable(doc, {
             head: [["Planta", "Fecha", "Total de ponches"]],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.plant,
                 item.date,
                 item.totalPlantPunch,
@@ -93,8 +104,9 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReportePonchePlanta.pdf");
     };
 
-    const exportXLSX = () => {
-        const plantPunchWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const plantPunchWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 

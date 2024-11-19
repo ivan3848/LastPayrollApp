@@ -37,7 +37,20 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useLatenessForReportQuery(filterReport, params);
+    const { data, isLoading, refetch } = useLatenessForReportQuery(
+        filterReport,
+        params
+    );
+
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useLatenessForReportQuery(
+        filterReport,
+        updatedParams
+    );
 
     const reset = () => {
         setFilterValues({});
@@ -71,7 +84,8 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de horas no laboradas";
@@ -96,7 +110,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Numero de Cuenta",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.fullName,
                 item.costCenter,
                 item.salary,
@@ -116,15 +130,14 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteHorasNoLaboradas.pdf");
     };
 
-    const exportXLSX = () => {
-        const latenessWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+        const latenessWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = latenessWithoutIdentifier.map((lateness) => {
             return {
-                //"Código Empleado": lateness.idEmployee ?? "N/A",
-                //"Código Tardanza": lateness.idLateness ?? "N/A",
                 Empleado: lateness.fullName ?? "N/A",
                 "Centro de Costo": lateness.costCenter ?? "N/A",
                 Salario:
@@ -141,14 +154,10 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .toLocaleDateString()
                         .replace("-", "/") ?? "N/A",
                 Nomina: lateness.payrollName ?? "N/A",
-                //"Código Nomina": lateness.idPayrollPay ?? "N/A",
                 Pago: lateness.isPaid ?? "N/A",
-                //"Código Posición": lateness.idPosition ?? "N/A",
                 Posición: lateness.position ?? "N/A",
-                //"Código Departamento": lateness.idDepartment ?? "N/A",
                 Departamento: lateness.department ?? "N/A",
                 "Numero de Cuenta": lateness.accountNumber ?? "N/A",
-                //"Código Centro de Costo": lateness.idCostCenter ?? "N/A",
             };
         });
 

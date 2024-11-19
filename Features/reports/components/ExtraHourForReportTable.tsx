@@ -37,9 +37,18 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
         setFilterReport(filterValues!);
     }
 
-    const { data, isLoading } = useExtraHourForReportQuery(
+    const { data, isLoading, refetch } = useExtraHourForReportQuery(
         filterReport,
         params
+    );
+    const updatedParams = {
+        ...params,
+        filter: { ...params.filter, pageSize: data?.totalCount ?? 0 },
+    };
+
+    const { data: excelData } = useExtraHourForReportQuery(
+        filterReport,
+        updatedParams
     );
     const reset = () => {
         setFilterValues({});
@@ -72,7 +81,8 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
         ]);
     };
 
-    const exportPDF = () => {
+    const exportPDF = async () => {
+        await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
         const text = "Reporte de Horas Extras";
@@ -106,7 +116,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código Centro de Costo",
                 ],
             ],
-            body: data?.items.map((item) => [
+            body: excelData?.items.map((item) => [
                 item.accountNumber,
                 item.idEmployee,
                 item.idExtraHourLateness,
@@ -135,17 +145,16 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.save("ReporteHorasExtras.pdf");
     };
 
-    const exportXLSX = () => {
-        const extraHourWithoutIdentifier = data.items.map(
+    const exportXLSX = async () => {
+        await refetch();
+
+        const extraHourWithoutIdentifier = excelData.items.map(
             ({ identifier, ...rest }) => rest
         );
 
         const renamed = extraHourWithoutIdentifier.map((extraHour) => {
             return {
                 "Numero de Cuenta": extraHour.accountNumber ?? "N/A",
-                //"Código Empleado": extraHour.idEmployee ?? "N/A",
-                //"Código horas no Laboradas":
-                //extraHour.idExtraHourLateness ?? "N/A",
                 Empleado: extraHour.fullName ?? "N/A",
                 "Centro de Costo": extraHour.costCenter ?? "N/A",
                 Salario:
