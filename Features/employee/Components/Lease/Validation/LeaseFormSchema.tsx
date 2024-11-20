@@ -10,9 +10,7 @@ const LeaseFormSchema = () => {
                 message: "Debe de una recurrencia de pago",
             }),
             fees: z.number().optional(),
-            amountFee: z.number({
-                message: "Debe de seleccionar un monto de cuota",
-            }),
+            amountFee: z.number().optional(),
             totalAmount: z.number({
                 message: "Debe tener las cuotas",
             }),
@@ -21,9 +19,7 @@ const LeaseFormSchema = () => {
             }),
             startDate: z.date({ message: "El campo debe de tener una fecha." }),
             endDate: z.date({ message: "El campo debe de tener una fecha." }),
-            monthlyFee: z.number({
-                message: "Debe de seleccionar una cuota mensual",
-            }),
+            monthlyFee: z.number().optional(),
             idBank: z.number({ message: "Se debe seleccionar el banco" }),
             leaseNumber: z.string({
                 message: "Debe de ingresar un número de préstamo",
@@ -77,9 +73,7 @@ const LeaseFormSchema = () => {
             message: "Debe de una recurrencia de pago",
         }),
         fees: z.number().optional(),
-        amountFee: z.number({
-            message: "Debe de seleccionar un monto de cuota",
-        }),
+        amountFee: z.number().optional(),
         totalAmount: z.number({
             message: "Debe tener las cuotas",
         }),
@@ -88,9 +82,7 @@ const LeaseFormSchema = () => {
         }),
         startDate: z.date({ message: "El campo debe de tener una fecha." }),
         endDate: z.date({ message: "El campo debe de tener una fecha." }),
-        monthlyFee: z.number({
-            message: "Debe de seleccionar una cuota mensual",
-        }),
+        monthlyFee: z.number().optional(),
         idBank: z.number({ message: "Se debe seleccionar el banco" }),
         leaseNumber: z.string({
             message: "Debe de ingresar un número de préstamo",
@@ -101,17 +93,13 @@ const LeaseFormSchema = () => {
             message: "Debe de seleccionar un método de pago",
         }),
         idCompany: z.number().optional(),
-        idDepositConcept: z.number({
-            message: "Debe de seleccionar un concepto",
-        }),
-        idDiscountConcept: z.number({
-            message: "Debe de seleccionar un concepto",
-        }),
+        idDepositConcept: z.number().optional(),
+        idDiscountConcept: z.number().optional(),
         totalDebt: z.number().optional(),
         recurrency: z.string().optional(),
     });
 
-    
+
 
     return { editEntityFormSchema, addEntityFormSchema };
 };
