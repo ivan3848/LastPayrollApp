@@ -3,8 +3,8 @@ interface ILease {
     idEmployee: number;
     idConcept: number;
     idRecurrencyStatus: number;
-    fees: number;
-    amountFee: number;
+    fees?: number;
+    amountFee?: number;
     totalAmount: number;
     requestDate: Date;
     startDate: Date;

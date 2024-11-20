@@ -15,6 +15,7 @@ import GenericStatusDropDown from "@/Features/Shared/Components/GenericStatusDro
 import { TABLE_NAME_RECURRENCY } from "@/constants/StatusTableName";
 import { SelectButton } from "primereact/selectbutton";
 import { useConceptByStatusCodeQuery } from "@/Features/concept/Hooks/useConceptQuery";
+import GenericInputNumber from "@/Features/Shared/Components/GenericInputNumber";
 
 interface Props {
     entity: ILease;
@@ -77,6 +78,8 @@ const EditLease = ({
 
     const onSubmit = (data: ILease) => {
         data.idEmployee = entity.idEmployee;
+        data.idDepositConcept = data.idDepositConcept ?? entity.idConcept
+        data.idDiscountConcept = data.idDiscountConcept ?? entity.idConcept
         editEntity.mutate(data);
     };
 
@@ -84,23 +87,48 @@ const EditLease = ({
         setEditEntityDialog(false);
     };
 
-    function FeeLease(e?: any) {
-        const recurrency = watch("recurrency");
-        if (e?.innerText) setValue("recurrency", e.innerText);
+    // function FeeLease(e?: any) {
+    //     const recurrency = watch("recurrency");
+    //     if (e?.innerText) setValue("recurrency", e.innerText);
 
-        const monthly = watch("monthlyFee", 0)!;
-        let result = 0;
+    //     const monthly = watch("monthlyFee", 0)!;
+    //     let result = 0;
 
-        if (recurrency == "Quincenal" && monthly > 0) {
-            result = monthly / 2;
-            setValue("amountFee", result);
-        } else if (recurrency == "Mensual" && monthly > 0) {
-            result = monthly / 1;
-            setValue("amountFee", result);
-        } else {
-            setValue("amountFee", 0);
-        }
+    //     if (recurrency == "Quincenal" && monthly > 0) {
+    //         result = monthly / 2;
+    //         setValue("amountFee", result);
+    //     } else if (recurrency == "Mensual" && monthly > 0) {
+    //         result = monthly / 1;
+    //         setValue("amountFee", result);
+    //     } else {
+    //         setValue("amountFee", 0);
+    //     }
+    // }
+
+    const calculateMonthlyFee = () => {
+        const totalAmount = watch("totalAmount");
+        const feeQuantity = calculateAmountFees();
+
+        return feeQuantity == 1
+            ? totalAmount
+            : totalAmount / feeQuantity
     }
+
+    const calculateAmountFees = (): number => {
+        const start = watch("startDate") ? new Date(watch("startDate")) : new Date();
+        const end = watch("endDate") ? new Date(watch("endDate")) : new Date();
+        const recurrency = watch("idRecurrencyStatus");
+
+        const startDate = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()));
+        const endDate = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()));
+
+        let months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+
+        if (endDate < startDate) months -= 1;
+
+        months = Math.max(0, months);
+        return recurrency === 15 ? months * 2 : months;
+    };
 
     return (
         <Dialog
@@ -228,7 +256,6 @@ const EditLease = ({
                                 isValid={!!errors.idRecurrencyStatus}
                                 setValue={setValue}
                                 watch={watch}
-                                onClick={FeeLease}
                                 isFocus={true}
                                 tableName={TABLE_NAME_RECURRENCY}
                             />
@@ -240,14 +267,14 @@ const EditLease = ({
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="fees">Cantidad de cuotas</label>
-                            <input
-                                {...register("fees", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
+                            <GenericInputNumber
                                 id="fees"
-                                type="number"
-                                className="p-inputtext p-component"
-                                placeholder="Se calcula al guardar el préstamo"
+                                isValid={!!errors.fees}
+                                currentValue={calculateAmountFees() ?? entity.fees}
+                                setValue={setValue}
+                                watch={watch}
+                                isReadOnly
+                                format={false}
                             />
                             {errors.fees && (
                                 <small className="p-invalid text-red-500">
@@ -259,16 +286,12 @@ const EditLease = ({
 
                         <div className="field col-12 md:col-6">
                             <label htmlFor="totalAmount">Monto total</label>
-                            <input
-                                {...register("totalAmount", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
+                            <GenericInputNumber
                                 id="totalAmount"
-                                type="number"
-                                onKeyUpCapture={FeeLease}
-                                onChangeCapture={FeeLease}
-                                className="p-inputtext p-component"
-                                placeholder="0.00"
+                                isValid={!!errors.fees}
+                                currentValue={entity.totalAmount}
+                                setValue={setValue}
+                                watch={watch}
                             />
                             {errors.totalAmount && (
                                 <small className="p-invalid text-red-500">
@@ -279,16 +302,15 @@ const EditLease = ({
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="monthlyFee">Cuota mensual</label>
-                            <input
-                                {...register("monthlyFee", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
+                            <GenericInputNumber
                                 id="monthlyFee"
-                                type="number"
-                                onKeyUpCapture={FeeLease}
-                                onChangeCapture={FeeLease}
-                                className="p-inputtext p-component"
-                                placeholder="0.00"
+                                isValid={!!errors.monthlyFee}
+                                currentValue={(watch("idRecurrencyStatus") == 16
+                                    ? calculateMonthlyFee()
+                                    : calculateMonthlyFee() * 2) ?? entity.monthlyFee}
+                                setValue={setValue}
+                                watch={watch}
+                                isReadOnly
                             />
                             {errors.monthlyFee && (
                                 <small className="p-invalid text-red-500">
@@ -299,16 +321,13 @@ const EditLease = ({
                         </div>
                         <div className="field col-12 md:col-6">
                             <label htmlFor="amountFee">Por cuota</label>
-                            <input
-                                {...register("amountFee", {
-                                    setValueAs: (value) => parseFloat(value),
-                                })}
+                            <GenericInputNumber
                                 id="amountFee"
-                                type="number"
-                                onKeyUpCapture={FeeLease}
-                                onChangeCapture={FeeLease}
-                                className="p-inputtext p-component"
-                                placeholder="0.00"
+                                isValid={!!errors.amountFee}
+                                currentValue={calculateMonthlyFee() ?? entity.amountFee}
+                                setValue={setValue}
+                                watch={watch}
+                                isReadOnly
                             />
                             {errors.amountFee && (
                                 <small className="p-invalid text-red-500">
