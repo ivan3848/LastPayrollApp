@@ -7,6 +7,7 @@ import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
 import PayrollConfiguration from "./PayrollConfiguration";
 import Bonification from "./BreakComponents/Bonification/Components/Bonification";
 import SeniorityIncentive from "./BreakComponents/SeniorityIncentive/Components/SeniorityIncentive";
+import PayrollArea from "@/Features/payrollArea/Components/PayrollArea";
 
 const ISRBreak = dynamic(
     () => import("./BreakComponents/ISRBreak/Components/ISRBreak")
@@ -43,6 +44,14 @@ const PayrollConfigurationTabs = () => {
                     >
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <PayrollConfiguration />
+                        </Suspense>
+                    </TabPanel>
+                    <TabPanel
+                        header="Clave de nomina"
+                        leftIcon="pi pi-key mr-2"
+                    >
+                        <Suspense fallback={<TabSkeletonTemplate />}>
+                            <PayrollArea />
                         </Suspense>
                     </TabPanel>
                 </TabView>

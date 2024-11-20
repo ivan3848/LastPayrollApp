@@ -18,7 +18,6 @@ export interface ICommission {
     isPaid: boolean;
     isTaxes: boolean;
     idPayrollPay: number;
-    idCompany: number;
     isCommissionPayroll: boolean;
     isExcecuted: boolean;
     payrollName: string;

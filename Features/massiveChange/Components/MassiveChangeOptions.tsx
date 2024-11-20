@@ -47,6 +47,18 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                         }
                     />
                 </Link>
+                <Link href="/massiveChange/complementaryData">
+                    <Button
+                        label="Data complementaria"
+                        icon="pi pi-pencil"
+                        className="m-2"
+                        onClick={() =>
+                            setAction(
+                                MassiveChangeOptionsEnum.ComplementaryData
+                            )
+                        }
+                    />
+                </Link>
             </Fieldset>
         </div>
     );

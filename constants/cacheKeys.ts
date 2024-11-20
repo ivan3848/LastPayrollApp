@@ -109,3 +109,4 @@ export const CACHE_KEY_FIREDEMPLOYEE_CONTABILIZATION =
     "firedEmployeeContabilization";
 export const CACHE_KEY_PAYROLL_CONFIGURATION = "payrollConfiguration";
 export const CACHE_KEY_WORK_SCHEDULER_PLAN = "workschedulerPlan";
+export const CACHE_KEY_COMPLEMENTARY_DATA = "complementaryData";
