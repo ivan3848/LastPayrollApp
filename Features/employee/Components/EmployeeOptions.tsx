@@ -43,7 +43,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         onClick={() => setAction(EmployeeOptionsEnum.Dependant)}
                     />
                 )}
-                {hasModuleAccess("Seguros") && (
+                {hasModuleAccess("SEGUROS") && (
                     <Button
                         label="SEGUROS"
                         icon="pi pi-shield"

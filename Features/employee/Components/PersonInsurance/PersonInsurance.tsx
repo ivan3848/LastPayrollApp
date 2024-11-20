@@ -105,5 +105,3 @@ const PersonInsurance = ({ employee }: Props) => {
 };
 
 export default PersonInsurance;
-
-

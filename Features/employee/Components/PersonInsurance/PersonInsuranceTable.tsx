@@ -35,7 +35,11 @@ const PersonInsuranceTable: React.FC<Props> = ({
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
             <h3 className="m-0">Seguros</h3>
-            <AddButton handleAdd={handleAdd} entity={employee.idEmployee} />
+            <AddButton
+                handleAdd={handleAdd}
+                entity={employee.idEmployee}
+                accessName="SEGUROS"
+            />
         </div>
     );
 
@@ -68,7 +72,6 @@ const PersonInsuranceTable: React.FC<Props> = ({
                 rowsPerPageOptions={[5, 10, 15]}
                 paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
             >
-
                 <Column
                     key={"firstName"}
                     field="firstName"
@@ -89,13 +92,17 @@ const PersonInsuranceTable: React.FC<Props> = ({
                     key="percentDiscount"
                     field="percentDiscount"
                     header="Descuento"
-                    body={(rowData: IPersonInsurance) => formatPercentage(rowData.percentDiscount)}
+                    body={(rowData: IPersonInsurance) =>
+                        formatPercentage(rowData.percentDiscount)
+                    }
                 />
                 <Column
                     key="amount"
                     field="amount"
                     header="Monto"
-                    body={(rowData: IPersonInsurance) => formatMoney(rowData.amount)}
+                    body={(rowData: IPersonInsurance) =>
+                        formatMoney(rowData.amount)
+                    }
                 />
                 <Column
                     key="startDate"
@@ -120,6 +127,7 @@ const PersonInsuranceTable: React.FC<Props> = ({
                             entity={rowData}
                             handleEdit={handleEdit}
                             handleDelete={handleDelete}
+                            accessName="SEGUROS"
                         />
                     )}
                 />

@@ -73,6 +73,8 @@ export const IModuleAccess: Readonly<{ [key: string]: string }> = {
     HERRAMIENTAS: "/toolWorkDefinitionEmployee",
     ISR_A_FAVOR: "/isrInFavor",
     PERMISOS: "/permit",
+    SEGUROS: "/insurance",
+    LICENCIA: "/license",
 
     //USERS
     CONFIGURACION_USUARIO: "/userConfiguration",
