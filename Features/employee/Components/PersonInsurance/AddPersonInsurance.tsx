@@ -15,7 +15,6 @@ import { IConcept } from "@/Features/concept/Types/IConcept";
 import useDependanHistoryById from "../Dependant/Hooks/useDependantByIdEmployee";
 import { IEmployee } from "../../Types/IEmployee";
 
-
 interface Props {
     employee: IEmployee;
     addEntityDialog: boolean;
@@ -36,9 +35,11 @@ const AddPersonInsurance = ({
     setSubmitted,
     toast,
 }: Props) => {
-
-    const [listDependats, setListDependats] = React.useState<IDependantPerson[]>([]);
-    const [selectDependant, setSelectDependant] = React.useState<IDependantPerson>();
+    const [listDependats, setListDependats] = React.useState<
+        IDependantPerson[]
+    >([]);
+    const [selectDependant, setSelectDependant] =
+        React.useState<IDependantPerson>();
     const [conceptField, setConceptField] = React.useState<IConcept>();
 
     const { addEntityFormSchema } = PersonInsuranceFormSchema();
@@ -74,12 +75,12 @@ const AddPersonInsurance = ({
             });
         }
         setListDependats(tes);
-    }
+    };
 
     const onSubmit = (data: IAddPersonInsurance) => {
         data.idEmployee = employee.idEmployee;
         data.idPerson = selectDependant?.idPerson ?? employee.idPerson!;
-        data.idConcept = data.idConcept
+        data.idConcept = data.idConcept;
         data.startDate = data!.startDate!;
         data.endDate = data!.endDate!;
         data.idEmployeeAuthorize = employee.idEmployee;
@@ -137,12 +138,11 @@ const AddPersonInsurance = ({
                         Seguros
                     </label>
                     <GenericConceptDropDown
-                        id="idConcept"
-                        isValid={!!errors.idConcept}
-                        setValue={setValue}
-                        watch={watch}
+                        id={"idConcept"}
                         code={CONCEPT_TYPE_INSURANCE}
-                        setData={setConceptField}
+                        isValid={!!errors.idConcept}
+                        watch={watch}
+                        setValue={setValue}
                     />
                     {errors.idConcept && (
                         <small className="text-red-600">
@@ -173,7 +173,10 @@ const AddPersonInsurance = ({
                         Monto
                     </label>
                     <GenericInputNumber
-                        currentValue={(conceptField?.amount || 0) * (watch("percentDiscount") / 100)}
+                        currentValue={
+                            (conceptField?.amount || 0) *
+                            (watch("percentDiscount") / 100)
+                        }
                         id="amount"
                         isValid={!!errors.amount}
                         setValue={setValue}

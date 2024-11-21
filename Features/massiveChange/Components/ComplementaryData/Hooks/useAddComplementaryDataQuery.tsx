@@ -20,13 +20,25 @@ const useAddComplementaryDataQuery = ({
     return useMutation({
         mutationFn: (entity: IComplementaryData) =>
             complementaryDataService.post(entity),
+
         onError: (error: any) => {
-            toast.current?.show({
-                severity: "warn",
-                summary: "Error",
-                detail: error.response.data,
-                life: 3000,
-            });
+            const text = error.response.data;
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: "Hay nóminas libre para calculo",
+                    life: 3000,
+                });
+                return;
+            } else {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Error",
+                    detail: error.response.data,
+                    life: 3000,
+                });
+            }
         },
         onSuccess: (e) => {
             setAddEntityDialog(false);
