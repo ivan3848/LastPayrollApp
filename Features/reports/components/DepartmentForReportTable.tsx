@@ -213,7 +213,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="departmentName"
                     filterPlaceholder="Buscar por nombre departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -225,7 +225,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -237,7 +237,7 @@ const DepartmentForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

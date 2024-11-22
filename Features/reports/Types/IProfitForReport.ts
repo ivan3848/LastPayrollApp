@@ -8,5 +8,9 @@ export interface IProfitForReport {
     end: string;
     isPaid: string;
     isPosition: string;
+    idPayrollPay: number;
+    payrollName: string;
+    amountFromPayroll: number;
+    payDate: string;
     idCompany: number;
 }

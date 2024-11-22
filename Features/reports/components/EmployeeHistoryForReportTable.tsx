@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useEmployeeHistoryForReportQuery from "../Hook/useEmployeeHistoryForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IEmployeeHistoryForReport } from "../Types/IEmployeeHistoryForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -54,7 +55,7 @@ const EmployeeHistoryForReportTable = ({
         filterReport,
         updatedParams
     );
-    
+
     const reset = () => {
         setFilterValues({});
     };
@@ -138,7 +139,7 @@ const EmployeeHistoryForReportTable = ({
         const renamed = employeeHistoryWithoutIdentifier.map(
             (employeeHistory) => {
                 return {
-                    //Código: employeeHistory.idEmployee ?? "N/A",
+                    Código: employeeHistory.idEmployee ?? "N/A",
                     Empleado: employeeHistory.employeeName ?? "N/A",
                     Departamento: employeeHistory.department ?? "N/A",
                     Posición: employeeHistory.position ?? "N/A",
@@ -203,6 +204,23 @@ const EmployeeHistoryForReportTable = ({
             />
         </div>
     );
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
 
     return (
         <div className="card">
@@ -234,7 +252,6 @@ const EmployeeHistoryForReportTable = ({
                     header="Código"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código"
@@ -251,7 +268,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -263,7 +280,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="employeeStatus"
                     filterPlaceholder="Buscar por estatus"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -275,7 +292,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -287,7 +304,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -299,7 +316,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="salaryHistory"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeHistoryForReport) =>
                         rowData.salaryHistory
@@ -319,7 +336,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="numberOfDependant"
                     filterPlaceholder="Buscar por dependientes"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -331,7 +348,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="changeType"
                     filterPlaceholder="Buscar por cambio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -340,10 +357,11 @@ const EmployeeHistoryForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="extraHour"
                     filterPlaceholder="Buscar por hora extra"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -355,7 +373,7 @@ const EmployeeHistoryForReportTable = ({
                     filterField="payrollArea"
                     filterPlaceholder="Buscar por area de nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -363,11 +381,10 @@ const EmployeeHistoryForReportTable = ({
                     header="Inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="startDateChange"
                     filterPlaceholder="Buscar por inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeHistoryForReport) =>
                         rowData.startDateChange
@@ -382,11 +399,10 @@ const EmployeeHistoryForReportTable = ({
                     header="Final"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="endDateChange"
                     filterPlaceholder="Buscar por final"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeHistoryForReport) =>
                         rowData.endDateChange

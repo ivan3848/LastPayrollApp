@@ -142,19 +142,10 @@ const BankTable = ({
                 header="Método de pago"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
-                filter
-                filterField="idStatusAccountType"
+                filterField="statusAccountType"
                 filterPlaceholder="Buscar por método de pago"
-                filterElement={
-                    <TableDropDownStatusFilter
-                        tableName={TABLE_NAME_BANK_PAYMENT_METHOD}
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                }
+                onFilterApplyClick={(e) => onFilter(e)}
                 showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
                 onFilterClear={clearFilters}
             ></Column>
 

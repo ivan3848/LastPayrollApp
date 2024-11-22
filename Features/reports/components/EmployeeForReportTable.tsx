@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useEmployeeForReportQuery from "../Hook/useEmployeeForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IEmployeeForReport } from "../Types/IEmployeeForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -146,8 +147,6 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
             return {
                 "Número de cuenta": employee.accountNumber ?? "N/A",
                 "Nombre Completo": employee.name ?? "N/A",
-                "Primer Apellido": employee.firstLastName ?? "N/A",
-                "Segundo Apellido": employee.secondLastName ?? "N/A",
                 Sexo: employee.sex ?? "N/A",
                 Cédula: employee.identification ?? "N/A",
                 "Fecha de inicio":
@@ -221,7 +220,23 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
             />
         </div>
     );
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
 
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
     return (
         <div className="card">
             <DataTable
@@ -269,7 +284,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="name"
                     filterPlaceholder="Buscar por nombre"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -281,7 +296,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="firstLastName"
                     filterPlaceholder="Buscar por primer apellido"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -293,7 +308,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="secondLastName"
                     filterPlaceholder="Buscar por segundo apellido"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -305,7 +320,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="sex"
                     filterPlaceholder="Buscar por sexo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -317,7 +332,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="identification"
                     filterPlaceholder="Buscar por cédula"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -326,11 +341,8 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
-                    filterField="employeeStartDate"
                     filterPlaceholder="Buscar por fecha de inicio"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.employeeStartDate
@@ -346,11 +358,8 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de nacimiento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
-                    filterField="birthDate"
                     filterPlaceholder="Buscar por fecha de nacimiento"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.birthDate
@@ -370,7 +379,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="salary"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.salary
@@ -391,7 +400,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -404,7 +413,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -417,7 +426,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="supervisor"
                     filterPlaceholder="Buscar por supervisor"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -428,9 +437,9 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     sortable
                     filter
                     filterField="sindicate"
+                    filterElement={yesNoFilter}
                     filterPlaceholder="Buscar por sindicato"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.sindicate ? "Si" : "No"
@@ -445,7 +454,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="workScheduler"
                     filterPlaceholder="Buscar por horario laboral"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -457,7 +466,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="disability"
                     filterPlaceholder="Buscar por discapacidad"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -469,7 +478,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="zone"
                     filterPlaceholder="Buscar por zona"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -482,7 +491,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="nationality"
                     filterPlaceholder="Buscar nacionalidad"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -494,7 +503,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="education"
                     filterPlaceholder="Buscar por educación"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -502,11 +511,8 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de Desvinculacion"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
-                    filterField="firedDate"
                     filterPlaceholder="Buscar por fecha de desvinculación"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.firedDate
@@ -525,7 +531,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollArea"
                     filterPlaceholder="Buscar por área de nómina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -550,7 +556,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -562,7 +568,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="email"
                     filterPlaceholder="Buscar por correo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -571,10 +577,10 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isWorkRelation"
                     filterPlaceholder="Buscar por labor directa"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -586,7 +592,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="bankName"
                     filterPlaceholder="Buscar por banco"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -598,7 +604,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="paymentMethod"
                     filterPlaceholder="Buscar por método de pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -610,7 +616,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumberCC"
                     filterPlaceholder="Buscar por número de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -622,7 +628,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumber"
                     filterPlaceholder="Buscar por número de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

@@ -214,7 +214,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por nombre completo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -226,7 +226,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="dependantIdentification"
                     filterPlaceholder="Buscar por ID dependiente"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -238,7 +238,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="statusDescription"
                     filterPlaceholder="Buscar por estado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -250,7 +250,7 @@ const DependantForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="fullNameDependant"
                     filterPlaceholder="Buscar por nombre completo del dependiente"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

@@ -97,7 +97,7 @@ const BankPaymentForReportTable = ({
         autoTable(doc, {
             head: [
                 [
-                    //"Código Empleado",
+                    "Código Empleado",
                     "Nombre",
                     "Método de pago",
                     "Banco",
@@ -105,6 +105,7 @@ const BankPaymentForReportTable = ({
                 ],
             ],
             body: excelData?.items.map((item) => [
+                item.idEmployee,
                 item.employeeName,
                 item.paymentMethod,
                 item.bankName,
@@ -123,6 +124,7 @@ const BankPaymentForReportTable = ({
 
         const renamed = bankWithoutIdentifier.map((bank) => {
             return {
+                "Código Empleado": bank.idEmployee,
                 Nombre: bank.employeeName,
                 "Método de pago": bank.paymentMethod,
                 Banco: bank.bankName,
@@ -205,7 +207,6 @@ const BankPaymentForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions

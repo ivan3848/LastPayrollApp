@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useNetPayForReportQuery from "../Hook/useNetPayForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { INetPayForReport } from "../Types/INetPayForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -190,6 +191,24 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -237,7 +256,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -249,7 +268,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="salary"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: INetPayForReport) =>
                         rowData.salary
@@ -269,7 +288,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por código concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -281,7 +300,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -293,7 +312,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por importe"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: INetPayForReport) =>
                         rowData.amount
@@ -326,7 +345,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollName"
                     filterPlaceholder="Buscar por nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -335,17 +354,16 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isProfit"
                     filterPlaceholder="Buscar por beneficio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: INetPayForReport) =>
                         rowData.isProfit
-                            ? rowData.isProfit
                                 ? "Si"
-                                : "No"
-                            : "N/A"
+                            : "No"
                     }
                 ></Column>
                 <Column
@@ -353,11 +371,10 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de pago"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="payrollPayDate"
                     filterPlaceholder="Buscar por fecha de pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: INetPayForReport) =>
                         rowData.payrollPayDate

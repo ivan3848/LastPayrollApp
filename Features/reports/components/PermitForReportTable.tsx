@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import usePermitForReportQuery from "../Hook/usePermitForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IPermitForReport } from "../Types/IPermitForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -191,6 +192,24 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -251,7 +270,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -276,7 +295,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -288,7 +307,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -296,11 +315,10 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="startDate"
                     filterPlaceholder="Buscar por inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPermitForReport) =>
                         rowData.startDate
@@ -315,11 +333,10 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Final"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="endDate"
                     filterPlaceholder="Buscar por final"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPermitForReport) =>
                         rowData.endDate
@@ -338,7 +355,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por código concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -350,7 +367,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptName"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -362,7 +379,7 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="hourAmount"
                     filterPlaceholder="Buscar por horas"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -371,10 +388,11 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPaid"
                     filterPlaceholder="Buscar por pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -383,10 +401,11 @@ const PermitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isToPay"
                     filterPlaceholder="Buscar por a pagar"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useVacationForReportQuery from "../Hook/useVacationForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IVacationForReport } from "../Types/IVacationForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -217,6 +218,24 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -248,7 +267,6 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -264,7 +282,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -272,11 +290,10 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="startDate"
                     filterPlaceholder="Buscar por fecha inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IVacationForReport) =>
                         rowData.startDate
@@ -291,11 +308,10 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha fin"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="endDate"
                     filterPlaceholder="Buscar por fecha fin"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IVacationForReport) =>
                         rowData.endDate
@@ -311,10 +327,11 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="paid"
                     filterPlaceholder="Buscar por pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -324,9 +341,10 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     sortable
                     filter
                     filterField="isPaid"
+                    filterElement={yesNoFilter}
                     filterPlaceholder="Buscar por pagado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -338,7 +356,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="enjoymentDay"
                     filterPlaceholder="Buscar por días de disfrute"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -350,7 +368,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="absenteeism"
                     filterPlaceholder="Buscar por absentismos"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -358,11 +376,10 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de pago"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="payDate"
                     filterPlaceholder="Buscar por fecha de pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IVacationForReport) =>
                         rowData.payDate
@@ -381,7 +398,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="dayToPay"
                     filterPlaceholder="Buscar por días a pagar"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -393,7 +410,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollName"
                     filterPlaceholder="Buscar por nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -405,7 +422,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollNumber"
                     filterPlaceholder="Buscar por número de nómina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -417,7 +434,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -429,7 +446,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -441,7 +458,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por importe"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IVacationForReport) =>
                         rowData.amount
@@ -449,7 +466,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                                   style: "currency",
                                   currency: "DOP",
                               })
-                            : "N/A"
+                            : "0.00"
                     }
                 ></Column>
                 <Column
@@ -461,7 +478,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por código de concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -473,7 +490,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

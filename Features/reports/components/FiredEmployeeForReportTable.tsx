@@ -119,7 +119,7 @@ const FiredEmployeeForReportTable = ({
             body: excelData?.items.map((item) => [
                 item.employeeName,
                 //item.idFiredEmployee,
-                //item.idPerson,
+                item.identification,
                 item.employeeSalary,
                 item.departmentName,
                 item.conceptName,
@@ -255,7 +255,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -280,7 +280,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="identification"
                     filterPlaceholder="Buscar por cédula"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -292,7 +292,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="employeeSalary"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IFiredEmployeeForReport) =>
                         rowData.employeeSalary
@@ -312,7 +312,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="departmentName"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -324,7 +324,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="conceptName"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -336,7 +336,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="dailySalary"
                     filterPlaceholder="Buscar por salario diario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IFiredEmployeeForReport) =>
                         rowData.dailySalary
@@ -356,7 +356,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="royaltiesDay"
                     filterPlaceholder="Buscar por navidad"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -368,7 +368,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="unemploymentDay"
                     filterPlaceholder="Buscar por cesantía"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -380,7 +380,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="noticeDay"
                     filterPlaceholder="Buscar por pre-aviso"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -392,7 +392,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="vacationDay"
                     filterPlaceholder="Buscar por vacaciones"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -404,7 +404,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="missLease"
                     filterPlaceholder="Buscar por deuda préstamo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IFiredEmployeeForReport) =>
                         rowData.missLease
@@ -424,7 +424,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="timeWork"
                     filterPlaceholder="Buscar por tiempo trabajado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -436,7 +436,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="amount"
                     filterPlaceholder="Buscar por cantidad"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IFiredEmployeeForReport) =>
                         rowData.amount
@@ -456,7 +456,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="totalProfit"
                     filterPlaceholder="Buscar por ingreso"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IFiredEmployeeForReport) =>
                         rowData.totalProfit
@@ -476,7 +476,7 @@ const FiredEmployeeForReportTable = ({
                     filterField="resume"
                     filterPlaceholder="Buscar por resumen"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 {/* <Column

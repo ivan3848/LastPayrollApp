@@ -23,6 +23,7 @@ import { Toast } from "primereact/toast";
 import { useRef, useState } from "react";
 import { IWorkSchedulerDetail } from "../../workSchedulerDetail/Types/IWorkSchedulerDetail";
 import { IWorkSchedulerPlan } from "../../workSchedulerPlan/Types/IWorkSchedulerPlan";
+import { Dropdown } from "primereact/dropdown";
 
 const WorkSchedulerPlanTable = () => {
     const {
@@ -288,7 +289,23 @@ const WorkSchedulerPlanTable = () => {
     const allowExpansion = () => {
         return data.items!.length > 0;
     };
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
 
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
     return (
         <div>
             <Dialog
@@ -392,6 +409,7 @@ const WorkSchedulerPlanTable = () => {
                     }}
                 />
             </div>
+
             <DataTable
                 id="AccumulateForReport-Table"
                 dataKey="identifier"
@@ -428,7 +446,7 @@ const WorkSchedulerPlanTable = () => {
                     filterField="identification"
                     filterPlaceholder="Buscar por cédula"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -452,7 +470,7 @@ const WorkSchedulerPlanTable = () => {
                     filterField="name"
                     filterPlaceholder="Buscar por nombre"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -461,10 +479,11 @@ const WorkSchedulerPlanTable = () => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="sindicate"
                     filterPlaceholder="Buscar por sindicato"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IEmployeeForReport) =>
                         rowData.sindicate ? "Si" : "No"
@@ -479,7 +498,7 @@ const WorkSchedulerPlanTable = () => {
                     filterField="posicion"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -491,7 +510,7 @@ const WorkSchedulerPlanTable = () => {
                     filterField="departamento"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -503,7 +522,7 @@ const WorkSchedulerPlanTable = () => {
                     filterField="workScheduler"
                     filterPlaceholder="Buscar por horario laboral"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column

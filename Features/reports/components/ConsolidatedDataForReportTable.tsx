@@ -251,7 +251,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="employeeName"
                     filterPlaceholder="Buscar por Empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -263,7 +263,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="extraHourDate"
                     filterPlaceholder="Buscar por Fecha"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IConsolidatedDataForReport) =>
                         new Date(rowData.extraHourDate)
@@ -293,7 +293,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="payrollName"
                     filterPlaceholder="Buscar por Nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -305,7 +305,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="costCenterName"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -317,7 +317,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por ID Concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -329,7 +329,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -354,7 +354,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="accountNumber"
                     filterPlaceholder="Buscar por numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -366,7 +366,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="name"
                     filterPlaceholder="Buscar por cuenta contable"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -378,7 +378,7 @@ const ConsolidatedDataForReportTable = ({
                     filterField="extraHourAmount"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IConsolidatedDataForReport) =>
                         rowData.extraHourAmount.toLocaleString("es-DO", {

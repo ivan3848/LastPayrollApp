@@ -59,6 +59,7 @@ const ToolWorkDefinitionTable = ({
     };
 
     const onFilter = (event: any) => {
+        console.log(event);
         setFilters([
             {
                 column: event.field,

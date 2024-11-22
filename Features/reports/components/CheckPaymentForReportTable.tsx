@@ -123,7 +123,7 @@ const CheckPaymentForReportTable = ({
 
         const renamed = checkPayWithoutIdentifier.map((checkPay) => {
             return {
-                //"Código Empleado": checkPay.idEmployee ?? "N/A",
+                "Código Empleado": checkPay.idEmployee ?? "N/A",
                 Nombre: checkPay.employeeName ?? "N/A",
                 "Método de pago": checkPay.paymentMethod ?? "N/A",
                 Importe:
@@ -209,7 +209,6 @@ const CheckPaymentForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -263,7 +262,6 @@ const CheckPaymentForReportTable = ({
                     header="Fecha de Nomina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="payrollPayDate"
                     filterPlaceholder="Buscar por fecha de nomina"
                     showFilterMenuOptions={false}

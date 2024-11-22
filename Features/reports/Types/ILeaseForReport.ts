@@ -5,6 +5,7 @@ export interface ILeaseForReport {
     conceptName: string;
     fees: number;
     amountFee: number;
+    missToPay: number;
     totalAmount: number;
     startDate: string;
     requestDate: string;

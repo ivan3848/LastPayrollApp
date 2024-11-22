@@ -2,10 +2,7 @@ export interface IInsuranceForReport {
     identifier: string;
     idEmployee: number;
     employeeName: string;
-    idInsurance: number;
-    description: string;
-    insuranceType: string;
-    planType: string;
+    idPersonInsurance: number;
     percentDiscount: number;
     amount: number;
     startDate: string;

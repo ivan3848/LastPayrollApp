@@ -231,7 +231,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="positionName"
                     filterPlaceholder="Buscar por nombre de la posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -243,7 +243,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="minSalary"
                     filterPlaceholder="Buscar por salario mínimo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPositionForReport) =>
                         rowData.minSalary
@@ -263,7 +263,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="maxSalary"
                     filterPlaceholder="Buscar por salario máximo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPositionForReport) =>
                         rowData.maxSalary
@@ -283,7 +283,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="departmentName"
                     filterPlaceholder="Buscar por nombre del departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -295,7 +295,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="filledPositions"
                     filterPlaceholder="Buscar por posiciones ocupadas"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -307,7 +307,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="availablePositions"
                     filterPlaceholder="Buscar por posiciones disponibles"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -319,7 +319,7 @@ const PositionForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="numberOfPositions"
                     filterPlaceholder="Buscar por numero de posiciones"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

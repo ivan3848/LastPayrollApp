@@ -54,7 +54,7 @@ const PayrollPayExpenseForReportTable = ({
         filterReport,
         updatedParams
     );
-    
+
     const reset = () => {
         setFilterValues({});
     };
@@ -113,7 +113,7 @@ const PayrollPayExpenseForReportTable = ({
                 item.payrollName,
                 item.concept,
                 item.costCenter,
-                item.accountNumber,
+                item.accountingAccount,
                 item.amount,
             ]),
             startY: 20,
@@ -134,7 +134,7 @@ const PayrollPayExpenseForReportTable = ({
                 Nomina: payrollPay.payrollName ?? "N/A",
                 Concepto: payrollPay.concept ?? "N/A",
                 "Centro de Costo": payrollPay.costCenter ?? "N/A",
-                "Cuenta contable": payrollPay.accountNumber ?? "N/A",
+                "Cuenta contable": payrollPay.accountingAccount ?? "N/A",
                 Monto:
                     payrollPay.amount.toLocaleString("es-DO", {
                         style: "currency",
@@ -270,12 +270,12 @@ const PayrollPayExpenseForReportTable = ({
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="accountNumber"
+                    field="accountingAccount"
                     header="Cuenta contable"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="accountNumber"
+                    filterField="accountingAccount"
                     filterPlaceholder="Buscar por Cuenta contable"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}

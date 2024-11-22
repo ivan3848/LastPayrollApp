@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useProfitForReportQuery from "../Hook/useProfitForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IProfitForReport } from "../Types/IProfitForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -101,6 +102,9 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Pagado",
                     "Inicio",
                     "Fin",
+                    "Nómina",
+                    "Fecha de Pago",
+                    "Monto de Nómina",
                 ],
             ],
             body: excelData?.items.map((item) => [
@@ -110,6 +114,9 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.isPaid,
                 item.start,
                 item.end,
+                item.payrollName,
+                item.payDate,
+                item.amountFromPayroll,
             ]),
             startY: 20,
         });
@@ -137,6 +144,11 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 Fin: new Date(profit.end)
                     .toLocaleDateString("en-GB")
                     .replace("-", "/"),
+                Nómina: profit.payrollName,
+                "Fecha de Pago": new Date(profit.payDate)
+                    .toLocaleDateString("en-GB")
+                    .replace("-", "/"),
+                "Monto de Nómina": profit.amountFromPayroll,
             };
         });
 
@@ -179,7 +191,23 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
             />
         </div>
     );
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
 
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
     return (
         <div className="card">
             <DataTable
@@ -227,7 +255,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por nombre completo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -239,7 +267,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptName"
                     filterPlaceholder="Buscar por nombre de concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -251,7 +279,7 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IProfitForReport) =>
                         rowData.amount
@@ -269,10 +297,11 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPosition"
                     filterPlaceholder="Buscar por es posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -282,9 +311,10 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     sortable
                     filter
                     filterField="isPaid"
+                    filterElement={yesNoFilter}
                     filterPlaceholder="Buscar por pagado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -292,11 +322,10 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="start"
                     filterPlaceholder="Buscar por inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IProfitForReport) =>
                         rowData.start
@@ -311,17 +340,72 @@ const ProfitForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fin"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="end"
                     filterPlaceholder="Buscar por fin"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IProfitForReport) =>
                         rowData.end
                             ? new Date(rowData.end)
                                   .toLocaleDateString("en-GB")
                                   .replace("-", "/")
+                            : "N/A"
+                    }
+                ></Column>
+                <Column
+                    field="payrollName"
+                    header="Nómina"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="payrollName"
+                    filterPlaceholder="Buscar por nómina"
+                    showFilterMenuOptions
+                    body={(rowData: IProfitForReport) =>
+                        rowData.payrollName ?? "N/A"
+                    }
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                ></Column>
+                <Column
+                    field="payDate"
+                    header="Fecha de Pago"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filterField="payDate"
+                    filterPlaceholder="Buscar por fecha de pago"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                    body={(rowData: IProfitForReport) =>
+                        rowData.payDate
+                            ? new Date(rowData.payDate)
+                                  .toLocaleDateString("en-GB")
+                                  .replace("-", "/")
+                            : "N/A"
+                    }
+                ></Column>
+                <Column
+                    field="amountFromPayroll"
+                    header="Monto de Nómina"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="amountFromPayroll"
+                    filterPlaceholder="Buscar por monto de nómina"
+                    showFilterMenuOptions
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                    body={(rowData: IProfitForReport) =>
+                        rowData.amountFromPayroll
+                            ? rowData.amountFromPayroll.toLocaleString(
+                                  "es-DO",
+                                  {
+                                      style: "currency",
+                                      currency: "DOP",
+                                  }
+                              )
                             : "N/A"
                     }
                 ></Column>

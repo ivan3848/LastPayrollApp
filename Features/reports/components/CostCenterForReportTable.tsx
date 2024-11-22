@@ -203,7 +203,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenterName"
                     filterPlaceholder="Buscar por nombre de centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -215,7 +215,7 @@ const CostCenterForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumber"
                     filterPlaceholder="Buscar por numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

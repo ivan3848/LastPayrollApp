@@ -136,6 +136,7 @@ const DependantInsuranceForReportTable = ({
         const renamed = dependantInsuranceWithoutIdentifier.map(
             (dependantInsurance) => {
                 return {
+                    "Código Empleado": dependantInsurance.idEmployee ?? "N/A",
                     Empleado: dependantInsurance.employeeName ?? "N/A",
                     "Cedula Dependiente":
                         dependantInsurance.dependantIdentification ?? "N/A",
@@ -224,7 +225,6 @@ const DependantInsuranceForReportTable = ({
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -290,7 +290,7 @@ const DependantInsuranceForReportTable = ({
                     filterField="idPersonInsurance"
                     filterPlaceholder="Buscar por código empleado asegurado"
                     showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -303,7 +303,7 @@ const DependantInsuranceForReportTable = ({
                     filterField="idInsurance"
                     filterPlaceholder="Buscar por código seguro"
                     showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column

@@ -97,9 +97,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Dependiente",
                     "Cédula dependiente",
                     "Código de Concepto",
-                    "Concepto",
                     "Seguro",
-                    "Plan",
                     "Centro de Costo",
                     "Numero de cuenta",
                     "Cuenta contable",
@@ -113,8 +111,6 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.identificationDisplay,
                 item.conceptCode,
                 item.conceptName,
-                item.description,
-                item.planType,
                 item.costCenter,
                 item.accountNumber,
                 item.accountingAccount,
@@ -139,8 +135,6 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 "Cédula dependiente": insurance.identificationDisplay ?? "N/A",
                 "Código de Concepto": insurance.conceptCode ?? "N/A",
                 Concepto: insurance.conceptName ?? "N/A",
-                Seguro: insurance.description ?? "N/A",
-                Plan: insurance.planType ?? "N/A",
                 "Centro de Costo": insurance.costCenter ?? "N/A",
                 "Numero de cuenta": insurance.accountNumber ?? "N/A",
                 "Cuenta contable": insurance.accountingAccount ?? "N/A",
@@ -219,13 +213,13 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
             >
                 <Column
-                    field="idInsurance"
+                    field="idPersonInsurance"
                     header="Código Seguro"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     hidden
                     filter
-                    filterField="idInsurance"
+                    filterField="idPersonInsurance"
                     filterPlaceholder="Buscar por código seguro"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -253,7 +247,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por titular"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -265,7 +259,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="fullNameDependant"
                     filterPlaceholder="Buscar por dependiente"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -277,7 +271,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="identificationDisplay"
                     filterPlaceholder="Buscar por cédula dependiente"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -302,7 +296,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por código de concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -314,31 +308,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptName"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="description"
-                    header="Seguro"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="description"
-                    filterPlaceholder="Buscar por seguro"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="planType"
-                    header="Plan"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="planType"
-                    filterPlaceholder="Buscar por plan"
-                    showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -350,7 +320,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -388,7 +358,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumber"
                     filterPlaceholder="Buscar por numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -401,7 +371,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountingAccount"
                     filterPlaceholder="Buscar por cuenta contable"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -414,7 +384,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="percentDiscount"
                     filterPlaceholder="Buscar por porcentaje a descontar"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IInsuranceForReport) =>
                         rowData.percentDiscount
@@ -432,7 +402,7 @@ const InsuranceForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IInsuranceForReport) =>
                         rowData.amount.toLocaleString("es-DO", {

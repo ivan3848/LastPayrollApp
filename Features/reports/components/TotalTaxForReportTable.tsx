@@ -213,7 +213,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por nombre completo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -225,7 +225,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="totalTax"
                     filterPlaceholder="Buscar por total impuesto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ITotalTaxForReport) =>
                         rowData.totalTax
@@ -233,7 +233,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                                   style: "currency",
                                   currency: "DOP",
                               })
-                            : "N/A"
+                            : "0.00"
                     }
                 ></Column>
                 <Column
@@ -245,7 +245,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollPayTotalTax"
                     filterPlaceholder="Buscar por total impuesto nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ITotalTaxForReport) =>
                         rowData.payrollPayTotalTax
@@ -256,7 +256,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                                       currency: "DOP",
                                   }
                               )
-                            : "N/A"
+                            : "0.00"
                     }
                 ></Column>
             </DataTable>

@@ -125,6 +125,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = leaseWithoutIdentifier.map((lease) => {
             return {
+                "Código Empleado": lease.idEmployee ?? "N/A",
                 Nombre: lease.employeeName ?? "N/A",
                 "Fecha Inicio":
                     new Date(lease.startDate)
@@ -220,7 +221,6 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
@@ -237,7 +237,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por nombre"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -246,11 +246,10 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha Inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="startDate"
                     filterPlaceholder="Buscar por fecha inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILeaseForReport) =>
                         rowData.startDate
@@ -266,11 +265,10 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de solicitud"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="requestDate"
                     filterPlaceholder="Buscar por fecha solicitud"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILeaseForReport) =>
                         rowData.requestDate
@@ -304,7 +302,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="bankName"
                     filterPlaceholder="Buscar por banco"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -317,7 +315,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amountFee"
                     filterPlaceholder="Buscar por cantidad de cuotas"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -330,7 +328,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amountPay"
                     filterPlaceholder="Buscar por total pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILeaseForReport) =>
                         rowData.amountPay
@@ -342,7 +340,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     }
                 ></Column>
 
-                {/* <Column
+                <Column
                     field="missToPay"
                     header="Deuda"
                     headerStyle={{ minWidth: "15rem" }}
@@ -351,7 +349,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="missToPay"
                     filterPlaceholder="Buscar por deuda"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILeaseForReport) =>
                         rowData.missToPay
@@ -361,7 +359,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                               })
                             : "N/A"
                     }
-                ></Column> */}
+                ></Column>
 
                 <Column
                     field="totalAmount"
@@ -372,7 +370,7 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="totalAmount"
                     filterPlaceholder="Buscar por total préstamo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILeaseForReport) =>
                         rowData.totalAmount

@@ -288,7 +288,13 @@ const ReportToolkit = ({ setFilter }: Props) => {
         {
             key: 110,
             name: "Beneficios",
-            filters: ["employee", "conceptCode", "endDate", "startDate"],
+            filters: [
+                "employee",
+                "conceptCode",
+                "endDate",
+                "startDate",
+                "payrollpay",
+            ],
         },
         {
             key: 111,

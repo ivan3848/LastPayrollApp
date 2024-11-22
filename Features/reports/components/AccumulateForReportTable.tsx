@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useAccumulateForReportQuery from "../Hook/useAccumulateForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IAccumulateForReport } from "../Types/IAccumulateForReport";
+import { Calendar } from "primereact/calendar";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -262,7 +263,6 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     sortable
                     filter
                     filterField="date"
-                    filterPlaceholder="Buscar por Fecha"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

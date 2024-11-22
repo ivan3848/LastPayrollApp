@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useLatenessForReportQuery from "../Hook/useLatenessForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { ILatenessForReport } from "../Types/ILatenessForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -201,6 +202,24 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -261,7 +280,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="fullName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -273,7 +292,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -285,7 +304,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="salary"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILatenessForReport) =>
                         rowData.salary
@@ -305,7 +324,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="percentage"
                     filterPlaceholder="Buscar por porcentaje"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILatenessForReport) =>
                         rowData.percentage ? `${rowData.percentage}%` : "N/A"
@@ -320,7 +339,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="concept"
                     filterPlaceholder="Buscar por tipo de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -332,7 +351,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="hourAmount"
                     filterPlaceholder="Buscar por cantidad de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -344,7 +363,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por valor de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILatenessForReport) =>
                         rowData.amount
@@ -364,7 +383,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="date"
                     filterPlaceholder="Buscar por fecha"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILatenessForReport) =>
                         rowData.date
@@ -383,7 +402,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollName"
                     filterPlaceholder="Buscar por nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -405,10 +424,11 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPaid"
                     filterPlaceholder="Buscar por pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -433,7 +453,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -458,7 +478,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -470,7 +490,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumber"
                     filterPlaceholder="Buscar por numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column

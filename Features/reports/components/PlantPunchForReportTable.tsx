@@ -195,7 +195,7 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="plant"
                     filterPlaceholder="Buscar por planta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -203,11 +203,10 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="date"
                     filterPlaceholder="Buscar por fecha"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPlantPunchForReport) =>
                         rowData.date
@@ -226,7 +225,7 @@ const PlantPunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="totalPlantPunch"
                     filterPlaceholder="Buscar por total de ponches"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

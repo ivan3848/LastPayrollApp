@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useIncentiveForReportQuery from "../Hook/useIncentiveForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IIncentiveForReport } from "../Types/IIncentiveForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -136,6 +137,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = incentiveWithoutIdentifier.map((incentive) => {
             return {
+                "Codigo de Empleado": incentive.idEmployee ?? "N/A",
                 Nombre: incentive.employee ?? "N/A",
                 Posición: incentive.position ?? "N/A",
                 Departamento: incentive.department ?? "N/A",
@@ -208,6 +210,24 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -238,7 +258,6 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -255,7 +274,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employee"
                     filterPlaceholder="Buscar por nombre"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -267,7 +286,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -279,7 +298,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -291,7 +310,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollName"
                     filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -303,7 +322,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="description"
                     filterPlaceholder="Buscar por incentivo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -311,11 +330,10 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de carga"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="chargeDate"
                     filterPlaceholder="Buscar por fecha de carga"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IIncentiveForReport) =>
                         rowData.chargeDate
@@ -330,11 +348,10 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de ejecución"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="dateExecuted"
                     filterPlaceholder="Buscar por fecha de ejecución"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IIncentiveForReport) =>
                         rowData.dateExecuted
@@ -349,11 +366,10 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de pago"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="payDate"
                     filterPlaceholder="Buscar por fecha de pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IIncentiveForReport) =>
                         rowData.payDate
@@ -369,10 +385,11 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isExecuted"
                     filterPlaceholder="Buscar por se efectuó"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -384,7 +401,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IIncentiveForReport) =>
                         rowData.amount
@@ -404,7 +421,7 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="tax"
                     filterPlaceholder="Buscar por impuesto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IIncentiveForReport) =>
                         rowData.tax
@@ -421,10 +438,11 @@ const IncentiveForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPaid"
                     filterPlaceholder="Buscar por pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

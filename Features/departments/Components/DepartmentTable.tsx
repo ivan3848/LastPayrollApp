@@ -116,9 +116,8 @@ const DepartmentTable = ({
                 header="Unidad Organizacional"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
-                filter
-                filterField="name"
-                filterPlaceholder="Buscar por departamento"
+                filterField="organizationalUnit"
+                filterPlaceholder="Buscar por unidad organizacional"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
@@ -129,21 +128,9 @@ const DepartmentTable = ({
                 header="Centro de costo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
-                filter
-                filterField="idCostCenter"
+                filterField="costCenter"
                 filterPlaceholder="Buscar por centro de costo"
-                filterElement={() => (
-                    <TableDropDownFilter
-                        useQuery={useCostCenterQuery}
-                        text="description"
-                        column="idCostCenter"
-                        setFilters={setFilters}
-                        clearFilters={clearFilters}
-                    />
-                )}
                 showFilterMenuOptions={false}
-                showApplyButton={false}
-                showClearButton={false}
                 onFilterClear={clearFilters}
             ></Column>
 

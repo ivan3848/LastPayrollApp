@@ -109,7 +109,7 @@ const RetroactiveHoursForReportTable = ({
                     "Tipo de Hora",
                     "Posición",
                     "Salario",
-                    "Monto",
+                    "Cantidad de horas",
                 ],
             ],
             body: excelData?.items.map((item) => [
@@ -139,6 +139,7 @@ const RetroactiveHoursForReportTable = ({
 
         const renamed = retroactiveWithoutIdentifier.map((retroactive) => {
             return {
+                "Codigo Empleado": retroactive.idEmployee,
                 Empleado: retroactive.fullName,
                 Fecha: retroactive.date,
                 Nomina: retroactive.payrollName,
@@ -229,7 +230,7 @@ const RetroactiveHoursForReportTable = ({
                     sortable
                     filter
                     hidden
-                    filterField="idEmployee"
+                    filterField="idCostCenter"
                     filterPlaceholder="Buscar por código centro costo"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
@@ -240,7 +241,6 @@ const RetroactiveHoursForReportTable = ({
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -257,7 +257,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="fullName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -265,11 +265,10 @@ const RetroactiveHoursForReportTable = ({
                     header="Fecha"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="date"
                     filterPlaceholder="Buscar por fecha"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IRetroactiveHoursForReport) =>
                         rowData.date
@@ -301,7 +300,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="payrollName"
                     filterPlaceholder="Buscar por nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -313,7 +312,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="costCenter"
                     filterPlaceholder="Buscar por centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -338,7 +337,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="concept"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -363,7 +362,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -375,7 +374,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="name"
                     filterPlaceholder="Buscar por cuenta contable"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -387,7 +386,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="accountingAccountNumber"
                     filterPlaceholder="Buscar por numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -399,7 +398,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="concept"
                     filterPlaceholder="Buscar por tipo de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -411,7 +410,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -423,7 +422,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="salary"
                     filterPlaceholder="Buscar por salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IRetroactiveHoursForReport) =>
                         rowData.salary
@@ -443,7 +442,7 @@ const RetroactiveHoursForReportTable = ({
                     filterField="hourAmount"
                     filterPlaceholder="Buscar por monto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

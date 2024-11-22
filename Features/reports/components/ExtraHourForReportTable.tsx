@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useExtraHourForReportQuery from "../Hook/useExtraHourForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IExtraHourForReport } from "../Types/IExtraHourForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -155,6 +156,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
         const renamed = extraHourWithoutIdentifier.map((extraHour) => {
             return {
                 "Numero de Cuenta": extraHour.accountNumber ?? "N/A",
+                "Código Empleado": extraHour.idEmployee ?? "N/A",
                 Empleado: extraHour.fullName ?? "N/A",
                 "Centro de Costo": extraHour.costCenter ?? "N/A",
                 Salario:
@@ -228,7 +230,23 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
             />
         </div>
     );
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
 
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
     return (
         <div className="card">
             <DataTable
@@ -263,7 +281,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="accountNumber"
                     filterPlaceholder="Buscar numero de cuenta"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -272,7 +290,6 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar código de empleado"
                     showFilterMenuOptions
@@ -301,7 +318,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="fullName"
                     filterPlaceholder="Buscar empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -313,7 +330,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="costCenter"
                     filterPlaceholder="Buscar centro de costo"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -325,7 +342,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="salary"
                     filterPlaceholder="Buscar salario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IExtraHourForReport) =>
                         rowData.salary
@@ -345,7 +362,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="percentValue"
                     filterPlaceholder="Buscar porcentaje"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IExtraHourForReport) =>
                         rowData.percentValue
@@ -362,7 +379,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar código de concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -374,7 +391,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="concept"
                     filterPlaceholder="Buscar tipo de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -386,7 +403,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="hourAmount"
                     filterPlaceholder="Buscar cantidad de horas"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -398,7 +415,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="amount"
                     filterPlaceholder="Buscar valor de hora"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IExtraHourForReport) =>
                         rowData.amount
@@ -415,11 +432,10 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="date"
                     filterPlaceholder="Buscar fecha"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IExtraHourForReport) =>
                         rowData.date
@@ -436,10 +452,11 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPaid"
                     filterPlaceholder="Buscar pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -452,7 +469,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollName"
                     filterPlaceholder="Buscar nomina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -507,7 +524,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -520,7 +537,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -530,10 +547,11 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="totalHour"
                     filterPlaceholder="Buscar total de horas"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -543,10 +561,11 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="totalAmount"
                     filterPlaceholder="Buscar total cantidad"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 

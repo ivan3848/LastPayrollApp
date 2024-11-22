@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useLicencesForReportQuery from "../Hook/useLicencesForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { ILicencesForReport } from "../Types/ILicencesForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -138,6 +139,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = licencesWithoutIdentifier.map((licences) => {
             return {
+                "Código de empleado": licences.idEmployee ?? "N/A",
                 Posición: licences.position ?? "N/A",
                 Departamento: licences.department ?? "N/A",
                 Empleado: licences.employeeName ?? "N/A",
@@ -200,6 +202,24 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         </div>
     );
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     return (
         <div className="card">
             <DataTable
@@ -260,7 +280,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -285,7 +305,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -310,7 +330,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -322,7 +342,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="doctorName"
                     filterPlaceholder="Buscar por nombre de doctor"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -334,7 +354,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por código de concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -346,7 +366,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptName"
                     filterPlaceholder="Buscar por concepto"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -358,7 +378,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="workDayOff"
                     filterPlaceholder="Buscar por días no laborados"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -367,10 +387,11 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isToPay"
                     filterPlaceholder="Buscar por a pagar"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -395,7 +416,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="payrollPay"
                     filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -407,7 +428,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="description"
                     filterPlaceholder="Buscar por descripción"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -415,11 +436,10 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Inicio"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="startDate"
                     filterPlaceholder="Buscar por inicio"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILicencesForReport) =>
                         rowData.startDate
@@ -434,11 +454,10 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fin"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="endDate"
                     filterPlaceholder="Buscar por fin"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: ILicencesForReport) =>
                         rowData.endDate
@@ -454,10 +473,11 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isPaid"
                     filterPlaceholder="Buscar por pago"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>

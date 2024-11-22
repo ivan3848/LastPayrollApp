@@ -13,6 +13,7 @@ import * as XLSX from "xlsx";
 import useConceptForReportQuery from "../Hook/useConceptForReportQuery";
 import IFilterReport from "../Types/IFilterReport";
 import { IConceptForReport } from "../Types/IConceptForReport";
+import { Dropdown } from "primereact/dropdown";
 
 interface Props {
     filterValues: IFilterReport | null;
@@ -129,6 +130,24 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         XLSX.writeFile(workbook, "ConceptForReport.xlsx");
     };
 
+    const yesNoOptions = [
+        { label: "Si", value: true },
+        { label: "No", value: false },
+    ];
+
+    const yesNoFilter = (options: any) => {
+        return (
+            <Dropdown
+                value={options.value}
+                options={yesNoOptions}
+                onChange={(e) => options.filterApplyCallback(e.value)}
+                placeholder="Selecciona Si o No"
+                className="p-column-filter"
+                showClear
+            />
+        );
+    };
+
     const header = (
         <div className="flex align-items-center justify-content-end gap-2">
             <h2
@@ -197,7 +216,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="conceptCode"
                     filterPlaceholder="Buscar por cc-nómina"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
@@ -212,30 +231,6 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
-                {/* <Column
-                    field="idEmployee"
-                    header="Código de empleado"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="idEmployee"
-                    filterPlaceholder="Buscar por código de empleado"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                ></Column>
-                <Column
-                    field="employeeName"
-                    header="Nombre"
-                    headerStyle={{ minWidth: "15rem" }}
-                    sortable
-                    filter
-                    filterField="employeeName"
-                    filterPlaceholder="Buscar por nombre"
-                    showFilterMenuOptions={false}
-                    onFilterApplyClick={(e) => onFilter(e)}
-                    onFilterClear={clearFilters}
-                ></Column> */}
                 <Column
                     field="amount"
                     header="Importe"
@@ -260,6 +255,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    filterElement={yesNoFilter}
                     filterField="isProfit"
                     filterPlaceholder="Buscar por beneficio"
                     showFilterMenuOptions={false}

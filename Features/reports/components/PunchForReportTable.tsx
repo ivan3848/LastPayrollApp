@@ -128,6 +128,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = punchWithoutIdentifier.map((punch) => {
             return {
+                "Código Empleado": punch.idEmployee,
                 Empleado: punch.employeeName,
                 Horario: punch.workScheduler,
                 Posición: punch.position,
@@ -210,7 +211,6 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
@@ -228,7 +228,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="employeeName"
                     filterPlaceholder="Buscar por empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -241,7 +241,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="workScheduler"
                     filterPlaceholder="Buscar por horario"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -282,7 +282,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="position"
                     filterPlaceholder="Buscar por posición"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -295,7 +295,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="department"
                     filterPlaceholder="Buscar por departamento"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -304,11 +304,10 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Fecha de ponche"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    filter
                     filterField="punchDate"
                     filterPlaceholder="Buscar por fecha de ponche"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: IPunchForReport) =>
                         rowData.punchDate
@@ -328,7 +327,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="hourIn"
                     filterPlaceholder="Buscar por entrada"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
@@ -341,7 +340,7 @@ const PunchForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="hourOut"
                     filterPlaceholder="Buscar por salida"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
             </DataTable>
