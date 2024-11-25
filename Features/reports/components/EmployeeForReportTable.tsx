@@ -292,6 +292,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     header="Primer Apellido"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
+                    hidden
                     filter
                     filterField="firstLastName"
                     filterPlaceholder="Buscar por primer apellido"
@@ -305,6 +306,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
+                    hidden
                     filterField="secondLastName"
                     filterPlaceholder="Buscar por segundo apellido"
                     showFilterMenuOptions
