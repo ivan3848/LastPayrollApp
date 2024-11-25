@@ -108,6 +108,8 @@ const AddLease = ({
 
         if (endDate < startDate) months -= 1;
 
+        if (months < 1) return 1;
+
         months = Math.max(0, months);
         return recurrency === 15 ? months * 2 : months;
     };
@@ -289,7 +291,7 @@ const AddLease = ({
                             <GenericInputNumber
                                 id="amountFee"
                                 isValid={!!errors.amountFee}
-                                currentValue={calculateMonthlyFee()}
+                                currentValue={calculateAmountFees() == 1 ? calculateMonthlyFee() * 2 : calculateMonthlyFee()}
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly

@@ -126,6 +126,8 @@ const EditLease = ({
 
         if (endDate < startDate) months -= 1;
 
+        if (months < 1) return 1;
+
         months = Math.max(0, months);
         return recurrency === 15 ? months * 2 : months;
     };
@@ -324,7 +326,9 @@ const EditLease = ({
                             <GenericInputNumber
                                 id="amountFee"
                                 isValid={!!errors.amountFee}
-                                currentValue={calculateMonthlyFee() ?? entity.amountFee}
+                                currentValue={(calculateAmountFees() == 1
+                                    ? calculateMonthlyFee() * 2
+                                    : calculateMonthlyFee()) ?? entity.amountFee}
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly

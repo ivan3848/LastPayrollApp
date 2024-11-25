@@ -49,7 +49,8 @@ export const Invoice = ({ data }: Props) => {
                     totalDeduction,
                     totalPay,
                     creditIsrRemain,
-                    creditIsrSustracted
+                    creditIsrSustracted,
+                    startDate
                 } = firstItem;
 
                 return (
@@ -94,7 +95,7 @@ export const Invoice = ({ data }: Props) => {
                                     Cta: {accountNumber || "N/A"}
                                 </Text>
                                 <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.removeRightLine, { flexWrap: "wrap" }]}>
-                                    Ing: {formatDate(payrollPayDate)} {departmentName || "N/A"}
+                                    Ing: {formatDate(startDate)} {departmentName || "N/A"}
                                 </Text>
                                 <Text style={[styles.tableCol, styles.marginTopMinus, styles.textColor, styles.textAlignRight, styles.removeLeftLine, styles.removeRightLine]}>
                                     CC: {idCostCenter || "N/A"}
