@@ -226,7 +226,7 @@ const EditVacation = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="end">Fecha Final</label>
+                            <label htmlFor="end">Fecha de pago</label>
                             <Calendar
                                 id="end"
                                 {...register("payrollPayDate")}
