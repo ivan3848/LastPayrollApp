@@ -98,7 +98,9 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Fecha Inicio",
                     "Fecha de solicitud",
                     "Banco",
-                    "Cantidad de Cuotas",
+                    "Cuotas",
+                    "Deuda",
+                    "Monto de Cuotas",
                     "Total pago",
                     "Total préstamo",
                 ],
@@ -108,6 +110,8 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 item.startDate,
                 item.requestDate,
                 item.bankName,
+                item.fees,
+                item.missToPay,
                 item.amountFee,
                 item.amountPay,
                 item.totalAmount,
@@ -136,7 +140,13 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
                 Banco: lease.bankName ?? "N/A",
-                "Cantidad de Cuotas": lease.amountFee ?? "N/A",
+                Cuotas: lease.fees ?? "N/A",
+                "Monto de Cuotas": lease.amountFee ?? "N/A",
+                Deuda:
+                    lease.missToPay.toLocaleString("es-DO", {
+                        style: "currency",
+                        currency: "DOP",
+                    }) ?? "N/A",
                 "Total pago":
                     lease.amountPay.toLocaleString("es-DO", {
                         style: "currency",
@@ -307,18 +317,38 @@ const LeaseForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
 
                 <Column
-                    field="amountFee"
-                    header="Cantidad de Cuotas"
+                    field="fees"
+                    header="Cuotas"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    filterField="amountFee"
-                    filterPlaceholder="Buscar por cantidad de cuotas"
+                    filterField="fees"
+                    filterPlaceholder="Buscar cuotas"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
 
+                <Column
+                    field="amountFee"
+                    header="Monto de cuotas"
+                    headerStyle={{ minWidth: "15rem" }}
+                    sortable
+                    filter
+                    filterField="amountFee"
+                    filterPlaceholder="Buscar por monto de cuotas"
+                    showFilterMenuOptions
+                    body={(rowData: ILeaseForReport) => {
+                        return rowData.amountFee
+                            ? rowData.amountFee.toLocaleString("es-DO", {
+                                  style: "currency",
+                                  currency: "DOP",
+                              })
+                            : "N/A";
+                    }}
+                    onFilterApplyClick={(e) => onFilter(e)}
+                    onFilterClear={clearFilters}
+                ></Column>
                 <Column
                     field="amountPay"
                     header="Total pago"

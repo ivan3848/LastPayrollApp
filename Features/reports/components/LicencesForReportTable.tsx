@@ -96,6 +96,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
         autoTable(doc, {
             head: [
                 [
+                    "Código de empleado",
                     "Posición",
                     "Departamento",
                     "Empleado",
@@ -112,6 +113,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ],
             ],
             body: excelData?.items.map((item) => [
+                item.idEmployee,
                 item.position,
                 item.department,
                 item.employeeName,
@@ -251,7 +253,6 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
-                    hidden
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
