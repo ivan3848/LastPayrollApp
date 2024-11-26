@@ -8,4 +8,5 @@ export default interface IFilterDGT {
     isDGT3?: boolean;
     isDGT4?: boolean;
     isDGT12?: boolean;
+    isDGT5?: boolean;
 }

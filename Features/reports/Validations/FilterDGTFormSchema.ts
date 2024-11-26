@@ -10,7 +10,8 @@ const FilterDGTFormSchema = () => {
         isDgt2: z.boolean().optional(),
         isDgt3: z.boolean().optional(),
         isDgt4: z.boolean().optional(),
-        isDgt12: z.boolean().optional()
+        isDgt12: z.boolean().optional(),
+        isDgt5: z.boolean().optional()
     });
 
     return { filterDGTFormSchema };

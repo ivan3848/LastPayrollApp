@@ -32,6 +32,7 @@ const DGT = () => {
     const [isDgt3, setIsDgt3] = useState(false);
     const [isDgt4, setIsDgt4] = useState(false);
     const [isDgt12, setIsDgt12] = useState(false);
+    const [isDgt5, setIsDgt5] = useState(false);
     const [loading, setLoading] = useState(false);
     const toast = useRef<Toast | null>(null);
 
@@ -51,6 +52,10 @@ const DGT = () => {
 
     const handleToggleDGT12 = () => {
         setIsDgt12(!isDgt12);
+    };
+
+    const handleToggleDGT5 = () => {
+        setIsDgt5(!isDgt5);
     };
 
     const daysInMonth = (year: number, month: number) => {
@@ -103,8 +108,8 @@ const DGT = () => {
             isDgt3,
             isDgt4,
             isDgt12,
+            isDgt5,
         });
-
         await executeDGTExcelTemplate(filter, "Plantilla_General_mt.xlsm");
     };
 
@@ -224,6 +229,16 @@ const DGT = () => {
                             id="dgt12"
                             checked={isDgt12}
                             onChange={handleToggleDGT12}
+                        />
+                    </div>
+                    <div className="field col-8 md:col-2">
+                        <label htmlFor="dgt5" className="mr-2 font-bold">
+                            DGT5
+                        </label>
+                        <InputSwitch
+                            id="dgt5"
+                            checked={isDgt5}
+                            onChange={handleToggleDGT5}
                         />
                     </div>
                 </div>
