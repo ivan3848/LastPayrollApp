@@ -238,12 +238,11 @@ const FiredEmployeeForReportTable = ({
                     header="Código Empleado"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
-                    hidden
                     filter
                     filterField="idEmployee"
                     filterPlaceholder="Buscar por código empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column

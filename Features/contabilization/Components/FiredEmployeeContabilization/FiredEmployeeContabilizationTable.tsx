@@ -18,13 +18,8 @@ const FiredEmployeeContabilizationTable = ({
     submitted,
     handleFiredEmployeeContabilization,
 }: Props) => {
-    const {
-        setFilters,
-        setSorts,
-        clearSorts,
-        clearFilters,
-        params,
-    } = useParamFilter();
+    const { setFilters, setSorts, clearSorts, clearFilters, params } =
+        useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
 
@@ -120,7 +115,9 @@ const FiredEmployeeContabilizationTable = ({
                     body={(rowData: IFireEmployee) => (
                         <ActionsTableContabilization
                             entity={rowData}
-                            Contabilization1={handleFiredEmployeeContabilization}
+                            Contabilization1={
+                                handleFiredEmployeeContabilization
+                            }
                         />
                     )}
                 />
