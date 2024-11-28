@@ -1,5 +1,4 @@
 import { IMassiveIncrease } from "@/Features/massiveChange/Components/MassiveIncrease/Types/IMassiveIncrease";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import { DataTable } from "primereact/datatable";
 import { Dialog } from "primereact/dialog";
@@ -17,7 +16,6 @@ const NotExistedEmployee = ({
     const hideDeleteEntityDialog = () => {
         setIsExistEmployee(false);
     };
-
     return (
         <>
             <Dialog
@@ -48,10 +46,7 @@ const NotExistedEmployee = ({
                                 field="idEmployee"
                                 header="Codigo"
                                 headerStyle={{ minWidth: "15rem" }}
-                                sortable
-                                filter
                                 filterField="idEmployee"
-                                filterPlaceholder="Buscar por Nombre"
                                 showFilterMenuOptions={false}
                             ></Column>
                         }

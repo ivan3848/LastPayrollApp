@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { IComplementaryData } from "../Types/IComplementaryData";
 import complementaryDataService from "../Services/complementaryDataService";
+import { IComplementaryData } from "../Types/IComplementaryData";
 
 interface Props {
     toast: React.MutableRefObject<any>;
@@ -47,7 +47,7 @@ const useAddComplementaryDataQuery = ({
                 e
             ) as IComplementaryData[];
             setNotExistedEmployeeData(notExistedEmployeeDataArray);
-            setIsExistEmployee(true);
+            setIsExistEmployee(false);
             toast.current?.show({
                 severity: "success",
                 summary: "Insertado!",

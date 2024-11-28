@@ -37,15 +37,18 @@ const DeleteEntity = ({
         onError: (error: any) => {
             setDeleteEntityDialog(false);
 
-            toast.current?.show({
-                severity: "warn",
-                summary: "Error",
-                detail: error.response.data,
-                life: 3000,
-            });
+            const text = error.response.data;
+            if (text.toString().includes("Hay")) {
+                toast.current?.show({
+                    severity: "warn",
+                    summary: "Advertencia",
+                    detail: "Hay nominas libre para calculo",
+                    life: 3000,
+                });
+                return;
+            }
         },
         onSuccess: (data: any) => {
-
             if (data.toString().includes("Hay")) {
                 toast?.current?.show({
                     severity: "warn",

@@ -198,13 +198,6 @@ export default function EmployeeTable({ submitted }: Props) {
                 </Link>
                 <Button
                     size="small"
-                    label="Historial"
-                    icon="pi pi-history"
-                    className="min-w-min"
-                    disabled
-                />
-                <Button
-                    size="small"
                     className="min-w-min"
                     label="Acciones"
                     icon="pi pi-external-link"

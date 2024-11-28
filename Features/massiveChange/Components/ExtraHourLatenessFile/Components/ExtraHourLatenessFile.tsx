@@ -8,7 +8,6 @@ import ExcelTable from "../../ExcelTable";
 import useAddExtraHourLatenessDataQuery from "../Hooks/useAddExtraHourLatenessDataQuery";
 import ExtraHourLatenessTable from "./ExtraHourLatenessTable";
 
-
 export const extraHourLatenessDataSchema: Object = {
     idConcept: 0,
     hourAmount: 0,
@@ -18,7 +17,6 @@ export const extraHourLatenessDataSchema: Object = {
 };
 
 const ExtraHourLatenessFile = () => {
-
     const [isToSendFile, setIsToSendFile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [extraHourLatenessDataSchemaValue, setExtraHourLatenessDataSchema] =
