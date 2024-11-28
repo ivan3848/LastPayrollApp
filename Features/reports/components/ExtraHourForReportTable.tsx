@@ -293,7 +293,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     filterField="idEmployee"
                     filterPlaceholder="Buscar código de empleado"
                     showFilterMenuOptions
-                    onFilterApplyClick={(e) => onFilter(e.field)}
+                    onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column

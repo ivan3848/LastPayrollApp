@@ -489,6 +489,25 @@ const ReportToolkit = ({ setFilter }: Props) => {
                             </div>
                             <div
                                 className="field col-12 md:col-6"
+                                hidden={!selectedFilters?.includes("employee")}
+                            >
+                                <label
+                                    htmlFor="idsEmployees"
+                                    className="w-full"
+                                >
+                                    Codigo Empleado
+                                </label>
+                                <GenericMultiSelect
+                                    id="idsEmployees"
+                                    placeholder="Seleccione..."
+                                    useQuery={useEmployeeQuery}
+                                    optionLabel="idEmployee"
+                                    alterFetchName="idEmployee"
+                                    onChange={handleEmployeeChange}
+                                />
+                            </div>
+                            <div
+                                className="field col-12 md:col-6"
                                 hidden={
                                     !selectedFilters?.includes("costCenter")
                                 }
