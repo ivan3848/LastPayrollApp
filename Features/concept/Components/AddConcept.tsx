@@ -206,12 +206,11 @@ const AddConcept = ({
                             />
                         </div>
                     </div>
-
                     <div className="col-12 md:col-4">
                         <div className="field-checkbox">
                             <GenericCheckBox
-                                id="isCompany"
-                                text="Compañía"
+                                id="isCommission"
+                                text="Comisión"
                                 watch={watch}
                                 setValue={setValue}
                             />
@@ -281,6 +280,19 @@ const AddConcept = ({
                             <GenericCheckBox
                                 id="toProjectIsr"
                                 text="Proyectar ISR"
+                                watch={watch}
+                                setValue={setValue}
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="grid">
+
+                    <div className="col-12 md:col-4">
+                        <div className="field-checkbox">
+                            <GenericCheckBox
+                                id="isCompany"
+                                text="Compañía"
                                 watch={watch}
                                 setValue={setValue}
                             />
