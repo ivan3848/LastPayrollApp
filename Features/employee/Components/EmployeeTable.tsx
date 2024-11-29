@@ -123,11 +123,14 @@ export default function EmployeeTable({ submitted }: Props) {
     const gridItem = (employee: IEmployee) => {
         return (
             <div
-                className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center flex-wrap gap-4"
+                className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center"
                 key={employee.idEmployee}
             >
-                <div className="p-3 border-1 surface-border border-round">
-                    <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+                <div
+                    className="p-3 border-1 surface-border border-round flex flex-column align-items-center justify-content-between gap-3"
+                    style={{ minHeight: "300px", maxWidth: "250px" }}
+                >
+                    <div className="flex flex-wrap align-items-center justify-content-between gap-2 w-full">
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-id-card"></i>
                             <span className="font-semibold text-xl">
@@ -139,25 +142,30 @@ export default function EmployeeTable({ submitted }: Props) {
                             severity={getSeverity(employee)}
                         ></Tag>
                     </div>
-                    <div className="flex flex-column align-items-center gap-1 py-2">
+                    <div className="flex flex-column align-items-center gap-1 py-2 w-full">
                         <img
-                            className="w-5 shadow-2 border-circle"
+                            className="w-5 h-5 shadow-2 border-circle object-cover"
                             src={employee.employeeImage ?? emptyImage}
                             alt={employee.employeeName!}
                         />
-                        <div className="text-2xl font-bold">
+                        <div
+                            className="text-2xl font-bold text-center text-wrap"
+                            style={{ maxWidth: "200px" }}
+                        >
                             {employee.employeeName}
                         </div>
                         <div>
-                            <p className="text-sky-400">{employee.position}</p>
+                            <p className="text-sky-400 text-center">
+                                {employee.position}
+                            </p>
                         </div>
                         <div>
-                            <p className="text-sky-400">
+                            <p className="text-sky-400 text-center">
                                 {employee.department}
                             </p>
                         </div>
                     </div>
-                    <div className="flex justify-content-center flex-wrap gap-1">
+                    <div className="flex justify-content-center flex-wrap gap-1 w-full">
                         {actionButtons(employee)}
                     </div>
                 </div>
