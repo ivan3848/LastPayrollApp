@@ -38,7 +38,7 @@ export default function EmployeeTable({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(6);
+    } = useParamFilter(8);
     const haveAccess = "EMPLEADO";
 
     const [layout, setLayout] = useState<
@@ -123,14 +123,14 @@ export default function EmployeeTable({ submitted }: Props) {
     const gridItem = (employee: IEmployee) => {
         return (
             <div
-                className="col-12 sm:col-6 xl:col-3 m-1 flex justify-content-center"
+                className="col-12 sm:col-4 xl:col-3 p-3"
                 key={employee.idEmployee}
             >
                 <div
                     className="p-3 border-1 surface-border border-round flex flex-column align-items-center justify-content-between gap-3"
-                    style={{ minHeight: "300px", maxWidth: "250px" }}
+                    style={{ minHeight: "15wh", maxWidth: "15wh" }}
                 >
-                    <div className="flex flex-wrap align-items-center justify-content-between gap-2 w-full">
+                    <div className="flex flex-wrap align-items-center justify-content-between  w-full">
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-id-card"></i>
                             <span className="font-semibold text-xl">
@@ -142,16 +142,13 @@ export default function EmployeeTable({ submitted }: Props) {
                             severity={getSeverity(employee)}
                         ></Tag>
                     </div>
-                    <div className="flex flex-column align-items-center gap-1 py-2 w-full">
+                    <div className="flex flex-column align-items-center py-2 w-full">
                         <img
                             className="w-5 h-5 shadow-2 border-circle object-cover"
                             src={employee.employeeImage ?? emptyImage}
                             alt={employee.employeeName!}
                         />
-                        <div
-                            className="text-2xl font-bold text-center text-wrap"
-                            style={{ maxWidth: "200px" }}
-                        >
+                        <div className="text-2xl font-bold text-center text-wrap">
                             {employee.employeeName}
                         </div>
                         <div>
