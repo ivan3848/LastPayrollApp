@@ -108,7 +108,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         }
                     />
                 )}
-                {hasModuleAccess("COMISIONES") && (
+                {/* {hasModuleAccess("COMISIONES") && (
                     <Button
                         label="Comisiones"
                         icon="pi pi-wallet"
@@ -117,7 +117,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                             setAction(EmployeeOptionsEnum.Commission)
                         }
                     />
-                )}
+                )} */}
             </Fieldset>
 
             <Fieldset legend="Absentismos" toggleable className="mb-5">
