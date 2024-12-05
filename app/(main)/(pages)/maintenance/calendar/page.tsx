@@ -14,7 +14,7 @@ import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
 import { Dialog } from "primereact/dialog";
 import { Dropdown } from "primereact/dropdown";
 import { InputText } from "primereact/inputtext";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 
 const CalendarDemo: Page = () => {
@@ -126,83 +126,52 @@ const CalendarDemo: Page = () => {
         return adjustedDate;
     }
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!validate()) {
             return;
-        } else {
-            const _clickedEvent = {
-                ...changedEvent,
-                backgroundColor: changedEvent.tag?.color ?? "#fff",
-                borderColor: changedEvent.tag?.color ?? "#fff",
-                textColor: "#212121",
-                id: changedEvent.id,
-            };
-
-            setShowDialog(false);
-
-            if (_clickedEvent.id) {
-                const adjustedStart = subtractFourHours(
-                    _clickedEvent.start as string
-                );
-
-                const adjustedEnd = subtractFourHours(
-                    _clickedEvent.end as string
-                );
-
-                const _scheduler = {
-                    idScheduler: parseInt(changedEvent.id as string),
-                    concept: _clickedEvent.title,
-                    date: adjustedStart,
-                    time: adjustedEnd,
-                    idStatus: tags.find(
-                        (x) => x?.name === _clickedEvent.tag?.name
-                    )?.idStatus,
-                } as IScheduler;
-
-                schedulerService.put(_scheduler);
-
-                setEvents((prevState) => [
-                    ...prevState,
-                    {
-                        ..._clickedEvent,
-                        concept: _clickedEvent.concept,
-                        title: _clickedEvent.title,
-                    },
-                ]);
-            } else {
-                const eventCreated = {
-                    title: _clickedEvent.title,
-                    concept: _clickedEvent.concept,
-                    textColor: "#212121",
-                    location: _clickedEvent.tag?.name,
-                    description: _clickedEvent.tag?.name,
-                    borderColor: getColor(_clickedEvent.tag?.name as string),
-                    start: subtractFourHours(_clickedEvent.start as string),
-                    end: subtractFourHours(_clickedEvent.end as string),
-                    backgroundColor: getColor(
-                        _clickedEvent.tag?.name as string
-                    ),
-                    tag: {
-                        name: _clickedEvent.tag?.name,
-                        color: getColor(_clickedEvent.tag?.name as string),
-                        idStatus: _clickedEvent.tag?.idStatus || 0,
-                    },
-                } as Demo.Event;
-
-                const _scheduler = {
-                    concept: eventCreated.title,
-                    date: eventCreated.start,
-                    time: eventCreated.end,
-                    idStatus: eventCreated.tag?.idStatus,
-                } as IScheduler;
-
-                schedulerService.post(_scheduler);
-
-                setSubmitted(!submitted);
-                setShowDialog(false);
-                setEvents((prevState) => [...prevState, eventCreated]);
-            }
         }
+
+        const _clickedEvent = {
+            ...changedEvent,
+            backgroundColor: changedEvent.tag?.color ?? "#fff",
+            borderColor: changedEvent.tag?.color ?? "#fff",
+            textColor: "#212121",
+            id: changedEvent.id,
+        };
+
+        setShowDialog(false);
+
+        const adjustedStart = subtractFourHours(_clickedEvent.start as string);
+        const adjustedEnd = subtractFourHours(_clickedEvent.end as string);
+
+        const _scheduler: IScheduler = {
+            title: _clickedEvent.title || "",
+            idScheduler: parseInt(changedEvent.id as string),
+            concept: _clickedEvent.title || "",
+            date: adjustedStart,
+            time: adjustedEnd,
+            idStatus:
+                tags.find((x) => x?.name === _clickedEvent.tag?.name)
+                    ?.idStatus ?? 0,
+        };
+
+        if (_clickedEvent.id) {
+            await schedulerService.put(_scheduler);
+            setEvents((prevState) =>
+                prevState.map((event) =>
+                    event.id === _clickedEvent.id ? _clickedEvent : event
+                )
+            );
+        } else {
+            const newScheduler = await schedulerService.post(_scheduler);
+            const newEvent: Demo.Event = {
+                ..._clickedEvent,
+                id: newScheduler.toString(),
+            };
+            setEvents((prevState) => [...prevState, newEvent]);
+        }
+
+        setSubmitted(!submitted);
     };
 
     const validate = () => {
