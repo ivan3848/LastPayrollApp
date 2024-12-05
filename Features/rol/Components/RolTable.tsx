@@ -126,7 +126,7 @@ const RolTable = ({
         >
             <Column
                 field="description"
-                header="Descripción"
+                header="Descripción de Rol"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter

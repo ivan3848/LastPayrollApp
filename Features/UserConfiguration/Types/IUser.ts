@@ -7,7 +7,7 @@ export interface IUser {
     idDepartment: number;
     idEmployee: number;
     isActive: boolean;
-    name: string;
+    employeeName: string;
     salary: number;
     sindicate: boolean;
     isLog: boolean;

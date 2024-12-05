@@ -109,7 +109,7 @@ const AddRol = ({ setAddEntityDialog, addEntityDialog, toast }: Props) => {
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field col-12 md:col-6 lg:col-4">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">Description de Rol</label>
                     <InputText
                         id="description"
                         type="text"

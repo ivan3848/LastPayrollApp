@@ -127,7 +127,7 @@ const EditRol = ({
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-box text-sm"></i>
                             <span>
-                                Puede Editar: {data.canWrite ? "Si" : "No"}
+                                Puede Editar: {data.canWrite ? "Sí" : "No"}
                             </span>
                         </div>
                     </div>
@@ -148,7 +148,7 @@ const EditRol = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field col-12 md:col-6 lg:col-4">
                     <label htmlFor="description" className="w-full">
-                        Descripción
+                        Descripción de Rol
                     </label>
                     <InputText
                         {...register("description")}

@@ -17,7 +17,7 @@ interface Product<T> {
 
 export default function BasicDemo<T>({ idValue, id, setValue }: Product<T>) {
     const { params } = useParamFilter();
-    const { data, isLoading, error } = useRolModuleByIdRol(params, [], idValue);
+    const { data } = useRolModuleByIdRol(params, [], idValue);
 
     data?.map((item: any) => ({
         id: item.rolModuleId,

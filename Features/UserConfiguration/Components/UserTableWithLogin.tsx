@@ -1,6 +1,5 @@
 import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
-import useExpireSessionQuery from "@/Features/Shared/Hooks/useExpireSessionQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
 import emptyImage from "@/constants/emptyImage";
@@ -20,6 +19,7 @@ import EditUser from "./EditUser";
 import ResetUserPassword from "./ResetUserPassword";
 import ResetUserStatus from "./ResetUserStatus";
 import React from "react";
+import { Card } from "primereact/card";
 interface Props {
     submitted: boolean;
 }
@@ -27,7 +27,7 @@ interface Props {
 const sortOptions = [
     { label: "Ordenar por...", value: "" },
     { label: "Código de empleado", value: "idEmployee" },
-    { label: "Nombre", value: "name" },
+    { label: "Nombre", value: "employeeName" },
 ];
 
 export default function UserTableWithLogin({ submitted }: Props) {
@@ -47,9 +47,9 @@ export default function UserTableWithLogin({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(6);
+    } = useParamFilter(8);
 
-    const [layout, setLayout] = useState<
+    const [layout] = useState<
         "grid" | "grid" | (string & Record<string, unknown>)
     >("grid");
 
@@ -85,15 +85,92 @@ export default function UserTableWithLogin({ submitted }: Props) {
                 return "success";
         }
     };
-
     const gridItem = (user: IUser) => {
+        const actionButtonStyles = {
+            menuItem: {
+                minWidth: "110px", // Fixed button width
+                height: "8vh", // Fixed button height
+            },
+        };
+
+        const actionButtons = (userSelected: IUser) => {
+            const items = [
+                {
+                    label: "Opciones",
+                    icon: "pi pi-objects-column",
+                    items: [
+                        {
+                            label: "Editar",
+                            icon: "pi pi-hammer",
+                            command: () => {
+                                setUser(userSelected);
+                                setShowEditUser(true);
+                                setEditEntityDialog(true);
+                            },
+                        },
+                        {
+                            label: "Eliminar Usuario",
+                            icon: "pi pi-trash",
+                            command: () => {
+                                setUser(userSelected);
+                                setDeleteUser(true);
+                                setDeleteEntityDialog(true);
+                            },
+                        },
+                        {
+                            label: "Resetear Contraseña",
+                            icon: "pi pi-key",
+                            command: () => {
+                                setUser(userSelected);
+                                setUserResetPassword(true);
+                                setUserResetPasswordEntityDialog(true);
+                            },
+                        },
+                        ...(userSelected.users[0].isBlock
+                            ? [
+                                  {
+                                      label: "Bloquear",
+                                      icon: "pi pi-lock",
+                                      command: () => {
+                                          setUser(userSelected);
+                                          setUserResetStatus(true);
+                                          setUserResetStatusEntityDialog(true);
+                                      },
+                                  },
+                              ]
+                            : []),
+                        ...(!userSelected.users[0].isBlock
+                            ? [
+                                  {
+                                      label: "Desbloquear",
+                                      icon: "pi pi-lock-open",
+                                      command: () => {
+                                          setUser(userSelected);
+                                          setUserActive(true);
+                                          setUserResetStatusEntityDialog(true);
+                                      },
+                                  },
+                              ]
+                            : []),
+                    ],
+                },
+            ];
+
+            return (
+                <Menubar
+                    model={items}
+                    style={{ ...actionButtonStyles.menuItem }}
+                />
+            );
+        };
+
         return (
-            <div
-                className="col-12 sm:col-4 xl:col-3 p-4 flex flex-column justify-content-centered align-items-center shadow-1"
-                key={user.idEmployee}
-            >
-                <div className="p-3  surface-border border-round">
-                    <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+            <div className="col-12 sm:col-4 xl:col-3 p-3" key={user.idEmployee}>
+                <div
+                    className="p-3 border-1 surface-border border-round flex flex-column align-items-center justify-content-between gap-3"
+                    style={{ minHeight: "40vh", maxWidth: "450px" }}
+                >
+                    <div className="flex flex-wrap align-items-center justify-content-between w-full">
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-id-card"></i>
                             <span className="font-semibold text-xl">
@@ -102,25 +179,28 @@ export default function UserTableWithLogin({ submitted }: Props) {
                         </div>
                         <Tag
                             value={user.isActive ? "Activo" : "Inactivo"}
-                            severity={getSeverity(user!)}
-                        ></Tag>
-                    </div>
-                    <div className="flex flex-column align-items-center gap-1 py-2">
-                        <img
-                            className="shadow-2 border-circle"
-                            src={user.employeeImage ?? emptyImage}
-                            alt={user.name!}
-                            style={{
-                                width: "5vw",
-                                height: "5vw",
-                                objectFit: "cover",
-                            }}
+                            severity={getSeverity(user)}
                         />
-                        <div className="text-2xl font-bold">{user.name}</div>
                     </div>
-                    <div className="flex justify-content-center flex-wrap gap-1">
-                        {actionButtons(user)}
+                    <div className="flex flex-column align-items-center py-2 w-full">
+                        <img
+                            className="w-5 h-5 shadow-2 border-circle object-cover"
+                            src={user.employeeImage || emptyImage}
+                            alt={user.employeeName}
+                        />
+                        <div
+                            className="text-2xl font-bold text-center text-wrap text-truncate"
+                            style={{
+                                maxWidth: "100%",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {user.employeeName}
+                        </div>
                     </div>
+                    <div>{actionButtons(user)}</div>
                 </div>
             </div>
         );
@@ -132,75 +212,6 @@ export default function UserTableWithLogin({ submitted }: Props) {
     ) => {
         if (!user) return;
         if (layout === "grid") return gridItem(user);
-    };
-    const actionButtons = (userSelected: IUser) => {
-        const items = [
-            {
-                label: "Opciones",
-                icon: "pi pi-objects-column",
-                items: [
-                    {
-                        label: "Editar",
-                        icon: "pi pi-hammer",
-                        command: () => {
-                            setUser(userSelected);
-                            setShowEditUser(true);
-                            setEditEntityDialog(true);
-                        },
-                    },
-                    {
-                        label: "Eliminar Usuario",
-                        icon: "pi pi-trash",
-                        command: () => {
-                            setUser(userSelected);
-                            setDeleteUser(true);
-                            setDeleteEntityDialog(true);
-                        },
-                    },
-                    {
-                        label: "Resetear Contraseña",
-                        icon: "pi pi-key",
-                        command: () => {
-                            setUser(userSelected);
-                            setUserResetPassword(true);
-                            setUserResetPasswordEntityDialog(true);
-                        },
-                    },
-                    ...(userSelected.users[0].isBlock
-                        ? [
-                              {
-                                  label: "Bloquear",
-                                  icon: "pi pi-lock",
-                                  command: () => {
-                                      setUser(userSelected);
-                                      setUserResetStatus(true);
-                                      setUserResetStatusEntityDialog(true);
-                                  },
-                              },
-                          ]
-                        : []),
-                    ...(!userSelected.users[0].isBlock
-                        ? [
-                              {
-                                  label: "Desbloquear",
-                                  icon: "pi pi-lock-open",
-                                  command: () => {
-                                      setUser(userSelected);
-                                      setUserActive(true);
-                                      setUserResetStatusEntityDialog(true);
-                                  },
-                              },
-                          ]
-                        : []),
-                ],
-            },
-        ];
-
-        return (
-            <span>
-                <Menubar model={items} />
-            </span>
-        );
     };
 
     const header = (

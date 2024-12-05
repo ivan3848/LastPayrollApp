@@ -16,7 +16,6 @@ import userServiceWithOut from "../Service/userService";
 import { IUser } from "../Types/IUser";
 import AddUser from "./AddUser";
 import ResetUserStatus from "./ResetUserStatus";
-import React from "react";
 
 interface Props {
     submitted: boolean;
@@ -25,7 +24,7 @@ interface Props {
 const sortOptionsMap = {
     "": "Ordenar por...",
     idEmployee: "Código de empleado",
-    name: "Nombre",
+    employeeName: "Nombre",
 };
 const sortOptions = Object.entries(sortOptionsMap).map(([value, label]) => ({
     label,
@@ -45,7 +44,7 @@ export default function UserTable({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(6);
+    } = useParamFilter(8);
 
     const [sortKey, setSortKey] = useState(null);
     const [user, setUser] = useState<IUser | null>(null);
@@ -69,12 +68,12 @@ export default function UserTable({ submitted }: Props) {
 
     const gridItem = (user: IUser) => {
         return (
-            <div
-                className="col-12 sm:col-4 xl:col-3 p-4 flex flex-column justify-content-centered align-items-center shadow-1"
-                key={user.idEmployee}
-            >
-                <div className="p-3  surface-border border-round">
-                    <div className="flex flex-wrap align-items-center justify-content-between gap-2">
+            <div className="col-12 sm:col-4 xl:col-3 p-3" key={user.idEmployee}>
+                <div
+                    className="p-3 border-1 surface-border border-round flex flex-column align-items-center justify-content-between gap-3"
+                    style={{ minHeight: "40vh", maxWidth: "450px" }}
+                >
+                    <div className="flex flex-wrap align-items-center justify-content-between  w-full">
                         <div className="flex align-items-center gap-2">
                             <i className="pi pi-id-card"></i>
                             <span className="font-semibold text-xl">
@@ -83,23 +82,28 @@ export default function UserTable({ submitted }: Props) {
                         </div>
                         <Tag
                             value={user.isActive ? "Activo" : "Inactivo"}
-                            severity={getSeverity(user!)}
+                            severity={getSeverity(user)}
                         ></Tag>
                     </div>
-                    <div className="flex flex-column align-items-center gap-1 py-2">
+                    <div className="flex flex-column align-items-center py-2 w-full">
                         <img
-                            className="shadow-2 border-circle"
+                            className="w-5 h-5 shadow-2 border-circle object-cover"
                             src={user.employeeImage ?? emptyImage}
-                            alt={user.name!}
-                            style={{
-                                width: "5vw",
-                                height: "5vw",
-                                objectFit: "cover",
-                            }}
+                            alt={user.employeeName!}
                         />
-                        <div className="text-2xl font-bold">{user.name}</div>
+                        <div
+                            className="text-2xl font-bold text-center text-wrap text-truncate"
+                            style={{
+                                maxWidth: "100%",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                            }}
+                        >
+                            {user.employeeName}
+                        </div>
                     </div>
-                    <div className="flex justify-content-center flex-wrap gap-1">
+                    <div className="flex justify-content-center flex-wrap gap-1 w-full">
                         {actionButtons(user)}
                     </div>
                 </div>
@@ -122,7 +126,7 @@ export default function UserTable({ submitted }: Props) {
                     <Button
                         size="small"
                         className="min-w-min"
-                        label="Add Setting"
+                        label="Agregar Usuario"
                         icon="pi pi-external-link"
                         onClick={() => {
                             setUser(userSelected);
@@ -202,8 +206,13 @@ export default function UserTable({ submitted }: Props) {
                 </>
             )}
             <Toast ref={toast} />
-            <div className="grid">
-                <div className="flex justify-content-between mb-5">
+            <div
+                style={{
+                    display: "grid",
+                    width: "100%",
+                }}
+            >
+                <div className="flex justify-content-between  ">
                     <h3>Lista de Empleados Sin Usuario</h3>
                 </div>
                 {isLoading ? (
