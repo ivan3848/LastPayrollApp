@@ -56,9 +56,9 @@ const MassiveEmployee = () => {
         const massiveEmployee = {
             name: `${name} - ${date}`,
             chargeDate: date,
-            isPaid: false,
             employees: data,
         } as IMassiveEmployee;
+
         addEntity.mutate(massiveEmployee);
         clear();
     };
