@@ -19,8 +19,9 @@ const massiveEmployeechema: Object = {
     nationality: "",
     educationLevel: "",
     ubication: "",
-    position: "",
     ocupation: "",
+    position: "",
+    department: "",
     payrollArea: "",
     documentType: "",
     identification: "",
@@ -30,7 +31,6 @@ const massiveEmployeechema: Object = {
     paymentMethod: "",
     bankAccount: "",
     costCenter: "",
-    department: "",
     workScheduler: ""
 };
 

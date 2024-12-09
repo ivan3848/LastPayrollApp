@@ -39,8 +39,6 @@ export default function ExcelTable({
 
     const { excelData, onSelect, clearData, file } = useExcelTable();
 
-    console.log('Excel data', excelData)
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -89,7 +87,7 @@ export default function ExcelTable({
                             handleUpload(
                                 excelData,
                                 file.name,
-                                formatDate(file.lastModifiedDate),
+                                file.lastModifiedDate ? formatDate(file.lastModifiedDate) : '',
                                 () => fileUploadRef?.current?.clear()
                             )
                         }
@@ -131,23 +129,18 @@ export default function ExcelTable({
                             <Column
                                 key={index}
                                 field={element.toLowerCase()}
-                                header={
-                                    getTableColumnName(
-                                        element.charAt(0).toUpperCase() +
-                                        element.slice(1)
-                                    ) ??
-                                    element.charAt(0).toUpperCase() +
-                                    element.slice(1)
-                                }
-                                headerStyle={{
-                                    minWidth: "15rem",
-                                }}
+                                header={getTableColumnName(element.charAt(0).toUpperCase() + element.slice(1)) ?? element.charAt(0).toUpperCase() + element.slice(1)}
+                                headerStyle={{ minWidth: "15rem" }}
                                 sortable
+                                body={(rowData) => {
+                                    const value = rowData[element.toLowerCase()];
+                                    return value instanceof Date ? value.toISOString().slice(0, 10) : value;
+                                }}
                             ></Column>
                         ))}
                 </DataTable>
 
-                {/* {isExistEmployee && (
+                {isExistEmployee && (
                     <>
                         <NotExistedEmployee
                             isExistEmployee={isExistEmployee}
@@ -155,7 +148,7 @@ export default function ExcelTable({
                             notExistedEmployeeData={notExistedEmployeeData}
                         />
                     </>
-                )} */}
+                )}
             </div>
         </>
     );

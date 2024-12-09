@@ -102,7 +102,7 @@ const MassiveEmployee = () => {
                         </Link>
 
                         <h2 className="font-bold white-space-nowrap text-2xl">
-                            Aumento Masivo
+                            Cargar Empleados
                         </h2>
                     </div>
                 </>
