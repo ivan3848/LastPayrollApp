@@ -215,7 +215,7 @@ const AppConfig = (props: AppConfigProps) => {
                                 ></RadioButton>
                                 <label htmlFor="mode2">Superponer</label>
                             </div>
-                            <div className="flex align-items-center gap-2">
+                            {/* <div className="flex align-items-center gap-2">
                                 <RadioButton
                                     name="menuMode"
                                     value={"slim"}
@@ -268,7 +268,7 @@ const AppConfig = (props: AppConfigProps) => {
                                     inputId="mode5"
                                 ></RadioButton>
                                 <label htmlFor="mode5">Horizontal</label>
-                            </div>
+                            </div> */}
                         </div>
 
                         <h5>Tema del menú</h5>
