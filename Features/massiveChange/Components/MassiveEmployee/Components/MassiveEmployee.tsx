@@ -3,24 +3,19 @@ import Link from "next/link";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useState } from "react";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import ExcelTable from "../../ExcelTable";
-import useAddExtraHourLatenessDataQuery from "../Hooks/useAddExtraHourLatenessDataQuery";
-import ExtraHourLatenessTable from "./ExtraHourLatenessTable";
+import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
+import { IMassiveEmployee, massiveEmployeechema } from "../Types/IMassiveEmployee";
+import MassiveEmployeeTable from "./MassiveEmployeeTable";
+import useAddMassiveEmployeeQuery from "../Hooks/useAddMassiveEmployee";
 
-export const extraHourLatenessDataSchema: Object = {
-    idConcept: 0,
-    hourAmount: 0,
-    typeValue: 0,
-    description: "",
-    date: Date.now(),
-};
+const MassiveEmployee = () => {
 
-const ExtraHourLatenessFile = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
-    const [extraHourLatenessDataSchemaValue, setExtraHourLatenessDataSchema] =
-        useState<string[]>(Object.keys(extraHourLatenessDataSchema));
+    const [massiveEmployeeSchemaValue, setMassiveEmployeeSchema] = useState<
+        string[]
+    >(Object.keys(massiveEmployeechema));
 
     const {
         setDeleteEntityDialog,
@@ -31,20 +26,20 @@ const ExtraHourLatenessFile = () => {
         deleteEntityDialog,
         submitted,
         setEntity,
-    } = useCrudModals<IExtraHourLatenessData>();
+    } = useCrudModals<IMassiveEmployee>();
 
     const [notExistedEmployeeData, setNotExistedEmployeeData] = useState<
-        IExtraHourLatenessData[]
+        IMassiveEmployee[]
     >([]);
     const [isExistEmployee, setIsExistEmployee] = useState(false);
 
-    const handleRevert = (entity: IExtraHourLatenessData) => {
+    const handleRevert = (entity: IMassiveEmployee) => {
         setEntity(entity);
         setSubmitted(false);
         setDeleteEntityDialog(true);
     };
 
-    const addEntity = useAddExtraHourLatenessDataQuery({
+    const addEntity = useAddMassiveEmployeeQuery({
         toast,
         setAddEntityDialog,
         setSubmitted,
@@ -58,13 +53,13 @@ const ExtraHourLatenessFile = () => {
         date: string,
         clear: () => void
     ) => {
-        const extraHourLatenessFile = {
-            description: name,
-            dateExecute: new Date(date),
+        const massiveEmployee = {
+            name: `${name} - ${date}`,
+            chargeDate: date,
             isPaid: false,
-        } as IExtraHourLatenessData;
-
-        addEntity.mutate(extraHourLatenessFile);
+            employees: data,
+        } as IMassiveEmployee;
+        addEntity.mutate(massiveEmployee);
         clear();
     };
 
@@ -87,7 +82,7 @@ const ExtraHourLatenessFile = () => {
                     </Link>
 
                     <h2 className="font-bold white-space-nowrap text-2xl">
-                        Horas Extras
+                        Cargar Empleados
                     </h2>
                 </div>
             ) : (
@@ -107,7 +102,7 @@ const ExtraHourLatenessFile = () => {
                         </Link>
 
                         <h2 className="font-bold white-space-nowrap text-2xl">
-                            Horas Extras
+                            Aumento Masivo
                         </h2>
                     </div>
                 </>
@@ -115,7 +110,7 @@ const ExtraHourLatenessFile = () => {
             {isToSendFile ? (
                 <ExcelTable
                     handleUpload={handleUpload}
-                    type={extraHourLatenessDataSchemaValue}
+                    type={massiveEmployeeSchemaValue}
                     notExistedEmployeeData={notExistedEmployeeData}
                     setIsExistEmployee={setIsExistEmployee}
                     isExistEmployee={isExistEmployee}
@@ -130,21 +125,21 @@ const ExtraHourLatenessFile = () => {
                         onClick={() => {
                             setIsToSendFile(true);
                             setIsVisible(false);
-                            setExtraHourLatenessDataSchema(
-                                extraHourLatenessDataSchemaValue
+                            setMassiveEmployeeSchema(
+                                massiveEmployeeSchemaValue
                             );
                         }}
                     />
                     <div className="m-2">
-                        <ExtraHourLatenessTable
+                        <MassiveEmployeeTable
                             submitted={submitted}
                             handleRevert={handleRevert}
                         />
                     </div>
                     {deleteEntityDialog && (
                         <DeleteEntity
-                            id={entity?.idExtraHourLatenessData ?? 0}
-                            endpoint="employee/extraHourLatenessFile"
+                            id={entity?.idMassiveEmployee ?? 0}
+                            endpoint="employee/massiveEmployee"
                             deleteEntityDialog={deleteEntityDialog}
                             setDeleteEntityDialog={setDeleteEntityDialog}
                             setSubmitted={setSubmitted}
@@ -157,4 +152,15 @@ const ExtraHourLatenessFile = () => {
     );
 };
 
-export default ExtraHourLatenessFile;
+export default MassiveEmployee;
+
+// function useAddMassiveEmployeeQuery(arg0: {
+//     toast: MutableRefObject<Toast | null>;
+//     setAddEntityDialog: Dispatch<SetStateAction<boolean>>;
+//     setSubmitted: Dispatch<SetStateAction<boolean>>;
+//     setNotExistedEmployeeData: Dispatch<SetStateAction<IMassiveEmployee[]>>;
+//     setIsExistEmployee: Dispatch<SetStateAction<boolean>>;
+// }) {
+//     throw new Error("Function not implemented.");
+// }
+

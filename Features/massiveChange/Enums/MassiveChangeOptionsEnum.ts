@@ -4,4 +4,5 @@ export enum MassiveChangeOptionsEnum {
     ArchiveCommission = "Commision archivo",
     ExtraHourLatenessFile = "Horas extras y tardanzas",
     ComplementaryData = "Data complementaria",
+    MassiveEmployee = "Empleados",
 }

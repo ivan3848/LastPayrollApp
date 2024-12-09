@@ -39,6 +39,8 @@ export default function ExcelTable({
 
     const { excelData, onSelect, clearData, file } = useExcelTable();
 
+    console.log('Excel data', excelData)
+
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -132,10 +134,10 @@ export default function ExcelTable({
                                 header={
                                     getTableColumnName(
                                         element.charAt(0).toUpperCase() +
-                                            element.slice(1)
+                                        element.slice(1)
                                     ) ??
                                     element.charAt(0).toUpperCase() +
-                                        element.slice(1)
+                                    element.slice(1)
                                 }
                                 headerStyle={{
                                     minWidth: "15rem",
@@ -145,7 +147,7 @@ export default function ExcelTable({
                         ))}
                 </DataTable>
 
-                {isExistEmployee && (
+                {/* {isExistEmployee && (
                     <>
                         <NotExistedEmployee
                             isExistEmployee={isExistEmployee}
@@ -153,7 +155,7 @@ export default function ExcelTable({
                             notExistedEmployeeData={notExistedEmployeeData}
                         />
                     </>
-                )}
+                )} */}
             </div>
         </>
     );

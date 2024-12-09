@@ -6,11 +6,11 @@ import {
     DataTablePageEvent,
     DataTableSortEvent,
 } from "primereact/datatable";
-import useMassiveIncreaseQuery from "../Hooks/useMassiveIncreaseQuery";
-import { IMassiveIncrease } from "../Types/IMassiveIncrease";
+import { IMassiveEmployee } from "../Types/IMassiveEmployee";
+import useMassiveEmployeeQuery from "../Hooks/useMassiveEmployee";
 interface Props {
     submitted: boolean;
-    handleRevert: (entity: IMassiveIncrease) => void;
+    handleRevert: (entity: IMassiveEmployee) => void;
 }
 
 const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
@@ -25,7 +25,7 @@ const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useMassiveIncreaseQuery(
+    const { data, isLoading } = useMassiveEmployeeQuery(
         params,
         listOfDependencies
     );
@@ -110,22 +110,9 @@ const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
                 }}
             ></Column>
             <Column
-                field="isPaid"
-                header="Pago realizado"
-                headerStyle={{ minWidth: "15rem" }}
-                sortable
-                filter
-                filterField="isPaid"
-                filterPlaceholder="Buscar por Pago realizado"
-                showFilterMenuOptions={false}
-                onFilterApplyClick={(e) => onFilter(e)}
-                onFilterClear={clearFilters}
-                body={(rowData) => (rowData.isPaid ? "Si" : "No")}
-            ></Column>
-            <Column
                 header="Acciones"
                 body={(rowData) => (
-                    <ActionTableTemplate<IMassiveIncrease>
+                    <ActionTableTemplate<IMassiveEmployee>
                         isCustomDelete={true}
                         entity={rowData}
                         handleDelete={handleRevert}

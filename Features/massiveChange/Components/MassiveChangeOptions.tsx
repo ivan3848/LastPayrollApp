@@ -16,7 +16,7 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                 <Link href="/massiveChange/massiveIncrease">
                     <Button
                         label="Aumento Masivo"
-                        icon="pi pi-search"
+                        icon="pi pi-money-bill"
                         className="m-2"
                         onClick={() =>
                             setAction(MassiveChangeOptionsEnum.MassiveIncrease)
@@ -26,7 +26,7 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                 <Link href="/massiveChange/archiveCommission">
                     <Button
                         label="Comision archivo"
-                        icon="pi pi-search"
+                        icon="pi pi-wallet"
                         className="m-2"
                         onClick={() =>
                             setAction(
@@ -37,8 +37,8 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                 </Link>
                 <Link href="/massiveChange/extraHourLatenessFile">
                     <Button
-                        label="Horas extras y tardanzas"
-                        icon="pi pi-search"
+                        label="Horas Extras"
+                        icon="pi pi-stopwatch"
                         className="m-2"
                         onClick={() =>
                             setAction(
@@ -51,6 +51,18 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                     <Button
                         label="Data complementaria"
                         icon="pi pi-pencil"
+                        className="m-2"
+                        onClick={() =>
+                            setAction(
+                                MassiveChangeOptionsEnum.ComplementaryData
+                            )
+                        }
+                    />
+                </Link>
+                <Link href="/massiveChange/massiveEmployee">
+                    <Button
+                        label="Empleados"
+                        icon="pi pi-users"
                         className="m-2"
                         onClick={() =>
                             setAction(

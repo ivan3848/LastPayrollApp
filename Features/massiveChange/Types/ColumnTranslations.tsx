@@ -15,6 +15,26 @@ const columnTranslations: { [key: string]: string } = {
     IdConcept: "Código Concepto",
     ConceptCode: "Codigo Concepto Normal",
     DateExecuted: "Fecha de carga",
+    HourAmount: "Cantidad de Horas",
+    TypeValue: "Tipo de Hora",
+    FirstLastName: "Primer Apellido",
+    SecondLastName: "Segundo Apellido",
+    Gender: "Genero",
+    BirthDay: "Fecha de Nacimiento",
+    Nationality: "Nacionalidad",
+    EducationLevel: "Nivel Educativo",
+    Ubication: "Localidad",
+    Position: "Posición",
+    Ocupation: "Ocupación",
+    Department: "Departamento",
+    PayrollArea: "Area de Nómina",
+    DocumentType: "Tipo de Documento ",
+    Identification: "Cedula o Pasaporte",
+    StartDate: "Fecha de Inicio",
+    PaymentMethod: "Metodo de Pago",
+    BankAccount: "Cuenta Bancaria",
+    CostCenter: "Centro de Costo",
+    WorkScheduler: "Horario"
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;
