@@ -143,6 +143,7 @@ const AddPersonInsurance = ({
                         isValid={!!errors.idConcept}
                         watch={watch}
                         setValue={setValue}
+                        setData={setConceptField}
                     />
                     {errors.idConcept && (
                         <small className="text-red-600">

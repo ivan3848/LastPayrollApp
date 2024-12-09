@@ -1,4 +1,4 @@
-import emptyImage from "@/constants/emptyImage";
+import emptyImage from "@/constants/useFullConstants";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Button } from "primereact/button";
 import { Fieldset } from "primereact/fieldset";

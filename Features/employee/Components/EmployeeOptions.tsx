@@ -45,7 +45,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 )}
                 {hasModuleAccess("SEGUROS") && (
                     <Button
-                        label="SEGUROS"
+                        label="Seguros"
                         icon="pi pi-shield"
                         className="m-2"
                         onClick={() =>
