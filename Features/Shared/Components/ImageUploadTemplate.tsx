@@ -1,3 +1,4 @@
+import emptyImage from "@/constants/useFullConstants";
 import {
     FileUpload,
     FileUploadHeaderTemplateOptions,
@@ -6,11 +7,10 @@ import {
 } from "primereact/fileupload";
 import { ProgressBar } from "primereact/progressbar";
 import { Tag } from "primereact/tag";
-import { Tooltip } from "primereact/tooltip";
-import { useRef, useState, useEffect, ChangeEvent } from "react"; // Import ChangeEvent from react
 import { Toast } from "primereact/toast";
+import { Tooltip } from "primereact/tooltip";
+import { useRef, useState } from "react"; // Import ChangeEvent from react
 import { UseFormSetValue } from "react-hook-form";
-import emptyImage from "@/constants/emptyImage";
 
 interface Props {
     setValue: UseFormSetValue<any>;

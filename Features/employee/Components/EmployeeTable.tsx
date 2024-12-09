@@ -1,7 +1,7 @@
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_EMPLOYEE } from "@/constants/cacheKeys";
-import emptyImage from "@/constants/emptyImage";
+import emptyImage, { PAGESIZE } from "@/constants/useFullConstants";
 import Link from "next/link";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
@@ -38,7 +38,7 @@ export default function EmployeeTable({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(8);
+    } = useParamFilter(PAGESIZE);
     const haveAccess = "EMPLEADO";
 
     const [layout, setLayout] = useState<

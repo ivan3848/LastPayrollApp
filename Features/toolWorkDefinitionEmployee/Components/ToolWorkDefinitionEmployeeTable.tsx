@@ -79,7 +79,7 @@ const ToolWorkDefinitionEmployeeTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Herramientas A ASDe Trabajo</h3>
+            <h3 className="m-0">Herramientas De Trabajo</h3>
 
             <AddButton
                 handleAdd={handleAdd}

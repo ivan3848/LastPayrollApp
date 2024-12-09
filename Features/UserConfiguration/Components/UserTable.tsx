@@ -1,7 +1,6 @@
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_USER_CONFIGURATION_WITH_LOGIN } from "@/constants/cacheKeys";
-import emptyImage from "@/constants/emptyImage";
 import { Button } from "primereact/button";
 import { DataTablePageEvent } from "primereact/datatable";
 import { DataView } from "primereact/dataview";
@@ -16,11 +15,11 @@ import userServiceWithOut from "../Service/userService";
 import { IUser } from "../Types/IUser";
 import AddUser from "./AddUser";
 import ResetUserStatus from "./ResetUserStatus";
+import emptyImage, { PAGESIZE } from "@/constants/useFullConstants";
 
 interface Props {
     submitted: boolean;
 }
-
 const sortOptionsMap = {
     "": "Ordenar por...",
     idEmployee: "Código de empleado",
@@ -44,7 +43,7 @@ export default function UserTable({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(8);
+    } = useParamFilter(PAGESIZE);
 
     const [sortKey, setSortKey] = useState(null);
     const [user, setUser] = useState<IUser | null>(null);

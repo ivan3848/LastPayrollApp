@@ -2,7 +2,7 @@ import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import useEntityQuery from "@/Features/Shared/Hooks/useEntityQuery";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { CACHE_KEY_USER_CONFIGURATION } from "@/constants/cacheKeys";
-import emptyImage from "@/constants/emptyImage";
+import emptyImage, { PAGESIZE } from "@/constants/useFullConstants";
 import { DataTablePageEvent } from "primereact/datatable";
 import { DataView } from "primereact/dataview";
 import { Dropdown, DropdownChangeEvent } from "primereact/dropdown";
@@ -19,7 +19,6 @@ import EditUser from "./EditUser";
 import ResetUserPassword from "./ResetUserPassword";
 import ResetUserStatus from "./ResetUserStatus";
 import React from "react";
-import { Card } from "primereact/card";
 interface Props {
     submitted: boolean;
 }
@@ -47,7 +46,7 @@ export default function UserTableWithLogin({ submitted }: Props) {
         clearSorts,
         setGlobalFilter,
         params,
-    } = useParamFilter(8);
+    } = useParamFilter(PAGESIZE);
 
     const [layout] = useState<
         "grid" | "grid" | (string & Record<string, unknown>)
