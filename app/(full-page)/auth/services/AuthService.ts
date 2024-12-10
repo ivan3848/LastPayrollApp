@@ -13,7 +13,7 @@ export interface Permission {
 }
 
 const apiService = new ApiService<ILogin, IUser>("employee/user/");
-
+let image = ""
 function* createRolModule(rolModuleList: IRolModule[]) {
     for (let element of rolModuleList) {
         yield { module: element.module, canWrite: element.canWrite };
@@ -28,12 +28,13 @@ export async function login(username: string, password: string) {
 
     if (typeof response === "string") return response;
 
-    const { employeeName, userId, idCompany, rol } = response as IUser;
+    const { employeeName, userId, idCompany, rol, employeeImage } = response as IUser;
+    image = employeeImage!;
     let rolModule: IRolModule[] = Array.from(
         createRolModule(response.rolModule)
     );
-    const result: IUser = { employeeName, userId, idCompany, rol, rolModule };
 
+    const result: IUser = { employeeName, userId, idCompany, rol, rolModule };
     const session = await encrypt({ result, expires: 2 * 24 * 60 * 60 * 1000 });
 
     cookies().set("session", session, { httpOnly: true });
@@ -63,6 +64,11 @@ export async function haveAccess(rolModule: string): Promise<Permission> {
     return { hasPermission: true, isReadOnly: !modules?.canWrite };
 }
 
+export async function getImage() {
+    return image;
+}
+
 export async function outSession() {
+    image = ""
     redirect("/auth/login");
 }

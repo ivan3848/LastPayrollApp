@@ -6,4 +6,5 @@ export default interface IAuth {
     rol: string;
     employeeName: string;
     rolModule: IRolModule[];
+    employeeImage: string;
 }
