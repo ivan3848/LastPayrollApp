@@ -12,26 +12,34 @@ import {
 import AppBreadcrumb from "./AppBreadCrumb";
 import { LayoutContext } from "./context/layoutcontext";
 import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
- 
+import { getImage } from "@/app/(full-page)/auth/services/AuthService";
+import useAuthStore from "@/app/(full-page)/auth/Hook/AuthStore";
+
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const { onMenuToggle, showProfileSidebar, showConfigSidebar } =
         useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const [adminInfo, setAdminInfo] = useState({} as any);
- 
+    const { employeeImage, setEmployeeImage } = useAuthStore();
+
     const onConfigButtonClick = () => {
         showConfigSidebar();
     };
- 
+
     useImperativeHandle(ref, () => ({
         menubutton: menubuttonRef.current,
     }));
+
     useEffect(() => {
         const onProfileSidebarShow = async () => {
             const sessionData = await sessionCheck();
+            const image = await getImage();
+            console.log(image === "" ? "No image" : "Image found");
+            if (image !== "") {
+                setEmployeeImage(image!);
+            }
             setAdminInfo(sessionData);
         };
- 
         onProfileSidebarShow();
     }, []);
     return (
@@ -45,10 +53,10 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                 >
                     <i className="pi pi-bars"></i>
                 </button>
- 
+
                 <AppBreadcrumb className="topbar-breadcrumb"></AppBreadcrumb>
             </div>
- 
+
             <div className="topbar-end">
                 <ul className="topbar-menu">
                     <li className="topbar-search">
@@ -64,7 +72,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             />
                         </span>
                     </li>
- 
+
                     <li className="topbar-user-logged">
                         <span className="text-right lg:block">
                             <span className="block text-sm font-medium text-black dark:text-white">
@@ -82,8 +90,12 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             onClick={showProfileSidebar}
                         >
                             <img
-                                src="/layout/images/avatar/avatar.png"
+                                src={`${employeeImage}`}
                                 alt="Profile"
+                                style={{
+                                    borderRadius: "60%",
+                                    transform: "scale(1.06)",
+                                }}
                             />
                         </button>
                     </li>
@@ -103,7 +115,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
         </div>
     );
 });
- 
+
 AppTopbar.displayName = "AppTopbar";
- 
+
 export default AppTopbar;

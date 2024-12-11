@@ -38,7 +38,6 @@ export function haveAccess(
     user: IUser | undefined
 ): IPermission {
     if (user === undefined) redirect("/auth/login");
-
     var modules = user!.rolModule.find(
         (element: IRolModule) =>
             element.module.toLocaleLowerCase() === rolModule.toLocaleLowerCase()
