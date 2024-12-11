@@ -13,7 +13,6 @@ export interface Permission {
 }
 
 const apiService = new ApiService<ILogin, IUser>("employee/user/");
-let image = ""
 function* createRolModule(rolModuleList: IRolModule[]) {
     for (let element of rolModuleList) {
         yield { module: element.module, canWrite: element.canWrite };
@@ -28,8 +27,8 @@ export async function login(username: string, password: string) {
 
     if (typeof response === "string") return response;
 
-    const { employeeName, userId, idCompany, rol, employeeImage } = response as IUser;
-    image = employeeImage!;
+    const { employeeName, userId, idCompany, rol } = response as IUser;
+
     let rolModule: IRolModule[] = Array.from(
         createRolModule(response.rolModule)
     );
@@ -64,11 +63,6 @@ export async function haveAccess(rolModule: string): Promise<Permission> {
     return { hasPermission: true, isReadOnly: !modules?.canWrite };
 }
 
-export async function getImage() {
-    return image;
-}
-
 export async function outSession() {
-    image = ""
     redirect("/auth/login");
 }

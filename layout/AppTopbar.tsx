@@ -12,15 +12,16 @@ import {
 import AppBreadcrumb from "./AppBreadCrumb";
 import { LayoutContext } from "./context/layoutcontext";
 import { sessionCheck } from "@/app/(full-page)/auth/login/LoginServerActions";
-import { getImage } from "@/app/(full-page)/auth/services/AuthService";
-import useAuthStore from "@/app/(full-page)/auth/Hook/AuthStore";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import useAuthQuery from "@/app/(full-page)/auth/Hook/useAuthQuery";
 
 const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     const { onMenuToggle, showProfileSidebar, showConfigSidebar } =
         useContext(LayoutContext);
     const menubuttonRef = useRef(null);
     const [adminInfo, setAdminInfo] = useState({} as any);
-    const { employeeImage, setEmployeeImage } = useAuthStore();
+    const { params } = useParamFilter();
+    let { data: configData } = useAuthQuery(params, [], adminInfo.userId);
 
     const onConfigButtonClick = () => {
         showConfigSidebar();
@@ -33,15 +34,11 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
     useEffect(() => {
         const onProfileSidebarShow = async () => {
             const sessionData = await sessionCheck();
-            const image = await getImage();
-            console.log(image === "" ? "No image" : "Image found");
-            if (image !== "") {
-                setEmployeeImage(image!);
-            }
             setAdminInfo(sessionData);
         };
         onProfileSidebarShow();
     }, []);
+
     return (
         <div className="layout-topbar">
             <div className="topbar-start">
@@ -90,7 +87,7 @@ const AppTopbar = forwardRef<AppTopbarRef>((props, ref) => {
                             onClick={showProfileSidebar}
                         >
                             <img
-                                src={`${employeeImage}`}
+                                src={`${configData.employeeImage}`}
                                 alt="Profile"
                                 style={{
                                     borderRadius: "60%",
