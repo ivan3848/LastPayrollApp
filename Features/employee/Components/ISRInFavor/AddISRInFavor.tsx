@@ -60,7 +60,7 @@ const AddISRInFavor = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "50vw" }}
-            header="Agregar ISR a Favor"
+            header="Agregar Isr a favor"
             modal
             className="p-fluid"
             onHide={hideDialog}

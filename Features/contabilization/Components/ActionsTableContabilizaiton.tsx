@@ -20,7 +20,7 @@ function ActionsTableContabilization<T>({
         <>
             {Contabilization1 && (
                 <Button
-                    icon="pi pi-calculator"
+                    label="1"
                     className="mr-2"
                     rounded
                     severity="info"
@@ -29,8 +29,8 @@ function ActionsTableContabilization<T>({
             )}
             {Contabilization2 && (
                 <Button
-                    icon="pi pi-calculator"
-                    className="mr-2"
+                    label="2"
+                    className="mr-2 "
                     rounded
                     severity="success"
                     onClick={() => Contabilization2(entity)}

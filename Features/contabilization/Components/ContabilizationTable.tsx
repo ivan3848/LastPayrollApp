@@ -1,7 +1,11 @@
 "use client";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
-import { DataTable, DataTablePageEvent, DataTableSortEvent } from "primereact/datatable";
+import {
+    DataTable,
+    DataTablePageEvent,
+    DataTableSortEvent,
+} from "primereact/datatable";
 import { Card } from "primereact/card";
 import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
@@ -37,10 +41,7 @@ const ContabilizationTable = ({
 
     const listOfDependencies: boolean[] = [submitted];
 
-    const { data, isLoading } = usePayrollPayQuery(
-        params,
-        listOfDependencies,
-    );
+    const { data, isLoading } = usePayrollPayQuery(params, listOfDependencies);
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString("es-DO", {
@@ -87,9 +88,7 @@ const ContabilizationTable = ({
                 loading={isLoading}
                 lazy
                 sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                sortOrder={
-                    params.filter?.sorts?.[0]?.isAsc ? 1 : -1
-                }
+                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
                 totalRecords={data?.totalCount}
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 emptyMessage="No hay registros para mostrar."
@@ -97,7 +96,8 @@ const ContabilizationTable = ({
                 rowsPerPageOptions={[5, 10, 25]}
                 rows={data?.pageSize!}
                 first={data.firstRow!}
-                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}">
+                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+            >
                 <Column
                     field="payrollNumber"
                     header="Numero de Nómina"
@@ -128,7 +128,7 @@ const ContabilizationTable = ({
                     }
                 />
                 <Column
-                    header="Contabilizacion 1 & 2"
+                    header="Contabilización 1 & 2"
                     body={(rowData: IPayrollPay) => (
                         <ActionsTableContabilization
                             entity={rowData}

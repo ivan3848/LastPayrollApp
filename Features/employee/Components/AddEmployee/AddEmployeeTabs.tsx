@@ -17,6 +17,7 @@ import { addEmployeeService } from "../../Services/employeeService";
 import { IEmployee } from "../../Types/IEmployee";
 import { IInsertEmployee } from "../../Types/IInsertEmployee";
 import AddEmployee from "./AddEmployee";
+import Link from "next/link";
 
 interface personFormRef {
     submitPersonForm: () => void;
@@ -82,6 +83,14 @@ const AddEmployeeTabs = () => {
 
     return (
         <div className="col-12">
+            <Link
+                href="/employee"
+                className="text-inherit"
+                style={{ textDecoration: "none", color: "inherit" }}
+            >
+                <i className="cursor-pointer pi pi-arrow-left"></i>
+            </Link>
+
             <h3>Agregar Empleado</h3>
             <Toast ref={toast} />
             {addEntityDialog && (
