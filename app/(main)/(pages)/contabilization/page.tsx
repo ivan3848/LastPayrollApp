@@ -10,7 +10,7 @@ const ContabilizationPage = () => {
 
     return (
         <div className="card">
-            <h4 className="mb-4">CONTABILIZACIÓN DE NOMINAS</h4>
+            <h4 className="mb-4">CONTABILIZACIÓN DE NÓMINA</h4>
             <div className="flex mb-2 gap-2 justify-content-end">
                 <Button
                     onClick={() => setActiveIndex(0)}

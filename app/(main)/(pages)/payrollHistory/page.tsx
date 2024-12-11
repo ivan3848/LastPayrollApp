@@ -4,7 +4,7 @@ import React from "react";
 const page = () => {
     return (
         <div className="card">
-            <h4 className="mb-4">HISTORIAL DE NOMINA</h4>
+            <h4 className="mb-4">HISTORIAL DE NÓMINA</h4>
             <PayrollHistory />
         </div>
     );

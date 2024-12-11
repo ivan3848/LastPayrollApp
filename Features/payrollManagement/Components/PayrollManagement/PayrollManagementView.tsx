@@ -114,9 +114,11 @@ const PayrollManagement = ({
     };
 
     const getLastRecord = async (idPayrollArea: number) => {
-        const result = await lastPayrollManagementService.getById(idPayrollArea) as IPayrollManagement;
+        const result = (await lastPayrollManagementService.getById(
+            idPayrollArea
+        )) as IPayrollManagement;
         setEntity(result);
-    }
+    };
 
     useEffect(() => {
         const updateFormValues = (data: IPayrollManagement) => {
@@ -166,13 +168,13 @@ const PayrollManagement = ({
                     <Toast ref={toast} />
                     <div className="field col-12 md:col-5">
                         <label htmlFor="idPayrollArea">
-                            <strong>Area de Nómina</strong>
+                            <strong>Área de Nómina</strong>
                         </label>
                         <SelectButton
                             {...register("idPayrollArea")}
                             value={watch("idPayrollArea")}
                             onChange={(e) => {
-                                setValue("idPayrollArea", e.value)
+                                setValue("idPayrollArea", e.value);
                                 getLastRecord(e.value);
                             }}
                             options={[
@@ -273,10 +275,10 @@ const PayrollManagement = ({
                                                     showButtonBar
                                                     value={
                                                         watch("date") ??
-                                                            entity?.date
+                                                        entity?.date
                                                             ? new Date(
-                                                                entity?.date!
-                                                            )
+                                                                  entity?.date!
+                                                              )
                                                             : new Date()
                                                     }
                                                     onChange={(e: any) => {
@@ -314,7 +316,11 @@ const PayrollManagement = ({
                                                         )
                                                     }
                                                     showIcon
-                                                    disabled={watch("idPayrollArea") != 3}
+                                                    disabled={
+                                                        watch(
+                                                            "idPayrollArea"
+                                                        ) != 3
+                                                    }
                                                 />
                                                 {errors.payrollPeriodStart && (
                                                     <small className="p-invalid text-danger">
@@ -343,7 +349,11 @@ const PayrollManagement = ({
                                                         )
                                                     }
                                                     showIcon
-                                                    disabled={watch("idPayrollArea") != 3}
+                                                    disabled={
+                                                        watch(
+                                                            "idPayrollArea"
+                                                        ) != 3
+                                                    }
                                                 />
                                                 {errors.payrollPeriodEnd && (
                                                     <small className="p-invalid text-danger">
@@ -526,7 +536,7 @@ const PayrollManagement = ({
                         </div>
                     </div>
                     <DialogFooterButtonPayrollManagement
-                        hideDialog={() => { }}
+                        hideDialog={() => {}}
                     />
                 </div>
             </div>

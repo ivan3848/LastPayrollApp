@@ -106,7 +106,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Absentismos",
                     "Fecha de pago",
                     "Días a pagar",
-                    "Nomina",
+                    "Nómina",
                     "Número de nómina",
                     "Posición",
                     "Departamento",
@@ -168,7 +168,7 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
                 "Días a pagar": vacation.dayToPay,
-                Nomina: vacation.payrollName,
+                Nómina: vacation.payrollName,
                 "Número de nómina": vacation.payrollNumber,
                 Posición: vacation.position,
                 Departamento: vacation.department,
@@ -403,12 +403,12 @@ const VacationForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

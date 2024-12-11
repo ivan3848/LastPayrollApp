@@ -105,7 +105,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Concepto",
                     "Dias no laborados",
                     "A Pagar",
-                    "Nomina",
+                    "Nómina",
                     "Descripción",
                     "Inicio",
                     "Fin",
@@ -150,7 +150,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 Concepto: licences.conceptName ?? "N/A",
                 "Dias no laborados": licences.workDayOff ?? "N/A",
                 "A Pagar": licences.isToPay ?? "N/A",
-                Nomina: licences.payrollPay ?? "N/A",
+                Nómina: licences.payrollPay ?? "N/A",
                 Descripción: licences.description ?? "N/A",
                 Inicio:
                     new Date(licences.startDate)
@@ -397,7 +397,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="idPayrollPay"
-                    header="Código Nomina"
+                    header="Código nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
@@ -410,7 +410,7 @@ const LicencesForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="payrollPay"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter

@@ -78,8 +78,8 @@ const EditLease = ({
 
     const onSubmit = (data: ILease) => {
         data.idEmployee = entity.idEmployee;
-        data.idDepositConcept = data.idDepositConcept ?? entity.idConcept
-        data.idDiscountConcept = data.idDiscountConcept ?? entity.idConcept
+        data.idDepositConcept = data.idDepositConcept ?? entity.idConcept;
+        data.idDiscountConcept = data.idDiscountConcept ?? entity.idConcept;
         editEntity.mutate(data);
     };
 
@@ -109,20 +109,26 @@ const EditLease = ({
         const totalAmount = watch("totalAmount");
         const feeQuantity = calculateAmountFees();
 
-        return feeQuantity == 1
-            ? totalAmount
-            : totalAmount / feeQuantity
-    }
+        return feeQuantity == 1 ? totalAmount : totalAmount / feeQuantity;
+    };
 
     const calculateAmountFees = (): number => {
-        const start = watch("startDate") ? new Date(watch("startDate")) : new Date();
+        const start = watch("startDate")
+            ? new Date(watch("startDate"))
+            : new Date();
         const end = watch("endDate") ? new Date(watch("endDate")) : new Date();
         const recurrency = watch("idRecurrencyStatus");
 
-        const startDate = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()));
-        const endDate = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()));
+        const startDate = new Date(
+            Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())
+        );
+        const endDate = new Date(
+            Date.UTC(end.getFullYear(), end.getMonth(), end.getDate())
+        );
 
-        let months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+        let months =
+            (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+            (endDate.getMonth() - startDate.getMonth());
 
         if (endDate < startDate) months -= 1;
 
@@ -272,7 +278,9 @@ const EditLease = ({
                             <GenericInputNumber
                                 id="fees"
                                 isValid={!!errors.fees}
-                                currentValue={calculateAmountFees() ?? entity.fees}
+                                currentValue={
+                                    calculateAmountFees() ?? entity.fees
+                                }
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly
@@ -307,9 +315,12 @@ const EditLease = ({
                             <GenericInputNumber
                                 id="monthlyFee"
                                 isValid={!!errors.monthlyFee}
-                                currentValue={(watch("idRecurrencyStatus") == 16
-                                    ? calculateMonthlyFee()
-                                    : calculateMonthlyFee() * 2) ?? entity.monthlyFee}
+                                currentValue={
+                                    (watch("idRecurrencyStatus") == 16
+                                        ? calculateMonthlyFee()
+                                        : calculateMonthlyFee() * 2) ??
+                                    entity.monthlyFee
+                                }
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly
@@ -326,9 +337,12 @@ const EditLease = ({
                             <GenericInputNumber
                                 id="amountFee"
                                 isValid={!!errors.amountFee}
-                                currentValue={(calculateAmountFees() == 1
-                                    ? calculateMonthlyFee() * 2
-                                    : calculateMonthlyFee()) ?? entity.amountFee}
+                                currentValue={
+                                    (calculateAmountFees() == 1
+                                        ? calculateMonthlyFee() * 2
+                                        : calculateMonthlyFee()) ??
+                                    entity.amountFee
+                                }
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly
@@ -370,7 +384,7 @@ const EditLease = ({
                                     }
                                     options={[
                                         { label: "Cheque", value: false },
-                                        { label: "Nomina", value: true },
+                                        { label: "Nómina", value: true },
                                     ]}
                                 />
                             </div>

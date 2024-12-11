@@ -90,7 +90,7 @@ const PayrollPayExpenseForReportTable = ({
         await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
-        const text = "Reporte de Gastos de Nomina";
+        const text = "Reporte de Gastos de Nómina";
         const textWidth = doc.getTextWidth(text);
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
@@ -99,7 +99,7 @@ const PayrollPayExpenseForReportTable = ({
                 [
                     "Código Empleado",
                     "Nombre Completo",
-                    "Nomina",
+                    "Nómina",
                     "Concepto",
                     "Centro de Costo",
                     "Cuenta contable",
@@ -131,7 +131,7 @@ const PayrollPayExpenseForReportTable = ({
                 return {
                     "Código Empleado": bankRelationship.idEmployee ?? "N/A",
                     "Nombre Completo": bankRelationship.name ?? "N/A",
-                    Nomina: bankRelationship.payrollName ?? "N/A",
+                    "Nómina ": bankRelationship.payrollName ?? "N/A",
                     Concepto: bankRelationship.concept ?? "N/A",
                     "Centro de Costo": bankRelationship.costCenter ?? "N/A",
                     "Cuenta contable": bankRelationship.accountNumber ?? "N/A",
@@ -236,12 +236,12 @@ const PayrollPayExpenseForReportTable = ({
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

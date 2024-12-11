@@ -91,7 +91,7 @@ const PayrollPayExpenseForReportTable = ({
         await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
-        const text = "Reporte de Gastos de Nomina";
+        const text = "Reporte de Gastos de nómina";
         const textWidth = doc.getTextWidth(text);
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
@@ -100,7 +100,7 @@ const PayrollPayExpenseForReportTable = ({
                 [
                     "Código Empleado",
                     "Nombre Completo",
-                    "Nomina",
+                    "Nómina",
                     "Concepto",
                     "Centro de Costo",
                     "Cuenta contable",
@@ -118,7 +118,7 @@ const PayrollPayExpenseForReportTable = ({
             ]),
             startY: 20,
         });
-        doc.save("ReporteGastosNomina.pdf");
+        doc.save("ReporteGastosNómina.pdf");
     };
 
     const exportXLSX = async () => {
@@ -131,7 +131,7 @@ const PayrollPayExpenseForReportTable = ({
             return {
                 "Código Empleado": payrollPay.idEmployee ?? "N/A",
                 "Nombre Completo": payrollPay.name ?? "N/A",
-                Nomina: payrollPay.payrollName ?? "N/A",
+                Nómina: payrollPay.payrollName ?? "N/A",
                 Concepto: payrollPay.concept ?? "N/A",
                 "Centro de Costo": payrollPay.costCenter ?? "N/A",
                 "Cuenta contable": payrollPay.accountingAccount ?? "N/A",
@@ -155,7 +155,7 @@ const PayrollPayExpenseForReportTable = ({
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de Gastos de Nomina
+                Reporte de Gastos de Nómina
             </h2>
             <Button
                 type="button"
@@ -235,12 +235,12 @@ const PayrollPayExpenseForReportTable = ({
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por Nómina"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

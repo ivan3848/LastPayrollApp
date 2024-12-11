@@ -104,7 +104,7 @@ const payrollConfigurationFormSchema = () => {
             .optional(),
         previousPeriodDebt: z
             .number({
-                message: "El concepto deuda periodo anterior es requerido",
+                message: "El concepto deuda período anterior es requerido",
             })
             .optional(),
         outstandingDebt: z

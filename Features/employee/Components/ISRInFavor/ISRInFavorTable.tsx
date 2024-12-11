@@ -96,7 +96,7 @@ const ISRInFavorTable = ({
         return (
             <div className="p-3 animate__animated animate__fadeIn">
                 <DataTable value={data.isrInFavorDetail}>
-                    <Column field="idPayrollPay" header="Periodo"></Column>
+                    <Column field="idPayrollPay" header="Período"></Column>
 
                     <Column field={"idPayrollPay"} header="Nómina"></Column>
 
