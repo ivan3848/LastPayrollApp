@@ -104,7 +104,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Cantidad de Hora",
                     "Valor de Hora",
                     "Fecha",
-                    "Nomina",
+                    "Nómina",
                     "Pago",
                     "Posición",
                     "Departamento",
@@ -154,7 +154,7 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     new Date(lateness.date)
                         .toLocaleDateString()
                         .replace("-", "/") ?? "N/A",
-                Nomina: lateness.payrollName ?? "N/A",
+                Nómina: lateness.payrollName ?? "N/A",
                 Pago: lateness.isPaid ?? "N/A",
                 Posición: lateness.position ?? "N/A",
                 Departamento: lateness.department ?? "N/A",
@@ -395,25 +395,25 @@ const LatenessForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
                     field="idPayrollPay"
-                    header="Código Nomina"
+                    header="Código nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     hidden
                     filter
                     filterField="idPayrollPay"
-                    filterPlaceholder="Buscar por código nomina"
+                    filterPlaceholder="Buscar por código nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}

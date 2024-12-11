@@ -118,7 +118,7 @@ const TotalTaxForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     style: "currency",
                     currency: "DOP",
                 }),
-                "Total impuesto nomina":
+                "Total impuesto nómina":
                     totalTax.payrollPayTotalTax.toLocaleString("es-DO", {
                         style: "currency",
                         currency: "DOP",

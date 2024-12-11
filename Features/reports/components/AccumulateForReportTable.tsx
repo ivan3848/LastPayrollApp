@@ -95,7 +95,7 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
         doc.text(text, textX, 16);
         autoTable(doc, {
             head: [
-                ["Nomina", "Concepto", "Nombre Completo", "Fecha", "Cantidad"],
+                ["Nómina", "Concepto", "Nombre Completo", "Fecha", "Cantidad"],
             ],
             body: excelData?.items.map((item) => [
                 item.payrollName,
@@ -117,7 +117,7 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
         const renamed = accumulateWithoutIdentifier.map((accumulate) => {
             return {
-                Nomina: accumulate.payrollName ?? "N/A",
+                "Nómina ": accumulate.payrollName ?? "N/A",
                 Concepto: accumulate.concept ?? "N/A",
                 "Nombre Completo": accumulate.employeeName ?? "N/A",
                 Fecha:
@@ -221,12 +221,12 @@ const AccumulateForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

@@ -295,7 +295,7 @@ const EditEmployee = ({ employee, toast }: Props) => {
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="idPayrollArea">
-                                Area De Nómina
+                                Área de Nómina
                             </label>
                             <GenericDropDown
                                 id="idPayrollArea"

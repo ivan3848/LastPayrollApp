@@ -89,7 +89,7 @@ const AppMenu = () => {
             ],
         },
         {
-            label: "GESTION NOMINA",
+            label: "GESTION NÓMINA",
             icon: "pi pi-fw pi-users",
             items: [
                 {
@@ -103,12 +103,12 @@ const AppMenu = () => {
                     to: "/payrollHistory",
                 },
                 {
-                    label: "Area de Nómina",
+                    label: "Área de Nómina",
                     icon: "pi pi-fw pi-book",
                     to: "/payrollPay",
                 },
                 {
-                    label: "Contabilizacion",
+                    label: "Contabilización",
                     icon: "pi pi-fw pi-calculator",
                     to: "/contabilization",
                 },
@@ -146,7 +146,7 @@ const AppMenu = () => {
                     to: "/userConfiguration/rol",
                 },
                 {
-                    label: "Configuracion de Nomina",
+                    label: "Configuración de Nómina",
                     icon: "pi pi-fw pi-calculator",
                     to: "/payrollConfiguration",
                 },

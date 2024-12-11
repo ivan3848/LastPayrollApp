@@ -27,14 +27,14 @@ const columnTranslations: { [key: string]: string } = {
     Position: "Posición",
     Ocupation: "Ocupación",
     Department: "Departamento",
-    PayrollArea: "Area de Nómina",
+    PayrollArea: "Área de Nómina",
     DocumentType: "Tipo de Documento ",
     Identification: "Cedula o Pasaporte",
     StartDate: "Fecha de Inicio",
     PaymentMethod: "Metodo de Pago",
     BankAccount: "Cuenta Bancaria",
     CostCenter: "Centro de Costo",
-    WorkScheduler: "Horario"
+    WorkScheduler: "Horario",
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;

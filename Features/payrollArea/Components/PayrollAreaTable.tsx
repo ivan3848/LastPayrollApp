@@ -145,12 +145,12 @@ const PayrollAreaTable = ({ submitted, handleDelete, handleEdit }: Props) => {
         >
             <Column
                 field="name"
-                header="Area de nomina"
+                header="Area de nómina"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
                 filterField="name"
-                filterPlaceholder="Buscar por Area de nomina"
+                filterPlaceholder="Buscar por Area de nómina"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}

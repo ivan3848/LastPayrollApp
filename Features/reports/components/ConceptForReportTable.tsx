@@ -88,7 +88,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
         await refetch();
         const doc = new jsPDF();
         const pageWidth = doc.internal.pageSize.getWidth();
-        const text = "Reporte de Conceptos de nomina";
+        const text = "Reporte de Conceptos de nómina";
         const textWidth = doc.getTextWidth(text);
         const textX = (pageWidth - textWidth) / 2;
         doc.text(text, textX, 16);
@@ -154,7 +154,7 @@ const ConceptForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 className="m-0 mx-auto text-center"
                 style={{ color: "#334155" }}
             >
-                Reporte de Conceptos de nomina
+                Reporte de Conceptos de nómina
             </h2>
             <Button
                 type="button"

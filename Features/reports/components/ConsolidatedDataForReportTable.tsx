@@ -99,7 +99,7 @@ const ConsolidatedDataForReportTable = ({
                 [
                     "Empleado",
                     "Fecha",
-                    "Nomina",
+                    "Nómina",
                     "Centro de Costo",
                     "ID Concepto",
                     "Concepto",
@@ -137,7 +137,7 @@ const ConsolidatedDataForReportTable = ({
                     new Date(consolidate.extraHourDate)
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
-                Nomina: consolidate.payrollName ?? "N/A",
+                "Nómina ": consolidate.payrollName ?? "N/A",
                 "Centro de Costo": consolidate.costCenterName ?? "N/A",
                 "ID Concepto": consolidate.conceptCode ?? "N/A",
                 Concepto: consolidate.concept ?? "N/A",
@@ -273,25 +273,25 @@ const ConsolidatedDataForReportTable = ({
                 ></Column>
                 <Column
                     field="idPayrollPay"
-                    header="ID Nomina"
+                    header="ID Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     hidden
                     filter
                     filterField="idPayrollPay"
-                    filterPlaceholder="Buscar por ID Nomina"
+                    filterPlaceholder="Buscar por ID Nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por Nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

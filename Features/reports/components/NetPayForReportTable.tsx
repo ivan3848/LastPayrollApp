@@ -101,7 +101,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Código de concepto",
                     "Concepto",
                     "Importe",
-                    "Nomina",
+                    "Nómina",
                     "Beneficio",
                     "Fecha de pago",
                 ],
@@ -142,7 +142,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         style: "currency",
                         currency: "DOP",
                     }) ?? "N/A",
-                Nomina: netPay.payrollName ?? "N/A",
+                Nómina: netPay.payrollName ?? "N/A",
                 Beneficio: netPay.isProfit ?? "N/A",
                 "Fecha de pago":
                     new Date(netPay.payrollPayDate)
@@ -325,25 +325,25 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="idPayrollPay"
-                    header="Código Nomina"
+                    header="Código nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     hidden
                     filterField="idPayrollPay"
-                    filterPlaceholder="Buscar por código nomina"
+                    filterPlaceholder="Buscar por código nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por Nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
@@ -361,9 +361,7 @@ const NetPayForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
                     body={(rowData: INetPayForReport) =>
-                        rowData.isProfit
-                                ? "Si"
-                            : "No"
+                        rowData.isProfit ? "Si" : "No"
                     }
                 ></Column>
                 <Column

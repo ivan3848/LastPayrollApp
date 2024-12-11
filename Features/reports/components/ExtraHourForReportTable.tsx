@@ -106,8 +106,8 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Valor de hora",
                     "Fecha",
                     "Pago",
-                    "Nomina",
-                    "Código Nomina",
+                    "Nómina",
+                    "Código Nómina",
                     "Código Posición",
                     "Código Departamento",
                     "Posición",
@@ -181,7 +181,7 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
                 Pago: extraHour.isPaid ?? "N/A",
-                Nomina: extraHour.payrollName ?? "N/A",
+                Nómina: extraHour.payrollName ?? "N/A",
                 //"Código Nomina": extraHour.idPayrollPay ?? "N/A",
                 //"Código Posición": extraHour.idPosition ?? "N/A",
                 //"Código Departamento": extraHour.idDepartment ?? "N/A",
@@ -462,12 +462,12 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar nomina"
+                    filterPlaceholder="Buscar nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
@@ -475,13 +475,13 @@ const ExtraHourForReportTable = ({ filterValues, setFilterValues }: Props) => {
 
                 <Column
                     field="idPayrollPay"
-                    header="Código Nomina"
+                    header="Código nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     hidden
                     filterField="idPayrollPay"
-                    filterPlaceholder="Buscar código de nomina"
+                    filterPlaceholder="Buscar código de nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
