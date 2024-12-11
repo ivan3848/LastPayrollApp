@@ -83,7 +83,7 @@ const FiredEmployeeContabilizationTable = ({
             >
                 <Column
                     field="idEmployee"
-                    header="Codigo de empleado"
+                    header="Código de empleado"
                     sortable
                     filter
                     filterField="idEmployee"
