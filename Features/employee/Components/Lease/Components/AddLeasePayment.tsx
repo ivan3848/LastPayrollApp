@@ -217,7 +217,7 @@ const AddLeasePayment = ({
                                         }
                                         options={[
                                             { label: "Cheque", value: false },
-                                            { label: "Nomina", value: true },
+                                            { label: "Nómina", value: true },
                                         ]}
                                     />
                                     {errors.paymentMethod && (

@@ -44,7 +44,7 @@ export default function EmployeeTable({ submitted }: Props) {
     const [layout, setLayout] = useState<
         "list" | "grid" | (string & Record<string, unknown>)
     >("grid");
-
+    const [isLoadingButton, setLoadingButton] = useState(false);
     const [sortKey, setSortKey] = useState(null);
     const [employee, setEmployee] = useState<IEmployee | null>(null);
     const [showEmployeeActions, setShowEmployeeActions] = useState(false);
@@ -198,6 +198,11 @@ export default function EmployeeTable({ submitted }: Props) {
                             className="min-w-min"
                             label="Editar"
                             icon="pi pi-pencil"
+                            loading={isLoadingButton}
+                            onClick={() => {
+                                setLoadingButton(true);
+                                setTimeout(() => setLoadingButton(false), 2000);
+                            }}
                         />
                     )}
                 </Link>
@@ -267,6 +272,14 @@ export default function EmployeeTable({ submitted }: Props) {
                                 <Button
                                     label="Agregar Empleado"
                                     icon="pi pi-user-plus"
+                                    loading={isLoadingButton}
+                                    onClick={() => {
+                                        setLoadingButton(true);
+                                        setTimeout(
+                                            () => setLoadingButton(false),
+                                            2000
+                                        );
+                                    }}
                                 />
                             )}
                         </Link>

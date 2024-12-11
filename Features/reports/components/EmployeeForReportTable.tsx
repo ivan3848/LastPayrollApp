@@ -110,7 +110,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                     "Horario Laboral",
                     "Zona",
                     "Fecha de Desvinculación",
-                    "Area de nómina",
+                    "Área de nómina",
                     "Banco",
                     "Método de pago",
                 ],
@@ -173,7 +173,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 Zona: employee.zone ?? "N/A",
                 Nacionalidad: employee.nationality ?? "N/A",
                 "Fecha de Desvinculación": employee.firedDate ?? "N/A",
-                "Area de nómina": employee.payrollArea ?? "N/A",
+                "Área de nómina": employee.payrollArea ?? "N/A",
                 "Centro de Costo": employee.costCenter ?? "N/A",
                 Correo: employee.email ?? "N/A",
                 "Labor Directa": employee.isWorkRelation ?? "N/A",
@@ -525,7 +525,7 @@ const EmployeeForReportTable = ({ filterValues, setFilterValues }: Props) => {
                 ></Column>
                 <Column
                     field="payrollArea"
-                    header="Area de nómina"
+                    header="Área de nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter

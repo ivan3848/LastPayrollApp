@@ -131,7 +131,7 @@ const EditBankEmployeeHistory = ({
 
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="isCommissionPayroll">
-                                Por Nomina de Comisiones
+                                Por Nómina de Comisiones
                             </label>
                             <div>
                                 <SelectButton
@@ -154,7 +154,7 @@ const EditBankEmployeeHistory = ({
 
                         <div className="field">
                             <label htmlFor="idPayrollPay" className="w-full">
-                                Nomina de Pago
+                                Nómina de Pago
                             </label>
                             <GenericDropDown
                                 id="idPayrollPay"

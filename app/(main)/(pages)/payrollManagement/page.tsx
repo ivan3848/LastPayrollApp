@@ -1,23 +1,21 @@
-'use client'
-import PayrollManagementView from '@/Features/payrollManagement/Components/PayrollManagement/PayrollManagementView'
-import useGetPayrollManagementByIdPayrollArea from '@/Features/payrollManagement/Hooks/useGetLastPayrollManagement';
-import useCrudModals from '@/Features/Shared/Hooks/useCrudModals';
-import useParamFilter from '@/Features/Shared/Hooks/useParamFilter';
-import React, { useEffect } from 'react'
+"use client";
+import PayrollManagementView from "@/Features/payrollManagement/Components/PayrollManagement/PayrollManagementView";
+import useGetPayrollManagementByIdPayrollArea from "@/Features/payrollManagement/Hooks/useGetLastPayrollManagement";
+import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
+import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
+import React, { useEffect } from "react";
 
 const PayrollManagement = () => {
-
     const { params } = useParamFilter();
 
-    const {
-        setSubmitted,
-        submitted,
-        toast,
-        setEntity,
-        entity,
-    } = useCrudModals<IPayrollManagement>();
+    const { setSubmitted, submitted, toast, setEntity, entity } =
+        useCrudModals<IPayrollManagement>();
 
-    let { data } = useGetPayrollManagementByIdPayrollArea(params, [submitted], 0);
+    let { data } = useGetPayrollManagementByIdPayrollArea(
+        params,
+        [submitted],
+        0
+    );
 
     useEffect(() => {
         if (data) {
@@ -28,15 +26,16 @@ const PayrollManagement = () => {
 
     return (
         <div className="card">
-            <h4 className='mb-4' >REGISTRO GESTION CALCULO DE NOMINA</h4>
+            <h4 className="mb-4">REGISTRO GESTION CALCULO DE NÓMINA</h4>
             <PayrollManagementView
                 entity={entity}
                 setEntity={setEntity}
                 toast={toast}
                 submitted={submitted}
-                setSubmitted={setSubmitted} />
+                setSubmitted={setSubmitted}
+            />
         </div>
-    )
-}
+    );
+};
 
-export default PayrollManagement
+export default PayrollManagement;

@@ -100,7 +100,7 @@ const CheckPaymentForReportTable = ({
                     "Nombre",
                     "Método de pago",
                     "Importe",
-                    "Fecha de Nomina",
+                    "Fecha de nómina",
                 ],
             ],
             body: excelData?.items.map((item) => [
@@ -131,7 +131,7 @@ const CheckPaymentForReportTable = ({
                         style: "currency",
                         currency: "DOP",
                     }) ?? "N/A",
-                "Fecha de Nomina":
+                "Fecha de nómina":
                     new Date(checkPay.payrollPayDate)
                         .toLocaleDateString("en-GB")
                         .replace("-", "/") ?? "N/A",
@@ -259,11 +259,11 @@ const CheckPaymentForReportTable = ({
                 ></Column>
                 <Column
                     field="payrollPayDate"
-                    header="Fecha de Nomina"
+                    header="Fecha de nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filterField="payrollPayDate"
-                    filterPlaceholder="Buscar por fecha de nomina"
+                    filterPlaceholder="Buscar por fecha de nómina"
                     showFilterMenuOptions={false}
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}
