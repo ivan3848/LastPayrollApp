@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import useContractTypeQuery from "../Hooks/useContractTypeQuery";
 import { IContractType } from "../Types/IContractType";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +35,7 @@ const ContractTypeTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useContractTypeQuery(
+    const { data, isFetching } = useContractTypeQuery(
         params,
         listOfDependencies
     );
@@ -69,12 +70,23 @@ const ContractTypeTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Tipos de contratos</h3>
-
-            <AddSingleButton
-                handleAdd={handleAdd}
-                accessName="EMPLEADO_MANTENIMIENTO"
-            />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Tipos de contratos</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton
+                    handleAdd={handleAdd}
+                    accessName="EMPLEADO_MANTENIMIENTO"
+                />
+            )}
         </div>
     );
 
@@ -85,7 +97,6 @@ const ContractTypeTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -108,6 +119,7 @@ const ContractTypeTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="description"
                 filterPlaceholder="Buscar por tipo"
                 showFilterMenuOptions={false}
@@ -116,14 +128,31 @@ const ContractTypeTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IContractType>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="EMPLEADO_MANTENIMIENTO"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IContractType>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="EMPLEADO_MANTENIMIENTO"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import { ICoverPosition } from "../Types/ICoverPosition";
 import useCoverPositionQuery from "../Hooks/useCoverPositionQuery";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     idEmployee: number;
@@ -36,7 +37,7 @@ const CoverPositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCoverPositionQuery(
+    const { data, isFetching } = useCoverPositionQuery(
         params,
         listOfDependencies,
         idEmployee
@@ -79,15 +80,26 @@ const CoverPositionTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Herramientas De Trabajo</h3>
-
-            <Button
-                label="Agregar"
-                icon="pi pi-plus"
-                severity="info"
-                className="mr-2"
-                onClick={handleAdd}
-            />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Herramientas De Trabajo</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <Button
+                    label="Agregar"
+                    icon="pi pi-plus"
+                    severity="info"
+                    className="mr-2"
+                    onClick={handleAdd}
+                />
+            )}
         </div>
     );
 
@@ -98,7 +110,6 @@ const CoverPositionTable = ({
             value={data}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -120,6 +131,7 @@ const CoverPositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="toolWorkDefinitionName"
                 filterPlaceholder="Buscar por herramienta"
                 showFilterMenuOptions={false}
@@ -132,7 +144,13 @@ const CoverPositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
-                body={(rowData) => formatDate(rowData.assignationDate)}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (rowData) => formatDate(rowData.assignationDate)
+                    )
+                }
                 filterField="assignationDate"
                 filterPlaceholder="Buscar por Fecha de Asignación"
                 showFilterMenuOptions={false}
@@ -145,6 +163,7 @@ const CoverPositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="description"
                 filterPlaceholder="Buscar por descripción"
                 showFilterMenuOptions={false}
@@ -153,13 +172,30 @@ const CoverPositionTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<ICoverPosition>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<ICoverPosition>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

@@ -12,6 +12,7 @@ import { IDepartment } from "../Types/IDepartment";
 import useDepartmentQuery from "../Hooks/useDepartmentQuery";
 import useCostCenterQuery from "@/Features/costCenter/Hooks/useCostCenterQuery";
 import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -37,7 +38,7 @@ const DepartmentTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useDepartmentQuery(params, listOfDependencies);
+    const { data, isFetching } = useDepartmentQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -69,9 +70,23 @@ const DepartmentTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Departamento</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Departamento</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton
+                    handleAdd={handleAdd}
+                    accessName="DEPARTAMENTOS"
+                />
+            )}
         </div>
     );
 
@@ -82,7 +97,6 @@ const DepartmentTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -106,6 +120,7 @@ const DepartmentTable = ({
                 sortable
                 filter
                 filterField="name"
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterPlaceholder="Buscar por departamento"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
@@ -116,6 +131,7 @@ const DepartmentTable = ({
                 header="Unidad Organizacional"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="organizationalUnit"
                 filterPlaceholder="Buscar por unidad organizacional"
                 showFilterMenuOptions={false}
@@ -128,22 +144,39 @@ const DepartmentTable = ({
                 header="Centro de costo"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="costCenter"
                 filterPlaceholder="Buscar por centro de costo"
                 showFilterMenuOptions={false}
                 onFilterClear={clearFilters}
             ></Column>
-
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IDepartment>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="DEPARTAMENTOS"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IDepartment>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="DEPARTAMENTOS"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

@@ -15,6 +15,7 @@ import {
 import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import hierarchyPositionService from "../Services/hierarchyPositionService";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -40,7 +41,7 @@ const HierarchyPositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useEntityQuery(
+    const { data, isFetching } = useEntityQuery(
         params,
         listOfDependencies,
         CACHE_KEY_HIERARCHY_POSITION,
@@ -121,9 +122,23 @@ const HierarchyPositionTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Vacantes</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Vacantes</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton
+                    handleAdd={handleAdd}
+                    accessName="DEPARTAMENTOS"
+                />
+            )}
         </div>
     );
 
@@ -134,7 +149,6 @@ const HierarchyPositionTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -157,6 +171,7 @@ const HierarchyPositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="name"
                 filterPlaceholder="Buscar por vacante"
                 showFilterMenuOptions={false}
@@ -183,6 +198,7 @@ const HierarchyPositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="idPosition"
                 filterPlaceholder="Buscar por posición"
                 filterElement={
@@ -206,7 +222,13 @@ const HierarchyPositionTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isOccupied} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isOccupied} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -217,14 +239,31 @@ const HierarchyPositionTable = ({
             />
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IHierarchyPosition>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="DEPARTAMENTOS"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IHierarchyPosition>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="DEPARTAMENTOS"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>
