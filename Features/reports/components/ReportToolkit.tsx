@@ -73,7 +73,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
                 "startDate",
             ],
         },
-        // { key: 2, name: "Comparativo de Nomina" },
+        // { key: 2, name: "Comparativo de Nómina" },
         {
             key: 11,
             name: "Conceptos de Nómina",
@@ -121,7 +121,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
         },
         {
             key: 13,
-            name: "Gastos de Nomina",
+            name: "Gastos de nómina",
             filters: [
                 "accountingAccount",
                 "costCenter",
@@ -423,13 +423,13 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     htmlFor="idPayrollPay"
                                     className="w-full"
                                 >
-                                    Nomina
+                                    Nómina
                                 </label>
                                 <GenericDropDown
                                     id="idPayrollPay"
                                     isValid={false}
                                     text="payrollName"
-                                    placeholder="Seleccione una nomina..."
+                                    placeholder="Seleccione una nómina..."
                                     useQuery={usePayrollPayQuery}
                                     setValue={setValue}
                                     watch={watch}
@@ -597,7 +597,7 @@ const ReportToolkit = ({ setFilter }: Props) => {
                                     htmlFor="idPayrollPayCompare"
                                     className="w-full"
                                 >
-                                    Nomina a comparar
+                                    Nómina a comparar
                                 </label>
                                 <GenericDropDown
                                     id="idPayrollPay"

@@ -1,6 +1,5 @@
 import ActionTableTemplate from "@/Features/Shared/Components/ActionTableTemplate";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
-import { Button } from "primereact/button";
 import { Column } from "primereact/column";
 import {
     DataTable,
@@ -53,8 +52,6 @@ const ISRInFavorTable = ({
         id
     );
 
-    console.log(data);
-
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
         setPageSize(event.rows);
@@ -99,7 +96,7 @@ const ISRInFavorTable = ({
         return (
             <div className="p-3 animate__animated animate__fadeIn">
                 <DataTable value={data.isrInFavorDetail}>
-                    <Column field="idPayrollPay" header="Periodo"></Column>
+                    <Column field="idPayrollPay" header="Período"></Column>
 
                     <Column field={"idPayrollPay"} header="Nómina"></Column>
 
@@ -119,7 +116,7 @@ const ISRInFavorTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">ISR a favor</h3>
+            <h3 className="m-0">Isr a favor</h3>
 
             <AddButton
                 handleAdd={handleAdd}

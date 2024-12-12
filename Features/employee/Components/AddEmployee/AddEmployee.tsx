@@ -35,11 +35,7 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
-const AddEmployee = ({
-    addEmployeeInformation,
-    employee,
-    toast,
-}: Props) => {
+const AddEmployee = ({ addEmployeeInformation, employee, toast }: Props) => {
     const { addEntityFormSchema } = employeeFormSchemas();
     const { setFilters, params, setAllData } = useParamFilter();
     const {
@@ -191,7 +187,7 @@ const AddEmployee = ({
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="idPayrollArea">
-                                Area De Nómina
+                                Área de Nómina
                             </label>
                             <GenericDropDown
                                 id="idPayrollArea"

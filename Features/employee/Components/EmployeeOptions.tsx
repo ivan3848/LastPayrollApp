@@ -100,7 +100,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                 )}
                 {hasModuleAccess("ISR_A_FAVOR") && (
                     <Button
-                        label="ISR A Favor"
+                        label="Isr a favor"
                         icon="pi pi-sparkles"
                         className="m-2"
                         onClick={() =>

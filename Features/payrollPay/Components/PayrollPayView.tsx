@@ -22,7 +22,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { useForm } from "react-hook-form";
 import { generatePayrollPayService } from "../Services/payrollPayService";
-import { IGetPayrollExecution, IGetPayrollExecutionTest } from "../types/IGetPayrollExecution";
+import {
+    IGetPayrollExecution,
+    IGetPayrollExecutionTest,
+} from "../types/IGetPayrollExecution";
 import { IPayrollPay } from "../types/IPayrollPay";
 import AddOrExcludeEmployee, { IAddEmployee } from "./AddOrExcludeEmployee";
 import DeletePayrollDialog from "./DeletePayrollDialog";
@@ -107,7 +110,8 @@ const PayrollPayView = ({
         setIsVisibleDelete(true);
     };
 
-    const handleGenerateReceipt = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+    const handleGenerateReceipt = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>
     ) => {
         event.preventDefault();
         setGenerateReceipt(true);
@@ -162,7 +166,9 @@ const PayrollPayView = ({
         data.toExclude = !byEmployees;
         data.isTest = activeIndex === 1;
 
-        const periodForTest = new Date(entityPayrollManagement!.payrollPeriodStart);
+        const periodForTest = new Date(
+            entityPayrollManagement!.payrollPeriodStart
+        );
         data.period = `${data.payrollNumber}/${periodForTest.getFullYear()}`;
 
         setLoading(true);
@@ -181,12 +187,16 @@ const PayrollPayView = ({
             })
             .then((res: IPayrollPay) => {
                 activeIndex === 1
-                    ? executeReport(res.getPayrollExecutionTest! as IGetPayrollExecutionTest[])
-                    : executeReport(res.getPayrollExecution! as IGetPayrollExecution[]);
+                    ? executeReport(
+                          res.getPayrollExecutionTest! as IGetPayrollExecutionTest[]
+                      )
+                    : executeReport(
+                          res.getPayrollExecution! as IGetPayrollExecution[]
+                      );
             });
     };
 
-    let options: string[] = ["Mensual", "Quincenal", 'Temporeros'];
+    let options: string[] = ["Mensual", "Quincenal", "Temporeros"];
 
     const getLastRecord = async (idPayrollArea: number) => {
         const result = (await lastPayrollManagementService.getById(
@@ -195,32 +205,44 @@ const PayrollPayView = ({
         setEntityPayrollManagement(result);
     };
 
-    const executeReport = async (data: IGetPayrollExecution[] | IGetPayrollExecutionTest[]) => {
+    const executeReport = async (
+        data: IGetPayrollExecution[] | IGetPayrollExecutionTest[]
+    ) => {
         if (!data?.length) return;
 
         const isRegularExecution = activeIndex === 0;
 
         const getPayrollExecutionWithoutIdentifier = isRegularExecution
-            ? (data as IGetPayrollExecution[]).map(({ identifier, ...rest }) => rest)
-            : (data as IGetPayrollExecutionTest[]).map(({ idPayrollTestCode, ...rest }) => rest);
+            ? (data as IGetPayrollExecution[]).map(
+                  ({ identifier, ...rest }) => rest
+              )
+            : (data as IGetPayrollExecutionTest[]).map(
+                  ({ idPayrollTestCode, ...rest }) => rest
+              );
 
         await openNewTabWithInvoiceViewer(getPayrollExecutionWithoutIdentifier);
     };
 
-    const openNewTabWithInvoiceViewer = async (payrollData: Omit<IGetPayrollExecution | IGetPayrollExecutionTest, 'identifier' | 'idPayrollTestCode'>[]) => {
+    const openNewTabWithInvoiceViewer = async (
+        payrollData: Omit<
+            IGetPayrollExecution | IGetPayrollExecutionTest,
+            "identifier" | "idPayrollTestCode"
+        >[]
+    ) => {
         const newTab = window.open("", "_blank");
         if (newTab) {
             newTab.document.write('<div id="invoice-viewer-root"></div>');
             newTab.document.close();
 
-            const rootElement = newTab.document.getElementById("invoice-viewer-root");
+            const rootElement = newTab.document.getElementById(
+                "invoice-viewer-root"
+            );
             if (rootElement) {
                 const root = createRoot(rootElement);
                 root.render(<InvoiceViewer data={payrollData} />);
             }
         }
     };
-
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
@@ -323,16 +345,22 @@ const PayrollPayView = ({
                                                 </label>
                                                 <GenericDropDown
                                                     id="idPayrollArea"
-                                                    isValid={!!errors.idPayrollArea}
+                                                    isValid={
+                                                        !!errors.idPayrollArea
+                                                    }
                                                     setValue={setValue}
                                                     watch={watch}
                                                     text="name"
-                                                    useQuery={usePayrollAreaQuery}
-                                                    idValueEdit={entityPayrollManagement?.idPayrollArea}
-                                                // getLastRecord(e.value);
+                                                    useQuery={
+                                                        usePayrollAreaQuery
+                                                    }
+                                                    idValueEdit={
+                                                        entityPayrollManagement?.idPayrollArea
+                                                    }
+                                                    // getLastRecord(e.value);
                                                 />
                                             </div>
-                                            <div className="field col-12 md:col-2">
+                                            {/* <div className="field col-12 md:col-2">
                                                 <h6 className="mt-2">
                                                     {period
                                                         ? "Periodo actual"
@@ -378,7 +406,7 @@ const PayrollPayView = ({
                                                     showButtons
                                                     disabled={period}
                                                 />
-                                            </div>
+                                            </div> */}
                                             <div className="field col-12 md:col-3">
                                                 <label
                                                     htmlFor="idStatus"
@@ -448,8 +476,8 @@ const PayrollPayView = ({
                                                         viewEmployees
                                                             ? "Ver empleados"
                                                             : byEmployees
-                                                                ? "Agregar empleados"
-                                                                : "Excluir empleados"
+                                                            ? "Agregar empleados"
+                                                            : "Excluir empleados"
                                                     }
                                                     onClick={handleAdd}
                                                 />
@@ -467,46 +495,34 @@ const PayrollPayView = ({
                                                 marginTop: "15px",
                                                 marginBottom: "15px",
                                                 display: "flex",
-                                                justifyContent: "space-around",
+                                                justifyContent: "space-evenly",
                                                 width: "100%",
                                             }}
                                         >
-                                            <div className="field col-12 md:col-4">
+                                            <div className="field col-12 md:col-3">
                                                 <label htmlFor="idPayrollArea">
                                                     <strong>
                                                         Area de Nómina
                                                     </strong>
                                                 </label>
-                                                <SelectButton
-                                                    {...register(
-                                                        "idPayrollArea",
-                                                        {
-                                                            required: true,
-                                                        }
-                                                    )}
-                                                    value={
-                                                        watch(
-                                                            "idPayrollArea"
-                                                        ) === 2
-                                                            ? "Mensual"
-                                                            : "Quincenal"
-                                                    }
-                                                    onChange={(e) => {
-                                                        setValue(
-                                                            "idPayrollArea",
-                                                            e.value ===
-                                                                "Mensual"
-                                                                ? 2
-                                                                : 1
-                                                        );
-                                                        getLastPayroll();
-                                                    }}
+                                                <GenericDropDown
                                                     id="idPayrollArea"
-                                                    options={options}
-                                                    defaultValue={1}
+                                                    isValid={
+                                                        !!errors.idPayrollArea
+                                                    }
+                                                    setValue={setValue}
+                                                    watch={watch}
+                                                    text="name"
+                                                    useQuery={
+                                                        usePayrollAreaQuery
+                                                    }
+                                                    idValueEdit={
+                                                        entityPayrollManagement?.idPayrollArea
+                                                    }
+                                                    // getLastRecord(e.value);
                                                 />
                                             </div>
-                                            <div className="field col-12 md:col-2">
+                                            {/* <div className="field col-12 md:col-2">
                                                 <h6 className="mt-2">
                                                     {period
                                                         ? "Periodo actual"
@@ -552,7 +568,7 @@ const PayrollPayView = ({
                                                     showButtons
                                                     disabled={period}
                                                 />
-                                            </div>
+                                            </div> */}
                                             <div className="field col-12 md:col-3">
                                                 <label
                                                     htmlFor="idStatus"
@@ -664,7 +680,8 @@ const PayrollPayView = ({
                     <DialogFooterButtonPayrollPay
                         isReadOnly={
                             activeIndex === 0 &&
-                            (entityPayrollManagement?.idPayrollManagement == 0 ||
+                            (entityPayrollManagement?.idPayrollManagement ==
+                                0 ||
                                 entityPayrollManagement?.idStatus !== 151 ||
                                 loading)
                         }

@@ -1,7 +1,11 @@
 "use client";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
-import { DataTable, DataTablePageEvent, DataTableSortEvent } from "primereact/datatable";
+import {
+    DataTable,
+    DataTablePageEvent,
+    DataTableSortEvent,
+} from "primereact/datatable";
 import { Card } from "primereact/card";
 import usePayrollPayQuery from "@/Features/payrollPay/Hook/usePayrollPayQuery";
 import { IPayrollPay } from "@/Features/payrollPay/types/IPayrollPay";
@@ -12,10 +16,7 @@ interface Props {
     handleDetails: (entity: IPayrollPay) => void;
 }
 
-const PayrollHistoryTable = ({
-    submitted,
-    handleDetails,
-}: Props) => {
+const PayrollHistoryTable = ({ submitted, handleDetails }: Props) => {
     const {
         setPage,
         setFilters,
@@ -33,10 +34,7 @@ const PayrollHistoryTable = ({
 
     const listOfDependencies: boolean[] = [submitted];
 
-    const { data, isLoading } = usePayrollPayQuery(
-        params,
-        listOfDependencies,
-    );
+    const { data, isLoading } = usePayrollPayQuery(params, listOfDependencies);
 
     const formatDate = (date: string) => {
         return new Date(date).toLocaleDateString("es-DO", {
@@ -86,10 +84,9 @@ const PayrollHistoryTable = ({
                 paginator
                 loading={isLoading}
                 lazy
+                onSort={onSort}
                 sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
-                sortOrder={
-                    params.filter?.sorts?.[0]?.isAsc ? 1 : -1
-                }
+                sortOrder={params.filter?.sorts?.[0]?.isAsc ? 1 : -1}
                 totalRecords={data?.totalCount}
                 paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
                 emptyMessage="No hay registros para mostrar."
@@ -97,7 +94,8 @@ const PayrollHistoryTable = ({
                 rowsPerPageOptions={[5, 10, 25]}
                 rows={data?.pageSize!}
                 first={data.firstRow!}
-                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}">
+                currentPageReportTemplate="Mostrando registros del {first} al {last} de {totalRecords}"
+            >
                 <Column
                     field="payrollName"
                     header="Descripción"
@@ -145,7 +143,9 @@ const PayrollHistoryTable = ({
                     key="totalPay"
                     field="totalPay"
                     header="Total pagado"
-                    body={(rowData: IPayrollPay) => formatMoney(rowData.totalPay ?? 0)}
+                    body={(rowData: IPayrollPay) =>
+                        formatMoney(rowData.totalPay ?? 0)
+                    }
                 />
                 <Column
                     header="Acciones"

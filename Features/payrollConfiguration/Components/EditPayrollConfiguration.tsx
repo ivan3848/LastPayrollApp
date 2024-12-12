@@ -429,7 +429,7 @@ const EditPayrollConfiguration: React.FC<Props> = ({
                             "vacation"
                         )}
                         {renderDropDown(
-                            "Concepto Deuda Periodo Anterior",
+                            "Concepto Deuda Período Anterior",
                             entity.previousPeriodDebt,
                             "previousPeriodDebt",
                             "previousPeriodDebt"

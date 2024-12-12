@@ -100,7 +100,7 @@ const RetroactiveHoursForReportTable = ({
                 [
                     "Empleado",
                     "Fecha",
-                    "Nomina",
+                    "Nómina",
                     "Centro de Costo",
                     "Concepto",
                     "Departamento",
@@ -142,7 +142,7 @@ const RetroactiveHoursForReportTable = ({
                 "Codigo Empleado": retroactive.idEmployee,
                 Empleado: retroactive.fullName,
                 Fecha: retroactive.date,
-                Nomina: retroactive.payrollName,
+                Nómina: retroactive.payrollName,
                 "Centro de Costo": retroactive.costCenter,
                 Concepto: retroactive.concept,
                 Departamento: retroactive.department,
@@ -280,25 +280,25 @@ const RetroactiveHoursForReportTable = ({
                 ></Column>
                 <Column
                     field="idPayrollPay"
-                    header="ID Nomina"
+                    header="ID Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     hidden
                     filterField="idPayrollPay"
-                    filterPlaceholder="Buscar por ID nomina"
+                    filterPlaceholder="Buscar por ID nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e.field)}
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
                     field="payrollName"
-                    header="Nomina"
+                    header="Nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollName"
-                    filterPlaceholder="Buscar por nomina"
+                    filterPlaceholder="Buscar por nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

@@ -13,7 +13,6 @@ export interface Permission {
 }
 
 const apiService = new ApiService<ILogin, IUser>("employee/user/");
-
 function* createRolModule(rolModuleList: IRolModule[]) {
     for (let element of rolModuleList) {
         yield { module: element.module, canWrite: element.canWrite };
@@ -29,11 +28,12 @@ export async function login(username: string, password: string) {
     if (typeof response === "string") return response;
 
     const { employeeName, userId, idCompany, rol } = response as IUser;
+
     let rolModule: IRolModule[] = Array.from(
         createRolModule(response.rolModule)
     );
-    const result: IUser = { employeeName, userId, idCompany, rol, rolModule };
 
+    const result: IUser = { employeeName, userId, idCompany, rol, rolModule };
     const session = await encrypt({ result, expires: 2 * 24 * 60 * 60 * 1000 });
 
     cookies().set("session", session, { httpOnly: true });

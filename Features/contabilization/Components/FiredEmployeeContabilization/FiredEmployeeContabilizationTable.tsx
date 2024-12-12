@@ -62,7 +62,7 @@ const FiredEmployeeContabilizationTable = ({
     };
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>Cargando...</div>;
     }
 
     return (
@@ -83,7 +83,7 @@ const FiredEmployeeContabilizationTable = ({
             >
                 <Column
                     field="idEmployee"
-                    header="Codigo de empleado"
+                    header="Código de empleado"
                     sortable
                     filter
                     filterField="idEmployee"

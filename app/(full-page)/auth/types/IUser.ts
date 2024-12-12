@@ -6,4 +6,5 @@ export default interface IUser {
     rol: string;
     employeeName: string;
     rolModule: IRolModule[];
+    employeeImage?: string;
 }

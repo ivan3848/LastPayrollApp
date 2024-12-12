@@ -113,7 +113,7 @@ const AddCommission = ({
 
                         <div className="field col-12 md:col-6 lg:col-4">
                             <label htmlFor="isCommissionPayroll">
-                                Por Nomina
+                                Por Nómina
                             </label>
                             <div>
                                 <SelectButton

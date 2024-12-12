@@ -32,7 +32,7 @@ const columnTranslations: { [key: string]: string } = {
     PaymentMethod: "Metodo de Pago",
     BankAccount: "Cuenta Bancaria",
     CostCenter: "Centro de Costo",
-    WorkScheduler: "Horario"
+    WorkScheduler: "Horario",
 };
 const getTableColumnName = (columnName: string): string => {
     return columnTranslations[columnName] || columnName;

@@ -82,7 +82,7 @@ const EditISRInFavor = ({
         <Dialog
             visible={editEntityDialog}
             style={{ width: "50vw" }}
-            header="Editar Isr A Favor"
+            header="Editar Isr a favor"
             modal
             className="p-fluid"
             onHide={hideDialog}

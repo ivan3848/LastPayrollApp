@@ -94,7 +94,7 @@ class ApiService<Q, R> {
         }
     }
 
-    async getById(id: number): Promise<R> {
+    async getById(id: number | string): Promise<R> {
         const finalEndpoint = concatEndpoint(this.endpoint, `${id}`);
         return await axiosInstance
             .get<R>(finalEndpoint, {})

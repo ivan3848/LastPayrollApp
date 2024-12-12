@@ -22,10 +22,13 @@ const userResetPassword = new ApiService<IResetPassword, ILogin>(
     "employee/user/changePassword"
 );
 
+const userServiceImage = new ApiService<IUser, IUser>("employee/user/");
+
 export default userServiceWithOut;
 export {
     userInsertService,
     userResetPassword,
     userServiceWithLogin,
     userUpdateService,
+    userServiceImage,
 };

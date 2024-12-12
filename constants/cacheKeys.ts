@@ -111,4 +111,5 @@ export const CACHE_KEY_PAYROLL_CONFIGURATION = "payrollConfiguration";
 export const CACHE_KEY_WORK_SCHEDULER_PLAN = "workschedulerPlan";
 export const CACHE_KEY_COMPLEMENTARY_DATA = "complementaryData";
 export const CACHE_KEY_MASSIVE_EMPLOYEE = "massiveEmployees";
+export const CACHE_KEY_USER_WITH_IMAGE = "userWithImage";
 

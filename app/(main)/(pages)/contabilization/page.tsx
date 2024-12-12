@@ -1,18 +1,16 @@
-'use client'
-import Contabilization from '@/Features/contabilization/Components/Contabilization'
-import FiredEmployeeContabilization from '@/Features/contabilization/Components/FiredEmployeeContabilization/FiredEmployeeContabilization';
-import { Button } from 'primereact/button';
-import { TabPanel, TabView } from 'primereact/tabview'
-import React, { useState } from 'react'
+"use client";
+import Contabilization from "@/Features/contabilization/Components/Contabilization";
+import FiredEmployeeContabilization from "@/Features/contabilization/Components/FiredEmployeeContabilization/FiredEmployeeContabilization";
+import { Button } from "primereact/button";
+import { TabPanel, TabView } from "primereact/tabview";
+import React, { useState } from "react";
 
 const ContabilizationPage = () => {
     const [activeIndex, setActiveIndex] = useState(0);
 
-
-
     return (
         <div className="card">
-            <h4 className='mb-4' >CONTABILIZATION DE NOMINAS</h4>
+            <h4 className="mb-4">CONTABILIZACIÓN DE NÓMINA</h4>
             <div className="flex mb-2 gap-2 justify-content-end">
                 <Button
                     onClick={() => setActiveIndex(0)}
@@ -29,7 +27,10 @@ const ContabilizationPage = () => {
                     label="2"
                 />
             </div>
-            <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+            <TabView
+                activeIndex={activeIndex}
+                onTabChange={(e) => setActiveIndex(e.index)}
+            >
                 <TabPanel header="Contabilizar">
                     <Contabilization />
                 </TabPanel>
@@ -38,7 +39,7 @@ const ContabilizationPage = () => {
                 </TabPanel>
             </TabView>
         </div>
-    )
-}
+    );
+};
 
-export default ContabilizationPage
+export default ContabilizationPage;

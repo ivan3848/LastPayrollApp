@@ -61,8 +61,8 @@ const AddLease = ({
 
     const onSubmit = (data: ILease) => {
         data.idEmployee = id;
-        data.idDepositConcept = data.idDepositConcept ?? data.idConcept
-        data.idDiscountConcept = data.idDiscountConcept ?? data.idConcept
+        data.idDepositConcept = data.idDepositConcept ?? data.idConcept;
+        data.idDiscountConcept = data.idDiscountConcept ?? data.idConcept;
         addEntity.mutate(data);
     };
 
@@ -91,20 +91,26 @@ const AddLease = ({
         const totalAmount = watch("totalAmount");
         const feeQuantity = calculateAmountFees();
 
-        return feeQuantity == 1
-            ? totalAmount
-            : totalAmount / feeQuantity
-    }
+        return feeQuantity == 1 ? totalAmount : totalAmount / feeQuantity;
+    };
 
     const calculateAmountFees = (): number => {
-        const start = watch("startDate") ? new Date(watch("startDate")) : new Date();
+        const start = watch("startDate")
+            ? new Date(watch("startDate"))
+            : new Date();
         const end = watch("endDate") ? new Date(watch("endDate")) : new Date();
         const recurrency = watch("idRecurrencyStatus");
 
-        const startDate = new Date(Date.UTC(start.getFullYear(), start.getMonth(), start.getDate()));
-        const endDate = new Date(Date.UTC(end.getFullYear(), end.getMonth(), end.getDate()));
+        const startDate = new Date(
+            Date.UTC(start.getFullYear(), start.getMonth(), start.getDate())
+        );
+        const endDate = new Date(
+            Date.UTC(end.getFullYear(), end.getMonth(), end.getDate())
+        );
 
-        let months = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate.getMonth());
+        let months =
+            (endDate.getFullYear() - startDate.getFullYear()) * 12 +
+            (endDate.getMonth() - startDate.getMonth());
 
         if (endDate < startDate) months -= 1;
 
@@ -274,7 +280,11 @@ const AddLease = ({
                             <GenericInputNumber
                                 id="monthlyFee"
                                 isValid={!!errors.monthlyFee}
-                                currentValue={watch("idRecurrencyStatus") == 16 ? calculateMonthlyFee() : calculateMonthlyFee() * 2}
+                                currentValue={
+                                    watch("idRecurrencyStatus") == 16
+                                        ? calculateMonthlyFee()
+                                        : calculateMonthlyFee() * 2
+                                }
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly
@@ -291,7 +301,11 @@ const AddLease = ({
                             <GenericInputNumber
                                 id="amountFee"
                                 isValid={!!errors.amountFee}
-                                currentValue={calculateAmountFees() == 1 ? calculateMonthlyFee() * 2 : calculateMonthlyFee()}
+                                currentValue={
+                                    calculateAmountFees() == 1
+                                        ? calculateMonthlyFee() * 2
+                                        : calculateMonthlyFee()
+                                }
                                 setValue={setValue}
                                 watch={watch}
                                 isReadOnly
@@ -333,7 +347,7 @@ const AddLease = ({
                                     }
                                     options={[
                                         { label: "Cheque", value: false },
-                                        { label: "Nomina", value: true },
+                                        { label: "Nómina", value: true },
                                     ]}
                                 />
                                 {errors.paymentMethod && (

@@ -10,6 +10,7 @@ import {
 import { ICostCenter } from "../Types/ICostCenter";
 import useCostCenterQuery from "../Hooks/useCostCenterQuery";
 import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -35,7 +36,7 @@ const CostCenterTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCostCenterQuery(params, listOfDependencies);
+    const { data, isFetching } = useCostCenterQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -67,9 +68,20 @@ const CostCenterTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Centros De Costos</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Centros De Costos</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
 
@@ -80,7 +92,6 @@ const CostCenterTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -103,6 +114,7 @@ const CostCenterTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="description"
                 filterPlaceholder="Buscar por centro de costo"
                 showFilterMenuOptions={false}
@@ -115,6 +127,7 @@ const CostCenterTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="accountNumber"
                 filterPlaceholder="Buscar por número de cuenta"
                 showFilterMenuOptions={false}
@@ -123,14 +136,31 @@ const CostCenterTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<ICostCenter>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="NOMINA"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<ICostCenter>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="NOMINA"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

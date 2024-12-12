@@ -490,7 +490,7 @@ const WorkSchedulerPlanTable = () => {
                     }
                 ></Column>
                 <Column
-                    field="posicion"
+                    field="position"
                     header="Posicion"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
@@ -502,7 +502,7 @@ const WorkSchedulerPlanTable = () => {
                     onFilterClear={clearFilters}
                 ></Column>
                 <Column
-                    field="departamento"
+                    field="department"
                     header="Departamento"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable

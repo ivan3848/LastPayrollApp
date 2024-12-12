@@ -71,7 +71,7 @@ const EditPayrollArea = ({
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="field">
                     <label htmlFor="name" className="w-full">
-                        Nomina
+                        Nómina
                     </label>
                     <InputText
                         {...register("name")}
