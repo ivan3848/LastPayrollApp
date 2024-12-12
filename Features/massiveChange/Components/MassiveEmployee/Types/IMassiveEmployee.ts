@@ -1,19 +1,37 @@
-import { Employee } from "../../MassiveIncrease/Types/IMassiveIncrease";
 
 export interface IMassiveEmployee {
-    idMassiveEmployee: number;
-    name: string;
-    chargeDate: string;
-    employees: Employee[]
-    isPaid: boolean;
-    idPayrollPay?: number;
+    employeeList: IMassiveEmployeeData[]
 }
+
+export interface IMassiveEmployeeData {
+    idEmployee: number;
+    name: string;
+    lastName: string;
+    gender: string;
+    birthDay: Date;
+    nationality: string;
+    educationLevel: string;
+    ubication: string;
+    ocupation: string;
+    position: string;
+    department: string;
+    payrollArea: string;
+    documentType: string;
+    identification: string;
+    startDate: Date;
+    address: string;
+    salary: number;
+    paymentMethod: string;
+    bankAccount: string;
+    costCenter: string;
+    workScheduler: string;
+}
+
 
 const massiveEmployeechema: Object = {
     idEmployee: 0,
     Name: "",
-    firstLastName: "",
-    secondLastName: "",
+    lastName: "",
     gender: "",
     birthDay: new Date(),
     nationality: "",
@@ -23,7 +41,6 @@ const massiveEmployeechema: Object = {
     position: "",
     department: "",
     payrollArea: "",
-    documentType: "",
     identification: "",
     startDate: new Date(),
     address: "",

@@ -60,8 +60,8 @@ const MassiveIncreaseTable = ({ submitted, handleRevert }: Props) => {
 
     return (
         <DataTable
-            id="MassiveIncrease-Table"
-            dataKey="idMassiveIncrease"
+            id="MassiveEmployee-Table"
+            dataKey="idMassiveEmployee"
             value={data?.items}
             lazy
             paginator

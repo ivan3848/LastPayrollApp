@@ -4,13 +4,11 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useState } from "react";
 import ExcelTable from "../../ExcelTable";
-import DeleteEntity from "@/Features/Shared/Components/DeleteEntity";
 import { IMassiveEmployee, massiveEmployeechema } from "../Types/IMassiveEmployee";
 import MassiveEmployeeTable from "./MassiveEmployeeTable";
 import useAddMassiveEmployeeQuery from "../Hooks/useAddMassiveEmployee";
 
 const MassiveEmployee = () => {
-
     const [isToSendFile, setIsToSendFile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
     const [massiveEmployeeSchemaValue, setMassiveEmployeeSchema] = useState<
@@ -22,8 +20,6 @@ const MassiveEmployee = () => {
         setAddEntityDialog,
         setSubmitted,
         toast,
-        entity,
-        deleteEntityDialog,
         submitted,
         setEntity,
     } = useCrudModals<IMassiveEmployee>();
@@ -53,12 +49,7 @@ const MassiveEmployee = () => {
         date: string,
         clear: () => void
     ) => {
-        const massiveEmployee = {
-            name: `${name} - ${date}`,
-            chargeDate: date,
-            employees: data,
-        } as IMassiveEmployee;
-
+        const massiveEmployee = { employeeList: data } as IMassiveEmployee;
         addEntity.mutate(massiveEmployee);
         clear();
     };
@@ -136,16 +127,7 @@ const MassiveEmployee = () => {
                             handleRevert={handleRevert}
                         />
                     </div>
-                    {deleteEntityDialog && (
-                        <DeleteEntity
-                            id={entity?.idMassiveEmployee ?? 0}
-                            endpoint="employee/massiveEmployee"
-                            deleteEntityDialog={deleteEntityDialog}
-                            setDeleteEntityDialog={setDeleteEntityDialog}
-                            setSubmitted={setSubmitted}
-                            toast={toast}
-                        />
-                    )}
+
                 </div>
             )}
         </>
@@ -153,14 +135,4 @@ const MassiveEmployee = () => {
 };
 
 export default MassiveEmployee;
-
-// function useAddMassiveEmployeeQuery(arg0: {
-//     toast: MutableRefObject<Toast | null>;
-//     setAddEntityDialog: Dispatch<SetStateAction<boolean>>;
-//     setSubmitted: Dispatch<SetStateAction<boolean>>;
-//     setNotExistedEmployeeData: Dispatch<SetStateAction<IMassiveEmployee[]>>;
-//     setIsExistEmployee: Dispatch<SetStateAction<boolean>>;
-// }) {
-//     throw new Error("Function not implemented.");
-// }
 

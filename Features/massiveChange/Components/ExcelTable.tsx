@@ -1,4 +1,3 @@
-import NotExistedEmployee from "@/Features/employee/Components/NotExistedEmployee";
 import useParamFilter from "@/Features/Shared/Hooks/useParamFilter";
 import { Column } from "primereact/column";
 import {
@@ -30,9 +29,7 @@ export default function ExcelTable({
     type,
     handleUpload,
     notExistedEmployeeData,
-    isExistEmployee,
     setIsExistEmployee,
-    setNotExistedEmployeeData,
 }: Props) {
     const { setSorts, clearSorts, params } = useParamFilter(8);
     const { excelData, onSelect, clearData, file } = useExcelTable();

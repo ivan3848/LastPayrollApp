@@ -66,7 +66,7 @@ const MassiveChangeOptions = ({ setAction }: Props) => {
                         className="m-2"
                         onClick={() =>
                             setAction(
-                                MassiveChangeOptionsEnum.ComplementaryData
+                                MassiveChangeOptionsEnum.MassiveEmployee
                             )
                         }
                     />
