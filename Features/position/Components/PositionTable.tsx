@@ -12,6 +12,7 @@ import {
 } from "primereact/datatable";
 import usePositionQuery from "../Hooks/usePositionQuery";
 import { IPosition } from "../Types/IPosition";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -37,7 +38,7 @@ const PositionTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = usePositionQuery(params, listOfDependencies);
+    const { data, isFetching } = usePositionQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -69,9 +70,20 @@ const PositionTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Posiciones</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="DEPARTAMENTOS" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Posiciones</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
 
@@ -82,7 +94,6 @@ const PositionTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -104,6 +115,7 @@ const PositionTable = ({
                 header="Posición"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filter
                 filterField="name"
                 filterPlaceholder="Buscar por posición"
@@ -117,6 +129,7 @@ const PositionTable = ({
                 header="Departamento"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filter
                 filterField="idDepartamento"
                 filterPlaceholder="Buscar por zona"
@@ -140,6 +153,7 @@ const PositionTable = ({
                 header="Posición superior"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filter
                 filterField="idPositionManager"
                 filterPlaceholder="Buscar por posición superior"
@@ -165,6 +179,7 @@ const PositionTable = ({
                 sortable
                 filter
                 filterField="idOccupation"
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterPlaceholder="Buscar por ocupación"
                 filterElement={() => (
                     <TableDropDownFilter
@@ -187,6 +202,7 @@ const PositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="minSalary"
                 filterPlaceholder="Buscar por salario mínimo"
                 showFilterMenuOptions={false}
@@ -200,23 +216,40 @@ const PositionTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="maxSalary"
                 filterPlaceholder="Buscar por salario máximo"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
                 onFilterClear={clearFilters}
             ></Column>
-
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IPosition>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="DEPARTAMENTOS"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IPosition>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="DEPARTAMENTOS"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

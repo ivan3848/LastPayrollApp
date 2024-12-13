@@ -14,6 +14,7 @@ import { TriStateCheckbox } from "primereact/tristatecheckbox";
 import useConceptQuery from "../Hooks/useConceptQuery";
 import { IConcept } from "../Types/IConcept";
 import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -39,7 +40,7 @@ const ConceptTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useConceptQuery(params, listOfDependencies);
+    const { data, isFetching } = useConceptQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -115,9 +116,20 @@ const ConceptTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Conceptos</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Conceptos</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
 
@@ -128,7 +140,6 @@ const ConceptTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -150,6 +161,7 @@ const ConceptTable = ({
                 header="Código"
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="conceptCode"
                 filterPlaceholder="Buscar por código de concepto"
                 showFilterMenuOptions={false}
@@ -162,6 +174,7 @@ const ConceptTable = ({
                 header="Concepto"
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="name"
                 filterPlaceholder="Buscar por concepto"
                 showFilterMenuOptions={false}
@@ -174,6 +187,7 @@ const ConceptTable = ({
                 header="Tipo"
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="idConceptType"
                 filterPlaceholder="Buscar por tipo"
                 filterElement={
@@ -194,6 +208,7 @@ const ConceptTable = ({
                 header="Monto"
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="amount"
                 filterPlaceholder="Buscar por monto de concepto"
                 showFilterMenuOptions={false}
@@ -205,6 +220,7 @@ const ConceptTable = ({
                 field="percentValue"
                 header="Porcentaje"
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filter
                 filterField="percentValue"
                 filterPlaceholder="Buscar por porcentaje de concepto"
@@ -219,7 +235,15 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isSpecial} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e: IConcept) => (
+                            <GenericTableCheck isChecked={e.isSpecial} />
+                        )
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -235,7 +259,15 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isBonification} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => (
+                            <GenericTableCheck isChecked={e.isBonification} />
+                        )
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -251,7 +283,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isCommission} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isCommission} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -267,7 +305,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isAbsenteeism} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isAbsenteeism} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -283,7 +327,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isLease} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isLease} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -299,7 +349,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isExtraHour} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isExtraHour} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -315,7 +371,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isTax} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isTax} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -331,7 +393,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isCompany} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isCompany} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -347,7 +415,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isInsurance} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isInsurance} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -363,7 +437,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isProfit} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isProfit} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -379,7 +459,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isDeduction} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.isDeduction} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -395,9 +481,17 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => (
-                    <GenericTableCheck isChecked={e.isOnlySecondPayroll} />
-                )}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => (
+                            <GenericTableCheck
+                                isChecked={e.isOnlySecondPayroll}
+                            />
+                        )
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -413,7 +507,13 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.beforeIsr} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => <GenericTableCheck isChecked={e.beforeIsr} />
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -429,7 +529,15 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => <GenericTableCheck isChecked={e.isForChargeTax} />}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => (
+                            <GenericTableCheck isChecked={e.isForChargeTax} />
+                        )
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -445,9 +553,17 @@ const ConceptTable = ({
                 dataType="boolean"
                 bodyClassName="text-center"
                 style={{ minWidth: "8rem" }}
-                body={(e) => (
-                    <GenericTableCheck isChecked={e.isForChargeTaxIsr} />
-                )}
+                body={
+                    isFetching ? (
+                        <Skeleton className="mb-2" />
+                    ) : (
+                        (e) => (
+                            <GenericTableCheck
+                                isChecked={e.isForChargeTaxIsr}
+                            />
+                        )
+                    )
+                }
                 filter
                 showAddButton={false}
                 showApplyButton={false}
@@ -456,17 +572,33 @@ const ConceptTable = ({
                 showFilterMenuOptions={false}
                 filterElement={verifiedFilterTemplate}
             />
-
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IConcept>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="NOMINA"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IConcept>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="NOMINA"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

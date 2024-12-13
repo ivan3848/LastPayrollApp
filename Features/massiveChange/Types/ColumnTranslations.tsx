@@ -26,7 +26,7 @@ const columnTranslations: { [key: string]: string } = {
     Position: "Posición",
     Ocupation: "Ocupación",
     Department: "Departamento",
-    PayrollArea: "Area de Nómina",
+    PayrollArea: "Área de Nómina",
     Identification: "Cedula o Pasaporte",
     StartDate: "Fecha de Inicio",
     PaymentMethod: "Metodo de Pago",

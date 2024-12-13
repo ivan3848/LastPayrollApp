@@ -37,7 +37,7 @@ const PayrollArea = () => {
     };
 
     const entityProperties = [
-        "Area de nómina",
+        "Área de nómina",
         "Código",
         "Posición",
         "Acciones",

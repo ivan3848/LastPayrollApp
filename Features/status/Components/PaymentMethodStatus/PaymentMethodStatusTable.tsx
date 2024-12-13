@@ -10,6 +10,7 @@ import {
 } from "primereact/datatable";
 import useStatusQuery from "../../Hooks/useStatusQuery";
 import { IStatus } from "../../Types/IStatus";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -37,7 +38,7 @@ const PaymentMethodStatusTable = ({
     });
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useStatusQuery(params, listOfDependencies);
+    const { data, isFetching } = useStatusQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -66,12 +67,22 @@ const PaymentMethodStatusTable = ({
             },
         ]);
     };
-
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Método de pago</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Método de pago</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
 
@@ -82,7 +93,6 @@ const PaymentMethodStatusTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -105,6 +115,7 @@ const PaymentMethodStatusTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="description"
                 filterPlaceholder="Buscar por método de pago"
                 showFilterMenuOptions={false}
@@ -113,14 +124,31 @@ const PaymentMethodStatusTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IStatus>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="NOMINA"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IStatus>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="NOMINA"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

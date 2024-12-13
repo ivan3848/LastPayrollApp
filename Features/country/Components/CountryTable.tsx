@@ -9,6 +9,7 @@ import {
 import { ICountry } from "../Types/ICountry";
 import useCountryQuery from "../Hooks/useCountryQuery";
 import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +35,7 @@ const CountryTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCountryQuery(params, listOfDependencies);
+    const { data, isFetching } = useCountryQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -63,11 +64,23 @@ const CountryTable = ({
             },
         ]);
     };
+
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Países</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Países</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
+            )}
         </div>
     );
 
@@ -78,7 +91,6 @@ const CountryTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -102,6 +114,7 @@ const CountryTable = ({
                 sortable
                 filter
                 filterField="name"
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterPlaceholder="Buscar por país"
                 showFilterMenuOptions={false}
                 onFilterApplyClick={(e) => onFilter(e)}
@@ -109,14 +122,31 @@ const CountryTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<ICountry>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="UBICACION"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<ICountry>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="UBICACION"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

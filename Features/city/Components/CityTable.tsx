@@ -11,6 +11,7 @@ import {
 import useCityQuery from "../Hooks/useCityQuery";
 import { ICity } from "../Types/ICity";
 import AddSingleButton from "@/Features/Shared/Components/AddSingleButton";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -36,7 +37,7 @@ const CityTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useCityQuery(params, listOfDependencies);
+    const { data, isFetching } = useCityQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,8 +69,20 @@ const CityTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Ciudades</h3>
-            <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Ciudades</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="UBICACION" />
+            )}
         </div>
     );
 
@@ -80,7 +93,6 @@ const CityTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -103,6 +115,7 @@ const CityTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="name"
                 filterPlaceholder="Buscar por ciudad"
                 showFilterMenuOptions={false}
@@ -116,6 +129,7 @@ const CityTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="idRegion"
                 filterPlaceholder="Buscar por región"
                 filterElement={
@@ -132,17 +146,33 @@ const CityTable = ({
                 showClearButton={false}
                 onFilterClear={clearFilters}
             ></Column>
-
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<ICity>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="UBICACION"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<ICity>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="UBICACION"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

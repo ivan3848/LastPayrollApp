@@ -57,20 +57,18 @@ const DeleteISRBreak = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Eliminar ISR Break"
+            header="Eliminar ISR"
             modal
             className="p-fluid"
             onHide={hideDialog}
         >
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="p-field">
-                    <h4 className="">
-                        Esta seguro que desea eliminar este Registro?
-                    </h4>
+                    <h6>¿Está seguro de eliminar este registro?</h6>
                 </div>
                 <div
                     className="flex justify-content-end mt-3"
-                    style={{ width: "55%", gap: "5px", marginLeft: "auto" }}
+                    style={{ width: "60%", gap: "5px", marginLeft: "auto" }}
                 >
                     <Button
                         label="Cancelar"
