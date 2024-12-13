@@ -100,7 +100,7 @@ const ISRBreakTable = ({
                         accessName="CONFIGURACION_NOMINA"
                     />
                 )}
-                headerStyle={{ minWidth: "10rem" }}
+                headerStyle={{ minWidth: "15rem" }}
             />
         </DataTable>
     );

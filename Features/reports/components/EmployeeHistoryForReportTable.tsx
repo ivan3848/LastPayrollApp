@@ -107,7 +107,7 @@ const EmployeeHistoryForReportTable = ({
                     "Dependientes",
                     "Cambio",
                     "Hora extra",
-                    "Area de nómina",
+                    "Área de nómina",
                     "Inicio",
                     "Final",
                 ],
@@ -151,7 +151,7 @@ const EmployeeHistoryForReportTable = ({
                     Dependientes: employeeHistory.numberOfDependant ?? "N/A",
                     Cambio: employeeHistory.changeType ?? "N/A",
                     "Hora extra": employeeHistory.extraHour ?? "N/A",
-                    "Area de nómina": employeeHistory.payrollArea ?? "N/A",
+                    "Área de nómina": employeeHistory.payrollArea ?? "N/A",
                     Inicio:
                         new Date(employeeHistory.startDateChange)
                             .toLocaleDateString("en-GB")
@@ -366,12 +366,12 @@ const EmployeeHistoryForReportTable = ({
                 ></Column>
                 <Column
                     field="payrollArea"
-                    header="Area de nómina"
+                    header="Área de nómina"
                     headerStyle={{ minWidth: "15rem" }}
                     sortable
                     filter
                     filterField="payrollArea"
-                    filterPlaceholder="Buscar por area de nómina"
+                    filterPlaceholder="Buscar por área de nómina"
                     showFilterMenuOptions
                     onFilterApplyClick={(e) => onFilter(e)}
                     onFilterClear={clearFilters}

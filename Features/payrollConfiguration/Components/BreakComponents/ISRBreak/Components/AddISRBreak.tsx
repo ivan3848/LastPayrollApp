@@ -55,7 +55,7 @@ const AddISRBreak = ({
         <Dialog
             visible={addEntityDialog}
             style={{ width: "450px" }}
-            header="Agregar ISR Break"
+            header="Agregar ISR"
             modal
             className="p-fluid"
             onHide={hideDialog}
