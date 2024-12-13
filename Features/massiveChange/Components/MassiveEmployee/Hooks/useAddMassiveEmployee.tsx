@@ -12,10 +12,6 @@ interface Props {
 
 const useAddMassiveEmployeeQuery = ({
     toast,
-    setAddEntityDialog,
-    setSubmitted,
-    setNotExistedEmployeeData,
-    setIsExistEmployee,
 }: Props) => {
     return useMutation({
         mutationFn: (entity: IMassiveEmployee) =>
@@ -29,13 +25,6 @@ const useAddMassiveEmployeeQuery = ({
             });
         },
         onSuccess: (e) => {
-            setAddEntityDialog(false);
-            setSubmitted(true);
-            const notExistedEmployeeDataArray = Object.values(
-                e
-            ) as IMassiveEmployee[];
-            setNotExistedEmployeeData(notExistedEmployeeDataArray);
-            setIsExistEmployee(true);
             toast.current?.show({
                 severity: "success",
                 summary: "Insertado!",

@@ -1,6 +1,8 @@
 
 export interface IMassiveEmployee {
-    employeeList: IMassiveEmployeeData[]
+    employeeList: IMassiveEmployeeData[];
+    repeatedEmployees?: number[];
+    repeatedIdentifications?: string[];
 }
 
 export interface IMassiveEmployeeData {

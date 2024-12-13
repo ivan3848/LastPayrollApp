@@ -4,13 +4,17 @@ import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
 import { useState } from "react";
 import ExcelTable from "../../ExcelTable";
-import { IMassiveEmployee, massiveEmployeechema } from "../Types/IMassiveEmployee";
+import { IMassiveEmployee, massiveEmployeechema } from '../Types/IMassiveEmployee';
 import MassiveEmployeeTable from "./MassiveEmployeeTable";
 import useAddMassiveEmployeeQuery from "../Hooks/useAddMassiveEmployee";
+import RepeatedEmployeeTable from "./RepeatedEmployeeTable";
 
 const MassiveEmployee = () => {
     const [isToSendFile, setIsToSendFile] = useState(false);
     const [isVisible, setIsVisible] = useState(true);
+    const [isRepeated, setIsRepeated] = useState(false);
+    const [showTable, setShowTable] = useState(false);
+    const [repeateData, setRepeateData] = useState<IMassiveEmployee>();
     const [massiveEmployeeSchemaValue, setMassiveEmployeeSchema] = useState<
         string[]
     >(Object.keys(massiveEmployeechema));
@@ -43,14 +47,18 @@ const MassiveEmployee = () => {
         setIsExistEmployee,
     });
 
-    const handleUpload = (
+    const handleUpload = async (
         data: any[],
         name: string,
         date: string,
         clear: () => void
     ) => {
         const massiveEmployee = { employeeList: data } as IMassiveEmployee;
-        addEntity.mutate(massiveEmployee);
+        const response = await addEntity.mutateAsync(massiveEmployee) as IMassiveEmployee;
+        if (response) {
+            setIsRepeated(true);
+            setRepeateData(response);
+        };
         clear();
     };
 
@@ -75,6 +83,7 @@ const MassiveEmployee = () => {
                     <h2 className="font-bold white-space-nowrap text-2xl">
                         Cargar Empleados
                     </h2>
+
                 </div>
             ) : (
                 <>
@@ -98,6 +107,21 @@ const MassiveEmployee = () => {
                     </div>
                 </>
             )}
+            {isRepeated && (
+                <div className="mb-3">
+                    <Button
+                        icon="pi pi-fw pi-upload"
+                        className="p-button p-button-rounded p-button-outlined"
+                        label="Ver empleados repetidos"
+                        onClick={() => setShowTable(true)}
+                    />
+                </div>
+            )}
+            {showTable && (<RepeatedEmployeeTable
+                data={repeateData}
+                showTable={showTable}
+                setShowTable={setShowTable}
+            />)}
             {isToSendFile ? (
                 <ExcelTable
                     handleUpload={handleUpload}

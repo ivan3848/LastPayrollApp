@@ -4,6 +4,7 @@ import { MassiveChangeOptionsEnum } from "../Enums/MassiveChangeOptionsEnum";
 import MassiveChangeOptions from "./MassiveChangeOptions";
 import MassiveIncrease from "./MassiveIncrease/Components/MassiveIncrease";
 import ComplementaryData from "./ComplementaryData/Components/ComplementaryData";
+import MassiveEmployee from "./MassiveEmployee/Components/MassiveEmployee";
 
 const MassiveChangeAction = ({ }) => {
     const [openAction, setOpenAction] = useState<MassiveChangeOptionsEnum>(
@@ -27,7 +28,7 @@ const MassiveChangeAction = ({ }) => {
                     <ComplementaryData />
                 )}
                 {openAction === MassiveChangeOptionsEnum.MassiveEmployee && (
-                    <ComplementaryData />
+                    <MassiveEmployee />
                 )}
             </div>
         </>
