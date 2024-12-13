@@ -11,6 +11,7 @@ import {
 } from "primereact/datatable";
 import useBankQuery from "../Hooks/useBankQuery";
 import { IBank } from "../Types/IBank";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -36,7 +37,7 @@ const BankTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useBankQuery(params, listOfDependencies);
+    const { data, isFetching } = useBankQuery(params, listOfDependencies);
 
     const onPage = (event: DataTablePageEvent) => {
         setPage(event.page! + 1);
@@ -68,9 +69,20 @@ const BankTable = ({
 
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Bancos</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Bancos</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
 
@@ -81,7 +93,6 @@ const BankTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -104,6 +115,7 @@ const BankTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="name"
                 filterPlaceholder="Buscar por banco"
                 showFilterMenuOptions={false}
@@ -117,6 +129,7 @@ const BankTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="bankKey"
                 filterPlaceholder="Buscar por clave de banco"
                 showFilterMenuOptions={false}
@@ -130,6 +143,7 @@ const BankTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="address"
                 filterPlaceholder="Buscar por dirección"
                 showFilterMenuOptions={false}
@@ -142,23 +156,40 @@ const BankTable = ({
                 header="Método de pago"
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="statusAccountType"
                 filterPlaceholder="Buscar por método de pago"
                 onFilterApplyClick={(e) => onFilter(e)}
                 showFilterMenuOptions={false}
                 onFilterClear={clearFilters}
             ></Column>
-
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IBank>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="NOMINA"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IBank>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="NOMINA"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>

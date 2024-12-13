@@ -9,6 +9,7 @@ import {
 } from "primereact/datatable";
 import useAccountingAccountQuery from "../Hooks/useAccountingAccountQuery";
 import { IAccountingAccount } from "../Types/IAccountingAccount";
+import { Skeleton } from "primereact/skeleton";
 
 interface Props {
     submitted: boolean;
@@ -34,7 +35,7 @@ const AccountingAccountTable = ({
     } = useParamFilter();
 
     const listOfDependencies: boolean[] = [submitted];
-    const { data, isLoading } = useAccountingAccountQuery(
+    const { data, isFetching } = useAccountingAccountQuery(
         params,
         listOfDependencies
     );
@@ -66,15 +67,24 @@ const AccountingAccountTable = ({
             },
         ]);
     };
-
     const header = (
         <div className="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-            <h3 className="m-0">Cuentas Contables</h3>
-
-            <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            {isFetching ? (
+                <Skeleton
+                    height="2rem"
+                    width="25rem"
+                    className="mb-2"
+                ></Skeleton>
+            ) : (
+                <h3 className="m-0">Cuentas Contables</h3>
+            )}
+            {isFetching ? (
+                <Skeleton borderRadius="20px" width="8rem" height="3rem" />
+            ) : (
+                <AddSingleButton handleAdd={handleAdd} accessName="NOMINA" />
+            )}
         </div>
     );
-
     return (
         <DataTable
             id="AccountingAccount-Table"
@@ -82,7 +92,6 @@ const AccountingAccountTable = ({
             value={data?.items}
             lazy
             paginator
-            loading={isLoading}
             onSort={onSort}
             removableSort
             sortField={params.filter?.sorts?.[0]?.sortBy ?? ""}
@@ -105,6 +114,7 @@ const AccountingAccountTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="name"
                 filterPlaceholder="Buscar por país"
                 showFilterMenuOptions={false}
@@ -117,6 +127,7 @@ const AccountingAccountTable = ({
                 headerStyle={{ minWidth: "15rem" }}
                 sortable
                 filter
+                body={isFetching && <Skeleton className="mb-2" />}
                 filterField="accountNumber"
                 filterPlaceholder="Buscar por número de cuenta"
                 showFilterMenuOptions={false}
@@ -125,14 +136,31 @@ const AccountingAccountTable = ({
             ></Column>
             <Column
                 header="Acciones"
-                body={(rowData) => (
-                    <ActionTableTemplate<IAccountingAccount>
-                        entity={rowData}
-                        handleDelete={handleDelete}
-                        handleEdit={handleEdit}
-                        accessName="NOMINA"
-                    />
-                )}
+                body={
+                    isFetching ? (
+                        <div style={{ display: "flex", gap: "0.5rem" }}>
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                            <Skeleton
+                                shape="circle"
+                                size="3rem"
+                                className="mr-2"
+                            />
+                        </div>
+                    ) : (
+                        (rowData) => (
+                            <ActionTableTemplate<IAccountingAccount>
+                                entity={rowData}
+                                handleDelete={handleDelete}
+                                handleEdit={handleEdit}
+                                accessName="NOMINA"
+                            />
+                        )
+                    )
+                }
                 headerStyle={{ minWidth: "10rem" }}
             ></Column>
         </DataTable>
