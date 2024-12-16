@@ -29,10 +29,17 @@ const AppMenuitem = (props: AppMenuItemProps) => {
     const key = props.parentKey
         ? props.parentKey + "-" + props.index
         : String(props.index);
-    const isActiveRoute = item!.to && pathname === item!.to;
+    const isActiveRoute =
+        item!.to &&
+        (pathname === item!.to ||
+            (item!.to === "/employee" &&
+                pathname.startsWith("/employee/") &&
+                (pathname === "/employee/addEmployee" ||
+                    pathname === "/employee/editEmployee")));
     const active =
         activeMenu === key ||
-        !!(activeMenu && activeMenu.startsWith(key + "-"));
+        !!(activeMenu && activeMenu.startsWith(key + "-")) ||
+        isActiveRoute;
 
     useSubmenuOverlayPosition({
         target: menuitemRef.current,
@@ -187,7 +194,7 @@ const AppMenuitem = (props: AppMenuItemProps) => {
             })}
         >
             {props.root && item?.visible !== false && (
-                <div className="layout-menuitem-root-text">{item?.label}</div> 
+                <div className="layout-menuitem-root-text">{item?.label}</div>
             )}
             {(!item?.to || item?.items) && item?.visible !== false ? (
                 <>
