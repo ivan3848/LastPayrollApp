@@ -327,7 +327,13 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Salario Mens : {items[index].employeeSalary}
+                                Salario Mens : {items[index].employeeSalary.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                         </View>
                         <View
@@ -380,7 +386,13 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                     styles.removeRightLine,
                                 ]}
                             >
-                                Salario diario : {items[index].dailySalary}
+                                Salario diario : {items[index].dailySalary.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                         </View>
                         <View
@@ -615,19 +627,19 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                 >
                                     {item.isProfit !== false
                                         ? (() => {
-                                              switch (item.conceptName) {
-                                                  case "Vacaciones":
-                                                      return item.vacationDay;
-                                                  case "PREAVISO":
-                                                      return item.noticeDay;
-                                                  case "CESANTIA":
-                                                      return item.unemploymentDay;
-                                                  case "Navidad":
-                                                      return item.royaltiesDay;
-                                                  default:
-                                                      return "";
-                                              }
-                                          })()
+                                            switch (item.conceptName) {
+                                                case "Vacaciones":
+                                                    return item.vacationDay;
+                                                case "PREAVISO":
+                                                    return item.noticeDay;
+                                                case "CESANTIA":
+                                                    return item.unemploymentDay;
+                                                case "Navidad":
+                                                    return item.royaltiesDay;
+                                                default:
+                                                    return "";
+                                            }
+                                        })()
                                         : ""}
                                 </Text>
                                 <Text
@@ -641,19 +653,25 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                 >
                                     {item.isProfit !== false
                                         ? (() => {
-                                              const amount = items
-                                                  .filter(
-                                                      (x) =>
-                                                          x.conceptName ===
-                                                          item.conceptName
-                                                  )
-                                                  .reduce(
-                                                      (total, x) =>
-                                                          total + x.amount,
-                                                      0
-                                                  );
-                                              return amount;
-                                          })()
+                                            const amount = items
+                                                .filter(
+                                                    (x) =>
+                                                        x.conceptName ===
+                                                        item.conceptName
+                                                )
+                                                .reduce(
+                                                    (total, x) =>
+                                                        total + x.amount,
+                                                    0
+                                                );
+                                            return amount.toLocaleString(
+                                                "es-DO",
+                                                {
+                                                    style: "currency",
+                                                    currency: "DOP",
+                                                }
+                                            );
+                                        })()
                                         : ""}
                                 </Text>
                             </View>
@@ -674,7 +692,13 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                     },
                                 ]}
                             >
-                                Total de Ingresos :{items[index].totalProfit}
+                                Total de Ingresos :{items[index].totalProfit.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                         </View>
 
@@ -770,19 +794,19 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                 >
                                     {item.isProfit === false
                                         ? (() => {
-                                              switch (item.conceptName) {
-                                                  case "Vacaciones":
-                                                      return item.vacationDay;
-                                                  case "PREAVISO":
-                                                      return item.noticeDay;
-                                                  case "CESANTIA":
-                                                      return item.unemploymentDay;
-                                                  case "Navidad":
-                                                      return item.royaltiesDay;
-                                                  default:
-                                                      return "";
-                                              }
-                                          })()
+                                            switch (item.conceptName) {
+                                                case "Vacaciones":
+                                                    return item.vacationDay;
+                                                case "PREAVISO":
+                                                    return item.noticeDay;
+                                                case "CESANTIA":
+                                                    return item.unemploymentDay;
+                                                case "Navidad":
+                                                    return item.royaltiesDay;
+                                                default:
+                                                    return "";
+                                            }
+                                        })()
                                         : ""}
                                 </Text>
                                 <Text
@@ -796,19 +820,25 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                 >
                                     {item.isProfit === false
                                         ? (() => {
-                                              const amount = items
-                                                  .filter(
-                                                      (x) =>
-                                                          x.conceptName ===
-                                                          item.conceptName
-                                                  )
-                                                  .reduce(
-                                                      (total, x) =>
-                                                          total + x.amount,
-                                                      0
-                                                  );
-                                              return amount;
-                                          })()
+                                            const amount = items
+                                                .filter(
+                                                    (x) =>
+                                                        x.conceptName ===
+                                                        item.conceptName
+                                                )
+                                                .reduce(
+                                                    (total, x) =>
+                                                        total + x.amount,
+                                                    0
+                                                );
+                                            return amount.toLocaleString(
+                                                "es-DO",
+                                                {
+                                                    style: "currency",
+                                                    currency: "DOP",
+                                                }
+                                            );
+                                        })()
                                         : ""}
                                 </Text>
                             </View>
@@ -829,7 +859,13 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                     },
                                 ]}
                             >
-                                Total Deducciones :{items[index].missLease}
+                                Total Deducciones :{items[index].missLease.toLocaleString(
+                                    "es-DO",
+                                    {
+                                        style: "currency",
+                                        currency: "DOP",
+                                    }
+                                )}
                             </Text>
                         </View>
                         <View
@@ -853,8 +889,14 @@ export const FiredEmployeeInvoice = ({ data }: Props) => {
                                 ]}
                             >
                                 Total Neto a Pagar :
-                                {items[index].totalProfit -
-                                    items[index].missLease}
+                                {(items[index].totalProfit -
+                                    items[index].missLease).toLocaleString(
+                                        "es-DO",
+                                        {
+                                            style: "currency",
+                                            currency: "DOP",
+                                        }
+                                    )}
                             </Text>
                         </View>
                         <View style={styles.addTopline}>
