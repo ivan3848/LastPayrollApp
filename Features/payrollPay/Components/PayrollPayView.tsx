@@ -444,7 +444,7 @@ const PayrollPayView = ({
                                 )}
                             </TabPanel>
 
-                            <TabPanel header="Nomina Simulada">
+                            <TabPanel header="Nómina Simulada">
                                 {activeIndex == 1 && (
                                     <>
                                         <div

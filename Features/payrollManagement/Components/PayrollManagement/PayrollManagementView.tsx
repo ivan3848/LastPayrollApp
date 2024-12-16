@@ -27,6 +27,14 @@ interface Props {
     toast: React.MutableRefObject<any>;
 }
 
+enum PayrollAreaData {
+    MENSUAL = 2,
+    QUINCENAL = 1,
+    TEMPOREROS = 4,
+    REGALIA = 5,
+    ESPECIAL = 3
+}
+
 const PayrollManagement = ({
     entity,
     setEntity,
@@ -67,7 +75,7 @@ const PayrollManagement = ({
 
         const period: IPayrollManagementByPayrollNumber = {
             payrollNumber: watch("payrollNumber"),
-            idPayrollArea: payrollArea ?? 1,
+            idPayrollArea: payrollArea ?? PayrollAreaData.QUINCENAL,
             PayrollYear: date!.getFullYear(),
             retroactivityPayrollNumber:
                 watch("retroactivityPayrollNumber") ?? payrollNumber,
@@ -178,11 +186,11 @@ const PayrollManagement = ({
                                 getLastRecord(e.value);
                             }}
                             options={[
-                                { label: "Mensual", value: 2 },
-                                { label: "Quincenal", value: 1 },
-                                { label: "Temporeros", value: 4 },
-                                { label: "Regalía", value: 5 },
-                                { label: "Especial", value: 3 },
+                                { label: "Mensual", value: PayrollAreaData.MENSUAL },
+                                { label: "Quincenal", value: PayrollAreaData.QUINCENAL },
+                                { label: "Temporeros", value: PayrollAreaData.TEMPOREROS },
+                                { label: "Regalía", value: PayrollAreaData.REGALIA },
+                                { label: "Especial", value: PayrollAreaData.ESPECIAL },
                             ]}
                         />
                         {errors.idPayrollArea && (
@@ -260,6 +268,7 @@ const PayrollManagement = ({
                                                         getLastPayroll();
                                                     }}
                                                     min={1}
+                                                    max={watch("idPayrollArea") == PayrollAreaData.MENSUAL ? 12 : 24}
                                                     format={false}
                                                     showButtons
                                                 />
@@ -275,10 +284,10 @@ const PayrollManagement = ({
                                                     showButtonBar
                                                     value={
                                                         watch("date") ??
-                                                        entity?.date
+                                                            entity?.date
                                                             ? new Date(
-                                                                  entity?.date!
-                                                              )
+                                                                entity?.date!
+                                                            )
                                                             : new Date()
                                                     }
                                                     onChange={(e: any) => {
@@ -319,7 +328,7 @@ const PayrollManagement = ({
                                                     disabled={
                                                         watch(
                                                             "idPayrollArea"
-                                                        ) != 3
+                                                        ) != PayrollAreaData.ESPECIAL
                                                     }
                                                 />
                                                 {errors.payrollPeriodStart && (
@@ -352,7 +361,7 @@ const PayrollManagement = ({
                                                     disabled={
                                                         watch(
                                                             "idPayrollArea"
-                                                        ) != 3
+                                                        ) != PayrollAreaData.ESPECIAL
                                                     }
                                                 />
                                                 {errors.payrollPeriodEnd && (
@@ -536,7 +545,7 @@ const PayrollManagement = ({
                         </div>
                     </div>
                     <DialogFooterButtonPayrollManagement
-                        hideDialog={() => {}}
+                        hideDialog={() => { }}
                     />
                 </div>
             </div>
