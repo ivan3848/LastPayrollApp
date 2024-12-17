@@ -24,11 +24,11 @@ const PayrollConfigurationTabs = () => {
                         </Suspense>
                     </TabPanel>
 
-                    <TabPanel header="Bonificación" leftIcon="pi pi-globe mr-2">
+                    {/* <TabPanel header="Bonificación" leftIcon="pi pi-globe mr-2">
                         <Suspense fallback={<TabSkeletonTemplate />}>
                             <Bonification />
                         </Suspense>
-                    </TabPanel>
+                    </TabPanel> */}
                     <TabPanel
                         header="Incentivo Vacional"
                         leftIcon="pi pi-globe mr-2"
