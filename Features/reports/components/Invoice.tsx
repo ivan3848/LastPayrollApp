@@ -53,7 +53,7 @@ export const Invoice = ({ data }: Props) => {
                     totalPay,
                     creditIsrRemain,
                     creditIsrSustracted,
-                    startDate,
+                    startDate
                 } = firstItem;
 
                 return (
@@ -320,7 +320,7 @@ export const Invoice = ({ data }: Props) => {
                                             styles.colWidthTwentyP,
                                         ]}
                                     >
-                                        {item.quantity}
+                                        {item.quantity && `${item.quantity} ${item?.name?.includes("Extra") ? "Horas" : "Dias"}`}
                                     </Text>
                                     <Text
                                         style={[
