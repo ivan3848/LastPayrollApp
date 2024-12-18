@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { ICostCenter } from "../Types/ICostCenter";
 import AddCostCenter from "./AddCostCenter";
 import EditCostCenter from "./EditCostCenter";
+import Loading from "@/app/loading";
 
-const CostCenterTable = dynamic(() => import("./CostCenterTable"));
+const CostCenterTable = dynamic(() => import("./CostCenterTable"), {
+    loading: () => <Loading />,
+});
 
 const CostCenter = () => {
     const {

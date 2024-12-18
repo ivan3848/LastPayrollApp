@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddContractStatus from "./AddContractStatus";
 import EditContractStatus from "./EditContractStatus";
+import Loading from "@/app/loading";
 
-const ContractStatusTable = dynamic(() => import("./ContractStatusTable"));
+const ContractStatusTable = dynamic(() => import("./ContractStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const ContractStatus = () => {
     const {

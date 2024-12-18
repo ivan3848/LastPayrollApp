@@ -4,15 +4,25 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
 const BenefitPosition = dynamic(
-    () => import("../../benefitPosition/Components/BenefitPosition")
+    () => import("../../benefitPosition/Components/BenefitPosition"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const ToolWorkDefinition = dynamic(
-    () => import("../../toolWorkDefinition/Components/ToolWorkDefinition")
+    () => import("../../toolWorkDefinition/Components/ToolWorkDefinition"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const ToolWorkPosition = dynamic(
-    () => import("../../toolWorkPosition/Components/ToolWorkPosition")
+    () => import("../../toolWorkPosition/Components/ToolWorkPosition"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const AsignationTabs = () => {

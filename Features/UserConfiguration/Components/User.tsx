@@ -7,10 +7,21 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { Skeleton } from "primereact/skeleton";
 import { Suspense } from "react";
 import { IEmployee } from "../../employee/Types/IEmployee";
-import UserTable from "@/Features/UserConfiguration/Components/UserTable";
 import { TabPanel, TabView } from "primereact/tabview";
 import TabSkeletonTemplate from "@/Features/Shared/Components/TabSkeletonTemplate";
-import UserTableWithLogin from "./UserTableWithLogin";
+import dynamic from "next/dynamic";
+import Loading from "@/app/loading";
+
+const UserTable = dynamic(
+    () => import("@/Features/UserConfiguration/Components/UserTable"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const UserTableWithLogin = dynamic(() => import("./UserTableWithLogin"), {
+    loading: () => <Loading />,
+});
 
 const User = () => {
     const {

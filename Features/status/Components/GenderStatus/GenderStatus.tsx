@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddGenderStatus from "./AddGenderStatus";
 import EditGenderStatus from "./EditGenderStatus";
+import Loading from "@/app/loading";
 
-const GenderStatusTable = dynamic(() => import("./GenderStatusTable"));
+const GenderStatusTable = dynamic(() => import("./GenderStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const GenderStatus = () => {
     const {

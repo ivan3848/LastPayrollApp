@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddMaritalStatus from "./AddMaritalStatus";
 import EditMaritalStatus from "./EditMaritalStatus";
+import Loading from "@/app/loading";
 
-const MaritalStatusTable = dynamic(() => import("./MaritalStatusTable"));
+const MaritalStatusTable = dynamic(() => import("./MaritalStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const MaritalStatus = () => {
     const {

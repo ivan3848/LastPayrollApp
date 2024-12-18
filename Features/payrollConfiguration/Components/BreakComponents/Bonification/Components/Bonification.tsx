@@ -9,8 +9,12 @@ import IBonificationBreak from "../Types/IBonificationBreak";
 import AddBonification from "./AddBonification";
 import EditBonification from "./EditBonification";
 import DeleteBonification from "./DeleteBonification";
+import Loading from "@/app/loading";
 
-const BonificationTable = dynamic(() => import("./BonificationTable"));
+const BonificationTable = dynamic(() => import("./BonificationTable"),
+{
+    loading: () => <Loading />,
+});
 
 const Bonification = () => {
     const {

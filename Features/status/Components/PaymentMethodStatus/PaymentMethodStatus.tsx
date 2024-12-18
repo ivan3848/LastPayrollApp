@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddPaymentMethodStatus from "./AddPaymentMethodStatus";
 import EditPaymentMethodStatus from "./EditPaymentMethodStatus";
+import Loading from "@/app/loading";
 
-const PaymentMethodStatusTable = dynamic(() => import("./PaymentMethodStatusTable"));
+const PaymentMethodStatusTable = dynamic(() => import("./PaymentMethodStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const PaymentMethodStatus = () => {
     const {

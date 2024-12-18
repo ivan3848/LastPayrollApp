@@ -8,8 +8,12 @@ import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IPayrollArea } from "../Types/IPayrollArea";
 import EditPayrollArea from "./EditPayrollArea";
+import Loading from "@/app/loading";
 
-const PayrollAreaTable = dynamic(() => import("./PayrollAreaTable"));
+const PayrollAreaTable = dynamic(() => import("./PayrollAreaTable"),
+{
+    loading: () => <Loading />,
+});
 
 const PayrollArea = () => {
     const {

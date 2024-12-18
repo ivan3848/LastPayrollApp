@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IConcept } from "../Types/IConcept";
 import AddConcept from "./AddConcept";
 import EditConcept from "./EditConcept";
+import Loading from "@/app/loading";
 
-const ConceptTable = dynamic(() => import("./ConceptTable"));
+const ConceptTable = dynamic(() => import("./ConceptTable"), {
+    loading: () => <Loading />,
+});
 
 const Concept = () => {
     const {

@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IToolWorkPosition } from "../Types/IToolWorkPosition";
 import AddToolWorkPosition from "./AddToolWorkPosition";
 import EditToolWorkPosition from "./EditToolWorkPosition";
+import Loading from "@/app/loading";
 
-const ToolWorkPositionTable = dynamic(() => import("./ToolWorkPositionTable"));
+const ToolWorkPositionTable = dynamic(() => import("./ToolWorkPositionTable"),
+{
+    loading: () => <Loading />,
+});
 
 const ToolWorkPosition = () => {
     const {

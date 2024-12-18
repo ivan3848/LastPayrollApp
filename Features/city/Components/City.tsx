@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { ICity } from "../Types/ICity";
 import AddCity from "./AddCity";
 import EditCity from "./EditCity";
+import Loading from "@/app/loading";
 
-const CityTable = dynamic(() => import("./CityTable"));
+const CityTable = dynamic(() => import("./CityTable"), {
+    loading: () => <Loading />,
+});
 
 const City = () => {
     const {

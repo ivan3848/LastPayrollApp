@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { INationality } from "../Types/INationality";
 import AddNationality from "./AddNationality";
 import EditNationality from "./EditNationality";
+import Loading from "@/app/loading";
 
-const NationalityTable = dynamic(() => import("./NationalityTable"));
+const NationalityTable = dynamic(() => import("./NationalityTable"),
+{
+    loading: () => <Loading />,
+});
 
 const Nationality = () => {
     const {

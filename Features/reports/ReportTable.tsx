@@ -29,6 +29,7 @@ import PunchForReportTable from "./components/PunchForReportTable";
 import RetroactiveHoursForReportTable from "./components/RetroactiveHoursForReportTable";
 import TotalTaxForReportTable from "./components/TotalTaxForReportTable";
 import VacationForReportTable from "./components/VacationForReportTable";
+import Loading from "../loading";
 
 interface Props {
     selectedReport: string;
@@ -36,7 +37,10 @@ interface Props {
     setFilterForReport: (value: any) => void;
 }
 const PayrollPayExpenseForReportTable = dynamic(
-    () => import("./components/PayrollPayExpenseForReportTable")
+    () => import("./components/PayrollPayExpenseForReportTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const ReportTable = ({
     selectedReport,

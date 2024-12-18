@@ -9,9 +9,13 @@ import { ISeniorityIncentiveBreak } from "../Types/ISeniorityIncentive";
 import AddSeniorityIncentive from "./AddSeniorityIncentive";
 import EditSeniorityIncentive from "./EditSeniorityIncentive";
 import DeleteSeniorityIncentive from "./DeleteSeniorityIncentive";
+import Loading from "@/app/loading";
 
 const SeniorityIncentiveTable = dynamic(
-    () => import("./SeniorityIncentiveTable")
+    () => import("./SeniorityIncentiveTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const SeniorityIncentive = () => {

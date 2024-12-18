@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddCancelationReasonStatus from "./AddCancelationReasonStatus";
 import EditCancelationReasonStatus from "./EditCancelationReasonStatus";
+import Loading from "@/app/loading";
 
-const CancelationReasonStatusTable = dynamic(() => import("./CancelationReasonStatusTable"));
+const CancelationReasonStatusTable = dynamic(() => import("./CancelationReasonStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const CancelationReasonStatus = () => {
     const {

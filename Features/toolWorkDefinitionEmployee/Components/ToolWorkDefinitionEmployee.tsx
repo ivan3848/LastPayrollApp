@@ -9,11 +9,15 @@ import { Suspense } from "react";
 import { IToolWorkDefinitionEmployee } from "../Types/IToolWorkDefinitionEmployee";
 import AddToolWorkDefinitionEmployee from "./AddToolWorkDefinitionEmployee";
 import EditToolWorkDefinitionEmployee from "./EditToolWorkDefinitionEmployee";
+import Loading from "@/app/loading";
 interface Props {
     id: number;
 }
 const ToolWorkDefinitionEmployeeTable = dynamic(
-    () => import("./ToolWorkDefinitionEmployeeTable")
+    () => import("./ToolWorkDefinitionEmployeeTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const ToolWorkDefinitionEmployee = ({ id }: Props) => {
