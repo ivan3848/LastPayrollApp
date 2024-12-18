@@ -9,3 +9,17 @@ Module not found: Can't resolve 'framer-motion'
 [0m [90m 6 |[39m     [36mreturn[39m ([0m
 
 https://nextjs.org/docs/messages/module-not-found
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ⨯ ./app/template.tsx:3:1
+Module not found: Can't resolve 'framer-motion'
+[0m [90m 1 |[39m [32m"use client"[39m[33m;[39m[0m
+[0m [90m 2 |[39m[0m
+[0m[31m[1m>[22m[39m[90m 3 |[39m [36mimport[39m { motion } [36mfrom[39m [32m"framer-motion"[39m[33m;[39m[0m
+[0m [90m   |[39m [31m[1m^[22m[39m[0m
+[0m [90m 4 |[39m[0m
+[0m [90m 5 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mTemplate[39m({ children }[33m:[39m { children[33m:[39m [33mReact[39m[33m.[39m[33mReactNode[39m }) {[0m
+[0m [90m 6 |[39m     [36mreturn[39m ([0m
+
+https://nextjs.org/docs/messages/module-not-found
