@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IWorkScheduler } from "../Types/IWorkScheduler";
 import AddWorkScheduler from "./AddWorkScheduler";
 import EditWorkScheduler from "./EditWorkScheduler";
+import Loading from "@/app/loading";
 
-const WorkSchedulerTable = dynamic(() => import("./WorkSchedulerTable"));
+const WorkSchedulerTable = dynamic(() => import("./WorkSchedulerTable"),
+{
+    loading: () => <Loading />,
+});
 
 const WorkScheduler = () => {
     const {

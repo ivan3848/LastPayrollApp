@@ -4,11 +4,17 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
 const UserTable = dynamic(
-    () => import("@/Features/UserConfiguration/Components/UserTable")
+    () => import("@/Features/UserConfiguration/Components/UserTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
-const Region = dynamic(() => import("../../region/Components/Region"));
+const Region = dynamic(() => import("../../region/Components/Region"), {
+    loading: () => <Loading />,
+});
 
 const LocationTabs = () => {
     return (

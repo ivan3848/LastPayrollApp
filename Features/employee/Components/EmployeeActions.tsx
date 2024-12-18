@@ -4,29 +4,103 @@ import { EmployeeOptionsEnum } from "../Enums/EmployeeOptionsEnum";
 import { IEmployee } from "../Types/IEmployee";
 import EmployeeOptions from "./EmployeeOptions";
 import EmployeeProfile from "./EmployeeProfile";
-import FireEmployee from "./FiredEmployee/Components/FireEmployee";
-import BankEmployeeHistory from "./BankEmployeeHistory/BankEmployeeHistory";
-import ToolWorkDefinitionEmployee from "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee";
-import Dependant from "./Dependant/Dependant";
-import Profit from "./Benefit/Profit";
-import PersonInsurance from "./PersonInsurance/PersonInsurance";
-import CoverPosition from "@/Features/coverPosition/Components/CoverPosition";
-import Deduction from "./Deduction/Deduction";
-import License from "./Licenses/License";
-import ISRInFavor from "./ISRInFavor/ISRInFavor";
-import Permit from "./Permit/Permit";
-import Vacation from "./Vacation/Vacation";
-import WorkSchedulerSubstitute from "./WorkSchedulerSubstitute/WorkSchedulerSubstitute";
-import Commission from "./Commission/Commission";
-import Lease from "./Lease/Lease";
-import ExtraHourLateness from "./ExtraHourLateness/Components/ExtraHourLateness";
 import React from "react";
+import dynamic from "next/dynamic";
+import Loading from "@/app/loading";
 
 interface Props {
     showEmployeeActions: boolean;
     setShowEmployeeActions: (value: boolean) => void;
     employee: IEmployee;
 }
+
+const BankEmployeeHistory = dynamic(
+    () => import("./BankEmployeeHistory/BankEmployeeHistory"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const FireEmployee = dynamic(
+    () => import("./FiredEmployee/Components/FireEmployee"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const ToolWorkDefinitionEmployee = dynamic(
+    () =>
+        import(
+            "@/Features/toolWorkDefinitionEmployee/Components/ToolWorkDefinitionEmployee"
+        ),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const Dependant = dynamic(() => import("./Dependant/Dependant"), {
+    loading: () => <Loading />,
+});
+
+const Profit = dynamic(() => import("./Benefit/Profit"), {
+    loading: () => <Loading />,
+});
+
+const PersonInsurance = dynamic(
+    () => import("./PersonInsurance/PersonInsurance"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const CoverPosition = dynamic(
+    () => import("@/Features/coverPosition/Components/CoverPosition"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const Deduction = dynamic(() => import("./Deduction/Deduction"), {
+    loading: () => <Loading />,
+});
+
+const License = dynamic(() => import("./Licenses/License"), {
+    loading: () => <Loading />,
+});
+
+const ISRInFavor = dynamic(() => import("./ISRInFavor/ISRInFavor"), {
+    loading: () => <Loading />,
+});
+
+const Permit = dynamic(() => import("./Permit/Permit"), {
+    loading: () => <Loading />,
+});
+
+const Vacation = dynamic(() => import("./Vacation/Vacation"), {
+    loading: () => <Loading />,
+});
+
+const WorkSchedulerSubstitute = dynamic(
+    () => import("./WorkSchedulerSubstitute/WorkSchedulerSubstitute"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const Commission = dynamic(() => import("./Commission/Commission"), {
+    loading: () => <Loading />,
+});
+
+const Lease = dynamic(() => import("./Lease/Lease"), {
+    loading: () => <Loading />,
+});
+
+const ExtraHourLateness = dynamic(
+    () => import("./ExtraHourLateness/Components/ExtraHourLateness"),
+    {
+        loading: () => <Loading />,
+    }
+);
 
 const EmployeeActions = ({
     showEmployeeActions,
@@ -114,8 +188,8 @@ const EmployeeActions = ({
                     )}
                     {openAction ===
                         EmployeeOptionsEnum.WorkSchedulerSubstitute && (
-                            <WorkSchedulerSubstitute id={employee.idEmployee!} />
-                        )}
+                        <WorkSchedulerSubstitute id={employee.idEmployee!} />
+                    )}
                     {openAction === EmployeeOptionsEnum.Commission && (
                         <Commission id={employee.idEmployee!} />
                     )}

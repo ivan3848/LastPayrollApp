@@ -1,9 +1,27 @@
 "use client";
-import Contabilization from "@/Features/contabilization/Components/Contabilization";
-import FiredEmployeeContabilization from "@/Features/contabilization/Components/FiredEmployeeContabilization/FiredEmployeeContabilization";
+
+import Loading from "@/app/loading";
+import dynamic from "next/dynamic";
 import { Button } from "primereact/button";
 import { TabPanel, TabView } from "primereact/tabview";
 import React, { useState } from "react";
+
+const Contabilization = dynamic(
+    () => import("@/Features/contabilization/Components/Contabilization"),
+    {
+        loading: () => <Loading />,
+    }
+);
+
+const FiredEmployeeContabilization = dynamic(
+    () =>
+        import(
+            "@/Features/contabilization/Components/FiredEmployeeContabilization/FiredEmployeeContabilization"
+        ),
+    {
+        loading: () => <Loading />,
+    }
+);
 
 const ContabilizationPage = () => {
     const [activeIndex, setActiveIndex] = useState(0);

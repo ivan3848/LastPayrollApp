@@ -8,9 +8,13 @@ import PayrollConfiguration from "./PayrollConfiguration";
 import Bonification from "./BreakComponents/Bonification/Components/Bonification";
 import SeniorityIncentive from "./BreakComponents/SeniorityIncentive/Components/SeniorityIncentive";
 import PayrollArea from "@/Features/payrollArea/Components/PayrollArea";
+import Loading from "@/app/loading";
 
 const ISRBreak = dynamic(
-    () => import("./BreakComponents/ISRBreak/Components/ISRBreak")
+    () => import("./BreakComponents/ISRBreak/Components/ISRBreak"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const PayrollConfigurationTabs = () => {

@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IBank } from "../Types/IBank";
 import AddBank from "./AddBank";
 import EditBank from "./EditBank";
+import Loading from "@/app/loading";
 
-const BankTable = dynamic(() => import("./BankTable"));
+const BankTable = dynamic(() => import("./BankTable"), {
+    loading: () => <Loading />,
+});
 
 const Bank = () => {
     const {

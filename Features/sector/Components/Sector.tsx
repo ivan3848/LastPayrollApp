@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { ISector } from "../Types/ISector";
 import AddSector from "./AddSector";
 import EditSector from "./EditSector";
+import Loading from "@/app/loading";
 
-const SectorTable = dynamic(() => import("./SectorTable"));
+const SectorTable = dynamic(() => import("./SectorTable"),
+{
+    loading: () => <Loading />,
+});
 
 const Sector = () => {
     const {

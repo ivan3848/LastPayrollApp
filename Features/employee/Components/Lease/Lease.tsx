@@ -6,16 +6,21 @@ import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import { TabPanel, TabView } from "primereact/tabview";
 import { Toast } from "primereact/toast";
 import { Suspense, useState } from "react";
-import LeasePause from "../LeasePause/LeasePause";
 import AddLease from "./AddLease";
 import EditLease from "./EditLease";
-import LeaseTable from "./LeaseTable";
 import AddLeasePayment from "./Components/AddLeasePayment";
+import dynamic from "next/dynamic";
+import Loading from "@/app/loading";
 
 interface props {
     id: number;
 }
-
+const LeaseTable = dynamic(() => import("./LeaseTable"), {
+    loading: () => <Loading />,
+});
+const LeasePause = dynamic(() => import("../LeasePause/LeasePause"), {
+    loading: () => <Loading />,
+});
 const Lease = ({ id }: props) => {
     const {
         deleteEntityDialog,

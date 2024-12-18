@@ -9,8 +9,12 @@ import IISRBreak from "../Types/IISRBreak";
 import EditISRBreak from "./EditISRBreak";
 import AddISRBreak from "./AddISRBreak";
 import DeleteISRBreak from "./DeleteISRBreak";
+import Loading from "@/app/loading";
 
-const ISRBreakTable = dynamic(() => import("./ISRBreakTable"));
+const ISRBreakTable = dynamic(() => import("./ISRBreakTable"),
+{
+    loading: () => <Loading />,
+});
 
 const ISRBreak = () => {
     const {

@@ -4,14 +4,29 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
-const Country = dynamic(() => import("../../country/Components/Country"));
-const Region = dynamic(() => import("../../region/Components/Region"));
-const City = dynamic(() => import("../../city/Components/City"));
-const Province = dynamic(() => import("../../province/Components/Province"));
-const Sector = dynamic(() => import("../../sector/Components/Sector"));
-const Zone = dynamic(() => import("../../zone/Components/Zone"));
-const Location = dynamic(() => import("../../location/Components/Location"));
+const Country = dynamic(() => import("../../country/Components/Country"), {
+    loading: () => <Loading />,
+});
+const Region = dynamic(() => import("../../region/Components/Region"), {
+    loading: () => <Loading />,
+});
+const City = dynamic(() => import("../../city/Components/City"), {
+    loading: () => <Loading />,
+});
+const Province = dynamic(() => import("../../province/Components/Province"), {
+    loading: () => <Loading />,
+});
+const Sector = dynamic(() => import("../../sector/Components/Sector"), {
+    loading: () => <Loading />,
+});
+const Zone = dynamic(() => import("../../zone/Components/Zone"), {
+    loading: () => <Loading />,
+});
+const Location = dynamic(() => import("../../location/Components/Location"), {
+    loading: () => <Loading />,
+});
 
 const LocationTabs = () => {
     return (

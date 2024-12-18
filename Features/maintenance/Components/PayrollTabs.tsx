@@ -2,28 +2,61 @@
 
 import dynamic from "next/dynamic";
 import { TabPanel, TabView } from "primereact/tabview";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import { useLoading } from "@/layout/context/loadingcontext";
+import Loading from "@/app/loading";
 
-const Concept = dynamic(() => import("../../concept/Components/Concept"));
-const Bank = dynamic(() => import("../../bank/Components/Bank"));
+const Concept = dynamic(() => import("../../concept/Components/Concept"), {
+    loading: () => <Loading />,
+});
+
+const Bank = dynamic(() => import("../../bank/Components/Bank"), {
+    loading: () => <Loading />,
+});
+
 const AccountingAccount = dynamic(
-    () => import("../../accountingAccount/Components/AccountingAccount")
+    () => import("../../accountingAccount/Components/AccountingAccount"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const CostCenter = dynamic(
-    () => import("../../costCenter/Components/CostCenter")
+    () => import("../../costCenter/Components/CostCenter"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const SalaryNewsStatus = dynamic(
-    () => import("../../status/Components/SalaryNewsStatus/SalaryNewsStatus")
+    () => import("../../status/Components/SalaryNewsStatus/SalaryNewsStatus"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const PaymentMethodStatus = dynamic(
     () =>
         import(
             "../../status/Components/PaymentMethodStatus/PaymentMethodStatus"
-        )
+        ),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const PayrollTabs = () => {
+    const { isLoading, setLoading } = useLoading();
+
+    useEffect(() => {
+        setLoading(true);
+        //      Simulate a network request or some async operation
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
+
     return (
         <div className="grid crud-demo">
             <div className="col-12">

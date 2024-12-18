@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IGroupManager } from "../Types/IGroupManager";
 import AddGroupManager from "./AddGroupManager";
 import EditGroupManager from "./EditGroupManager";
+import Loading from "@/app/loading";
 
-const GroupManagerTable = dynamic(() => import("./GroupManagerTable"));
+const GroupManagerTable = dynamic(() => import("./GroupManagerTable"), {
+    loading: () => <Loading />,
+});
 
 const GroupManager = () => {
     const {

@@ -7,8 +7,11 @@ import { Skeleton } from "primereact/skeleton";
 import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IEmployee } from "../Types/IEmployee";
+import Loading from "../loading";
 
-const EmployeeTable = dynamic(() => import("./EmployeeTable"));
+const EmployeeTable = dynamic(() => import("./EmployeeTable"), {
+    loading: () => <Loading />,
+});
 
 const Employee = () => {
     const {

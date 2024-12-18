@@ -9,9 +9,13 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddRelationshipStatus from "./AddRelationshipStatus";
 import EditRelationshipStatus from "./EditRelationshipStatus";
+import Loading from "@/app/loading";
 
 const RelationshipStatusTable = dynamic(
-    () => import("./RelationshipStatusTable")
+    () => import("./RelationshipStatusTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const RelationshipStatus = () => {

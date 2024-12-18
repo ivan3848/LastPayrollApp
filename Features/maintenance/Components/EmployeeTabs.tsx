@@ -4,31 +4,56 @@ import dynamic from "next/dynamic";
 import { TabPanel, TabView } from "primereact/tabview";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
 const ContractStatus = dynamic(
-    () => import("../../status/Components/ContractStatus/ContractStatus")
+    () => import("../../status/Components/ContractStatus/ContractStatus"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const ContractType = dynamic(
-    () => import("../../contractType/Components/ContractType")
+    () => import("../../contractType/Components/ContractType"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const CancelationTypeStatus = dynamic(
     () =>
         import(
             "../../status/Components/CancelationTypeStatus/CancelationTypeStatus"
-        )
+        ),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const CancelationReasonStatus = dynamic(
     () =>
         import(
             "../../status/Components/CancelationReasonStatus/CancelationReasonStatus"
-        )
+        ),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const WorkScheduler = dynamic(
-    () => import("../../workScheduler/Components/WorkScheduler")
+    () => import("../../workScheduler/Components/WorkScheduler"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const GroupManager = dynamic(
-    () => import("../../groupManager/Components/GroupManager")
+    () => import("../../groupManager/Components/GroupManager"),
+    {
+        loading: () => <Loading />,
+    }
 );
+
 const EmployeeTabs = () => {
     return (
         <div className="grid crud-demo">

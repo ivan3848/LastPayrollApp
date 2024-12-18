@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IDepartment } from "../Types/IDepartment";
 import AddDepartment from "./AddDepartment";
 import EditDepartment from "./EditDepartment";
+import Loading from "@/app/loading";
 
-const DepartmentTable = dynamic(() => import("./DepartmentTable"));
+const DepartmentTable = dynamic(() => import("./DepartmentTable"), {
+    loading: () => <Loading />,
+});
 
 const Department = () => {
     const {

@@ -9,9 +9,13 @@ import { Suspense } from "react";
 import { IHierarchyPosition } from "../Types/IHierarchyPosition";
 import AddHierarchyPosition from "./AddHierarchyPosition";
 import EditHierarchyPosition from "./EditHierarchyPosition";
+import Loading from "@/app/loading";
 
 const HierarchyPositionTable = dynamic(
-    () => import("./HierarchyPositionTable")
+    () => import("./HierarchyPositionTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const HierarchyPosition = () => {

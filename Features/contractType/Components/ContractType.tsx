@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IContractType } from "../Types/IContractType";
 import AddContractType from "./AddContractType";
 import EditContractType from "./EditContractType";
+import Loading from "@/app/loading";
 
-const ContractTypeTable = dynamic(() => import("./ContractTypeTable"));
+const ContractTypeTable = dynamic(() => import("./ContractTypeTable"), {
+    loading: () => <Loading />,
+});
 
 const ContractType = () => {
     const {

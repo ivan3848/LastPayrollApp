@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IRegion } from "../Types/IRegion";
 import AddRegion from "./AddRegion";
 import EditRegion from "./EditRegion";
+import Loading from "@/app/loading";
 
-const RegionTable = dynamic(() => import("./RegionTable"));
+const RegionTable = dynamic(() => import("./RegionTable"), {
+    loading: () => <Loading />,
+});
 
 const Region = () => {
     const {

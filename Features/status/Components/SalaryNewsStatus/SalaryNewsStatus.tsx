@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IStatus } from "../../Types/IStatus";
 import AddSalaryNewsStatus from "./AddSalaryNewsStatus";
 import EditSalaryNewsStatus from "./EditSalaryNewsStatus";
+import Loading from "@/app/loading";
 
-const SalaryNewsStatusTable = dynamic(() => import("./SalaryNewsStatusTable"));
+const SalaryNewsStatusTable = dynamic(() => import("./SalaryNewsStatusTable"),
+{
+    loading: () => <Loading />,
+});
 
 const SalaryNewsStatus = () => {
     const {
