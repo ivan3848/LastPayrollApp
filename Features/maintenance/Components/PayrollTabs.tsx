@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import { TabPanel, TabView } from "primereact/tabview";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import { useLoading } from "@/layout/context/loadingcontext";
 
 const Concept = dynamic(() => import("../../concept/Components/Concept"));
 const Bank = dynamic(() => import("../../bank/Components/Bank"));
@@ -24,6 +25,16 @@ const PaymentMethodStatus = dynamic(
 );
 
 const PayrollTabs = () => {
+    const { isLoading, setLoading } = useLoading();
+
+    useEffect(() => {
+        setLoading(true);
+        //      Simulate a network request or some async operation
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
+
     return (
         <div className="grid crud-demo">
             <div className="col-12">

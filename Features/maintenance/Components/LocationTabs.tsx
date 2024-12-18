@@ -4,8 +4,11 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
-const Country = dynamic(() => import("../../country/Components/Country"));
+const Country = dynamic(() => import("../../country/Components/Country"), {
+    loading: () => <Loading />,
+});
 const Region = dynamic(() => import("../../region/Components/Region"));
 const City = dynamic(() => import("../../city/Components/City"));
 const Province = dynamic(() => import("../../province/Components/Province"));

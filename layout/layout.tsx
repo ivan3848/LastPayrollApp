@@ -16,6 +16,7 @@ import AppProfileSidebar from "./AppProfileSidebar";
 import AppSidebar from "./AppSidebar";
 import AppTopbar from "./AppTopbar";
 import { LayoutContext } from "./context/layoutcontext";
+import { useLoading } from "./context/loadingcontext";
 
 const Layout = (props: ChildContainerProps) => {
     const {
@@ -192,7 +193,7 @@ const Layout = (props: ChildContainerProps) => {
         "layout-sidebar-active": layoutState.sidebarActive,
         "layout-sidebar-anchored": layoutState.anchored,
     });
-
+    const { isLoading } = useLoading();
     return (
         <React.Fragment>
             <div className={classNames("layout-container", containerClass)}>
@@ -208,7 +209,11 @@ const Layout = (props: ChildContainerProps) => {
                     <AppTopbar ref={topbarRef} />
 
                     <AppBreadCrumb className="content-breadcrumb"></AppBreadCrumb>
-                    <div className="layout-content">{props.children}</div>
+                    {isLoading ? (
+                        <>Loading...</>
+                    ) : (
+                        <div className="layout-content">{props.children}</div>
+                    )}
                 </div>
                 <AppProfileSidebar />
                 <AppConfig />
