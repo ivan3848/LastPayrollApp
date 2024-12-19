@@ -10,6 +10,7 @@ const VacationFormSchema = () => {
         totalRemain: z.number().optional(),
         enjoymentDay: z.number().optional(),
         absenteeism: z.number().optional(),
+        payrollPayDate: z.date({ message: "El campo debe de tener una fecha." }),
         dayPay: z.number().optional(),
     })
         .refine(data => data.start <= data.end, {

@@ -1,4 +1,3 @@
-"use client";
 import { Page } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
@@ -13,6 +12,8 @@ import { ILogin } from "../types/ILogin";
 import SignIn from "./LoginServerActions";
 import useCrudModals from "@/Features/Shared/Hooks/useCrudModals";
 import ChangePassword from "@/Features/UserConfiguration/Components/newpassword/ChangePassword";
+import YourSvg from "@/layout/images/WorkingWithlogoPNG.png";
+import Image from "next/image";
 
 const loginFormSchema = z.object({
     username: z
@@ -132,6 +133,15 @@ const Login: Page = () => {
                     </svg>
                     <div className="px-5 min-h-screen flex justify-content-center align-items-center">
                         <div className="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1">
+                            <div className="flex justify-content-center mb-6">
+                                <Image
+                                    src={YourSvg}
+                                    alt="specialistNOM logo"
+                                    width={150}
+                                    height={55}
+                                />
+                            </div>
+
                             <div className="mb-4">
                                 <div className="text-900 text-2xl font-bold mb-2 ">
                                     Iniciar Sesión
