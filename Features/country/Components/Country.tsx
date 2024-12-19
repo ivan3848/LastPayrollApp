@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { ICountry } from "../Types/ICountry";
 import AddCountry from "./AddCountry";
 import EditCountry from "./EditCountry";
+import Loading from "@/app/loading";
 
-const CountryTable = dynamic(() => import("./CountryTable"));
+const CountryTable = dynamic(() => import("./CountryTable"), {
+    loading: () => <Loading />,
+});
 
 const Country = () => {
     const {

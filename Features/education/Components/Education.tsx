@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IEducation } from "../Types/IEducation";
 import AddEducation from "./AddEducation";
 import EditEducation from "./EditEducation";
+import Loading from "@/app/loading";
 
-const EducationTable = dynamic(() => import("./EducationTable"));
+const EducationTable = dynamic(() => import("./EducationTable"), {
+    loading: () => <Loading />,
+});
 
 const Education = () => {
     const {

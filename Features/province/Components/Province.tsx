@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IProvince } from "../Types/IProvince";
 import AddProvince from "./AddProvince";
 import EditProvince from "./EditProvince";
+import Loading from "@/app/loading";
 
-const ProvinceTable = dynamic(() => import("./ProvinceTable"));
+const ProvinceTable = dynamic(() => import("./ProvinceTable"), {
+    loading: () => <Loading />,
+});
 
 const Province = () => {
     const {

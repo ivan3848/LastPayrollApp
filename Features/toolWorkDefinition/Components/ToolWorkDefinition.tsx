@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { IToolWorkDefinition } from "../Types/IToolWorkDefinition";
 import AddToolWorkDefinition from "./AddToolWorkDefinition";
 import EditToolWorkDefinition from "./EditToolWorkDefinition";
+import Loading from "@/app/loading";
 
-const ToolWorkDefinitionTable = dynamic(() => import("./ToolWorkDefinitionTable"));
+const ToolWorkDefinitionTable = dynamic(() => import("./ToolWorkDefinitionTable"),
+{
+    loading: () => <Loading />,
+});
 
 const ToolWorkDefinition = () => {
     const {

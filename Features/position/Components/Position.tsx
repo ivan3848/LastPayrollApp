@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IPosition } from "../Types/IPosition";
 import AddPosition from "./AddPosition";
 import EditPosition from "./EditPosition";
+import Loading from "@/app/loading";
 
-const PositionTable = dynamic(() => import("./PositionTable"));
+const PositionTable = dynamic(() => import("./PositionTable"), {
+    loading: () => <Loading />,
+});
 
 const Position = () => {
     const {

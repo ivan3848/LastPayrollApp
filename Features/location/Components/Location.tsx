@@ -9,8 +9,12 @@ import { Suspense } from "react";
 import { ILocation } from "../Types/ILocation";
 import AddLocation from "./AddLocation";
 import EditLocation from "./EditLocation";
+import Loading from "@/app/loading";
 
-const LocationTable = dynamic(() => import("./LocationTable"));
+const LocationTable = dynamic(() => import("./LocationTable"),
+{
+    loading: () => <Loading />,
+});
 
 const Location = () => {
     const {

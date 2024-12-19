@@ -9,8 +9,14 @@ import { Suspense } from "react";
 import { IAccountingAccount } from "../Types/IAccountingAccount";
 import AddAccountingAccount from "./AddAccountingAccount";
 import EditAccountingAccount from "./EditAccountingAccount";
+import Loading from "@/app/loading";
 
-const AccountingAccountTable = dynamic(() => import("./AccountingAccountTable"));
+const AccountingAccountTable = dynamic(
+    () => import("./AccountingAccountTable"),
+    {
+        loading: () => <Loading />,
+    }
+);
 
 const AccountingAccount = () => {
     const {
@@ -44,7 +50,7 @@ const AccountingAccount = () => {
         setDeleteEntityDialog(true);
     };
 
-    const entityProperties = ["Cuenta","Número de cuenta", "Acciones"];
+    const entityProperties = ["Cuenta", "Número de cuenta", "Acciones"];
 
     return (
         <div className="grid">

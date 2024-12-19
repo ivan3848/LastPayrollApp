@@ -7,9 +7,13 @@ import { Toast } from "primereact/toast";
 import { Suspense } from "react";
 import { IPayrollConfiguration } from "../Types/IPayrollConfiguration";
 import EditPayrollConfiguration from "./EditPayrollConfiguration";
+import Loading from "@/app/loading";
 
 const PayrollConfigurationTable = dynamic(
-    () => import("./PayrollConfigurationTable")
+    () => import("./PayrollConfigurationTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const PayrollConfiguration = () => {

@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IZone } from "../Types/IZone";
 import AddZone from "./AddZone";
 import EditZone from "./EditZone";
+import Loading from "@/app/loading";
 
-const ZoneTable = dynamic(() => import("./ZoneTable"));
+const ZoneTable = dynamic(() => import("./ZoneTable"), {
+    loading: () => <Loading />,
+});
 
 const Zone = () => {
     const {

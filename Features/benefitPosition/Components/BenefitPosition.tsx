@@ -9,8 +9,11 @@ import { Suspense } from "react";
 import { IBenefitPosition } from "../Types/IBenefitPosition";
 import AddBenefitPosition from "./AddBenefitPosition";
 import EditBenefitPosition from "./EditBenefitPosition";
+import Loading from "@/app/loading";
 
-const BenefitPositionTable = dynamic(() => import("./BenefitPositionTable"));
+const BenefitPositionTable = dynamic(() => import("./BenefitPositionTable"), {
+    loading: () => <Loading />,
+});
 
 const BenefitPosition = () => {
     const {

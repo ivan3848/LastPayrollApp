@@ -3,18 +3,31 @@ import { TabPanel, TabView } from "primereact/tabview";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import TabSkeletonTemplate from "../../Shared/Components/TabSkeletonTemplate";
+import Loading from "@/app/loading";
 
 const OrganizationalUnit = dynamic(
-    () => import("@/Features/organizationalUnit/Components/OrganizationalUnit")
+    () => import("@/Features/organizationalUnit/Components/OrganizationalUnit"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const Department = dynamic(
-    () => import("@/Features/departments/Components/Department")
+    () => import("@/Features/departments/Components/Department"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const Position = dynamic(
-    () => import("@/Features/position/Components/Position")
+    () => import("@/Features/position/Components/Position"),
+    {
+        loading: () => <Loading />,
+    }
 );
 const HierarchyPosition = dynamic(
-    () => import("@/Features/hierarchyPosition/Components/HierarchyPosition")
+    () => import("@/Features/hierarchyPosition/Components/HierarchyPosition"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const DepartmentTabs = () => {

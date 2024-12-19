@@ -9,9 +9,13 @@ import { Suspense } from "react";
 import { IOrganizationalUnit } from "../Types/IOrganizationalUnit";
 import AddOrganizationalUnit from "./AddOrganizationalUnit";
 import EditOrganizationalUnit from "./EditOrganizationalUnit";
+import Loading from "@/app/loading";
 
 const OrganizationalUnitTable = dynamic(
-    () => import("./OrganizationalUnitTable")
+    () => import("./OrganizationalUnitTable"),
+    {
+        loading: () => <Loading />,
+    }
 );
 
 const OrganizationalUnit = () => {

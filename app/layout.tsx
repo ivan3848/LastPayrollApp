@@ -13,6 +13,7 @@ import "../styles/demo/Demos.scss";
 import "../styles/layout/layout.scss";
 import { sessionCheck } from "./(full-page)/auth/login/LoginServerActions";
 import Login from "./(full-page)/auth/login/page";
+import { LoadingProvider } from "../layout/context/loadingcontext";
 
 interface RootLayoutProps {
     children: React.ReactNode;
@@ -49,7 +50,14 @@ const RootLayout = ({ children }: RootLayoutProps) => {
                 <QueryClientProvider client={queryClient}>
                     <PrimeReactProvider>
                         {isCheckingAuth ? (
-                            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    height: "100vh",
+                                }}
+                            >
                                 <ProgressSpinner />
                             </div>
                         ) : isLoggedIn ? (
