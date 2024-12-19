@@ -98,7 +98,7 @@ const EditVacation = ({
         data.totalRemain = data.totalRemain;
         data.enjoymentDay = data.enjoymentDay;
         data.reEntryDate = data.end;
-        data.payrollPayDate = data.start;
+        data.payrollPayDate = data.payrollPayDate;
         data.absenteeism = data.absenteeism;
         data.dayPay = data.dayPay;
 
@@ -226,13 +226,13 @@ const EditVacation = ({
                             )}
                         </div>
                         <div className="field col-12 md:col-6 lg:col-4">
-                            <label htmlFor="end">Fecha de pago</label>
+                            <label htmlFor="payrollPayDate">Fecha de pago</label>
                             <Calendar
-                                id="end"
+                                id="payrollPayDate"
                                 {...register("payrollPayDate")}
                                 value={watch("payrollPayDate") ?? new Date(entity.payrollPayDate!)}
                                 onChange={(e) => setValue("payrollPayDate", new Date(e.value!))}
-                                key={entity.end.toString()}
+                                key={entity.payrollPayDate!.toString()}
                                 showIcon
                             />
                             {errors.end && (
