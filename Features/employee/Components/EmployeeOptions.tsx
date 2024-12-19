@@ -155,7 +155,7 @@ const EmployeeOptions = ({ setAction }: Props) => {
                         onClick={() => setAction(EmployeeOptionsEnum.Vacation)}
                     />
                 )}
-                {hasModuleAccess("SUPLENCIAS") && (
+                {hasModuleAccess("SUPLENCIAS-WRITE") && (
                     <Button
                         label="Suplencias"
                         icon="pi pi-arrow-right-arrow-left"
