@@ -1,3 +1,4 @@
+"use client";
 import { Page } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "primereact/button";
